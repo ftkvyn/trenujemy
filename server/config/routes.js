@@ -32,9 +32,15 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'homepage'
-  }
+  '/': 'ViewsController.home',
+
+  '/login': 'ViewsController.login',
+
+  '/register': 'ViewsController.register',
+
+  '/trainer': 'ViewsController.trainer',
+
+  '/user': 'ViewsController.user',
 
   /***************************************************************************
   *                                                                          *

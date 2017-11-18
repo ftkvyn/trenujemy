@@ -1,0 +1,35 @@
+/*
+Navbar
+*/
+.navbar.navbar-light.bg-faded{
+    background-color:#fff;
+}
+.navbar .container{
+    position: relative;
+}
+.navbar.navbar-light .nav-link{
+    text-transform: capitalize;
+    font-weight: 500;
+    color: #999;
+    font-size: .8rem;
+    &.btn{
+        color:#fff;
+    margin-left:30px;
+    }
+}
+.navbar-brand{
+    font-family: $title-font;
+}
+.navbar-light .navbar-nav .active>.nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show>.nav-link {
+    color: $primary-color;
+}
+@media(min-width:992px){
+    .navbar-expand-lg .navbar-nav .nav-link{
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+.navbar.navbar-light.navbar-sticky.fixed-top{
+    animation: fadeInDown .3s;
+    border-bottom:1px solid #eee;
+}

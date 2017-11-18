@@ -2,7 +2,7 @@
   "name": "trenujemy",
   "private": true,
   "version": "0.0.0",
-  "description": "a Sails application",
+  "description": "a training application",
   "keywords": [],
   "dependencies": {
     "ejs": "2.3.4",
@@ -21,7 +21,12 @@
     "include-all": "^1.0.0",
     "rc": "1.0.1",
     "sails": "~0.12.8",
-    "sails-disk": "~0.10.9"
+    "sails-mysql": "0.12.1",
+    "sails-mongo": "0.12.0",
+    "connect-mongo": "0.8.2",
+    "bcrypt":"0.8.6",
+    "moment":"*",
+    "q" : "*"
   },
   "scripts": {
     "debug": "node debug app.js",
