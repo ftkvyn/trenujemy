@@ -38,7 +38,7 @@ module.exports.routes = {
 
   '/register': 'ViewsController.register',
 
-  '/trainer': 'ViewsController.trainer',
+  '/dashboard/:path?': 'ViewsController.trainer',
 
   '/user': 'ViewsController.user',
 

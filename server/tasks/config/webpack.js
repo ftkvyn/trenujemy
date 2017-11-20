@@ -6,7 +6,7 @@ var path = require('path');
 var baseHref = '/trainer';
 
 module.exports = function(grunt) {
- 
+
   // Project configuration.
   grunt.config.set('webpack',{ 
     
@@ -22,7 +22,7 @@ module.exports = function(grunt) {
         },
         progress: true,
         failOnError: true,
-        watch: true,
+        watch: false,
         // module: {
         //   loaders: [
         //     { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
