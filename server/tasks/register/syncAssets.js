@@ -16,7 +16,7 @@ module.exports = function(grunt) {
     'less:dev',
     'sync:dev',
     'coffee:dev',
-    'babel:dev',
+   // 'babel:dev',
     'webpack'
   ]);
 };
