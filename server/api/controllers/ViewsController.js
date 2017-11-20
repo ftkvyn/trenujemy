@@ -19,7 +19,7 @@ module.exports = {
 	},
 
 	trainer: function(req,res){
-		return res.view('homepage', {layout: 'assanLayout'});	
+		return res.view('reactLayout', {layout: null});	
 	},
 
 	user: function(req,res){
