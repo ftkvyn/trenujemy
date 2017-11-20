@@ -19,7 +19,7 @@ module.exports.models = {
   ***************************************************************************/
   connection: 'mysqlServer',
   schema:true,
-  //migrate:'alter',
+  // migrate:'alter',
   migrate:'safe',
 
   /***************************************************************************

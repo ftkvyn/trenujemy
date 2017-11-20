@@ -20,7 +20,7 @@ module.exports = function(grunt) {
           sourceMapFilename: "[name].js.map",
           pathinfo: true
         },
-        progress: true,
+        progress: false,
         failOnError: true,
         watch: false,
         // module: {
