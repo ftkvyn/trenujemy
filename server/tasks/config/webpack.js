@@ -120,11 +120,11 @@ module.exports = function(grunt) {
             // }),
             new CopyWebpackPlugin([{
                 from: __dirname +  '/../../assets/react/img',
-                to: __dirname +'/../../.tmp/public/react/img',
+                to: __dirname +'/../../.tmp/public/img',
                 //context: path.join(__dirname, 'app')
             }, {
                 from: __dirname +'/../../assets/react/server',
-                to: __dirname +'/../../.tmp/public/react/server',
+                to: __dirname +'/../../.tmp/public/server',
                 //context: path.join(__dirname, 'app')
             }, {
                 from: __dirname +'/../../assets/react/fonts',
