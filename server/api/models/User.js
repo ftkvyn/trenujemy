@@ -13,6 +13,14 @@ module.exports = {
 	    unique: true,
 	    required: true
 	},
+	isActive:{
+		type:'boolean',
+		defaultsTo: false
+	},
+	activationCode:{
+		type:'string',
+		unique: true
+	},
 	role:{
 		type:'string',
 		enum: ['user', 'trainer']

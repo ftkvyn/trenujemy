@@ -36,11 +36,23 @@ module.exports.routes = {
 
   '/login': 'ViewsController.login',
 
-  '/register': 'ViewsController.register',
+  '/recoverPassword': 'ViewsController.recoverPassword',
 
-  '/trainer/:path?': 'ViewsController.trainer',
+  '/changePassword': 'ViewsController.changePassword',
 
-  '/user': 'ViewsController.user',
+  '/activate': 'ViewsController.activate',  
+
+  '/dashboard/:path?': 'ViewsController.dashboard',
+
+  'post /auth/login': 'AuthController.login',
+
+  'get /auth/activate': 'AuthController.activate',
+
+  'post /auth/register': 'AuthController.register',
+
+  'get /auth/logout': 'AuthController.logout',
+
+  'post /auth/login': 'AuthController.login',
 
   /***************************************************************************
   *                                                                          *

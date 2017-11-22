@@ -7,23 +7,31 @@
 
 module.exports = {
 	home: function(req,res){
-		return res.view('homepage', {layout: 'assanLayout'});	
+		return res.view('homepage');	
 	},
 
 	login: function(req,res){
-		return res.view('login', {layout: 'assanLayout'});	
+		console.log(req.query.returnUrl);
+		if(req.query.returnUrl){
+			req.session.returnUrl = decodeURIComponent(req.query.returnUrl);
+		}
+		return res.view('login');	
 	},
 
-	register: function(req,res){
-		return res.view('register', {layout: 'assanLayout'});	
+	activate:function(req,res){
+		return res.view('activate', {locals : {}});	
 	},
 
-	trainer: function(req,res){
-		return res.view('reactLayout', {layout: null});	
+	recoverPassword: function(req,res){
+		return res.view('login');	
 	},
 
-	user: function(req,res){
-		return res.view('homepage', {layout: 'assanLayout'});	
+	changePassword: function(req,res){
+		return res.view('login');	
 	},
+
+	dashboard: function(req,res){
+		return res.view('dashboard', {layout: null});	
+	}
 };
 

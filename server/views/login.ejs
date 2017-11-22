@@ -1,64 +1,88 @@
 <div class="bg-parallax parallax-overlay accounts-page"  data-jarallax='{"speed": 0.2}' style='background-image: url("/images/gym/03.jpg")'>
-    <div class="container">
-        <div class="row pb30">
+     <div class="container">
+        <div class="row pb30 align-items-end">
             <div class="col-lg-4 col-md-6 mr-auto ml-auto col-sm-8">
-                <h3 class="text-white text-center mb30">Login to continue</h3>
-                <form>
+                <h3 class="text-white text-center mb30">Zaloguj się</h3>
+                <form class="login-form">
                     <div class="form-group">
-                        <input type="email" class="form-control" placeholder="Username">
+                        <input type="email" class="form-control email" placeholder="Adres Email" required>
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control password" placeholder="Hasło" required>
+                    </div>                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-rounded btn-primary btn-block">Zaloguj</button>
                     </div>
-                      <div class="form-group">
-                          <button type="submit" class="btn btn-rounded btn-primary btn-block">Sign In</button>
-                    </div>
-                    <div class="text-center"><a href="#" class="btn btn-link btn-block">Having trouble logging in?</a></div>
                     <hr>
                     <div>
-                        <a href="#" class="btn btn-white-outline btn-block">Sign Up</a>
+                        <a href="/recoverPassword" class="btn btn-white-outline btn-block">Nie pamiętam hasła</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row pb30 align-items-end">
+            <div class="col-lg-4 col-md-6 mr-auto ml-auto col-sm-8">
+                <h3 class="text-white text-center mb30">Zarejestruj się</h3>
+                <form class="register-form">
+                    <div class="form-group">
+                        <input type="email" class="form-control email" placeholder="Adres Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control password" placeholder="Hasło" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control password2" placeholder="Powtórz hasło" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-rounded btn-primary btn-block">Stwórz konto</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<footer class="footer footer-dark pt50 pb30">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6  ml-auto mr-auto text-center">
-                <ul class="social-icons list-inline">
-                    <li class="list-inline-item">
-                        <a href="#">
-                            <i class="fa fa-facebook"></i>Facebook
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#">
-                            <i class="fa fa-twitter"></i>twitter
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#">
-                            <i class="fa fa-instagram"></i>instagram
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#">
-                            <i class="fa fa-behance"></i>Behance
-                        </a>
-                    </li>
-                </ul>
-                <h4><i class="fa fa-phone"></i> 1800-355-4322</h4>
-                <h4><i class="fa fa-envelope"></i> support@assan.com</h4>
-                <p>&copy; Copyright 2017. Assan 3.0</p>
-            </div>
-        </div>
-    </div>
-</footer>
 
-<!--back to top-->
-<a href="#" class="back-to-top hidden-xs-down" id="back-to-top"><i class="ti-angle-up"></i></a>
-<!-- jQuery first, then Tether, then Bootstrap JS. -->
-<script src="/assan/js/plugins/plugins.js"></script> 
-<script src="/assan/js/assan.custom.js"></script> 
+<script type="text/javascript" src="/assan/js/plugins/plugins.js"></script> 
+<script type="text/javascript" src="/assan/js/assan.custom.js"></script> 
+
+<script type="text/javascript">
+    $(function() {
+        $('body').on('submit', '.login-form',function(event){
+            event.preventDefault();
+            var model = {};
+            model.login = $('.login-form .email').val();
+            model.password = $('.login-form .password').val();
+            $.post('/auth/login', model, function(data){
+                console.log(data);
+            });
+            return false;
+        });
+
+        $('body').on('submit', '.register-form',function(event){
+            event.preventDefault();
+            var model = {};
+            model.login = $('.register-form .email').val();
+            model.password = $('.register-form .password').val();
+            model.password2 = $('.register-form .password2').val();
+            if(model.password2 !== model.password){
+                alert('Hasło musi być identyczne w obu polach');
+                return false;
+            }
+            $.post('/auth/register', model,
+            function(data){
+                console.log(data);
+                if(data.succeess){
+                    window.location = '/activate';
+                    return false;
+                }else{
+                    alert('Error');
+                }
+                //ToDo: handle other results.
+            });
+            return false;
+        });
+    });
+</script>
