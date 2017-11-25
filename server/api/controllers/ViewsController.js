@@ -18,6 +18,11 @@ module.exports = {
 	},
 
 	activate:function(req,res){
+		var user = {
+			login : 'ftkvyn@gmail.com',
+			activationCode: '6fm0xg3ho4'
+		};
+		emailService.sendActivationMail(user);  
 		return res.view('activate', {locals : {}});	
 	},
 

@@ -81,7 +81,6 @@ module.exports = {
 	                	return res.badRequest('Error.');
 	                }
 	                var key = generateRandomStr(10);
-	                console.log('code = ' + key);
 	        		var userData = {
 						login: req.body.login,
 						password: hash,
@@ -95,7 +94,7 @@ module.exports = {
 	                		return res.badRequest('Error.');		
 						}
 	                  	if (user) {            	              
-	                  		//ToDo: send activation email.      	
+	                  		emailService.sendActivationMail(user);     	
 	                    	return res.send({success: true});
           				}else{
           					console.error('No user created');
@@ -158,14 +157,13 @@ module.exports = {
 	            });
               }
               var code = generateRandomStr(12);
-              console.log(code);
-              //ToDo: send email
               User.update({id: user.id}, {passwordRecoveryKey: code})
 	        	.exec(function(err, users){
 	        		if(err){
 		        		console.error(err);
 		        		return res.send({error: err});
 		        	}	
+		        	emailService.sendPasswordRecoveryMail(users[0]);
 		        	return res.send({
 		              success: true
 		            });
@@ -173,7 +171,6 @@ module.exports = {
 	    });
 	},
 
-	//413ekcsxb6sw
 	changePassword:function(req,res){
 		User.findOne({passwordRecoveryKey:req.body.code}).exec(
 	        function(err,user){
