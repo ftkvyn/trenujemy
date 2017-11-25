@@ -132,7 +132,7 @@ module.exports = {
 		            	req.session.returnUrl = null;
 		            	return res.redirect(url);
 		            }
-		            return res.redirect('/dashboard');
+		            return res.view('activate', {locals : {activated: true}});	
 	        	});
 	    	});
 	},

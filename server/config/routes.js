@@ -34,6 +34,28 @@ module.exports.routes = {
 
   '/': 'ViewsController.home',
 
+  '/history': 'ViewsController.history',
+
+  '/training': 'ViewsController.training',
+
+  '/plans': 'ViewsController.plans',
+
+  '/cart': 'ViewsController.cart',
+
+  // '/': 'ViewsController.home',
+
+  // '/': 'ViewsController.home',
+
+  // '/': 'ViewsController.home',
+
+  // '/': 'ViewsController.home',
+
+  // '/': 'ViewsController.home',
+
+  // '/': 'ViewsController.home',
+
+  // '/': 'ViewsController.home',
+
   '/login': 'ViewsController.login',
 
   '/recoverPassword': 'ViewsController.recoverPassword',

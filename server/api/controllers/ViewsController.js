@@ -10,6 +10,42 @@ module.exports = {
 		return res.view('homepage', {locals: {user: req.session.user}});	
 	},
 
+	history: function(req,res){
+		return res.view('history', {locals: {user: req.session.user}});	
+	},
+
+	training: function(req,res){
+		return res.view('training', {locals: {user: req.session.user}});	
+	},
+
+	plans: function(req,res){
+		return res.view('plans', {locals: {user: req.session.user}});	
+	},
+
+	cart: function(req,res){
+		return res.view('cart', {locals: {user: req.session.user}});	
+	},
+
+	// home: function(req,res){
+	// 	return res.view('homepage', {locals: {user: req.session.user}});	
+	// },
+
+	// home: function(req,res){
+	// 	return res.view('homepage', {locals: {user: req.session.user}});	
+	// },
+
+	// home: function(req,res){
+	// 	return res.view('homepage', {locals: {user: req.session.user}});	
+	// },
+
+	// home: function(req,res){
+	// 	return res.view('homepage', {locals: {user: req.session.user}});	
+	// },
+
+	// home: function(req,res){
+	// 	return res.view('homepage', {locals: {user: req.session.user}});	
+	// },
+
 	login: function(req,res){
 		if(req.query.returnUrl){
 			req.session.returnUrl = decodeURIComponent(req.query.returnUrl);
