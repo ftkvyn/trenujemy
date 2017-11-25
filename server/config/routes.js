@@ -54,6 +54,10 @@ module.exports.routes = {
 
   'post /auth/login': 'AuthController.login',
 
+  'post /auth/recoverPassword': 'AuthController.recoverPassword',
+
+  'post /auth/changePassword': 'AuthController.changePassword',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

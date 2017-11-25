@@ -75,8 +75,7 @@
             model.password = $('.login-form .password').val();
             $('.loginError').hide();
             $.post('/auth/login', model, function(data){
-                console.log(data);
-                if(data.succeess){
+                if(data.success){
                     window.location = data.url;
                     return false;
                 }
@@ -107,8 +106,7 @@
             }
             $.post('/auth/register', model,
             function(data){
-                console.log(data);
-                if(data.succeess){
+                if(data.success){
                     window.location = '/activate';
                     return false;
                 }                

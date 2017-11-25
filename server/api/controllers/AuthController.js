@@ -96,7 +96,7 @@ module.exports = {
 						}
 	                  	if (user) {            	              
 	                  		//ToDo: send activation email.      	
-	                    	return res.send({succeess: true});
+	                    	return res.send({success: true});
           				}else{
           					console.error('No user created');
           					return res.badRequest('Error.');	
@@ -109,6 +109,9 @@ module.exports = {
 	},
 
 	activate:function(req,res){
+		if(!req.query.activationCode){
+			return res.view('activate', {locals : {noUser: true}});	
+		}
 		User.findOne({activationCode:req.query.activationCode}).exec(
 	        function(err,user){
 	        	if(err){
@@ -136,11 +139,68 @@ module.exports = {
 	},
 
 	recoverPassword:function(req,res){
-
+		User.findOne({login:req.body.login}).exec(
+	        function(err,user){
+	          if(err){
+	            console.error(err);
+	            return res.send({error: err});
+	          }
+	          if(!user){
+	            return res.send({
+	              success: false,
+	              notFound: true
+	            });
+	          }
+	          if(!user.isActive){
+              	return res.send({
+	              success: false,
+	              notActive: true
+	            });
+              }
+              var code = generateRandomStr(12);
+              console.log(code);
+              //ToDo: send email
+              User.update({id: user.id}, {passwordRecoveryKey: code})
+	        	.exec(function(err, users){
+	        		if(err){
+		        		console.error(err);
+		        		return res.send({error: err});
+		        	}	
+		        	return res.send({
+		              success: true
+		            });
+	        	});
+	    });
 	},
 
+	//413ekcsxb6sw
 	changePassword:function(req,res){
-
+		User.findOne({passwordRecoveryKey:req.body.code}).exec(
+	        function(err,user){
+	        	if(err){
+	        		console.error(err);
+	        		return res.send({success:false, error: err});
+	        	}
+	        	if(!user){
+	        		return res.send({success:false, noUser: true});
+	        	}
+	        	bcrypt.genSalt(10, function(err, salt) {
+	            bcrypt.hash(req.body.password, salt, function(err, hash) {
+		              	if (err) {
+		                	console.error(err);
+	        				return res.send({success:false, error: err});
+		                }
+						User.update({id: user.id}, {password: hash, passwordRecoveryKey: null})
+						.exec(function(err, users){
+							if(err){
+								console.error(err);
+	        					return res.send({success:false, error: err});	
+							}
+		                  	return res.send({success: true});
+	          			});
+	        		});
+				});
+	    	});
 	},
 };
 

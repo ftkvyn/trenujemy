@@ -22,14 +22,17 @@ module.exports = {
 	},
 
 	recoverPassword: function(req,res){
-		return res.view('login');	
+		return res.view('recoverPassword', {locals : {}});	
 	},
 
 	changePassword: function(req,res){
-		return res.view('login');	
+		return res.view('changePassword', {locals : {code: req.query.code}});	
 	},
 
 	dashboard: function(req,res){
+		if(!req.session.user){
+			return res.redirect('/');
+		}
 		return res.view('dashboard', {layout: null});	
 	}
 };

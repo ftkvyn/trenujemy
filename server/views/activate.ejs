@@ -3,7 +3,17 @@
     <div class="container">
         <div class="row pb30 align-items-end">
             <div class="col-lg-4 col-md-6 mr-auto ml-auto col-sm-8">
-                <h4 class="text-white text-center mb30">Activate</h3>                
+                <h4 class="text-white text-center mb30">Aktywuj konto</h3>    
+                 <% if(locals.noUser) {%>
+                  <div class="alert alert-danger text-center" role="alert">
+                    Nie udało się aktywować konta.
+                  </div>
+                  <% } else {%>
+                  <div class="text-white text-center">
+                     Dziękuję za rejestrację. Na Twój adres email został wysłany mail z linkiem aktywacyjnym.
+                  </div>
+                  <% } %>
+                            
             </div>
         </div>
     </div>
