@@ -7,11 +7,10 @@
 
 module.exports = {
 	home: function(req,res){
-		return res.view('homepage');	
+		return res.view('homepage', {locals: {user: req.session.user}});	
 	},
 
 	login: function(req,res){
-		console.log(req.query.returnUrl);
 		if(req.query.returnUrl){
 			req.session.returnUrl = decodeURIComponent(req.query.returnUrl);
 		}

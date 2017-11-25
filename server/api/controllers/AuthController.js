@@ -22,7 +22,7 @@ module.exports = {
 
 	login:function(req,res){
 		var password = req.body.password;
-	    User.findOne({login:req.body.email}).exec(
+	    User.findOne({login:req.body.login}).exec(
 	        function(err,user){
 	          if(err){
 	            console.error(err);
@@ -42,13 +42,18 @@ module.exports = {
 	                  notFound: true
 	                });
 	              }
-	              req.session.user = user;
-	              var url = req.session.returnUrl;
-	              if(url){
-	              	req.session.returnUrl = null;
-	              	return res.redirect(url);
+	              if(!user.isActive){
+	              	return res.send({
+		              success: false,
+		              notActive: true
+		            });
 	              }
-	              return res.redirect('/dashboard');
+	              req.session.user = user;
+	              var url = req.session.returnUrl || '/dashboard';
+	              return res.send({
+		              success: true,
+		              url: url
+		            });
 	            });
 	          }
 	    });

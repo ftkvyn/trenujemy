@@ -3,6 +3,15 @@
         <div class="row pb30 align-items-end">
             <div class="col-lg-4 col-md-6 mr-auto ml-auto col-sm-8">
                 <h3 class="text-white text-center mb30">Zaloguj się</h3>
+                <div class="alert alert-danger loginError notFoundError text-center" role="alert" style="display: none;">
+                    Nie ma użytkownika z podanym emailem i hasłem.
+                </div>
+                <div class="alert alert-danger loginError notActiveError text-center" role="alert" style="display: none;">
+                    Proszimy aktywować konto poprzez link, który został wysłany na podany email.
+                </div>
+                <div class="alert alert-danger loginError someLoginError text-center" role="alert" style="display: none;">
+                    Występił nieznany błąd. 
+                </div>
                 <form class="login-form">
                     <div class="form-group">
                         <input type="email" class="form-control email" placeholder="Adres Email" required>
@@ -26,6 +35,15 @@
         <div class="row pb30 align-items-end">
             <div class="col-lg-4 col-md-6 mr-auto ml-auto col-sm-8">
                 <h3 class="text-white text-center mb30">Zarejestruj się</h3>
+                <div class="alert alert-danger registerError passwordNotSame text-center" role="alert" style="display: none;">
+                    Hasło musi być identyczne w obu polach.
+                </div>
+                <div class="alert alert-danger registerError emailUsedError text-center" role="alert" style="display: none;">
+                    Podany adres email jest już obecny w bazie serwisu.
+                </div>
+                <div class="alert alert-danger registerError someRegisterError text-center" role="alert" style="display: none;">
+                     Występił nieznany błąd. 
+                </div>
                 <form class="register-form">
                     <div class="form-group">
                         <input type="email" class="form-control email" placeholder="Adres Email" required>
@@ -55,8 +73,23 @@
             var model = {};
             model.login = $('.login-form .email').val();
             model.password = $('.login-form .password').val();
+            $('.loginError').hide();
             $.post('/auth/login', model, function(data){
                 console.log(data);
+                if(data.succeess){
+                    window.location = data.url;
+                    return false;
+                }
+                if(data.notFound){
+                    $('.notFoundError').show();
+                    return false;
+                }
+                if(data.notActive){
+                    $('.notActiveError').show();
+                    return false;
+                }
+                console.error(data);
+                $('.someLoginError').show();
             });
             return false;
         });
@@ -67,8 +100,9 @@
             model.login = $('.register-form .email').val();
             model.password = $('.register-form .password').val();
             model.password2 = $('.register-form .password2').val();
+            $('.registerError').hide();
             if(model.password2 !== model.password){
-                alert('Hasło musi być identyczne w obu polach');
+                $('.passwordNotSame').show();
                 return false;
             }
             $.post('/auth/register', model,
@@ -77,10 +111,13 @@
                 if(data.succeess){
                     window.location = '/activate';
                     return false;
-                }else{
-                    alert('Error');
+                }                
+                if(data.emailUsed){
+                    $('.emailUsedError').show();
+                    return false;
                 }
-                //ToDo: handle other results.
+                console.error(data);
+                $('.someRegisterError').show();
             });
             return false;
         });
