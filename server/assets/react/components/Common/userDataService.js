@@ -31,7 +31,7 @@ $.get('/api/userData')
 	rejectWaiters = [];
 });
 
-export default () => {
+function loadUser(){
 	return new Promise((resolve, reject) => {
 		if(userData.login){
 			return resolve(userData);
@@ -40,3 +40,18 @@ export default () => {
 		rejectWaiters.push(reject);
 	  });
 }
+
+function saveUser(newUser){
+	return new Promise((resolve, reject) => {
+		$.post('/api/userData', newUser)
+		.success(function(data) {
+			resolve(data);
+		})
+		.error(function(err){
+			console.error(err);
+			reject(err);
+		});
+	  });
+}
+
+export {loadUser, saveUser};

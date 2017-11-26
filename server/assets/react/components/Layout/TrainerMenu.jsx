@@ -9,7 +9,8 @@ class TrainerMenu extends React.Component {
 
         this.state = {
             collapse: {
-                singleview: this.routeActive(['singleview']),
+                singleview:this.routeActive(['singleview']),
+                profile: this.routeActive(['profile']),
                 submenu: this.routeActive(['submenu'])
             }
         };
@@ -45,10 +46,27 @@ class TrainerMenu extends React.Component {
                 </li>
 
                 <li className={ this.routeActive('singleview') ? 'active' : '' }>
-                    <Link to="singleview" title="Single View">
+                    <Link to="singleview" title="Single view">
                     <em className="icon-grid"></em>
                     <span data-localize="sidebar.nav.SINGLEVIEW">Single View</span>
                     </Link>
+                </li>
+
+                <li className={ this.routeActive(['profile']) ? 'active' : '' }>
+                    <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'profile') }>
+                        <em className="icon-user"></em>
+                        <span>Konto</span>
+                    </div>
+                    <Collapse in={ this.state.collapse.profile } timeout={ 100 }>
+                        <ul id="profile" className="nav sidebar-subnav">
+                            <li className="sidebar-subnav-header">Moje dane</li>
+                            <li className={ this.routeActive('profile') ? 'active' : '' }>
+                                <Link to="profile" title="Moje dane">
+                                <span>Moje dane</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </Collapse>
                 </li>
 
                 <li className={ this.routeActive(['submenu']) ? 'active' : '' }>

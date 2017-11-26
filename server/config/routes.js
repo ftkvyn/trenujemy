@@ -68,6 +68,8 @@ module.exports.routes = {
 
   'get /api/userData' : 'UserDataController.getUserData',
 
+  'post /api/userData' : 'UserDataController.saveUserData',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

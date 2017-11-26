@@ -3,7 +3,7 @@ import { Router, Route, Link, History, withRouter } from 'react-router-dom';
 import SidebarRun from './Sidebar.run';
 import TrainerMenu from './TrainerMenu';
 import UserMenu from './UserMenu';
-import userDataService from '../Common/userDataService';
+import { loadUser } from '../Common/userDataService';
 
 class Sidebar extends React.Component {
     constructor(props, context) {
@@ -17,7 +17,7 @@ class Sidebar extends React.Component {
             }
         };
         let me = this;
-        userDataService()
+        loadUser()
         .then(function(userData) {              
             me.setState({user: userData});
         });

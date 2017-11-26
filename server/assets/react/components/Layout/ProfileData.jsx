@@ -1,7 +1,7 @@
 import React from 'react';
 import pubsub from 'pubsub-js';
 import { Collapse } from 'react-bootstrap';
-import userDataService from '../Common/userDataService';
+import {loadUser, saveUser} from '../Common/userDataService';
 
 class ProfileData extends React.Component {
     constructor(props, context) {
@@ -17,7 +17,7 @@ class ProfileData extends React.Component {
             });
         });
         let me = this;
-        userDataService()
+        loadUser()
           .then(function(userData) {              
               me.setState({user: userData});
           })
@@ -44,6 +44,9 @@ class ProfileData extends React.Component {
                             </div>
                             { /* Name and Job */ }
                             <div className="user-block-info">
+                                <span className="user-block-name">
+                                    { this.state.user.name }
+                                </span>
                                 <span className="user-block-name">
                                     { this.state.user.login }
                                 </span>
