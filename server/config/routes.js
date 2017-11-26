@@ -80,6 +80,8 @@ module.exports.routes = {
 
   'post /auth/changePassword': 'AuthController.changePassword',
 
+  'get /api/userData' : 'UserDataController.getUserData',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

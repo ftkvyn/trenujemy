@@ -16,7 +16,6 @@ class CustomListGroup extends React.Component {
 }
 
 class Header extends React.Component {
-
     componentDidMount() {
 
         HeaderRun();
@@ -28,7 +27,7 @@ class Header extends React.Component {
         pubsub.publish('toggleUserblock');
     }
 
-    render() {
+    render() {       
         const ddAlertTitle = (
             <span>
                 <em className="icon-bell"></em>
