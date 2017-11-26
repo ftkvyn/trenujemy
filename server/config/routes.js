@@ -50,7 +50,7 @@ module.exports.routes = {
 
   '/activate': 'ViewsController.activate',  
 
-  '/dashboard/:path?': 'ViewsController.dashboard',
+  '/dashboard/:path?/:path2?/:path3?': 'ViewsController.dashboard',
 
   'post /auth/login': 'AuthController.login',
 
@@ -69,6 +69,8 @@ module.exports.routes = {
   'get /api/userData' : 'UserDataController.getUserData',
 
   'post /api/userData' : 'UserDataController.saveUserData',
+
+  'get /api/clients': 'UserDataController.getClientsData',
 
   /***************************************************************************
   *                                                                          *

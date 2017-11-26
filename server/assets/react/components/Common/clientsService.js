@@ -1,11 +1,13 @@
-let userData = {};
+let clients = [];
+let loaded = false;
 let resolveWaiters = [];
 let rejectWaiters = [];
 
 
-$.get('/api/userData')
+$.get('/api/clients')
 .success(function(data) {
-	userData = data;
+	clients = data;
+	loaded = true;
 	for (var i = resolveWaiters.length - 1; i >= 0; i--) {
 		try{
 			resolveWaiters[i](data);
@@ -18,6 +20,7 @@ $.get('/api/userData')
 	rejectWaiters = [];
 })
 .error(function(err){
+	loaded = true;
 	console.error(err);
 	for (var i = rejectWaiters.length - 1; i >= 0; i--) {
 		try{
@@ -31,27 +34,14 @@ $.get('/api/userData')
 	rejectWaiters = [];
 });
 
-function loadUser(){
+function loadClients(){
 	return new Promise((resolve, reject) => {
-		if(userData.login){
-			return resolve(userData);
+		if(loaded){
+			return resolve(clients);
 		}
 		resolveWaiters.push(resolve);
 		rejectWaiters.push(reject);
 	  });
 }
 
-function saveUser(newUser){
-	return new Promise((resolve, reject) => {
-		$.post('/api/userData', newUser)
-		.success(function(data) {
-			resolve(data);
-		})
-		.error(function(err){
-			console.error(err);
-			reject(err);
-		});
-	  });
-}
-
-export {loadUser, saveUser};
+export {loadClients};

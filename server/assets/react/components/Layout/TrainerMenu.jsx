@@ -2,6 +2,7 @@ import React from 'react';
 import ProfileData from './ProfileData';
 import { Router, Route, Link, History, withRouter } from 'react-router-dom';
 import { Collapse } from 'react-bootstrap';
+import ClientsLinks from './ClientsLinks'
 
 class TrainerMenu extends React.Component {
     constructor(props, context) {
@@ -52,14 +53,14 @@ class TrainerMenu extends React.Component {
                         <ul id="profile" className="nav sidebar-subnav">
                             <li className="sidebar-subnav-header">Moje dane</li>
                             <li className={ this.routeActive('profile') ? 'active' : '' }>
-                                <Link to="profile" title="Moje dane">
+                                <Link to="/profile" title="Moje dane">
                                 <span>Moje dane</span>
                                 </Link>
                             </li>
                         </ul>
                     </Collapse>
                 </li>
-
+                <ClientsLinks></ClientsLinks>
             </ul>);
     }
 

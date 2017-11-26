@@ -54,7 +54,7 @@ const Routes = ({ location }) => {
                     <div>
                         <Switch location={location}>
                             <Route path="/profile" component={Profile}/>
-
+                            <Route path="/clients/:id" component={Profile}/>
                             <Redirect to="/profile"/>
                         </Switch>
                     </div>

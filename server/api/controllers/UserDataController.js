@@ -64,5 +64,23 @@ module.exports = {
 				return res.json({success: true});
 			}
 		});
+	},
+
+	getClientsData: function(req, res){
+		User.find({role:'user'})
+		.exec(function(err, users){
+			if(err){
+				console.error(err);
+				return res.badRequest(err);
+			}
+			var models = users.map(function(user){
+				var model = user;
+				delete user.password;
+				delete user.activationCode;
+				delete user.passwordRecoveryKey;
+				return model; 
+			});	
+			return res.json(models);
+		});
 	}
 }

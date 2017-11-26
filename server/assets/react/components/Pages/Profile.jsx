@@ -2,6 +2,7 @@ import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
 import { loadUser, saveUser } from '../Common/userDataService';
+import { loadClients } from '../Common/clientsService';
 
 let hideAlertSuccess = null;
 let hideAlertError = null;
@@ -22,51 +23,78 @@ function saveUserFn(newUser){
     });
 }
 
+function loadClientData(id, me){
+    loadClients()
+    .then(function(clients){
+        for (var i = clients.length - 1; i >= 0; i--) {
+            if(clients[i].id == id){
+                setUser(clients[i], me);
+                return;
+            }
+        }
+    });
+}
+
+function setUser(userData, me){
+    me.setState({user: userData});    
+    $('#datetimepicker').datetimepicker({
+        icons: {
+            time: 'fa fa-clock-o',
+            date: 'fa fa-calendar',
+            up: 'fa fa-chevron-up',
+            down: 'fa fa-chevron-down',
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-crosshairs',
+            clear: 'fa fa-trash'
+      },
+      format:'DD.MM.YYYY',
+      keepOpen: false,
+      defaultDate: userData.birthday
+    });
+    $("#datetimepicker").on("dp.change", function (e) {
+        let newDate = e.date.toDate().toISOString();
+        let newUser = me.state.user;
+        newUser.birthday = newDate
+        me.setState({user: newUser});
+
+        if(saveHandler){
+            saveHandler.clear();
+        }
+        saveHandler = debounce(() => saveUserFn(newUser), 1000);
+        saveHandler();
+    });
+    if(userData.birthday){;
+        $('#datetimepicker').data("DateTimePicker").date(userData.birthday);
+    }
+}
+
 let saveHandler = null;
 
 class Profile extends React.Component {
     constructor(props, context) {
         super(props, context);
-
         this.state = {
             user: {}
         };
         let me = this;
-        loadUser()
-        .then(function(userData) {              
-            me.setState({user: userData});
-            $('#datetimepicker').datetimepicker({
-                icons: {
-                    time: 'fa fa-clock-o',
-                    date: 'fa fa-calendar',
-                    up: 'fa fa-chevron-up',
-                    down: 'fa fa-chevron-down',
-                    previous: 'fa fa-chevron-left',
-                    next: 'fa fa-chevron-right',
-                    today: 'fa fa-crosshairs',
-                    clear: 'fa fa-trash'
-              },
-              format:'DD.MM.YYYY',
-              keepOpen: false,
-              defaultDate: userData.birthday
-            });
-            $("#datetimepicker").on("dp.change", function (e) {
-                let newDate = e.date.toDate().toISOString();
-                let newUser = me.state.user;
-                newUser.birthday = newDate
-                me.setState({user: newUser});
-
-                if(saveHandler){
-                    saveHandler.clear();
-                }
-                saveHandler = debounce(() => saveUserFn(newUser), 1000);
-                saveHandler();
-            });
-            if(userData.birthday){;
-                $('#datetimepicker').data("DateTimePicker").date(userData.birthday);
-            }
-        });
+        if(!props.match.params.id){
+            loadUser()
+            .then((data) => setUser(data, me));
+        }else{
+            loadClientData(props.match.params.id, me);
+        }
     };
+
+    componentWillReceiveProps(nextProps) {
+        let me = this;
+        if(!nextProps.match.params.id){
+            loadUser()
+            .then((data) => setUser(data, me));
+        }else{
+            loadClientData(nextProps.match.params.id, me);
+        }
+    }
 
     handleChange(event) {
         let fieldName = event.target.name;
