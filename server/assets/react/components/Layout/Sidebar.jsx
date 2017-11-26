@@ -1,32 +1,19 @@
 import React from 'react';
 import { Router, Route, Link, History, withRouter } from 'react-router-dom';
-import pubsub from 'pubsub-js';
 import { Collapse } from 'react-bootstrap';
 import SidebarRun from './Sidebar.run';
-import userDataService from '../Common/userDataService';
+import ProfileData from './ProfileData';
 
 class Sidebar extends React.Component {
     constructor(props, context) {
         super(props, context);
 
         this.state = {
-            user: {},
-            userBlockCollapse: false,
             collapse: {
                 singleview: this.routeActive(['singleview']),
                 submenu: this.routeActive(['submenu'])
             }
         };
-        this.pubsub_token = pubsub.subscribe('toggleUserblock', () => {
-            this.setState({
-                userBlockCollapse: !this.state.userBlockCollapse
-            });
-        });
-        let me = this;
-        userDataService()
-          .then(function(userData) {              
-              me.setState({user: userData});
-          })
     };
 
     componentDidMount() {
@@ -36,11 +23,6 @@ class Sidebar extends React.Component {
 
     navigator(route) {
         this.props.router.push(route)
-    }
-
-    componentWillUnmount() {
-        // React removed me from the DOM, I have to unsubscribe from the pubsub using my token
-        pubsub.unsubscribe(this.pubsub_token);
     }
 
     routeActive(paths) {
@@ -63,13 +45,8 @@ class Sidebar extends React.Component {
         });
     }
 
-    render() {        
+    render() {    
         let panelName = 'Panel';
-        if(this.state.user.role == 'user'){
-            panelName = 'Panel Klienta';
-        }else if(this.state.user.role == 'trainer'){
-            panelName = 'Panel Trenera';
-        }
         return (
             <aside className='aside'>
                 { /* START Sidebar (left) */ }
@@ -77,30 +54,7 @@ class Sidebar extends React.Component {
                     <nav data-sidebar-anyclick-close="" className="sidebar">
                         { /* START sidebar nav */ }
                         <ul className="nav">
-                            { /* START user info */ }
-                            <li className="has-user-block">
-                                <Collapse id="user-block" in={ this.state.userBlockCollapse }>
-                                    <div>
-                                        <div className="item user-block">
-                                            { /* User picture */ }
-                                            <div className="user-block-picture">
-                                                <div className="user-block-status">
-                                                    <img src={this.state.user.profilePic || "img/user/02.jpg"} alt="Avatar" width="60" height="60" className="img-thumbnail img-circle" />
-                                                    <div className="circle circle-success circle-lg"></div>
-                                                </div>
-                                            </div>
-                                            { /* Name and Job */ }
-                                            <div className="user-block-info">
-                                                <span className="user-block-name">
-                                                    { this.state.user.login }
-                                                </span>
-                                                <a href='/auth/logout'>Wyloguj</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Collapse>
-                            </li>
-                            { /* END user info */ }
+                            <ProfileData></ProfileData>
                             { /* Iterates over all sidebar items */ }
                             <li className="nav-heading ">
                                 <span data-localize="sidebar.heading.HEADER">{ panelName }</span>
