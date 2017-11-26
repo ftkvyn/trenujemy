@@ -53,11 +53,9 @@ const Routes = ({ location }) => {
                 <CSSTransition key={currentKey} timeout={timeout} classNames={animationName}>
                     <div>
                         <Switch location={location}>
-                            <Route path="/singleview" component={SingleView}/>
-                            <Route path="/submenu" component={SubMenu}/>
                             <Route path="/profile" component={Profile}/>
 
-                            <Redirect to="/singleview"/>
+                            <Redirect to="/profile"/>
                         </Switch>
                     </div>
                 </CSSTransition>

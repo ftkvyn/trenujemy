@@ -9,9 +9,7 @@ class TrainerMenu extends React.Component {
 
         this.state = {
             collapse: {
-                singleview:this.routeActive(['singleview']),
                 profile: this.routeActive(['profile']),
-                submenu: this.routeActive(['submenu'])
             }
         };
     };
@@ -45,13 +43,6 @@ class TrainerMenu extends React.Component {
                     <span>Panel Trenera</span>
                 </li>
 
-                <li className={ this.routeActive('singleview') ? 'active' : '' }>
-                    <Link to="singleview" title="Single view">
-                    <em className="icon-grid"></em>
-                    <span data-localize="sidebar.nav.SINGLEVIEW">Single View</span>
-                    </Link>
-                </li>
-
                 <li className={ this.routeActive(['profile']) ? 'active' : '' }>
                     <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'profile') }>
                         <em className="icon-user"></em>
@@ -63,24 +54,6 @@ class TrainerMenu extends React.Component {
                             <li className={ this.routeActive('profile') ? 'active' : '' }>
                                 <Link to="profile" title="Moje dane">
                                 <span>Moje dane</span>
-                                </Link>
-                            </li>
-                        </ul>
-                    </Collapse>
-                </li>
-
-                <li className={ this.routeActive(['submenu']) ? 'active' : '' }>
-                    <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'submenu') }>
-                        <div className="pull-right label label-info">1</div>
-                        <em className="icon-speedometer"></em>
-                        <span data-localize="sidebar.nav.MENU">Menu</span>
-                    </div>
-                    <Collapse in={ this.state.collapse.submenu } timeout={ 100 }>
-                        <ul id="submenu" className="nav sidebar-subnav">
-                            <li className="sidebar-subnav-header">Submenu</li>
-                            <li className={ this.routeActive('submenu') ? 'active' : '' }>
-                                <Link to="submenu" title="Submenu">
-                                <span data-localize="sidebar.nav.SUBMENU">Submenu</span>
                                 </Link>
                             </li>
                         </ul>

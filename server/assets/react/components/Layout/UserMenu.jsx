@@ -9,8 +9,7 @@ class UserMenu extends React.Component {
 
         this.state = {
             collapse: {
-                singleview: this.routeActive(['singleview']),
-                submenu: this.routeActive(['submenu'])
+                profile: this.routeActive(['profile']),
             }
         };
     };
@@ -44,25 +43,17 @@ class UserMenu extends React.Component {
                     <span>Panel Klienta</span>
                 </li>
 
-                <li className={ this.routeActive('singleview') ? 'active' : '' }>
-                    <Link to="singleview" title="Single View">
-                    <em className="icon-grid"></em>
-                    <span data-localize="sidebar.nav.SINGLEVIEW">Single View 2</span>
-                    </Link>
-                </li>
-
-                <li className={ this.routeActive(['submenu']) ? 'active' : '' }>
-                    <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'submenu') }>
-                        <div className="pull-right label label-info">1</div>
-                        <em className="icon-speedometer"></em>
-                        <span data-localize="sidebar.nav.MENU">Menu 2</span>
+                <li className={ this.routeActive(['profile']) ? 'active' : '' }>
+                    <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'profile') }>
+                        <em className="icon-user"></em>
+                        <span>Konto</span>
                     </div>
-                    <Collapse in={ this.state.collapse.submenu } timeout={ 100 }>
-                        <ul id="submenu" className="nav sidebar-subnav">
-                            <li className="sidebar-subnav-header">Submenu</li>
-                            <li className={ this.routeActive('submenu') ? 'active' : '' }>
-                                <Link to="submenu" title="Submenu">
-                                <span data-localize="sidebar.nav.SUBMENU">Submenu</span>
+                    <Collapse in={ this.state.collapse.profile } timeout={ 100 }>
+                        <ul id="profile" className="nav sidebar-subnav">
+                            <li className="sidebar-subnav-header">Moje dane</li>
+                            <li className={ this.routeActive('profile') ? 'active' : '' }>
+                                <Link to="profile" title="Moje dane">
+                                <span>Moje dane</span>
                                 </Link>
                             </li>
                         </ul>

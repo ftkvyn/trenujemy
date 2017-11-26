@@ -22,6 +22,8 @@ function saveUserFn(newUser){
     });
 }
 
+let saveHandler = null;
+
 class Profile extends React.Component {
     constructor(props, context) {
         super(props, context);
@@ -54,7 +56,11 @@ class Profile extends React.Component {
                 newUser.birthday = newDate
                 me.setState({user: newUser});
 
-                debounce(() => saveUserFn(newUser), 1000)();
+                if(saveHandler){
+                    saveHandler.clear();
+                }
+                saveHandler = debounce(() => saveUserFn(newUser), 1000);
+                saveHandler();
             });
             if(userData.birthday){;
                 $('#datetimepicker').data("DateTimePicker").date(userData.birthday);
@@ -69,7 +75,11 @@ class Profile extends React.Component {
         newUser[fieldName] = fieldVal
         this.setState({user: newUser});
 
-        debounce(() => saveUserFn(newUser), 1000)();        
+        if(saveHandler){
+            saveHandler.clear();
+        }
+        saveHandler = debounce(() => saveUserFn(newUser), 1000);        
+        saveHandler();
     }
 
     render() {  
