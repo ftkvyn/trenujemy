@@ -6,8 +6,6 @@ let rejectWaiters = [];
 $.get('/api/userData')
 .success(function(data) {
 	userData = data;
-	console.log('service');
-	console.log(data);
 	for (var i = resolveWaiters.length - 1; i >= 0; i--) {
 		try{
 			resolveWaiters[i](data);

@@ -23,11 +23,8 @@ class Sidebar extends React.Component {
             });
         });
         let me = this;
-        console.log(userDataService);
         userDataService()
-          .then(function(userData) {
-              console.log('component');
-              console.log(userData);
+          .then(function(userData) {              
               me.setState({user: userData});
           })
     };

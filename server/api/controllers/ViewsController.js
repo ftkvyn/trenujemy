@@ -26,26 +26,6 @@ module.exports = {
 		return res.view('cart', {locals: {user: req.session.user}});	
 	},
 
-	// home: function(req,res){
-	// 	return res.view('homepage', {locals: {user: req.session.user}});	
-	// },
-
-	// home: function(req,res){
-	// 	return res.view('homepage', {locals: {user: req.session.user}});	
-	// },
-
-	// home: function(req,res){
-	// 	return res.view('homepage', {locals: {user: req.session.user}});	
-	// },
-
-	// home: function(req,res){
-	// 	return res.view('homepage', {locals: {user: req.session.user}});	
-	// },
-
-	// home: function(req,res){
-	// 	return res.view('homepage', {locals: {user: req.session.user}});	
-	// },
-
 	login: function(req,res){
 		if(req.query.returnUrl){
 			req.session.returnUrl = decodeURIComponent(req.query.returnUrl);
