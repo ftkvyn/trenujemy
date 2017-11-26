@@ -1,19 +1,26 @@
 import React from 'react';
 import { Router, Route, Link, History, withRouter } from 'react-router-dom';
-import { Collapse } from 'react-bootstrap';
 import SidebarRun from './Sidebar.run';
-import ProfileData from './ProfileData';
+import TrainerMenu from './TrainerMenu';
+import UserMenu from './UserMenu';
+import userDataService from '../Common/userDataService';
 
 class Sidebar extends React.Component {
     constructor(props, context) {
         super(props, context);
 
         this.state = {
+            user: {},
             collapse: {
                 singleview: this.routeActive(['singleview']),
                 submenu: this.routeActive(['submenu'])
             }
         };
+        let me = this;
+        userDataService()
+        .then(function(userData) {              
+            me.setState({user: userData});
+        });
     };
 
     componentDidMount() {
@@ -46,46 +53,19 @@ class Sidebar extends React.Component {
     }
 
     render() {    
-        let panelName = 'Panel';
+        let menu = <ul></ul>
+        if(this.state.user.role == 'user'){
+            menu = <UserMenu></UserMenu>
+        }else if(this.state.user.role == 'trainer'){
+            menu = <TrainerMenu></TrainerMenu>
+        }
         return (
             <aside className='aside'>
                 { /* START Sidebar (left) */ }
                 <div className="aside-inner">
                     <nav data-sidebar-anyclick-close="" className="sidebar">
                         { /* START sidebar nav */ }
-                        <ul className="nav">
-                            <ProfileData></ProfileData>
-                            { /* Iterates over all sidebar items */ }
-                            <li className="nav-heading ">
-                                <span data-localize="sidebar.heading.HEADER">{ panelName }</span>
-                            </li>
-
-                            <li className={ this.routeActive('singleview') ? 'active' : '' }>
-                                <Link to="singleview" title="Single View">
-                                <em className="icon-grid"></em>
-                                <span data-localize="sidebar.nav.SINGLEVIEW">Single View</span>
-                                </Link>
-                            </li>
-
-                            <li className={ this.routeActive(['submenu']) ? 'active' : '' }>
-                                <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'submenu') }>
-                                    <div className="pull-right label label-info">1</div>
-                                    <em className="icon-speedometer"></em>
-                                    <span data-localize="sidebar.nav.MENU">Menu</span>
-                                </div>
-                                <Collapse in={ this.state.collapse.submenu } timeout={ 100 }>
-                                    <ul id="submenu" className="nav sidebar-subnav">
-                                        <li className="sidebar-subnav-header">Submenu</li>
-                                        <li className={ this.routeActive('submenu') ? 'active' : '' }>
-                                            <Link to="submenu" title="Submenu">
-                                            <span data-localize="sidebar.nav.SUBMENU">Submenu</span>
-                                            </Link>
-                                        </li>
-                                    </ul>
-                                </Collapse>
-                            </li>
-
-                        </ul>
+                        {menu}
                         { /* END sidebar nav */ }
                     </nav>
                 </div>

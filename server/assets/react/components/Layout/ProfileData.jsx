@@ -29,14 +29,6 @@ class ProfileData extends React.Component {
     }
 
     render() {        
-        let panelName = 'Panel';
-        let defaultProfilePic = 'img/user/02.jpg';
-        if(this.state.user.role == 'user'){
-            panelName = 'Panel Klienta';
-            defaultProfilePic = 'img/user/13.jpg';
-        }else if(this.state.user.role == 'trainer'){
-            panelName = 'Panel Trenera';
-        }
         return (
             <li className="has-user-block">
                 <Collapse id="user-block" in={ this.state.userBlockCollapse }>
@@ -45,7 +37,7 @@ class ProfileData extends React.Component {
                             { /* User picture */ }
                             <div className="user-block-picture">
                                 <div className="user-block-status">
-                                    <img src={this.state.user.profilePic || defaultProfilePic} 
+                                    <img src={this.state.user.profilePic || this.props.defaultProfilePic} 
                                     alt="Avatar" width="60" height="60" className="img-thumbnail img-circle" />
                                     <div className="circle circle-success circle-lg"></div>
                                 </div>

@@ -1,7 +1,7 @@
 import React from 'react';
+import ProfileData from './ProfileData';
 import { Router, Route, Link, History, withRouter } from 'react-router-dom';
 import { Collapse } from 'react-bootstrap';
-import SidebarRun from './Sidebar.run';
 
 class TrainerMenu extends React.Component {
     constructor(props, context) {
@@ -35,8 +35,41 @@ class TrainerMenu extends React.Component {
         });
     }
 
-    render() {        
-        return ();
+    render() {      
+        return (
+            <ul className="nav">
+                <ProfileData defaultProfilePic='img/user/02.jpg'></ProfileData>
+                { /* Iterates over all sidebar items */ }
+                <li className="nav-heading ">
+                    <span>Panel Trenera</span>
+                </li>
+
+                <li className={ this.routeActive('singleview') ? 'active' : '' }>
+                    <Link to="singleview" title="Single View">
+                    <em className="icon-grid"></em>
+                    <span data-localize="sidebar.nav.SINGLEVIEW">Single View</span>
+                    </Link>
+                </li>
+
+                <li className={ this.routeActive(['submenu']) ? 'active' : '' }>
+                    <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'submenu') }>
+                        <div className="pull-right label label-info">1</div>
+                        <em className="icon-speedometer"></em>
+                        <span data-localize="sidebar.nav.MENU">Menu</span>
+                    </div>
+                    <Collapse in={ this.state.collapse.submenu } timeout={ 100 }>
+                        <ul id="submenu" className="nav sidebar-subnav">
+                            <li className="sidebar-subnav-header">Submenu</li>
+                            <li className={ this.routeActive('submenu') ? 'active' : '' }>
+                                <Link to="submenu" title="Submenu">
+                                <span data-localize="sidebar.nav.SUBMENU">Submenu</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </Collapse>
+                </li>
+
+            </ul>);
     }
 
 }
