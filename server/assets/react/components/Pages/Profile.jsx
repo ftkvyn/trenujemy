@@ -37,9 +37,10 @@ function loadClientData(id, me){
 
 function destroyDp(){
     if($('#datetimepicker').data("DateTimePicker")) {
-        console.log('destroy');
         $('#datetimepicker').data("DateTimePicker").destroy();
         $('#datetimepicker input').val(null);
+        $('#datetimepicker').off('dp.change');
+        $('#datetimepicker *').off('dp.change');
     }
 }
 
@@ -48,7 +49,6 @@ function setUser(userData, me){
     $('.saveSuccess').hide();
     destroyDp();
     me.setState({user: userData});
-    console.log('create');
     $('#datetimepicker').datetimepicker({
         icons: {
             time: 'fa fa-clock-o',
