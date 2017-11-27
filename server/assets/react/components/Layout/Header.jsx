@@ -64,14 +64,6 @@ class Header extends React.Component {
                                     <em className="fa fa-navicon"></em>
                                 </a>
                             </li>
-                            { /* START User avatar toggle */ }
-                            <li>
-                                { /* Button used to collapse the left sidebar. Only visible on tablet and desktops */ }
-                                <a id="user-block-toggle" href="#" onClick={ this.toggleUserblock }>
-                                    <em className="icon-user"></em>
-                                </a>
-                            </li>
-                            { /* END User avatar toggle */ }
                         </ul>
                         { /* END Left navbar */ }
                         { /* START Right Navbar */ }

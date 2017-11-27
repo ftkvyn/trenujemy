@@ -35,8 +35,20 @@ function loadClientData(id, me){
     });
 }
 
+function destroyDp(){
+    if($('#datetimepicker').data("DateTimePicker")) {
+        console.log('destroy');
+        $('#datetimepicker').data("DateTimePicker").destroy();
+        $('#datetimepicker input').val(null);
+    }
+}
+
 function setUser(userData, me){
-    me.setState({user: userData});    
+    $('.saveError').hide();
+    $('.saveSuccess').hide();
+    destroyDp();
+    me.setState({user: userData});
+    console.log('create');
     $('#datetimepicker').datetimepicker({
         icons: {
             time: 'fa fa-clock-o',
@@ -53,6 +65,8 @@ function setUser(userData, me){
       defaultDate: userData.birthday
     });
     $("#datetimepicker").on("dp.change", function (e) {
+        console.log('change');
+        console.log(e);
         let newDate = e.date.toDate().toISOString();
         let newUser = me.state.user;
         newUser.birthday = newDate
@@ -63,10 +77,7 @@ function setUser(userData, me){
         }
         saveHandler = debounce(() => saveUserFn(newUser), 1000);
         saveHandler();
-    });
-    if(userData.birthday){;
-        $('#datetimepicker').data("DateTimePicker").date(userData.birthday);
-    }
+    });    
 }
 
 let saveHandler = null;
@@ -76,17 +87,23 @@ class Profile extends React.Component {
         super(props, context);
         this.state = {
             user: {}
-        };
+        };        
+    };
+
+    componentDidMount(){
         let me = this;
-        if(!props.match.params.id){
+        if(!this.props.match.params.id){
             loadUser()
             .then((data) => setUser(data, me));
         }else{
-            loadClientData(props.match.params.id, me);
+            loadClientData(this.props.match.params.id, me);
         }
-    };
+    }
 
     componentWillReceiveProps(nextProps) {
+        if(this.props.match.params.id === nextProps.match.params.id){
+            return;
+        }
         let me = this;
         if(!nextProps.match.params.id){
             loadUser()
@@ -124,6 +141,10 @@ class Profile extends React.Component {
                 </Col>
             </FormGroup>     
         }      
+        var readonlyProps = {};
+        if(this.props.match.params.id){
+            readonlyProps = {readOnly: true};
+        }
         return (
             <ContentWrapper>
                 <h3>Twoje dane</h3>
@@ -135,7 +156,7 @@ class Profile extends React.Component {
                                     <label className="col-lg-2 control-label">Imię i nazwisko:</label>
                                     <Col lg={ 10 }>
                                         <FormControl type="text" placeholder="Imię i nazwisko" 
-                                        className="form-control" 
+                                        className="form-control" {...readonlyProps}
                                         name='name'
                                         value={this.state.user.name || ''}
                                         onChange={this.handleChange.bind(this)}/>
@@ -145,7 +166,7 @@ class Profile extends React.Component {
                                     <label className="col-lg-2 control-label">Data urodzenia:</label>
                                     <Col lg={ 10 }>
                                         <div id="datetimepicker" className="input-group date">
-                                            <input type="text" className="form-control" name='birthday'/>
+                                            <input type="text" className="form-control" name='birthday' {...readonlyProps}/>
                                             <span className="input-group-addon">
                                             <span className="fa fa-calendar"></span>
                                             </span>
@@ -156,7 +177,7 @@ class Profile extends React.Component {
                                     <label className="col-lg-2 control-label">Numer telefonu:</label>
                                     <Col lg={ 10 }>
                                         <FormControl type="text" placeholder="Numer telefonu" 
-                                        className="form-control" 
+                                        className="form-control" {...readonlyProps}
                                         name='phone'
                                         value={this.state.user.phone || ''}
                                         onChange={this.handleChange.bind(this)}/>

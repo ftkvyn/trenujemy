@@ -9,13 +9,8 @@ class ProfileData extends React.Component {
 
         this.state = {
             user: {},
-            userBlockCollapse: false,
+            userBlockCollapse: true,
         };
-        this.pubsub_token = pubsub.subscribe('toggleUserblock', () => {
-            this.setState({
-                userBlockCollapse: !this.state.userBlockCollapse
-            });
-        });
         let me = this;
         loadUser()
           .then(function(userData) {              

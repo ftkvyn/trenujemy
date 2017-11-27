@@ -67,7 +67,7 @@ module.exports = {
 	},
 
 	getClientsData: function(req, res){
-		User.find({role:'user'})
+		User.find({role:'user', isActive: true})
 		.exec(function(err, users){
 			if(err){
 				console.error(err);

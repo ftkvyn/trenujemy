@@ -55,11 +55,12 @@ class ClientsLinks extends React.Component {
         return (
             <li className={ this.routeActive(['clients']) ? 'active' : '' }>
             <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'clients') }>
-                <em className="icon-user"></em>
+                <em className="icon-people"></em>
                 <span>Klienci</span>
             </div>
             <Collapse in={ this.state.collapse.clients } timeout={ 100 }>
                 <ul id="clients" className="nav sidebar-subnav">
+                    <li className="sidebar-subnav-header">Klienci</li>
                     {linkItems}                    
                 </ul>
             </Collapse>
