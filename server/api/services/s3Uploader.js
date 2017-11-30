@@ -42,7 +42,6 @@ function upload(params){
 	    	console.error(error);
 	    	deferred.reject(new Error(error));
 	    }else{
-	    	console.log(response);
 	    	deferred.resolve({url: response.Location, key: response.key});
 		}
 	  });

@@ -127,6 +127,63 @@ class Profile extends React.Component {
         saveHandler();
     }
 
+    imageClick(event){
+        if(this.props.userId){
+            return;
+        }
+        $('#profilePicInput').click();
+    }
+
+    uploadImage(){
+        let me = this;
+        var fd = new FormData();
+        var fileData = $('#profilePicInput')[0].files[0];
+        fd.append('file', fileData);
+        $.ajax({
+            // Your server script to process the upload
+            url: '/api/uploadImage',
+            type: 'POST',
+
+            // Form data
+            data: fd,
+
+            // Tell jQuery not to process data or worry about content-type
+            // You *must* include these options!
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: 'multipart/form-data',
+
+            // Custom XMLHttpRequest
+            xhr: function() {
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) {
+                    // For handling the progress of the upload
+                    myXhr.upload.addEventListener('progress', function(e) {
+                        
+                    } , false);
+                }
+                return myXhr;
+            },
+            success: function (data) {
+                let newUser = me.state.user;
+                newUser.profilePic = data.url;
+                me.setState({user: newUser});
+                if(saveHandler){
+                    saveHandler.clear();
+                }
+                saveHandler = debounce(() => saveUserFn(newUser), 100);        
+                saveHandler();
+            },
+            error: function(err){
+                console.error(err);
+                $('.saveError').show();
+                clearTimeout(hideAlertError);
+                hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
+            }
+        });
+    }
+
     render() {  
         var invoiceForm = "";
         if(this.state.user.role == 'trainer'){
@@ -145,9 +202,22 @@ class Profile extends React.Component {
         if(this.props.userId){
             readonlyProps = {readOnly: true};
         }
+        var profilePic = this.state.user.profilePic || '/images/no_image_user.png';
+        var picForm = "";
+        if(!this.props.userId){
+            picForm = <form id='profilePicForm' style={{display:'none'}}>
+                <input type='file' name='file' id='profilePicInput' onChange={this.uploadImage.bind(this)}/>
+            </form>
+        }
         return (
               <Panel>
-                    <form className="form-horizontal">                                
+                    <form className="form-horizontal">     
+                        <FormGroup>
+                            <label className="col-lg-2 control-label">Zdjęcie profilowe:</label>
+                            <Col lg={ 10 }>
+                                <img src={profilePic} className='profile-pic' onClick={this.imageClick.bind(this)}/>
+                            </Col>
+                        </FormGroup> 
                         <FormGroup>
                             <label className="col-lg-2 control-label">Imię i nazwisko:</label>
                             <Col lg={ 10 }>
@@ -195,10 +265,7 @@ class Profile extends React.Component {
                             Nie udało się zapisać dane.
                         </div>
                     </form>
-                    <form method='POST' action='/api/uploadImage' encType="multipart/form-data" >
-                        <input type='file' name='file' />
-                        <input type='submit' name='Submit' value='submit' /> 
-                    </form>
+                    {picForm}
                 </Panel>
         );
     }

@@ -40,7 +40,8 @@ module.exports = {
 		var model = {
 			//profilePic
 			name: req.body.name,
-			phone: req.body.phone
+			phone: req.body.phone,
+			profilePic: req.body.profilePic
 		};
 		if(req.body.birthday){
 			model.birthday = req.body.birthday;
@@ -90,26 +91,26 @@ module.exports = {
 			maxBytes: 10000000
 		},function (err, uploadedFiles){
 			if(err){
-				console.log(err);
+				console.error(err);
 				return res.badRequest(err);
 			}
 			if(uploadedFiles.length){
 				var model = {};
 				model.fileData = uploadedFiles[0].fd;
 				model.originalName = uploadedFiles[0].filename;
-				model.name = 'andrei_profile_img';
+				var name = req.session.user.name || 'user_' + req.session.user.id;
+				model.name = name;
 				model.type = uploadedFiles[0].type;
-				s3Uploader.uploadFile(model)
+				s3Uploader.uploadImg(model)
 				.then(function(data){
-					var url = s3Uploader.getFileUrl(data.key);
-					return res.redirect('/dashboard/profile');
+					return res.json({url: data.url});
 				})
 				.catch(function(err){
 					return res.badRequest(err);
     			})
-    			.done();;
+    			.done();
 			}else{
-				return res.redirect('/dashboard/profile');
+				return res.send("no files uploaded");
 			}
 		});
 
