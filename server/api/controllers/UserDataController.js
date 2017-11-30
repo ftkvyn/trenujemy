@@ -82,5 +82,36 @@ module.exports = {
 			});	
 			return res.json(models);
 		});
+	},
+
+	uploadImage: function(req, res){
+		req.file('file').upload({
+			dirname: sails.config.appPath + '/.tmp/upload/',
+			maxBytes: 10000000
+		},function (err, uploadedFiles){
+			if(err){
+				console.log(err);
+				return res.badRequest(err);
+			}
+			if(uploadedFiles.length){
+				var model = {};
+				model.fileData = uploadedFiles[0].fd;
+				model.originalName = uploadedFiles[0].filename;
+				model.name = 'andrei_profile_img';
+				model.type = uploadedFiles[0].type;
+				s3Uploader.uploadFile(model)
+				.then(function(data){
+					var url = s3Uploader.getFileUrl(data.key);
+					return res.redirect('/dashboard/profile');
+				})
+				.catch(function(err){
+					return res.badRequest(err);
+    			})
+    			.done();;
+			}else{
+				return res.redirect('/dashboard/profile');
+			}
+		});
+
 	}
 }

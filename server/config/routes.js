@@ -72,6 +72,8 @@ module.exports.routes = {
 
   'get /api/clients': 'UserDataController.getClientsData',
 
+  'post /api/uploadImage': 'UserDataController.uploadImage',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

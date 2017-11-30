@@ -150,57 +150,63 @@ class Profile extends React.Component {
                 <h3>Twoje dane</h3>
                 <Row>
                    <Col lg={6} md={8} sm={12}>
-                      <Panel>
-                            <form className="form-horizontal">                                
-                                <FormGroup>
-                                    <label className="col-lg-2 control-label">Imię i nazwisko:</label>
-                                    <Col lg={ 10 }>
-                                        <FormControl type="text" placeholder="Imię i nazwisko" 
-                                        className="form-control" {...readonlyProps}
-                                        name='name'
-                                        value={this.state.user.name || ''}
-                                        onChange={this.handleChange.bind(this)}/>
-                                    </Col>
-                                </FormGroup> 
-                                 <FormGroup>
-                                    <label className="col-lg-2 control-label">Data urodzenia:</label>
-                                    <Col lg={ 10 }>
-                                        <div id="datetimepicker" className="input-group date">
-                                            <input type="text" className="form-control" name='birthday' {...readonlyProps}/>
-                                            <span className="input-group-addon">
-                                            <span className="fa fa-calendar"></span>
-                                            </span>
-                                        </div>
-                                    </Col>
-                                </FormGroup> 
-                                 <FormGroup>
-                                    <label className="col-lg-2 control-label">Numer telefonu:</label>
-                                    <Col lg={ 10 }>
-                                        <FormControl type="text" placeholder="Numer telefonu" 
-                                        className="form-control" {...readonlyProps}
-                                        name='phone'
-                                        value={this.state.user.phone || ''}
-                                        onChange={this.handleChange.bind(this)}/>
-                                    </Col>
-                                </FormGroup>   
-                                <FormGroup>
-                                    <label className="col-lg-2 control-label">Adres email:</label>
-                                    <Col lg={ 10 }>
-                                        <FormControl type="email" readOnly='true' placeholder="Adres email" 
-                                        className="form-control" 
-                                        value={this.state.user.login || ''}/>
-                                    </Col>
-                                </FormGroup>       
-                                {invoiceForm} 
-                                <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
-                                    Dane zapisane poprawnie.
-                                </div>  
-                                <div role="alert" className="alert alert-success saveError" style={{display:'none'}}>
-                                    Nie udało się zapisać dane.
-                                </div>                                                                                
-                            </form>
-                        </Panel>
-                   </Col>
+              {/*==================*/}
+              <Panel>
+                    <form className="form-horizontal">                                
+                        <FormGroup>
+                            <label className="col-lg-2 control-label">Imię i nazwisko:</label>
+                            <Col lg={ 10 }>
+                                <FormControl type="text" placeholder="Imię i nazwisko" 
+                                className="form-control" {...readonlyProps}
+                                name='name'
+                                value={this.state.user.name || ''}
+                                onChange={this.handleChange.bind(this)}/>
+                            </Col>
+                        </FormGroup> 
+                         <FormGroup>
+                            <label className="col-lg-2 control-label">Data urodzenia:</label>
+                            <Col lg={ 10 }>
+                                <div id="datetimepicker" className="input-group date">
+                                    <input type="text" className="form-control" name='birthday' {...readonlyProps}/>
+                                    <span className="input-group-addon">
+                                    <span className="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </Col>
+                        </FormGroup> 
+                         <FormGroup>
+                            <label className="col-lg-2 control-label">Numer telefonu:</label>
+                            <Col lg={ 10 }>
+                                <FormControl type="text" placeholder="Numer telefonu" 
+                                className="form-control" {...readonlyProps}
+                                name='phone'
+                                value={this.state.user.phone || ''}
+                                onChange={this.handleChange.bind(this)}/>
+                            </Col>
+                        </FormGroup>   
+                        <FormGroup>
+                            <label className="col-lg-2 control-label">Adres email:</label>
+                            <Col lg={ 10 }>
+                                <FormControl type="email" readOnly='true' placeholder="Adres email" 
+                                className="form-control" 
+                                value={this.state.user.login || ''}/>
+                            </Col>
+                        </FormGroup>       
+                        {invoiceForm} 
+                        <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
+                            Dane zapisane poprawnie.
+                        </div>  
+                        <div role="alert" className="alert alert-success saveError" style={{display:'none'}}>
+                            Nie udało się zapisać dane.
+                        </div>
+                    </form>
+                    <form method='POST' action='/api/uploadImage' encType="multipart/form-data" >
+                        <input type='file' name='file' />
+                        <input type='submit' name='Submit' value='submit' /> 
+                    </form>
+                </Panel>
+                {/*==================*/}
+                 </Col>
                 </Row>
             </ContentWrapper>
         );
