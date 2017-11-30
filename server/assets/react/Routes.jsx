@@ -9,6 +9,7 @@ import BaseHorizontal from './components/Layout/BaseHorizontal';
 import SingleView from './components/SingleView/SingleView';
 import SubMenu from './components/SubMenu/SubMenu';
 import ProfilePage from './components/Pages/ProfilePage'
+import ClientPage from './components/Pages/ClientPage'
 
 // List of routes that uses the page layout
 // listed here to Switch between layouts
@@ -54,7 +55,7 @@ const Routes = ({ location }) => {
                     <div>
                         <Switch location={location}>
                             <Route path="/profile" component={ProfilePage}/>
-                            <Route path="/clients/:id" component={ProfilePage}/>
+                            <Route path="/clients/:id" component={ClientPage}/>
                             <Redirect to="/profile"/>
                         </Switch>
                     </div>
