@@ -11,7 +11,7 @@ class ProfilePage extends React.Component {
                 <h3>Twoje dane</h3>
                 <Row>
                    <Col lg={6} md={8} sm={12}>
-                      <Profile {...this.params}></Profile>
+                      <Profile userId={this.props.match.params.id} ></Profile>
                    </Col>
                 </Row>
             </ContentWrapper>

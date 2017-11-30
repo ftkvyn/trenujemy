@@ -92,24 +92,24 @@ class Profile extends React.Component {
 
     componentDidMount(){
         let me = this;
-        if(!this.props.match.params.id){
+        if(!this.props.userId){
             loadUser()
             .then((data) => setUser(data, me));
         }else{
-            loadClientData(this.props.match.params.id, me);
+            loadClientData(this.props.userId, me);
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.match.params.id === nextProps.match.params.id){
+        if(this.props.userId === nextProps.userId){
             return;
         }
         let me = this;
-        if(!nextProps.match.params.id){
+        if(!nextProps.userId){
             loadUser()
             .then((data) => setUser(data, me));
         }else{
-            loadClientData(nextProps.match.params.id, me);
+            loadClientData(nextProps.userId, me);
         }
     }
 
@@ -142,15 +142,10 @@ class Profile extends React.Component {
             </FormGroup>     
         }      
         var readonlyProps = {};
-        if(this.props.match.params.id){
+        if(this.props.userId){
             readonlyProps = {readOnly: true};
         }
         return (
-            <ContentWrapper>
-                <h3>Twoje dane</h3>
-                <Row>
-                   <Col lg={6} md={8} sm={12}>
-              {/*==================*/}
               <Panel>
                     <form className="form-horizontal">                                
                         <FormGroup>
@@ -205,10 +200,6 @@ class Profile extends React.Component {
                         <input type='submit' name='Submit' value='submit' /> 
                     </form>
                 </Panel>
-                {/*==================*/}
-                 </Col>
-                </Row>
-            </ContentWrapper>
         );
     }
 
