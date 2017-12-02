@@ -82,7 +82,7 @@ function setUser(userData, me){
 
 let saveHandler = null;
 
-class Profile extends React.Component {
+class Survey extends React.Component {
     constructor(props, context) {
         super(props, context);
         let initialState = {
@@ -144,6 +144,7 @@ class Profile extends React.Component {
     }
 
     uploadImage(){
+        //ToDo: move to service and use service in Profile.jsx
         let me = this;
         var fd = new FormData();
         var fileData = $('#profilePicInput')[0].files[0];
@@ -194,24 +195,10 @@ class Profile extends React.Component {
     }
 
     render() {  
-        var invoiceForm = "";
-        if(this.state.user.role == 'trainer'){
-            invoiceForm = <FormGroup>
-                <label className="col-lg-2 control-label">Dane do faktury: </label>
-                <Col lg={ 10 }>
-                    <textarea 
-                    className="form-control" 
-                    name='invoiceInfo'
-                    value={this.state.user.invoiceInfo || ''}
-                    onChange={this.handleChange.bind(this)}></textarea>
-                </Col>
-            </FormGroup>     
-        }      
         var readonlyProps = {};
         if(this.state.userId){
             readonlyProps = {readOnly: true};
         }
-        var profilePic = this.state.user.profilePic || '/images/no_image_user.png';
         var picForm = "";
         if(!this.state.userId){
             picForm = <form id='profilePicForm' style={{display:'none'}}>
@@ -221,12 +208,6 @@ class Profile extends React.Component {
         return (
               <Panel>
                     <form className="form-horizontal">     
-                        <FormGroup>
-                            <label className="col-lg-2 control-label">Zdjęcie profilowe:</label>
-                            <Col lg={ 10 }>
-                                <img src={profilePic} className='profile-pic' onClick={this.imageClick.bind(this)}/>
-                            </Col>
-                        </FormGroup> 
                         <FormGroup>
                             <label className="col-lg-2 control-label">Imię i nazwisko:</label>
                             <Col lg={ 10 }>
@@ -266,7 +247,6 @@ class Profile extends React.Component {
                                 value={this.state.user.login || ''}/>
                             </Col>
                         </FormGroup>       
-                        {invoiceForm} 
                         <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
                             Dane zapisane poprawnie.
                         </div>  
@@ -281,5 +261,5 @@ class Profile extends React.Component {
 
 }
 
-export default Profile;
+export default Survey;
 

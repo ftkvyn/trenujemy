@@ -5,7 +5,7 @@ import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from '
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import Profile from './Profile'
-
+import Survey from './Survey'
 
 class ClientPage extends React.Component {
     routeActive(paths) {
@@ -43,9 +43,7 @@ class ClientPage extends React.Component {
                 <Row>
                    <Col lg={6} md={8} sm={12}>
                       <Route exact path="/clients/:id" component={Profile}/>
-                      <Route path="/clients/:id/survey" render={() => (
-                        <h3>Please select a topic.</h3>
-                      )}/>
+                      <Route path="/clients/:id/survey" component={Survey}/>
                    </Col>
                 </Row>
             </ContentWrapper>
