@@ -85,31 +85,40 @@ let saveHandler = null;
 class Profile extends React.Component {
     constructor(props, context) {
         super(props, context);
-        this.state = {
-            user: {}
-        };        
+        let initialState = {
+            user:{}
+        };
+        if(this.props.match && this.props.match.params){
+            initialState.userId = this.props.match.params.id;
+        }
+        this.state = initialState;        
     };
 
     componentDidMount(){
         let me = this;
-        if(!this.props.userId){
+        if(!this.state.userId){
             loadUser()
             .then((data) => setUser(data, me));
         }else{
-            loadClientData(this.props.userId, me);
+            loadClientData(this.state.userId, me);
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.userId === nextProps.userId){
+        var nextId = undefined;
+        if(nextProps.match && nextProps.match.params){
+            nextId = nextProps.match.params.id;
+        }
+        if(this.state.userId === nextId){
             return;
         }
         let me = this;
-        if(!nextProps.userId){
+        this.setState({userId: nextId});
+        if(!nextId){
             loadUser()
             .then((data) => setUser(data, me));
         }else{
-            loadClientData(nextProps.userId, me);
+            loadClientData(nextId, me);
         }
     }
 
@@ -128,7 +137,7 @@ class Profile extends React.Component {
     }
 
     imageClick(event){
-        if(this.props.userId){
+        if(this.state.userId){
             return;
         }
         $('#profilePicInput').click();
@@ -199,12 +208,12 @@ class Profile extends React.Component {
             </FormGroup>     
         }      
         var readonlyProps = {};
-        if(this.props.userId){
+        if(this.state.userId){
             readonlyProps = {readOnly: true};
         }
         var profilePic = this.state.user.profilePic || '/images/no_image_user.png';
         var picForm = "";
-        if(!this.props.userId){
+        if(!this.state.userId){
             picForm = <form id='profilePicForm' style={{display:'none'}}>
                 <input type='file' name='file' id='profilePicInput' onChange={this.uploadImage.bind(this)}/>
             </form>
