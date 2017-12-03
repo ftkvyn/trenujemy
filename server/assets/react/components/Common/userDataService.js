@@ -54,4 +54,37 @@ function saveUser(newUser){
 	  });
 }
 
-export {loadUser, saveUser};
+function loadSurvey(userId){
+	let promise = new Promise((resolve, reject) => {
+		let url = '/api/survey';
+		if(userId){
+			url += '/' + userId;
+		}
+		$.get(url)
+		.success(function(data) {
+			resolve(data);
+		})
+		.error(function(err){
+			console.error(err);
+			reject(err);
+		});
+	});
+	return promise;
+}
+
+function saveSurvey(model){
+	let promise = new Promise((resolve, reject) => {
+		let url = '/api/survey';
+		$.post(url, model)
+		.success(function(data) {
+			resolve(data);
+		})
+		.error(function(err){
+			console.error(err);
+			reject(err);
+		});
+	});
+	return promise;
+}
+
+export {loadUser, saveUser, loadSurvey, saveSurvey};

@@ -8,7 +8,11 @@
     <base href="/dashboard" />
     <link href="/react/vendor.css" rel="stylesheet"/>
     <link href="/styles/custom.css" rel="stylesheet"/>
-    <title>Angle + ReactJS</title>
+    <% if( locals.user.role == 'user'){%>
+        <title>Trenujemy - Panel klienta</title>
+    <% }else{%>
+        <title>Trenujemy - Panel trenera</title>
+    <% }%>
 </head>
 <body>
 

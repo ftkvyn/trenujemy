@@ -2,6 +2,7 @@ import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
 import { loadUser, saveUser } from '../Common/userDataService';
+import { saveImage } from '../Common/filesService';
 import { loadClients } from '../Common/clientsService';
 
 let hideAlertSuccess = null;
@@ -145,51 +146,24 @@ class Profile extends React.Component {
 
     uploadImage(){
         let me = this;
-        var fd = new FormData();
+        var formData = new FormData();
         var fileData = $('#profilePicInput')[0].files[0];
-        fd.append('file', fileData);
-        $.ajax({
-            // Your server script to process the upload
-            url: '/api/uploadImage',
-            type: 'POST',
-
-            // Form data
-            data: fd,
-
-            // Tell jQuery not to process data or worry about content-type
-            // You *must* include these options!
-            cache: false,
-            contentType: false,
-            processData: false,
-            enctype: 'multipart/form-data',
-
-            // Custom XMLHttpRequest
-            xhr: function() {
-                var myXhr = $.ajaxSettings.xhr();
-                if (myXhr.upload) {
-                    // For handling the progress of the upload
-                    myXhr.upload.addEventListener('progress', function(e) {
-                        
-                    } , false);
-                }
-                return myXhr;
-            },
-            success: function (data) {
-                let newUser = me.state.user;
-                newUser.profilePic = data.url;
-                me.setState({user: newUser});
-                if(saveHandler){
-                    saveHandler.clear();
-                }
-                saveHandler = debounce(() => saveUserFn(newUser), 100);        
-                saveHandler();
-            },
-            error: function(err){
-                console.error(err);
-                $('.saveError').show();
-                clearTimeout(hideAlertError);
-                hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
+        formData.append('file', fileData);
+        saveImage(formData)
+        .then(function(data){
+            let newUser = me.state.user;
+            newUser.profilePic = data.url;
+            me.setState({user: newUser});
+            if(saveHandler){
+                saveHandler.clear();
             }
+            saveHandler = debounce(() => saveUserFn(newUser), 100);        
+            saveHandler();
+        })
+        .catch(function(err){
+            $('.saveError').show();
+            clearTimeout(hideAlertError);
+            hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
         });
     }
 
@@ -270,7 +244,7 @@ class Profile extends React.Component {
                         <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
                             Dane zapisane poprawnie.
                         </div>  
-                        <div role="alert" className="alert alert-success saveError" style={{display:'none'}}>
+                        <div role="alert" className="alert alert-danger saveError" style={{display:'none'}}>
                             Nie udało się zapisać dane.
                         </div>
                     </form>

@@ -2,7 +2,6 @@ import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import Profile from './Profile'
 import Survey from './Survey'
@@ -20,9 +19,6 @@ class ClientPage extends React.Component {
     }
     
     render() {  
-        const currentKey = location.pathname.split('/')[1] || '/';
-        const timeout = { enter: 500, exit: 500 };
-        const animationName = 'rag-fadeIn'
         return (
             <ContentWrapper>
                 <h3>
@@ -41,9 +37,9 @@ class ClientPage extends React.Component {
                   
                 </h3>
                 <Row>
-                   <Col lg={6} md={8} sm={12}>
-                      <Route exact path="/clients/:id" component={Profile}/>
-                      <Route path="/clients/:id/survey" component={Survey}/>
+                   <Col lg={12} md={12} sm={12}>
+                    <Route exact path="/clients/:id" component={Profile}/>
+                    <Route path="/clients/:id/survey" component={Survey}/>
                    </Col>
                 </Row>
             </ContentWrapper>

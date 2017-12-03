@@ -10,7 +10,7 @@ class ProfilePage extends React.Component {
             <ContentWrapper>
                 <h3>Twoje dane</h3>
                 <Row>
-                   <Col lg={6} md={8} sm={12}>
+                   <Col lg={12} md={12} sm={12}>
                       <Profile></Profile>
                    </Col>
                 </Row>

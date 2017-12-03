@@ -1,38 +1,53 @@
 module.exports = {
-	neck:{
-		type:'integer',
-		defaultsTo:38
-	},
-	shoulder:{
-		type:'integer',
-		defaultsTo:36
-	},
-	forearm:{
-		type:'integer',
-		defaultsTo:27
-	},
-	wrist:{
-		type:'integer',
-		defaultsTo:17
-	},
-	chest:{
-		type:'integer',
-		defaultsTo:103
-	},
-	waist:{
-		type:'integer',
-		defaultsTo:82
-	},
-	hips:{
-		type:'integer',
-		defaultsTo:91
-	},
-	thigh:{
-		type:'integer',
-		defaultsTo:52
-	},
-	shin:{
-		type:'integer',
-		defaultsTo:37
+	attributes: {
+		user:{
+			model:'User',
+			required: true
+		},
+		neck:{
+			type:'integer',
+			required: true,
+			defaultsTo:38
+		},
+		shoulder:{
+			type:'integer',
+			required: true,
+			defaultsTo:36
+		},
+		forearm:{
+			type:'integer',
+			required: true,
+			defaultsTo:27
+		},
+		wrist:{
+			type:'integer',
+			required: true,
+			defaultsTo:17
+		},
+		chest:{
+			type:'integer',
+			required: true,
+			defaultsTo:103
+		},
+		waist:{
+			type:'integer',
+			required: true,
+			defaultsTo:82
+		},
+		hips:{
+			type:'integer',
+			required: true,
+			defaultsTo:91
+		},
+		thigh:{
+			type:'integer',
+			required: true,
+			defaultsTo:52
+		},
+		shin:{
+			type:'integer',
+			required: true,
+			defaultsTo:37
+		}
 	}
 }

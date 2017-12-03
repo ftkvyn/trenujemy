@@ -46,7 +46,7 @@ module.exports = {
 	},
 
 	dashboard: function(req,res){
-		return res.view('dashboard', {layout: null});	
+		return res.view('dashboard', {layout: null, locals: {user: req.session.user}});	
 	}
 };
 

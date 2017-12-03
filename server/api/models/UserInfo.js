@@ -26,21 +26,25 @@ module.exports = {
 	//========Personal customs==========//
 	wakeUpHour:{
 		type:'integer',
+		required: true,
 		defaultsTo: 730, //For 7:30
 	},
 
 	goToBedHour:{
 		type:'integer',
+		required: true,
 		defaultsTo: 2300
 	},
 
 	mealsNumber:{
 		type:'integer',
+		required: true,
 		defaultsTo: 5
 	},
 
 	eatingTimes:{
 		type:'string',
+		required: true,
 		defaultsTo: '8:00, 12:00, 14:30, 17:00, 20:00'
 	},
 
@@ -69,6 +73,7 @@ module.exports = {
 
 	preserveWeightProblems:{
 		type:'boolean',
+		required: true,
 		defaultsTo:true
 	},
 
@@ -77,11 +82,15 @@ module.exports = {
 	},
 
 	dailyCalories:{
-		type:'integer'
+		type:'integer',
+		required: true,
+		defaultsTo:0
 	},
 
 	kitchenEquipment:{
-		type:'integer' //Using bit mask - 101001
+		type:'integer', //Using bit mask - 101001
+		required: true,
+		defaultsTo:0
 	},
 
 	workType:{
@@ -95,17 +104,20 @@ module.exports = {
 	//==========Training survey===========//
 	weight:{
 		type:'integer',
+		required: true,
 		defaultsTo:75
 	},
 
 	height:{
 		type:'integer',
+		required: true,
 		defaultsTo: 180
 	},
 
 	activity:{
 		type:'string',
 		enum: ['little', 'normal', 'medium','many','very much'],
+		required: true,
 		defaultsTo:'little'
 	},
 
@@ -117,12 +129,14 @@ module.exports = {
 	gymExperience:{
 		type:'string',
 		enum: ['never','sometimes','long_time','expert'],
+		required: true,
 		defaultsTo:'never'
 	},
 
 	trainingsStatus:{
 		type:'string',
 		enum:['once','twice','three-four','more_than_four'],
+		required: true,
 		defaultsTo:'once'
 	},
 
@@ -137,12 +151,14 @@ module.exports = {
 	currentStatus:{
 		type:'string',
 		enum:['bad','worse','not_so_bad','better','good'],
+		required: true,
 		defaultsTo:'bad'
 	},
 
 	possibleTrainings:{
 		type:'integer',
 		enum:[1,2,3,4,5,6],
+		required: true,
 		defaultsTo:1
 	},
 
@@ -150,12 +166,14 @@ module.exports = {
 		type:'string',
 		enum:['chest','legs','back','shoulders'
 		,'biceps','triceps','belly','all'],
+		required: true,
 		defaultsTo:'belly'
 	},
 
 	availableEquipment:{
 		type:'string',
 		enum:['gym','home','none'],
+		required: true,
 		defaultsTo:'gym'
 	},
 
@@ -164,11 +182,15 @@ module.exports = {
 	},
 
 	supplementsCost:{
-		type:'integer'//200.00 PLN is 20000
+		type:'integer',//200.00 PLN is 20000
+		required: true,
+		defaultsTo:0
 	},
 
 	contusionCheckboxes:{
-		type:'integer' //Bit mask
+		type:'integer', //Bit mask
+		required: true,
+		defaultsTo:0
 	},
 
 	contusionAdditional:{

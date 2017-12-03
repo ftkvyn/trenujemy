@@ -87,22 +87,31 @@ module.exports = {
 
 	saveSurvey:function(req, res){
 		var model = req.body;
-		UserInfo.update({user: req.session.user.id}, model)
-		.exec(function(err, userInfos){
+		BodySize.update({id: model.bodySize.id, user: req.session.user.id}, model.bodySize)
+		.exec(function(err, bodySizes){
 			if(err){
 				console.error(err);
 				return res.badRequest(err);
 			}
-			return res.json({success: true});
+			model.bodySize = model.bodySize.id;
+			UserInfo.update({user: req.session.user.id}, model)
+			.exec(function(err, userInfos){
+				if(err){
+					console.error(err);
+					return res.badRequest(err);
+				}
+				return res.json({success: true});
+			});
 		});
+		
 	},
 
 	getSurvey:function(req, res){
 		var model = req.body;
 		var userId = req.params.userId || req.session.user.id;
 		UserInfo
-		.populate('bodySize')
 		.findOne({user: userId}, {user: userId})
+		.populate('bodySize')
 		.exec(function(err, userInfo){
 			if(err){
 				console.error(err);
@@ -111,7 +120,7 @@ module.exports = {
 			if(userInfo){
 				return res.json(userInfo);
 			}
-			BodySize.create({})
+			BodySize.create({user: userId})
 			.exec(function(err, bodySize){
 				if(err){
 					console.error(err);
@@ -123,6 +132,7 @@ module.exports = {
 						console.error(err);
 						return res.badRequest(err);
 					}
+					userInfo.bodySize = bodySize;
 					return res.json(userInfo);
 				});
 			});
