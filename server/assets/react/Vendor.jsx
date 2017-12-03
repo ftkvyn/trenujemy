@@ -18,6 +18,8 @@ import '../../node_modules/animate.css/animate.min.css';
 import '../../node_modules/simple-line-icons/css/simple-line-icons.css';
 // Localization
 import '../../node_modules/jquery-localize/dist/jquery.localize.min.js';
+// Input Mask
+import '../../node_modules/inputmask/dist/jquery.inputmask.bundle.js';
 // Datetime picker
 import '../../node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js';
 import '../../node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css';

@@ -15,12 +15,16 @@ module.exports = {
 
 	target:{
 		type:'string',
-		enum: ['weight', 'cut', 'slim', 'power']
+		enum: ['weight', 'cut', 'slim', 'power'],
+		required: true,
+		defaultsTo: 'weight'
 	},
 
 	bodyType:{
 		type:'integer',
-		enum: [1,2,3]
+		enum: [1,2,3],
+		defaultsTo:1,
+		required:true
 	},
 
 	//========Personal customs==========//

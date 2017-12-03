@@ -84,7 +84,7 @@ module.exports = {
 			return res.json(models);
 		});
 	},
-
+ 
 	saveSurvey:function(req, res){
 		var model = req.body;
 		BodySize.update({id: model.bodySize.id, user: req.session.user.id}, model.bodySize)

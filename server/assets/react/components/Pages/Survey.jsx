@@ -23,10 +23,34 @@ function saveUserFn(newData){
     });
 }
 
+function formatHour(val) {
+    val = '' + val;
+    val = val.replace(':','');
+    if(isNaN(+val)){
+        return '0000';
+    }
+    if(+val >= 2400){
+        return '23:59';
+    }
+    while(val.length < 4){
+        val = '0' + val;
+    }
+    return val;
+}
+
 function setUser(userData, me){
     $('.saveError').hide();
     $('.saveSuccess').hide();
-    me.setState({data: userData});
+    userData.wakeUpHour = formatHour(userData.wakeUpHour);
+    userData.goToBedHour = formatHour(userData.goToBedHour);
+    me.setState({data: userData},
+        () =>{
+            if($.fn.inputmask){
+                $('[data-masked]').inputmask();
+                $('[data-masked]').off('change');
+                $('[data-masked]').change(me.handleChange.bind(me));
+            }
+        });
 }
 
 let saveHandler = null;
@@ -62,18 +86,20 @@ class Survey extends React.Component {
     componentDidMount(){
         let me = this;
         loadSurvey(this.state.userId)
-            .then((data) => setUser(data, me));
+            .then((data) => setUser(data, me));        
     }
 
     handleChange(event) {
         let fieldName = event.target.name;
         let fieldVal = event.target.value;
+        if(typeof $(event.target).attr('data-masked') != 'undefined'){
+            fieldVal = fieldVal.replace(':','');   
+        }
         let newData = this.state.data;
         if(fieldName.indexOf('.') == -1){
             newData[fieldName] = fieldVal
         }else{
             let fields = fieldName.split('.');
-            console.log(fields);
             newData[fields[0]][fields[1]] = fieldVal || 0;
         }
         this.setState({data: newData});
@@ -116,9 +142,12 @@ class Survey extends React.Component {
     }
 
     render() {  
+        if(!this.state.data.id){
+            return <Panel></Panel>
+        }
         var readonlyProps = {};
         if(this.state.userId){
-            readonlyProps = {readOnly: true};
+            readonlyProps = {readOnly: true, disabled: 'disabled'};
         }
         var picForm = "";
         if(!this.state.userId){
@@ -128,40 +157,146 @@ class Survey extends React.Component {
         }
         return (
               <Panel>
-                    <form className="form-horizontal">     
-                        <FormGroup>
-                            <label className="col-lg-2 control-label">Rodzaj wykonywanej pracy:</label>
-                            <Col lg={ 10 }>
-                                <FormControl type="text" placeholder="Rodzaj wykonywanej pracy" 
-                                className="form-control" {...readonlyProps}
-                                name='workType'
-                                value={this.state.data.workType || ''}
-                                onChange={this.handleChange.bind(this)}/>
-                            </Col>
-                        </FormGroup> 
-                        <FormGroup>
-                            <label className="col-lg-2 control-label">Kark:</label>
-                            <Col lg={ 10 }>
-                                <FormControl type="number" placeholder="Kark" 
-                                className="form-control" {...readonlyProps}
-                                name='bodySize.neck'
-                                value={this.state.data.bodySize.neck || 0}
-                                onChange={this.handleChange.bind(this)}/>
-                            </Col>
-                        </FormGroup> 
-                        <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
-                            Dane zapisane poprawnie.
-                        </div>  
-                        <div role="alert" className="alert alert-danger saveError" style={{display:'none'}}>
-                            Nie udało się zapisać dane.
+                <form className="form-horizontal">     
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Twój główny cel:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <div className="radio c-radio">
+                                <label>
+                                    <input type="radio" name="target" 
+                                    value="weight"
+                                    checked={this.state.data.target === 'weight'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Chcę zbudować masę i powiększyć mięśnie
+                                </label>
+                            </div>
+                            <div className="radio c-radio">
+                                <label>
+                                    <input type="radio" name="target" 
+                                    value="cut"
+                                    checked={this.state.data.target === 'cut'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Chcę wyrzeźbić mięśnie
+                                </label>
+                            </div>
+                            <div className="radio c-radio">
+                                <label>
+                                    <input type="radio" name="target" 
+                                    value="slim"
+                                    checked={this.state.data.target === 'slim'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Chcę schudnąć
+                                </label>
+                            </div>
+                            <div className="radio c-radio">
+                                <label>
+                                    <input type="radio" name="target" 
+                                    value="power"
+                                    checked={this.state.data.target === 'power'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Chcę zwiększyć siłę
+                                </label>
+                            </div>
+                        </Col>
+                    </FormGroup>
+                    <legend>2) Typ sylwetki</legend>
+                    <div style={{'paddingLeft':'50px','paddingBottom':'20px'}}>
+                        <img src='/images/body_types.jpg'/>
+                        <div>
+                            <label style={{'margin':'0 46px'}} className="radio-inline c-radio">
+                                <input type="radio" name="bodyType" 
+                                value="1"
+                                checked={this.state.data.bodyType == '1'} 
+                                onChange={this.handleChange.bind(this)} />
+                                <em className="fa fa-circle"></em>
+                            </label>
+                            <label style={{'margin':'0 46px'}} className="radio-inline c-radio">
+                                <input type="radio" name="bodyType" 
+                                value="2"
+                                checked={this.state.data.bodyType == '2'} 
+                                onChange={this.handleChange.bind(this)} />
+                                <em className="fa fa-circle"></em>
+                            </label>
+                            <label style={{'margin':'0 52px'}} className="radio-inline c-radio">
+                                <input type="radio" name="bodyType" 
+                                value="3"
+                                checked={this.state.data.bodyType == '3'} 
+                                onChange={this.handleChange.bind(this)} />
+                                <em className="fa fa-circle"></em>
+                            </label>
                         </div>
-                    </form>
-                    {picForm}
-                </Panel>
+                    </div>
+                    <legend>2) Osobiste zwyczaje</legend>
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Godzina pobudki:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <FormControl type="text" placeholder="Godzina pobudki" 
+                            className="form-control" {...readonlyProps}
+                            data-masked="" data-inputmask="'mask': '99:99'" 
+                            name='wakeUpHour'
+                            value={this.state.data.wakeUpHour}
+                            onChange={this.handleChange.bind(this)}/>
+                        </Col>
+                    </FormGroup> 
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Godzina chodzenia spać:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <FormControl type="text" placeholder="Godzina chodzenia spać" 
+                            className="form-control" {...readonlyProps}
+                            data-masked="" data-inputmask="'mask': '99:99'" 
+                            name='goToBedHour'
+                            value={this.state.data.goToBedHour}
+                            onChange={this.handleChange.bind(this)}/>
+                        </Col>
+                    </FormGroup> 
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Czy jesteś gotowy zmienić swój dzienny plan aby dostosować sie do zaleceń trenera?</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <FormControl componentClass="select" name="canYouChangeDailyPlan" 
+                            value={this.state.data.canYouChangeDailyPlan || 'no'}
+                            onChange={this.handleChange.bind(this)}
+                            {...readonlyProps}
+                            className="form-control">
+                                <option value='no'>Nie</option>
+                                <option value='rather_no'>Raczej nie</option>
+                                <option value='rather_yes'>Raczej tak</option>
+                                <option value='yes'>Zdecydowanie tak</option>
+                            </FormControl>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Rodzaj wykonywanej pracy:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <FormControl type="text" placeholder="Rodzaj wykonywanej pracy" 
+                            className="form-control" {...readonlyProps}
+                            name='workType'
+                            value={this.state.data.workType}
+                            onChange={this.handleChange.bind(this)}/>
+                        </Col>
+                    </FormGroup> 
+                    <legend>3) Ankieta treningowa</legend>
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Kark:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <FormControl type="number" placeholder="Kark" 
+                            className="form-control" {...readonlyProps}
+                            name='bodySize.neck'
+                            value={this.state.data.bodySize.neck}
+                            onChange={this.handleChange.bind(this)}/>
+                        </Col>
+                    </FormGroup> 
+                    <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
+                        Dane zapisane poprawnie.
+                    </div>  
+                    <div role="alert" className="alert alert-danger saveError" style={{display:'none'}}>
+                        Nie udało się zapisać dane.
+                    </div>
+                </form>
+                {picForm}
+            </Panel>
         );
     }
 
 }
 
 export default Survey;
-
