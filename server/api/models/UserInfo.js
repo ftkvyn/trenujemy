@@ -78,7 +78,7 @@ module.exports = {
 	preserveWeightProblems:{
 		type:'boolean',
 		required: true,
-		defaultsTo:true
+		defaultsTo:false
 	},
 
 	usedEatingPlans:{
@@ -86,9 +86,7 @@ module.exports = {
 	},
 
 	dailyCalories:{
-		type:'integer',
-		required: true,
-		defaultsTo:0
+		type:'integer'
 	},
 
 	kitchenEquipment:{
@@ -215,6 +213,23 @@ module.exports = {
 
 	medicalReporKey:{
 		type:'string'
-	}
+	},
+
+	toJSON: function() {
+      var obj = this.toObject();
+      if(!obj.allergy){
+      	obj.allergy = null;
+      }
+      if(!obj.notEating){
+      	obj.notEating = null;
+      }
+      if(!obj.dailyCalories){
+      	obj.dailyCalories = null;
+      }
+      if(!obj.usedEatingPlans){
+      	obj.usedEatingPlans = null;
+      }
+      return obj;
+    }
   }
 };

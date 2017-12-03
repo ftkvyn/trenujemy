@@ -87,6 +87,9 @@ module.exports = {
  
 	saveSurvey:function(req, res){
 		var model = req.body;
+		if(!model.dailyCalories){
+			model.dailyCalories = 0;
+		}
 		BodySize.update({id: model.bodySize.id, user: req.session.user.id}, model.bodySize)
 		.exec(function(err, bodySizes){
 			if(err){
