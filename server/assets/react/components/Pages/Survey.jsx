@@ -100,7 +100,7 @@ class Survey extends React.Component {
             }else{
                 newData[fieldName] = null;
             }
-        }if(fieldName.indexOf('binmap:') > -1){
+        }else if(fieldName.indexOf('binmap:') > -1){
             fieldName = fieldName.replace('binmap:','');
             let checked = event.target.checked;
             if(checked){
@@ -425,7 +425,7 @@ class Survey extends React.Component {
                                 style={this.state.data.dailyCalories === null ? {'display':'none'} : {'width':'120px'}}
                                 value={this.state.data.dailyCalories || 0}
                                 onChange={this.handleChange.bind(this)}/> 
-                                <span style={this.state.data.dailyCalories === null ? {'display':'none'} : {}}>kcal</span>
+                                <span style={this.state.data.dailyCalories === null ? {'display':'none'} : {}}>  kcal</span>
                         </Col>
                     </FormGroup>
                     <FormGroup>
@@ -468,16 +468,6 @@ class Survey extends React.Component {
                     <FormGroup>
                         <label className="col-lg-3 col-md-4 control-label">Rodzaj wykonywanej pracy:</label>
                         <Col lg={ 9 } md={ 8 }>
-                            <textarea 
-                            className="form-control" 
-                            name='invoiceInfo'
-                            value={this.state.data.hintsForTrainer || ''}
-                            onChange={this.handleChange.bind(this)}></textarea>
-                        </Col>
-                    </FormGroup> 
-                    <FormGroup>
-                        <label className="col-lg-3 col-md-4 control-label">Inne uwagi dla trenera:</label>
-                        <Col lg={ 9 } md={ 8 }>
                             <FormControl type="text" placeholder="Rodzaj wykonywanej pracy" 
                             className="form-control" {...readonlyProps}
                             name='workType'
@@ -485,8 +475,18 @@ class Survey extends React.Component {
                             onChange={this.handleChange.bind(this)}/>
                         </Col>
                     </FormGroup> 
-                    <legend>3) Ankieta treningowa</legend>
                     <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Inne uwagi dla trenera:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <textarea 
+                            className="form-control" 
+                            name='hintsForTrainer'
+                            value={this.state.data.hintsForTrainer || ''}
+                            onChange={this.handleChange.bind(this)}></textarea>
+                        </Col>
+                    </FormGroup> 
+                    <legend>3) Ankieta treningowa</legend>
+                    <FormGroup className='form-inline'>
                         <label className="col-lg-3 col-md-4 control-label">Waga:</label>
                         <Col lg={ 9 } md={ 8 }>
                             <FormControl type="number" placeholder="Waga" 
@@ -496,7 +496,7 @@ class Survey extends React.Component {
                             onChange={this.handleChange.bind(this)}/> kg
                         </Col>
                     </FormGroup> 
-                    <FormGroup>
+                    <FormGroup className='form-inline'>
                         <label className="col-lg-3 col-md-4 control-label">Wzrost:</label>
                         <Col lg={ 9 } md={ 8 }>
                             <FormControl type="number" placeholder="Wzrost" 
@@ -522,8 +522,8 @@ class Survey extends React.Component {
                             </FormControl>
                         </Col>
                     </FormGroup>
-                    <h3>Aktualne wymiary</h3>
-                    <FormGroup>
+                    <h5>Aktualne wymiary</h5>
+                    <FormGroup className='form-inline'>
                         <label className="col-lg-3 col-md-4 control-label">Kark:</label>
                         <Col lg={ 9 } md={ 8 }>
                             <FormControl type="number" placeholder="Kark" 
@@ -533,7 +533,7 @@ class Survey extends React.Component {
                             onChange={this.handleChange.bind(this)}/> cm
                         </Col>
                     </FormGroup> 
-                    <FormGroup>
+                    <FormGroup className='form-inline'>
                         <label className="col-lg-3 col-md-4 control-label">Ramię:</label>
                         <Col lg={ 9 } md={ 8 }>
                             <FormControl type="number" placeholder="Ramię" 
@@ -543,7 +543,7 @@ class Survey extends React.Component {
                             onChange={this.handleChange.bind(this)}/> cm
                         </Col>
                     </FormGroup> 
-                    <FormGroup>
+                    <FormGroup className='form-inline'>
                         <label className="col-lg-3 col-md-4 control-label">Przedramię:</label>
                         <Col lg={ 9 } md={ 8 }>
                             <FormControl type="number" placeholder="Przedramię" 
@@ -553,7 +553,7 @@ class Survey extends React.Component {
                             onChange={this.handleChange.bind(this)}/> cm
                         </Col>
                     </FormGroup> 
-                    <FormGroup>
+                    <FormGroup className='form-inline'>
                         <label className="col-lg-3 col-md-4 control-label">Nadgarstek:</label>
                         <Col lg={ 9 } md={ 8 }>
                             <FormControl type="number" placeholder="Nadgarstek" 
@@ -563,7 +563,7 @@ class Survey extends React.Component {
                             onChange={this.handleChange.bind(this)}/> cm
                         </Col>
                     </FormGroup> 
-                    <FormGroup>
+                    <FormGroup className='form-inline'>
                         <label className="col-lg-3 col-md-4 control-label">Klatka piersiowa:</label>
                         <Col lg={ 9 } md={ 8 }>
                             <FormControl type="number" placeholder="Klatka piersiowa" 
@@ -573,7 +573,7 @@ class Survey extends React.Component {
                             onChange={this.handleChange.bind(this)}/> cm
                         </Col>
                     </FormGroup> 
-                    <FormGroup>
+                    <FormGroup className='form-inline'>
                         <label className="col-lg-3 col-md-4 control-label">Talia (brzuch):</label>
                         <Col lg={ 9 } md={ 8 }>
                             <FormControl type="number" placeholder="Talia (brzuch)" 
@@ -583,7 +583,7 @@ class Survey extends React.Component {
                             onChange={this.handleChange.bind(this)}/> cm
                         </Col>
                     </FormGroup> 
-                    <FormGroup>
+                    <FormGroup className='form-inline'>
                         <label className="col-lg-3 col-md-4 control-label">Biodra:</label>
                         <Col lg={ 9 } md={ 8 }>
                             <FormControl type="number" placeholder="Biodra" 
@@ -593,7 +593,7 @@ class Survey extends React.Component {
                             onChange={this.handleChange.bind(this)}/> cm
                         </Col>
                     </FormGroup> 
-                    <FormGroup>
+                    <FormGroup className='form-inline'>
                         <label className="col-lg-3 col-md-4 control-label">Udo:</label>
                         <Col lg={ 9 } md={ 8 }>
                             <FormControl type="number" placeholder="Udo" 
@@ -603,7 +603,7 @@ class Survey extends React.Component {
                             onChange={this.handleChange.bind(this)}/> cm
                         </Col>
                     </FormGroup> 
-                    <FormGroup>
+                    <FormGroup className='form-inline'>
                         <label className="col-lg-3 col-md-4 control-label">Łydka:</label>
                         <Col lg={ 9 } md={ 8 }>
                             <FormControl type="number" placeholder="Łydka" 
@@ -617,15 +617,275 @@ class Survey extends React.Component {
                     <FormGroup>
                         <label className="col-lg-3 col-md-4 control-label">Doświadczenie na siłowni:</label>
                         <Col lg={ 9 } md={ 8 }>
-                            <FormControl componentClass="select" name="canYouEatSameDaily" 
-                            value={this.state.data.canYouEatSameDaily || 'rather_no'}
+                            <FormControl componentClass="select" name="gymExperience" 
+                            value={this.state.data.gymExperience || 'never'}
                             onChange={this.handleChange.bind(this)}
                             {...readonlyProps}
                             className="form-control">
-                                <option value='rather_no'>Nigdy nie ćwiczyłem</option>
-                                <option value='maybe'>W umiarkowanym zakresie tak</option>
-                                <option value='yes'>W 100% tak</option>
+                                <option value='never'>Nigdy nie ćwiczyłem</option>
+                                <option value='sometimes'>Ćwiczyłem od czasu do czasu</option>
+                                <option value='long_time'>Dobrze czuję się na siłowni, trenuję od dawna</option>
+                                <option value='expert'>Jestem ekspertem na siłowni</option>
                             </FormControl>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Aktualny status treningów:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <FormControl componentClass="select" name="trainingsStatus" 
+                            value={this.state.data.trainingsStatus || 'once'}
+                            onChange={this.handleChange.bind(this)}
+                            {...readonlyProps}
+                            className="form-control">
+                                <option value='once'>Raz w tygodniu, rekreacyjnie</option>
+                                <option value='twice'>Dwa razy w tygodniu, średnio intensywne treningi</option>
+                                <option value='three_four'>3-4 razy w tygodniu, intensywne treningi</option>
+                                <option value='more_than_four'>Powyżej 4 razy w tygodniu, bardzo intensywnie</option>
+                            </FormControl>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Rozpisz, jak trenujesz obecnie na siłowni. Wymień ćwiczenia, jak łączysz partie, jak długo trenujesz tym planem, długość przerw między seriami, ile czasu trwa twój trening:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <textarea 
+                            className="form-control" 
+                            name='trainingDescription'
+                            value={this.state.data.trainingDescription || ''}
+                            onChange={this.handleChange.bind(this)}></textarea>
+                        </Col>
+                    </FormGroup> 
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Czy oprócz siłowni uprawiasz inne sporty, wliczając w to intensywne spacery, rower, bieganie? Opisz je:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <textarea 
+                            className="form-control" 
+                            name='otherTrainings'
+                            value={this.state.data.otherTrainings || ''}
+                            onChange={this.handleChange.bind(this)}></textarea>
+                        </Col>
+                    </FormGroup> 
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Jak oceniasz swój obecny stan wytrenowania:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <FormControl componentClass="select" name="currentStatus" 
+                            value={this.state.data.currentStatus || 'bad'}
+                            onChange={this.handleChange.bind(this)}
+                            {...readonlyProps}
+                            className="form-control">
+                                <option value='bad'>Nie zrobię nawet pięciu pompek</option>
+                                <option value='worse'>Zrobię 10 pompek, parę razy się podciągnę na drążku</option>
+                                <option value='not_so_bad'>Zrobię 15 pompek, podciągnę się na drążku 10 razy</option>
+                                <option value='better'>Pompki robię bez problemu, 20 razy podciągnę się na drążku</option>
+                                <option value='good'>Pompki i podciąganie na drążku nie sprawiają mi problemu - robię bez ograniczeń</option>
+                            </FormControl>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Ile razu w tygodniu w nowym planie treningowym możesz maksymalnie ćwiczyć na siłowni:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <FormControl componentClass="select" name="possibleTrainings" 
+                            value={this.state.data.possibleTrainings || 1}
+                            onChange={this.handleChange.bind(this)}
+                            style={{'width':'100px'}}
+                            {...readonlyProps}
+                            className="form-control">
+                                <option value='1'>1</option>
+                                <option value='2'>2</option>
+                                <option value='3'>3</option>
+                                <option value='4'>4</option>
+                                <option value='5'>5</option>
+                                <option value='6'>6-7</option>
+                            </FormControl>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Na której partii mięśni zależy Ci najbardziej:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <label className="radio-inline c-radio">
+                                <input type="radio" name="mostImportantBodyPart" 
+                                    value="chest"
+                                    checked={this.state.data.target === 'chest'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Klatka
+                            </label>
+                            <label className="radio-inline c-radio">
+                                <input type="radio" name="mostImportantBodyPart" 
+                                    value="legs"
+                                    checked={this.state.data.target === 'legs'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Nogi
+                            </label>
+                            <label className="radio-inline c-radio">
+                                <input type="radio" name="mostImportantBodyPart" 
+                                    value="back"
+                                    checked={this.state.data.target === 'back'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Plecy
+                            </label>
+                            <label className="radio-inline c-radio">
+                                <input type="radio" name="mostImportantBodyPart" 
+                                    value="shoulders"
+                                    checked={this.state.data.target === 'shoulders'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Barki
+                            </label>
+                            <label className="radio-inline c-radio">
+                                <input type="radio" name="mostImportantBodyPart" 
+                                    value="biceps"
+                                    checked={this.state.data.target === 'biceps'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Biceps
+                            </label>
+                            <label className="radio-inline c-radio">
+                                <input type="radio" name="mostImportantBodyPart" 
+                                    value="triceps"
+                                    checked={this.state.data.target === 'triceps'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Triceps
+                            </label>
+                            <label className="radio-inline c-radio">
+                                <input type="radio" name="mostImportantBodyPart" 
+                                    value="belly"
+                                    checked={this.state.data.target === 'belly'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Brzuch
+                            </label>
+                            <label className="radio-inline c-radio">
+                                <input type="radio" name="mostImportantBodyPart" 
+                                    value="all"
+                                    checked={this.state.data.target === 'all'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Wszystkie jednakowo
+                            </label>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Jaki jest Twój dostęp do sprzętów:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <label className="radio-inline c-radio">
+                                <input type="radio" name="availableEquipment" 
+                                    value="gym"
+                                    checked={this.state.data.target === 'gym'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Siłownia - pełne wyposażenie
+                            </label>
+                            <label className="radio-inline c-radio">
+                                <input type="radio" name="availableEquipment" 
+                                    value="home"
+                                    checked={this.state.data.target === 'home'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Domowa siłownia
+                            </label>
+                            <label className="radio-inline c-radio">
+                                <input type="radio" name="availableEquipment" 
+                                    value="none"
+                                    checked={this.state.data.target === 'none'} 
+                                    onChange={this.handleChange.bind(this)} />
+                                    <em className="fa fa-circle"></em>Brak sprzętu
+                            </label>                            
+                        </Col>
+                    </FormGroup>
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Czy obecnie stosujesz suplementy diety? Jeśli tak - jakie?</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <textarea 
+                            className="form-control" 
+                            name='currentNutrition'
+                            value={this.state.data.currentNutrition || ''}
+                            onChange={this.handleChange.bind(this)}></textarea>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup className='form-inline'>
+                        <label className="col-lg-3 col-md-4 control-label">Czy chcesz stosować suplementację? Jaki jest Twój miesięczny budżet na suplementy w nowym planie treningowym?</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <FormControl componentClass="select" name="isNull:supplementsCost" 
+                            value={this.state.data.supplementsCost === null ? 'no' : 'yes'}
+                            onChange={this.handleChange.bind(this)}
+                            {...readonlyProps}
+                            style={{'width':'80px'}}
+                            className="form-control">
+                                <option value='yes'>Tak</option>
+                                <option value='no'>Nie</option>
+                            </FormControl>
+
+                             <FormControl type="number" placeholder="budżet" 
+                                className="form-control ml" {...readonlyProps}
+                                name='supplementsCost'
+                                style={this.state.data.supplementsCost === null ? {'display':'none'} : {'width':'120px'}}
+                                value={this.state.data.supplementsCost || 0}
+                                onChange={this.handleChange.bind(this)}/> 
+                                <span style={this.state.data.supplementsCost === null ? {'display':'none'} : {}}> PLN</span>
+                        </Col>
+                    </FormGroup>
+
+                    <FormGroup className='form-inline'>
+                        <label className="col-lg-3 col-md-4 control-label">Czy masz kontuzje?</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <label className="checkbox-inline c-checkbox">
+                                <input type="checkbox" name="binmap:contusionCheckboxes" 
+                                value="1"
+                                className='needsclick'
+                                checked={this.state.data.contusionCheckboxes & 0b1} 
+                                onChange={this.handleChange.bind(this)} />
+                                <em className="fa fa-check"></em>Stawy barkowe
+                            </label>
+                            <label className="checkbox-inline c-checkbox">
+                                <input type="checkbox" name="binmap:contusionCheckboxes" 
+                                value="10"
+                                className='needsclick'
+                                checked={this.state.data.contusionCheckboxes & 0b10} 
+                                onChange={this.handleChange.bind(this)} />
+                                <em className="fa fa-check"></em>Kolana
+                            </label>
+                            <label className="checkbox-inline c-checkbox">
+                                <input type="checkbox" name="binmap:contusionCheckboxes" 
+                                value="100"
+                                className='needsclick'
+                                checked={this.state.data.contusionCheckboxes & 0b100} 
+                                onChange={this.handleChange.bind(this)} />
+                                <em className="fa fa-check"></em>Staw skokowy
+                            </label>
+                            <label className="checkbox-inline c-checkbox">
+                                <input type="checkbox" name="binmap:contusionCheckboxes" 
+                                value="1000"
+                                className='needsclick'
+                                checked={this.state.data.contusionCheckboxes & 0b1000} 
+                                onChange={this.handleChange.bind(this)} />
+                                <em className="fa fa-check"></em>Stawy lokciowe
+                            </label>
+                            <label className="checkbox-inline c-checkbox">
+                                <input type="checkbox" name="binmap:contusionCheckboxes" 
+                                value="10000"
+                                className='needsclick'
+                                checked={this.state.data.contusionCheckboxes & 0b10000} 
+                                onChange={this.handleChange.bind(this)} />
+                                <em className="fa fa-check"></em>Stawy nadgarstkowe
+                            </label>
+                            <label className="checkbox-inline c-checkbox">
+                                <input type="checkbox" name="binmap:contusionCheckboxes" 
+                                value="100000"
+                                className='needsclick'
+                                checked={this.state.data.contusionCheckboxes & 0b100000} 
+                                onChange={this.handleChange.bind(this)} />
+                                <em className="fa fa-check"></em>Odcinek lędźwiowo-krzyżowy
+                            </label>
+                            <br/>
+                            <label>Inne</label>
+                            <FormControl type="text" placeholder="Inne" 
+                                className="form-control" {...readonlyProps}
+                                name='contusionAdditional'
+                                value={this.state.data.contusionAdditional}
+                                onChange={this.handleChange.bind(this)}/>
+                        </Col>
+                    </FormGroup>
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Inne uwagi dla trenera:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <textarea 
+                            className="form-control" 
+                            name='otherHints'
+                            value={this.state.data.otherHints || ''}
+                            onChange={this.handleChange.bind(this)}></textarea>
                         </Col>
                     </FormGroup>
 

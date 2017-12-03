@@ -90,6 +90,10 @@ module.exports = {
 		if(!model.dailyCalories){
 			model.dailyCalories = 0;
 		}
+		if(!model.supplementsCost){
+			model.supplementsCost = 0;
+		}
+		
 		BodySize.update({id: model.bodySize.id, user: req.session.user.id}, model.bodySize)
 		.exec(function(err, bodySizes){
 			if(err){

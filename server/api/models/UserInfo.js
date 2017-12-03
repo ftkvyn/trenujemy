@@ -118,7 +118,7 @@ module.exports = {
 
 	activity:{
 		type:'string',
-		enum: ['little', 'normal', 'medium','many','very much'],
+		enum: ['little', 'normal', 'medium','many','very_much'],
 		required: true,
 		defaultsTo:'little'
 	},
@@ -137,7 +137,7 @@ module.exports = {
 
 	trainingsStatus:{
 		type:'string',
-		enum:['once','twice','three-four','more_than_four'],
+		enum:['once','twice','three_four','more_than_four'],
 		required: true,
 		defaultsTo:'once'
 	},
@@ -184,9 +184,7 @@ module.exports = {
 	},
 
 	supplementsCost:{
-		type:'integer',//200.00 PLN is 20000
-		required: true,
-		defaultsTo:0
+		type:'integer'
 	},
 
 	contusionCheckboxes:{
@@ -225,6 +223,9 @@ module.exports = {
       }
       if(!obj.dailyCalories){
       	obj.dailyCalories = null;
+      }
+      if(!obj.supplementsCost){
+      	obj.supplementsCost = null;
       }
       if(!obj.usedEatingPlans){
       	obj.usedEatingPlans = null;
