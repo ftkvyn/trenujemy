@@ -72,7 +72,13 @@ module.exports.routes = {
 
   'get /api/clients': 'UserDataController.getClientsData',
 
-  'post /api/uploadImage': 'UserDataController.uploadImage',
+  'post /api/uploadImage': 'FilesController.uploadImage',
+
+  'post /api/uploadFile': 'FilesController.uploadFile',
+
+  'get /api/survey/:userId?' : 'UserDataController.getSurvey',
+
+  'post /api/survey' : 'UserDataController.saveSurvey',
 
   /***************************************************************************
   *                                                                          *

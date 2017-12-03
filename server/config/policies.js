@@ -26,7 +26,7 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  // '*': true,
+  '*': 'sessionAuth',
 
   /***************************************************************************
   *                                                                          *
@@ -48,4 +48,23 @@ module.exports.policies = {
 		// before letting any users feed our rabbits
 		// feed : ['isNiceToAnimals', 'hasRabbitFood']
 	// }
+  AuthController:{
+    '*':true
+  },
+
+  ViewsController:{
+    '*' : true,
+    'dashboard' : 'sessionAuthRedirectToLogin',
+    'cart' : 'sessionAuthRedirectToLogin'
+  },
+
+  UserDataController:{
+    '*': 'sessionAuth',
+    'getClientsData': 'isTrainer',
+    'getSurvey': 'isTrainerForOtherUser'
+  },
+
+  FilesController:{
+    '*': 'sessionAuth',
+  }
 };

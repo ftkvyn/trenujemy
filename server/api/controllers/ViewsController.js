@@ -46,9 +46,6 @@ module.exports = {
 	},
 
 	dashboard: function(req,res){
-		if(!req.session.user){
-			return res.redirect('/');
-		}
 		return res.view('dashboard', {layout: null});	
 	}
 };

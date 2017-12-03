@@ -85,34 +85,28 @@ module.exports = {
 		});
 	},
 
-	uploadImage: function(req, res){
-		req.file('file').upload({
-			dirname: sails.config.appPath + '/.tmp/upload/',
-			maxBytes: 10000000
-		},function (err, uploadedFiles){
+	saveSurvey:function(req, res){
+		var model = req.body;
+		UserInfo.update({user: req.session.user.id}, model)
+		.exec(function(err, userInfos){
 			if(err){
 				console.error(err);
 				return res.badRequest(err);
 			}
-			if(uploadedFiles.length){
-				var model = {};
-				model.fileData = uploadedFiles[0].fd;
-				model.originalName = uploadedFiles[0].filename;
-				var name = req.session.user.name || 'user_' + req.session.user.id;
-				model.name = name;
-				model.type = uploadedFiles[0].type;
-				s3Uploader.uploadImg(model)
-				.then(function(data){
-					return res.json({url: data.url});
-				})
-				.catch(function(err){
-					return res.badRequest(err);
-    			})
-    			.done();
-			}else{
-				return res.send("no files uploaded");
-			}
+			return res.json({success: true});
 		});
+	},
 
-	}
+	getSurvey:function(req, res){
+		var model = req.body;
+		var userId = req.params.userId || req.session.user.id;
+		UserInfo.findOne({user: userId})
+		.exec(function(err, userInfo){
+			if(err){
+				console.error(err);
+				return res.badRequest(err);
+			}
+			return res.json(userId);
+		});
+	},	
 }
