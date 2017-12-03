@@ -100,13 +100,32 @@ module.exports = {
 	getSurvey:function(req, res){
 		var model = req.body;
 		var userId = req.params.userId || req.session.user.id;
-		UserInfo.findOne({user: userId})
+		UserInfo
+		.populate('bodySize')
+		.findOne({user: userId}, {user: userId})
 		.exec(function(err, userInfo){
 			if(err){
 				console.error(err);
 				return res.badRequest(err);
 			}
-			return res.json(userId);
+			if(userInfo){
+				return res.json(userInfo);
+			}
+			BodySize.create({})
+			.exec(function(err, bodySize){
+				if(err){
+					console.error(err);
+					return res.badRequest(err);
+				}
+				UserInfo.create({user: userId, bodySize: bodySize})
+				.exec(function(err, userInfo){
+					if(err){
+						console.error(err);
+						return res.badRequest(err);
+					}
+					return res.json(userInfo);
+				});
+			});
 		});
 	},	
 }
