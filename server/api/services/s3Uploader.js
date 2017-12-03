@@ -63,11 +63,12 @@ exports.uploadImg = function (params) {
 	return upload(params);
 }
 
-exports.getFileUrl = function(key){
+exports.getFileUrl = function(key, fileName){
 	const signedUrlExpireSeconds = 60 * 5;
-
+	const contentDisposition = 'attachment; filename="' + fileName + '"';
 	const url = s3.getSignedUrl('getObject', {
 	    Bucket: bucketName,
+	    ResponseContentDisposition: contentDisposition,
 	    Key: key,
 	    Expires: signedUrlExpireSeconds
 	});

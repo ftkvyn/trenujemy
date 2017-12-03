@@ -80,6 +80,7 @@ module.exports.routes = {
 
   'post /api/survey' : 'UserDataController.saveSurvey',
 
+  'get /api/surveyFileLink/:id' : 'UserDataController.getSurveyFileLink',
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

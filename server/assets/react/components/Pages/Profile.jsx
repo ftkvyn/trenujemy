@@ -189,7 +189,7 @@ class Profile extends React.Component {
         var picForm = "";
         if(!this.state.userId){
             picForm = <form id='profilePicForm' style={{display:'none'}}>
-                <input type='file' name='file' id='profilePicInput' onChange={this.uploadImage.bind(this)}/>
+                <input type='file' name='file' id='profilePicInput' accept="image/x-png,image/gif,image/jpeg" onChange={this.uploadImage.bind(this)}/>
             </form>
         }
         return (

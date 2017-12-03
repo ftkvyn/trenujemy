@@ -41,11 +41,26 @@ function save(formData, url){
 }
 
 function saveFile(formData){
-	return save(formData, '/api/uploadImage');
+	return save(formData, '/api/uploadFile');
 }
 
 function saveImage(formData){
-	return save(formData, '/api/uploadFile');	
+	return save(formData, '/api/uploadImage');	
 }
 
-export {saveFile, saveImage};
+function getFileLink(surveyId) {
+    let promise = new Promise((resolve, reject) => {
+        let url = '/api/surveyFileLink/'+surveyId;
+        $.get(url)
+        .success(function(data) {
+            resolve(data);
+        })
+        .error(function(err){
+            console.error(err);
+            reject(err);
+        });
+    });
+    return promise;
+}
+
+export {saveFile, saveImage, getFileLink};

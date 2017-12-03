@@ -145,4 +145,19 @@ module.exports = {
 			});
 		});
 	},	
+
+	getSurveyFileLink:function(req, res) {
+		UserInfo.findOne({id: req.params.id})
+		.exec(function(err, userInfo){
+			if(err){
+				console.error(err);
+				return res.badRequest(err);
+			}
+			if(req.session.user.role != 'trainer' && (req.session.user.id != userInfo.user) || !userInfo.medicalReporKey){
+				return res.forbidden();
+			}
+			var url = s3Uploader.getFileUrl(userInfo.medicalReporKey, userInfo.medicalReportName);
+			return res.send({url: url});
+		});
+	}
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
 import { loadSurvey, saveSurvey } from '../Common/userDataService';
-import { saveImage, saveFile } from '../Common/filesService';
+import { saveImage, saveFile, getFileLink } from '../Common/filesService';
 
 let hideAlertSuccess = null;
 let hideAlertError = null;
@@ -132,7 +132,7 @@ class Survey extends React.Component {
         if(this.state.userId){
             return;
         }
-        $('#profilePicInput').click();
+        $('#bodyPicInput').click();
     }
 
     uploadImage(){
@@ -158,6 +158,56 @@ class Survey extends React.Component {
         });
     }
 
+    fileClick(event){
+        if(this.state.userId){
+            return;
+        }
+        $('#medFileInput').click();
+    }
+
+    uploadFile(){
+        let me = this;
+        var formData = new FormData();
+        var fileData = $('#medFileInput')[0].files[0];
+        formData.append('file', fileData);
+        saveFile(formData)
+        .then(function(data){
+            let newData = me.state.data;
+            newData.medicalReportName = data.name;
+            newData.medicalReporKey = data.key;
+            me.setState({data: newData});
+            if(saveHandler){
+                saveHandler.clear();
+            }
+            saveHandler = debounce(() => saveUserFn(newData), 100);        
+            saveHandler();
+        })
+        .catch(function(err){
+            $('.saveError').show();
+            clearTimeout(hideAlertError);
+            hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
+        });
+    }
+
+    downloadFile(){
+        if(!this.state.data.medicalReporKey){
+            return;
+        }
+        let me = this;
+        getFileLink(this.state.data.id)
+        .then(function(data) {
+            var link = document.createElement("a");
+            link.download = me.state.data.medicalReportName;
+            link.href = data.url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        })
+        .catch(function(err){
+            alert('Nie udało się pobrać plik');
+        });
+    }
+
     render() {  
         if(!this.state.data.id){
             return <Panel></Panel>
@@ -166,11 +216,20 @@ class Survey extends React.Component {
         if(this.state.userId){
             readonlyProps = {readOnly: true, disabled: 'disabled'};
         }
+        var bodyPic = this.state.data.bodyPicture || '/images/no_image_user.png';
         var picForm = "";
+        var fileForm = "";
+        var uploadBtn = "";
         if(!this.state.userId){
             picForm = <form id='bodyPicForm' style={{display:'none'}}>
-                <input type='file' name='file' id='profilePicInput' onChange={this.uploadImage.bind(this)}/>
+                <input type='file' name='file' id='bodyPicInput' accept="image/x-png,image/gif,image/jpeg" onChange={this.uploadImage.bind(this)}/>
             </form>
+
+            fileForm = <form id='medFileForm' style={{display:'none'}}>
+                <input type='file' name='file' id='medFileInput' onChange={this.uploadFile.bind(this)}/>
+            </form>
+
+            uploadBtn = <div onClick={this.fileClick.bind(this)} className="btn btn-default mr">Załaduj</div>
         }
         return (
               <Panel>
@@ -181,7 +240,7 @@ class Survey extends React.Component {
                             <div className="radio c-radio">
                                 <label>
                                     <input type="radio" name="target" 
-                                    value="weight"
+                                    value="weight" {...readonlyProps}
                                     checked={this.state.data.target === 'weight'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Chcę zbudować masę i powiększyć mięśnie
@@ -190,7 +249,7 @@ class Survey extends React.Component {
                             <div className="radio c-radio">
                                 <label>
                                     <input type="radio" name="target" 
-                                    value="cut"
+                                    value="cut" {...readonlyProps}
                                     checked={this.state.data.target === 'cut'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Chcę wyrzeźbić mięśnie
@@ -199,7 +258,7 @@ class Survey extends React.Component {
                             <div className="radio c-radio">
                                 <label>
                                     <input type="radio" name="target" 
-                                    value="slim"
+                                    value="slim" {...readonlyProps}
                                     checked={this.state.data.target === 'slim'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Chcę schudnąć
@@ -208,7 +267,7 @@ class Survey extends React.Component {
                             <div className="radio c-radio">
                                 <label>
                                     <input type="radio" name="target" 
-                                    value="power"
+                                    value="power" {...readonlyProps}
                                     checked={this.state.data.target === 'power'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Chcę zwiększyć siłę
@@ -222,21 +281,21 @@ class Survey extends React.Component {
                         <div>
                             <label style={{'margin':'0 46px'}} className="radio-inline c-radio">
                                 <input type="radio" name="bodyType" 
-                                value="1"
+                                value="1" {...readonlyProps}
                                 checked={this.state.data.bodyType == '1'} 
                                 onChange={this.handleChange.bind(this)} />
                                 <em className="fa fa-circle"></em>
                             </label>
                             <label style={{'margin':'0 46px'}} className="radio-inline c-radio">
                                 <input type="radio" name="bodyType" 
-                                value="2"
+                                value="2" {...readonlyProps}
                                 checked={this.state.data.bodyType == '2'} 
                                 onChange={this.handleChange.bind(this)} />
                                 <em className="fa fa-circle"></em>
                             </label>
                             <label style={{'margin':'0 52px'}} className="radio-inline c-radio">
                                 <input type="radio" name="bodyType" 
-                                value="3"
+                                value="3" {...readonlyProps}
                                 checked={this.state.data.bodyType == '3'} 
                                 onChange={this.handleChange.bind(this)} />
                                 <em className="fa fa-circle"></em>
@@ -433,7 +492,7 @@ class Survey extends React.Component {
                         <Col lg={ 9 } md={ 8 }>
                             <label className="checkbox-inline c-checkbox">
                                 <input type="checkbox" name="binmap:kitchenEquipment" 
-                                value="1"
+                                value="1" {...readonlyProps}
                                 className='needsclick'
                                 checked={this.state.data.kitchenEquipment & 0b1} 
                                 onChange={this.handleChange.bind(this)} />
@@ -441,7 +500,7 @@ class Survey extends React.Component {
                             </label>
                             <label className="checkbox-inline c-checkbox">
                                 <input type="checkbox" name="binmap:kitchenEquipment" 
-                                value="10"
+                                value="10" {...readonlyProps}
                                 className='needsclick'
                                 checked={this.state.data.kitchenEquipment & 0b10} 
                                 onChange={this.handleChange.bind(this)} />
@@ -449,7 +508,7 @@ class Survey extends React.Component {
                             </label>
                             <label className="checkbox-inline c-checkbox">
                                 <input type="checkbox" name="binmap:kitchenEquipment" 
-                                value="100"
+                                value="100" {...readonlyProps}
                                 className='needsclick'
                                 checked={this.state.data.kitchenEquipment & 0b100} 
                                 onChange={this.handleChange.bind(this)} />
@@ -457,7 +516,7 @@ class Survey extends React.Component {
                             </label>
                             <label className="checkbox-inline c-checkbox">
                                 <input type="checkbox" name="binmap:kitchenEquipment" 
-                                value="1000"
+                                value="1000" {...readonlyProps}
                                 className='needsclick'
                                 checked={this.state.data.kitchenEquipment & 0b1000} 
                                 onChange={this.handleChange.bind(this)} />
@@ -478,7 +537,7 @@ class Survey extends React.Component {
                     <FormGroup>
                         <label className="col-lg-3 col-md-4 control-label">Inne uwagi dla trenera:</label>
                         <Col lg={ 9 } md={ 8 }>
-                            <textarea 
+                            <textarea  {...readonlyProps}
                             className="form-control" 
                             name='hintsForTrainer'
                             value={this.state.data.hintsForTrainer || ''}
@@ -647,7 +706,7 @@ class Survey extends React.Component {
                     <FormGroup>
                         <label className="col-lg-3 col-md-4 control-label">Rozpisz, jak trenujesz obecnie na siłowni. Wymień ćwiczenia, jak łączysz partie, jak długo trenujesz tym planem, długość przerw między seriami, ile czasu trwa twój trening:</label>
                         <Col lg={ 9 } md={ 8 }>
-                            <textarea 
+                            <textarea {...readonlyProps}
                             className="form-control" 
                             name='trainingDescription'
                             value={this.state.data.trainingDescription || ''}
@@ -657,7 +716,7 @@ class Survey extends React.Component {
                     <FormGroup>
                         <label className="col-lg-3 col-md-4 control-label">Czy oprócz siłowni uprawiasz inne sporty, wliczając w to intensywne spacery, rower, bieganie? Opisz je:</label>
                         <Col lg={ 9 } md={ 8 }>
-                            <textarea 
+                            <textarea {...readonlyProps}
                             className="form-control" 
                             name='otherTrainings'
                             value={this.state.data.otherTrainings || ''}
@@ -703,49 +762,49 @@ class Survey extends React.Component {
                         <Col lg={ 9 } md={ 8 }>
                             <label className="radio-inline c-radio">
                                 <input type="radio" name="mostImportantBodyPart" 
-                                    value="chest"
+                                    value="chest" {...readonlyProps}
                                     checked={this.state.data.target === 'chest'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Klatka
                             </label>
                             <label className="radio-inline c-radio">
                                 <input type="radio" name="mostImportantBodyPart" 
-                                    value="legs"
+                                    value="legs" {...readonlyProps}
                                     checked={this.state.data.target === 'legs'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Nogi
                             </label>
                             <label className="radio-inline c-radio">
                                 <input type="radio" name="mostImportantBodyPart" 
-                                    value="back"
+                                    value="back" {...readonlyProps}
                                     checked={this.state.data.target === 'back'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Plecy
                             </label>
                             <label className="radio-inline c-radio">
                                 <input type="radio" name="mostImportantBodyPart" 
-                                    value="shoulders"
+                                    value="shoulders" {...readonlyProps}
                                     checked={this.state.data.target === 'shoulders'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Barki
                             </label>
                             <label className="radio-inline c-radio">
                                 <input type="radio" name="mostImportantBodyPart" 
-                                    value="biceps"
+                                    value="biceps" {...readonlyProps}
                                     checked={this.state.data.target === 'biceps'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Biceps
                             </label>
                             <label className="radio-inline c-radio">
                                 <input type="radio" name="mostImportantBodyPart" 
-                                    value="triceps"
+                                    value="triceps" {...readonlyProps}
                                     checked={this.state.data.target === 'triceps'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Triceps
                             </label>
                             <label className="radio-inline c-radio">
                                 <input type="radio" name="mostImportantBodyPart" 
-                                    value="belly"
+                                    value="belly" {...readonlyProps}
                                     checked={this.state.data.target === 'belly'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Brzuch
@@ -764,21 +823,21 @@ class Survey extends React.Component {
                         <Col lg={ 9 } md={ 8 }>
                             <label className="radio-inline c-radio">
                                 <input type="radio" name="availableEquipment" 
-                                    value="gym"
+                                    value="gym" {...readonlyProps}
                                     checked={this.state.data.target === 'gym'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Siłownia - pełne wyposażenie
                             </label>
                             <label className="radio-inline c-radio">
                                 <input type="radio" name="availableEquipment" 
-                                    value="home"
+                                    value="home" {...readonlyProps}
                                     checked={this.state.data.target === 'home'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Domowa siłownia
                             </label>
                             <label className="radio-inline c-radio">
                                 <input type="radio" name="availableEquipment" 
-                                    value="none"
+                                    value="none" {...readonlyProps}
                                     checked={this.state.data.target === 'none'} 
                                     onChange={this.handleChange.bind(this)} />
                                     <em className="fa fa-circle"></em>Brak sprzętu
@@ -788,7 +847,7 @@ class Survey extends React.Component {
                     <FormGroup>
                         <label className="col-lg-3 col-md-4 control-label">Czy obecnie stosujesz suplementy diety? Jeśli tak - jakie?</label>
                         <Col lg={ 9 } md={ 8 }>
-                            <textarea 
+                            <textarea {...readonlyProps}
                             className="form-control" 
                             name='currentNutrition'
                             value={this.state.data.currentNutrition || ''}
@@ -823,7 +882,7 @@ class Survey extends React.Component {
                         <Col lg={ 9 } md={ 8 }>
                             <label className="checkbox-inline c-checkbox">
                                 <input type="checkbox" name="binmap:contusionCheckboxes" 
-                                value="1"
+                                value="1" {...readonlyProps}
                                 className='needsclick'
                                 checked={this.state.data.contusionCheckboxes & 0b1} 
                                 onChange={this.handleChange.bind(this)} />
@@ -831,7 +890,7 @@ class Survey extends React.Component {
                             </label>
                             <label className="checkbox-inline c-checkbox">
                                 <input type="checkbox" name="binmap:contusionCheckboxes" 
-                                value="10"
+                                value="10" {...readonlyProps}
                                 className='needsclick'
                                 checked={this.state.data.contusionCheckboxes & 0b10} 
                                 onChange={this.handleChange.bind(this)} />
@@ -839,7 +898,7 @@ class Survey extends React.Component {
                             </label>
                             <label className="checkbox-inline c-checkbox">
                                 <input type="checkbox" name="binmap:contusionCheckboxes" 
-                                value="100"
+                                value="100" {...readonlyProps}
                                 className='needsclick'
                                 checked={this.state.data.contusionCheckboxes & 0b100} 
                                 onChange={this.handleChange.bind(this)} />
@@ -847,7 +906,7 @@ class Survey extends React.Component {
                             </label>
                             <label className="checkbox-inline c-checkbox">
                                 <input type="checkbox" name="binmap:contusionCheckboxes" 
-                                value="1000"
+                                value="1000" {...readonlyProps}
                                 className='needsclick'
                                 checked={this.state.data.contusionCheckboxes & 0b1000} 
                                 onChange={this.handleChange.bind(this)} />
@@ -855,7 +914,7 @@ class Survey extends React.Component {
                             </label>
                             <label className="checkbox-inline c-checkbox">
                                 <input type="checkbox" name="binmap:contusionCheckboxes" 
-                                value="10000"
+                                value="10000" {...readonlyProps}
                                 className='needsclick'
                                 checked={this.state.data.contusionCheckboxes & 0b10000} 
                                 onChange={this.handleChange.bind(this)} />
@@ -863,7 +922,7 @@ class Survey extends React.Component {
                             </label>
                             <label className="checkbox-inline c-checkbox">
                                 <input type="checkbox" name="binmap:contusionCheckboxes" 
-                                value="100000"
+                                value="100000" {...readonlyProps}
                                 className='needsclick'
                                 checked={this.state.data.contusionCheckboxes & 0b100000} 
                                 onChange={this.handleChange.bind(this)} />
@@ -881,13 +940,29 @@ class Survey extends React.Component {
                     <FormGroup>
                         <label className="col-lg-3 col-md-4 control-label">Inne uwagi dla trenera:</label>
                         <Col lg={ 9 } md={ 8 }>
-                            <textarea 
+                            <textarea  {...readonlyProps}
                             className="form-control" 
                             name='otherHints'
                             value={this.state.data.otherHints || ''}
                             onChange={this.handleChange.bind(this)}></textarea>
                         </Col>
                     </FormGroup>
+
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Dodaj zdjęcie swojej sylwetki, aby trener mógł dokładniej ocenić potrzeby i dostosować plan treningów:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            <img src={bodyPic} className='profile-pic' onClick={this.imageClick.bind(this)}/>
+                        </Col>
+                    </FormGroup> 
+
+                    <FormGroup>
+                        <label className="col-lg-3 col-md-4 control-label">Załaduj skan badań lekarskich:</label>
+                        <Col lg={ 9 } md={ 8 }>
+                            {uploadBtn}
+                            <label className='mr' style={this.state.data.medicalReportName ? {} : {'display':'none'}}>{this.state.data.medicalReportName}</label>
+                            <a onClick={this.downloadFile.bind(this)} style={this.state.data.medicalReporKey ? {'cursor':'pointer'} : {'display':'none'}}>Pobierz</a>
+                        </Col>
+                    </FormGroup> 
 
                     <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
                         Dane zapisane poprawnie.
@@ -897,6 +972,7 @@ class Survey extends React.Component {
                     </div>
                 </form>
                 {picForm}
+                {fileForm}
             </Panel>
         );
     }
