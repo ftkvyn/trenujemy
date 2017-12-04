@@ -8,7 +8,29 @@
 module.exports = {
 
   attributes: {
+  		name:{
+  			type:'string'
+  		},
 
+  		priceOld:{
+  			type: 'integer',
+  		},
+
+  		price:{
+  			type:'integer',
+  		},
+
+  		description:{
+  			type:'text',
+  		},
+
+  		isActive:{
+  			type:'boolean'
+  		},
+
+  		isRecomended:{
+  			type:'boolean'
+  		}
   }
 };
 

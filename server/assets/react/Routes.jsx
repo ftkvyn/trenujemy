@@ -10,6 +10,10 @@ import ProfilePage from './components/Pages/ProfilePage'
 import SurveyPage from  './components/Pages/SurveyPage'
 import ClientPage from './components/Pages/ClientPage'
 
+import TrainingsPrice from './components/Pages/TrainingsPrice'
+import TrainingsPlaces from './components/Pages/TrainingsPlaces'
+import TrainingsHours from './components/Pages/TrainingsHours'
+
 // List of routes that uses the page layout
 // listed here to Switch between layouts
 // depending on the current pathname
@@ -56,6 +60,9 @@ const Routes = ({ location }) => {
                             <Route path="/profile" component={ProfilePage}/>
                             <Route path="/survey" component={SurveyPage}/>
                             <Route path="/clients/:id" component={ClientPage}/>
+                            <Route path="/trainings/price" component={TrainingsPrice}/>
+                            <Route path="/trainings/places" component={TrainingsPlaces}/>
+                            <Route path="/trainings/hours" component={TrainingsHours}/>
                             <Redirect to="/profile"/>
                         </Switch>
                     </div>

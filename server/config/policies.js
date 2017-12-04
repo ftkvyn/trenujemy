@@ -66,5 +66,23 @@ module.exports.policies = {
 
   FilesController:{
     '*': 'sessionAuth',
+  },
+
+  TrainPlacesController:{
+    '*':'isTrainer',
+    'find':true,
+    'findOne':true,
+  },
+
+  TrainTimesController:{
+    '*':'isTrainer',
+    'find':true,
+    'findOne':true,
+  },
+
+  TrainPlanController:{
+    '*':'isTrainer',
+    'find':true,
+    'findOne':true,
   }
 };

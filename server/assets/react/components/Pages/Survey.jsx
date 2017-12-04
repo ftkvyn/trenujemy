@@ -90,6 +90,9 @@ class Survey extends React.Component {
     }
 
     handleChange(event) {
+        if(this.state.userId){
+            return;
+        }
         let fieldName = event.target.name;
         let fieldVal = event.target.value;
         let newData = this.state.data;
