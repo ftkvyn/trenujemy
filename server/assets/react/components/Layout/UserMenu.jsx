@@ -53,13 +53,11 @@ class UserMenu extends React.Component {
                             <li className="sidebar-subnav-header">Konto</li>
                             <li className={ this.routeActive('profile') ? 'active' : '' }>
                                 <Link to="/profile" title="Moje dane">
-                                <em className='fa fa-gear'></em>
                                 <span>Moje dane</span>
                                 </Link>
                             </li>
                             <li className={ this.routeActive('survey') ? 'active' : '' }>
                                 <Link to="/survey" title="Ankieta">
-                                <em className='fa fa-edit'></em>
                                 <span>Ankieta</span>
                                 </Link>
                             </li>

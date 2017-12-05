@@ -55,7 +55,6 @@ class TrainerMenu extends React.Component {
                             <li className="sidebar-subnav-header">Konto</li>
                             <li className={ this.routeActive('profile') ? 'active' : '' }>
                                 <Link to="/profile" title="Moje dane">
-                                    <em className='fa fa-gear'></em>
                                     <span>Moje dane</span>
                                 </Link>
                             </li>
@@ -73,19 +72,16 @@ class TrainerMenu extends React.Component {
                             <li className="sidebar-subnav-header">Treningi</li>
                             <li className={ this.routeActive('/trainings/price') ? 'active' : '' } >
                                 <Link to={"/trainings/price"} title='Cennik'>
-                                    <em className='fa fa-money'></em>
                                     <span>Cennik</span>
                                 </Link>
                             </li> 
                             <li className={ this.routeActive('/trainings/places') ? 'active' : '' } >
                                 <Link to={"/trainings/places"} title='Miejsca'>
-                                    <em className='icon-location-pin'></em>
                                     <span>Miejsca</span>
                                 </Link>
                             </li> 
                             <li className={ this.routeActive('/trainings/hours') ? 'active' : '' } >
                                 <Link to={"/trainings/hours"} title='Godziny'>
-                                    <em className='icon-clock'></em>
                                     <span>Godziny</span>
                                 </Link>
                             </li>                    
