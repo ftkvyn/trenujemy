@@ -29,8 +29,8 @@ module.exports = {
 					return res.badRequest(err);
 				}
 				return res.json(data);
-			})
-		})
+			});
+		});
 	}
 };
 

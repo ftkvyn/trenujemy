@@ -15,6 +15,31 @@ module.exports = {
 			}
 			return res.json(data);
 		})
+	},
+
+	findAll:  function(req, res){
+		TrainPlan.find()
+		.exec(function(err, data) {
+			if(err){
+				console.error(err);
+				return res.badRequest(err);
+			}
+			if(data.length){
+				return res.json(data);
+			}
+			const items = [{},{},{},{}];
+	        TrainPlan.create(items)
+	        .exec(function(err, data) {
+				if(err){
+					console.error(err);
+					return res.badRequest(err);
+				}
+				data = data.sort((a,b) =>{
+					return a.id - b.id;
+				});
+				return res.json(data);
+			})
+		})
 	}
 };
 
