@@ -11,7 +11,8 @@ module.exports = {
   	dayOfWeek:{
   		type:'integer',
   		enum:[1,2,3,4,5,6,7],
-  		required: true
+  		required: true,
+      unique: true
   	},
   	fromTime:{
   		type:'integer',
