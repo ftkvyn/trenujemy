@@ -15,7 +15,6 @@ function loadAllPlans(){
 	return new Promise((resolve, reject) => {
 		$.get('/api/trainPlansAll')
 		.success(function(data) {
-			console.log(data);
 			resolve(data);
 		})
 		.error(function(err){
@@ -32,7 +31,6 @@ function savePlan(plan){
 	if(plan.price == null){
 		delete plan.price;
 	}
-	console.log(plan);
 	return new Promise((resolve, reject) => {
 		$.ajax({
             url: '/api/trainPlan/'+plan.id,

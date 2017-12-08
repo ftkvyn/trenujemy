@@ -84,5 +84,17 @@ module.exports.policies = {
     '*':'isTrainer',
     'find':true,
     'findOne':true,
-  }
+  },
+
+  FeedPlanTargetController:{
+    'find':true,
+    'create':false,
+    'destroy':false
+  },
+
+  FeedPlanController:{
+    'find':true,
+    'create':false,
+    'destroy':false
+  },
 };

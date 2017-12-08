@@ -50,7 +50,6 @@ class TrainingsPrice extends React.Component {
               let oldRecomended = plans.find((item) => item.isRecomended);              
               if(oldRecomended){
                 let recNum = plans.indexOf(oldRecomended);      
-                console.log('old rec is ' + oldRecomended.name);
                 oldRecomended.isRecomended = false;
                 savePlan(oldRecomended)
                  .then(function(){

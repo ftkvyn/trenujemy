@@ -14,6 +14,8 @@ import TrainingsPrice from './components/Pages/TrainingsPrice'
 import TrainingsPlaces from './components/Pages/TrainingsPlaces'
 import TrainingsHours from './components/Pages/TrainingsHours'
 
+import FeedPlansPrice from './components/Pages/FeedPlansPrice'
+
 // List of routes that uses the page layout
 // listed here to Switch between layouts
 // depending on the current pathname
@@ -63,6 +65,7 @@ const Routes = ({ location }) => {
                             <Route path="/trainings/price" component={TrainingsPrice}/>
                             <Route path="/trainings/places" component={TrainingsPlaces}/>
                             <Route path="/trainings/hours" component={TrainingsHours}/>
+                            <Route path="/plans/price" component={FeedPlansPrice}/>
                             <Redirect to="/profile"/>
                         </Switch>
                     </div>

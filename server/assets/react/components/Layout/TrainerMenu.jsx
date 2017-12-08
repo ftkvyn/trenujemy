@@ -12,6 +12,7 @@ class TrainerMenu extends React.Component {
             collapse: {
                 profile: this.routeActive(['profile']),
                 trainings: this.routeActive(['trainings']),
+                plans: this.routeActive(['plans']),
             }
         };
     };
@@ -85,6 +86,23 @@ class TrainerMenu extends React.Component {
                                     <span>Godziny</span>
                                 </Link>
                             </li>                    
+                        </ul>
+                    </Collapse>
+                </li>
+
+                <li className={ this.routeActive(['plans']) ? 'active' : '' }>
+                    <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'plans') }>
+                        <em className="fa fa-cutlery"></em>
+                        <span>Plany</span>
+                    </div>
+                    <Collapse in={ this.state.collapse.plans } timeout={ 100 }>
+                        <ul id="plans" className="nav sidebar-subnav">
+                            <li className="sidebar-subnav-header">Plany</li>
+                            <li className={ this.routeActive('/plans/price') ? 'active' : '' } >
+                                <Link to={"/plans/price"} title='Cennik'>
+                                    <span>Cennik</span>
+                                </Link>
+                            </li>                 
                         </ul>
                     </Collapse>
                 </li>
