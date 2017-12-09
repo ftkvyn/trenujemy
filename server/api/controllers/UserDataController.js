@@ -117,7 +117,7 @@ module.exports = {
 		var model = req.body;
 		var userId = req.params.userId || req.session.user.id;
 		UserInfo
-		.findOne({user: userId}, {user: userId})
+		.findOne({user: userId})
 		.populate('bodySize')
 		.exec(function(err, userInfo){
 			if(err){

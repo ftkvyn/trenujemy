@@ -8,6 +8,7 @@ import BaseHorizontal from './components/Layout/BaseHorizontal';
 
 import ProfilePage from './components/Pages/ProfilePage'
 import SurveyPage from  './components/Pages/SurveyPage'
+import AdvicePage from  './components/Pages/AdvicePage'
 import ClientPage from './components/Pages/ClientPage'
 
 import TrainingsPrice from './components/Pages/TrainingsPrice'
@@ -61,6 +62,7 @@ const Routes = ({ location }) => {
                         <Switch location={location}>
                             <Route path="/profile" component={ProfilePage}/>
                             <Route path="/survey" component={SurveyPage}/>
+                            <Route path="/advice" component={AdvicePage}/>
                             <Route path="/clients/:id" component={ClientPage}/>
                             <Route path="/trainings/price" component={TrainingsPrice}/>
                             <Route path="/trainings/places" component={TrainingsPlaces}/>

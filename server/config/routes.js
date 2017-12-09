@@ -83,6 +83,10 @@ module.exports.routes = {
   'get /api/surveyFileLink/:id' : 'UserDataController.getSurveyFileLink',
 
   'get /api/trainPlansAll' : 'TrainPlanController.findAll',
+
+  'get /api/defaultAdvice' : 'AdviceController.getDefaultVals',
+
+  'get /api/advice/:userId?' : 'AdviceController.find',
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

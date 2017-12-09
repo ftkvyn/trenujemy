@@ -97,4 +97,12 @@ module.exports.policies = {
     'create':false,
     'destroy':false
   },
+
+  AdviceController:{
+    'find':'isTrainerForOtherUser',
+    'create':false,
+    'destroy':false,
+    'update':'isTrainer',
+    'getDefaultVals':'isTrainer'
+  },
 };

@@ -5,6 +5,7 @@ import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from '
 
 import Profile from './Profile'
 import Survey from './Survey'
+import Advice from './Advice'
 
 class ClientPage extends React.Component {
     routeActive(paths) {
@@ -34,12 +35,19 @@ class ClientPage extends React.Component {
                       Ankieta
                     </button>
                   </Link>
+                   <Link to={"/clients/" + this.props.match.params.id + "/advice"}>
+                    <button type="button" 
+            className={"mb-sm mr-sm btn btn-outline " + (this.routeActive('/clients/' + this.props.match.params.id + '/advice') ? 'btn-primary' : 'btn-default') }>
+                      Zalecenia
+                    </button>
+                  </Link>
                   
                 </h3>
                 <Row>
                    <Col lg={12} md={12} sm={12}>
                     <Route exact path="/clients/:id" component={Profile}/>
                     <Route path="/clients/:id/survey" component={Survey}/>
+                    <Route path="/clients/:id/advice" component={Advice}/>
                    </Col>
                 </Row>
             </ContentWrapper>
