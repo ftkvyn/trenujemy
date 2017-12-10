@@ -3,3 +3,11 @@
 	max-height: 400px;
 	cursor: pointer;
 }
+
+.short-input{
+	width: 120px;
+}
+
+body .modal-backdrop.in{
+	display: none;
+}

@@ -23,5 +23,11 @@ import '../../node_modules/inputmask/dist/jquery.inputmask.bundle.js';
 // Datetime picker
 import '../../node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js';
 import '../../node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css';
+// Wysiwig
+import '../../node_modules/bootstrap/dist/js/bootstrap.min.js';
+import '../../node_modules/codemirror/lib/codemirror.css';
+import '../../node_modules/codemirror/lib/codemirror.js';
+import '../../node_modules/summernote/dist/summernote.css';
+import '../../node_modules/summernote/dist/summernote.min.js';
 //debounce
 window.debounce = require('debounce');

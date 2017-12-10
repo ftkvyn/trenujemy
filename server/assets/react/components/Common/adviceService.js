@@ -1,6 +1,6 @@
 function loadUserAdvice(userId){
 	return new Promise((resolve, reject) => {
-		let url = '/api/advice';
+		let url = '/api/advice/';
 		if(userId){
 			url += userId;
 		}

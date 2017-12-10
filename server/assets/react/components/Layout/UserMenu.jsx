@@ -61,6 +61,11 @@ class UserMenu extends React.Component {
                                 <span>Ankieta</span>
                                 </Link>
                             </li>
+                            <li className={ this.routeActive('advice') ? 'active' : '' }>
+                                <Link to="/advice" title="Zalecenia">
+                                <span>Zalecenia</span>
+                                </Link>
+                            </li>
                         </ul>
                     </Collapse>
                 </li>

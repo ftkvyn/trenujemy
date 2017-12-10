@@ -5,6 +5,9 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
+const fields = ['protein','carbo','fat','fiber','sodium','potassium','calcium',
+'iron','vitaminC','vitminA','calories'];
+
 module.exports = {
 
   attributes: {
@@ -22,9 +25,13 @@ module.exports = {
   		type:'integer'
   	},
 
-	fat:{
+	  fat:{
   		type:'integer'
   	},
+
+    calories:{
+      type:'integer'
+    },
 
   	fiber:{ //g
   		type:'integer'
@@ -85,6 +92,16 @@ module.exports = {
   	plan:{
   		type:'text'
   	}
+  },
+
+  beforeValidate: function (values, cb) {
+    for (var i = fields.length - 1; i >= 0; i--) {
+      const key = fields[i];
+      if(!values[key]){
+        delete values[key];
+      }
+    }
+    cb();
   }
 };
 
