@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
-import { loadUser, saveUser } from '../Common/userDataService';
+import { loadUser, saveUser, loadRequirements, saveRequirements } from '../Common/userDataService';
 import { saveImage } from '../Common/filesService';
 import { loadClients } from '../Common/clientsService';
 
@@ -24,15 +24,36 @@ function saveUserFn(newUser){
     });
 }
 
-function loadClientData(id, me){
+function saveRequirementsFn(data){
+    saveRequirements(data)
+    .then(function(){
+        $('.saveError').hide();
+        $('.saveSuccess').show();
+        clearTimeout(hideAlertSuccess);
+        hideAlertSuccess = setTimeout(() => {$('.saveSuccess').hide()}, 6000);
+    })
+    .catch(function(){
+        $('.saveSuccess').hide();
+        $('.saveError').show();
+        clearTimeout(hideAlertError);
+        hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
+    });
+}
+
+function loadClientData(id){
     loadClients()
-    .then(function(clients){
+    .then((clients) => {
         for (var i = clients.length - 1; i >= 0; i--) {
             if(clients[i].id == id){
-                setUser(clients[i], me);
+                setUser.call(this, clients[i]);
                 return;
             }
         }
+    });
+
+    loadRequirements(id)
+    .then((data) => {
+        this.setState({requirements: data});
     });
 }
 
@@ -45,11 +66,11 @@ function destroyDp(){
     }
 }
 
-function setUser(userData, me){
+function setUser(userData){
     $('.saveError').hide();
     $('.saveSuccess').hide();
     destroyDp();
-    me.setState({user: userData});
+    this.setState({user: userData});
     $('#datetimepicker').datetimepicker({
         icons: {
             time: 'fa fa-clock-o',
@@ -65,13 +86,11 @@ function setUser(userData, me){
       keepOpen: false,
       defaultDate: userData.birthday
     });
-    $("#datetimepicker").on("dp.change", function (e) {
-        console.log('change');
-        console.log(e);
+    $("#datetimepicker").on("dp.change",  (e) => {
         let newDate = e.date.toDate().toISOString();
-        let newUser = me.state.user;
+        let newUser = this.state.user;
         newUser.birthday = newDate
-        me.setState({user: newUser});
+        this.setState({user: newUser});
 
         if(saveHandler){
             saveHandler.clear();
@@ -87,7 +106,8 @@ class Profile extends React.Component {
     constructor(props, context) {
         super(props, context);
         let initialState = {
-            user:{}
+            user:{},
+            requirements:{}
         };
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
@@ -103,23 +123,21 @@ class Profile extends React.Component {
         if(this.state.userId === nextId){
             return;
         }
-        let me = this;
         this.setState({userId: nextId});
         if(!nextId){
             loadUser()
-            .then((data) => setUser(data, me));
+            .then((data) => setUser.call(this, data));
         }else{
-            loadClientData(nextId, me);
+            loadClientData.call(this, nextId);
         }
     }
 
     componentDidMount(){
-        let me = this;
         if(!this.state.userId){
             loadUser()
-            .then((data) => setUser(data, me));
+            .then((data) => setUser.call(this, data));
         }else{
-            loadClientData(this.state.userId, me);
+            loadClientData.call(this, this.state.userId);
         }
     }
 
@@ -137,6 +155,20 @@ class Profile extends React.Component {
         saveHandler();
     }
 
+    handleChangeRequirements(event){
+        let fieldName = event.target.name;
+        let fieldVal = event.target.value;
+        let newData = this.state.requirements;
+        newData[fieldName] = fieldVal
+        this.setState({requirements: newData});
+
+        if(saveHandler){
+            saveHandler.clear();
+        }
+        saveHandler = debounce(() => saveRequirementsFn(newData), 1000);        
+        saveHandler();
+    }
+
     imageClick(event){
         if(this.state.userId){
             return;
@@ -145,15 +177,14 @@ class Profile extends React.Component {
     }
 
     uploadImage(){
-        let me = this;
         var formData = new FormData();
         var fileData = $('#profilePicInput')[0].files[0];
         formData.append('file', fileData);
         saveImage(formData)
-        .then(function(data){
-            let newUser = me.state.user;
+        .then((data) => {
+            let newUser = this.state.user;
             newUser.profilePic = data.url;
-            me.setState({user: newUser});
+            this.setState({user: newUser});
             if(saveHandler){
                 saveHandler.clear();
             }
@@ -168,7 +199,8 @@ class Profile extends React.Component {
     }
 
     render() {  
-        var invoiceForm = "";
+        let invoiceForm = "";
+        let requirementsForm = "";
         if(this.state.user.role == 'trainer'){
             invoiceForm = <FormGroup>
                 <label className="col-lg-2 control-label">Dane do faktury: </label>
@@ -179,19 +211,42 @@ class Profile extends React.Component {
                     value={this.state.user.invoiceInfo || ''}
                     onChange={this.handleChange.bind(this)}></textarea>
                 </Col>
-            </FormGroup>     
+            </FormGroup>   
         }      
-        var readonlyProps = {};
+        let readonlyProps = {};
         if(this.state.userId){
             readonlyProps = {readOnly: true};
+            if(this.state.requirements.user){
+                requirementsForm = <div>
+                    <FormGroup>
+                        <label className="col-lg-2 control-label">Wysyłaj ciekawostki i wskazówki:</label>
+                        <Col lg={ 10 }>
+                            <FormControl componentClass="select" name="sendTips" 
+                            value={this.state.requirements.sendTips}
+                            onChange={this.handleChangeRequirements.bind(this)}
+                            className="form-control">
+                                <option value='twice_a_day'>Dwa razy dziennie</option>
+                                <option value='each_day'>Raz dziennie</option>
+                                <option value='each_second_day'>Co drugi dzień</option>
+                                <option value='each_third_day'>Co trzeci dzień</option>
+                                <option value='weekly'>Raz w tygodniu</option>
+                                <option value='never'>Nie wysyłaj</option>
+                            </FormControl>
+                        </Col>
+                    </FormGroup>
+
+                </div>  
+            }
         }
-        var profilePic = this.state.user.profilePic || '/images/no_image_user.png';
-        var picForm = "";
+        let profilePic = this.state.user.profilePic || '/images/no_image_user.png';
+        let picForm = "";
         if(!this.state.userId){
             picForm = <form id='profilePicForm' style={{display:'none'}}>
                 <input type='file' name='file' id='profilePicInput' accept="image/x-png,image/gif,image/jpeg" onChange={this.uploadImage.bind(this)}/>
             </form>
         }
+
+
         return (
               <Panel>
                     <form className="form-horizontal">     
@@ -241,6 +296,7 @@ class Profile extends React.Component {
                             </Col>
                         </FormGroup>       
                         {invoiceForm} 
+                        {requirementsForm}
                         <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
                             Dane zapisane poprawnie.
                         </div>  

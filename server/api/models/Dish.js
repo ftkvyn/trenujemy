@@ -13,9 +13,9 @@ module.exports = {
   		via:'dish'
   	},
   	user:{
-		model: 'User',
-		required:true	
-	},
+  		model: 'User',
+  		required:true	
+  	},
   }
 };
 

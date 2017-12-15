@@ -87,6 +87,8 @@ module.exports.routes = {
   'get /api/defaultAdvice' : 'AdviceController.getDefaultVals',
 
   'get /api/advice/:userId?' : 'AdviceController.find',
+
+  'get /api/userRequirement/:userId?' : 'UserRequirementController.find',
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

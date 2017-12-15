@@ -105,4 +105,11 @@ module.exports.policies = {
     'update':'isTrainer',
     'getDefaultVals':'isTrainer'
   },
+
+  UserRequirementController:{
+    'find':'isTrainer',
+    'create':false,
+    'destroy':false,
+    'update':'isTrainer',
+  },
 };
