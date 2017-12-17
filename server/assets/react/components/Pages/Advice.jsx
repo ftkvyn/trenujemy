@@ -99,7 +99,6 @@ class Advice extends React.Component {
     }
 
     handlePlanChange(code){
-        console.log(code);
         let newData = this.state.data;
         newData.plan = code;
         this.setState({data: newData});

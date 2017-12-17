@@ -3,7 +3,7 @@ const fs = require('fs');
 const Q = require('q');
 const uuidv4 = require('uuid/v4');
 const path = require('path');
-const bucketName = 'trenujemy'; //trenu-jemy
+const bucketName = 'trenu-jemy';
 
 AWS.config.update({accessKeyId: process.env.TRENUJEMY_AWS_ID, 
 	secretAccessKey: process.env.TRENUJEMY_AWS_KEY});

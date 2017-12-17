@@ -1,6 +1,7 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
+import { saveImage } from '../Common/filesService';
 
 class TextEditor extends React.Component {
     
@@ -14,6 +15,22 @@ class TextEditor extends React.Component {
                 if(me.props.onChange){
                   me.props.onChange(markupStr);
                 }
+              },
+              onImageUpload: function(files) {
+                var formData = new FormData();
+                var fileData = files[0];
+                formData.append('file', fileData);
+                saveImage(formData)
+                .then((data) => {
+                    data.url;
+                    let imgNode = document.createElement("img");
+                    imgNode.src = data.url;
+                    // upload image to server and create imgNode...
+                    $('#summernote').summernote('insertNode', imgNode);
+                })
+                .catch(function(err){
+                  console.error(err);
+                });                
               }
             }
         });
