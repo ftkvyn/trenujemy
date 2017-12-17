@@ -11,3 +11,11 @@
 body .modal-backdrop.in{
 	display: none;
 }
+
+.sizes-requirement-panel{
+	padding-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #e4eaec;
+    border-radius: 10px;
+    background: #f6f7f7;
+}

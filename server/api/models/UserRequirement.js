@@ -52,6 +52,34 @@ module.exports = {
   		provideMedicalSurvey:{
   			type:'boolean',
   		},
+
+  		neck:{
+			type:'boolean',
+		},
+		shoulder:{
+			type:'boolean',
+		},
+		forearm:{
+			type:'boolean',
+		},
+		wrist:{
+			type:'boolean',
+		},
+		chest:{
+			type:'boolean',
+		},
+		waist:{
+			type:'boolean',
+		},
+		hips:{
+			type:'boolean',
+		},
+		thigh:{
+			type:'boolean',
+		},
+		shin:{
+			type:'boolean',
+		}
   }
 };
 
