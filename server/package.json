@@ -51,6 +51,7 @@
     "datatables.net-responsive": "2.1.1",
     "datatables.net-responsive-bs": "2.1.1",
     "debounce": "^1.1.0",
+    "dotenv": "^4.0.0",
     "easy-pie-chart": "2.1.7",
     "ejs": "2.3.4",
     "empty-module": "0.0.2",
