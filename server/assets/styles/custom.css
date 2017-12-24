@@ -19,3 +19,33 @@ body .modal-backdrop.in{
     border-radius: 10px;
     background: #f6f7f7;
 }
+
+.select-date-btn{
+
+}
+
+.select-date-btn{
+
+}
+
+.select-date-btn .input-group-addon:last-child{
+	display: block;
+    float: right;
+    text-align: center;
+    border-radius: 4px;
+    padding: 2px 10px;
+    width: initial;
+    margin-left: 10px;
+}
+
+.select-date-btn .date-input{
+	display: none;
+}
+
+.select-date-btn .input-group.date{
+	max-width: 200px;
+	display: inline;
+}
+.btn-primary .bootstrap-datetimepicker-widget{
+	color:black;
+}

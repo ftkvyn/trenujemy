@@ -19,6 +19,17 @@ class ClientPage extends React.Component {
         }
         return false;
     }
+
+    routeActiveStart(paths) {
+        paths = Array.isArray(paths) ? paths : [paths];
+        let currentPath = this.props.location.pathname;
+        for (var i = paths.length - 1; i >= 0; i--) {
+            if(currentPath.indexOf(paths[i]) != -1){
+                return true;
+            }
+        }
+        return false;
+    }
     
     render() {  
         return (
@@ -44,18 +55,17 @@ class ClientPage extends React.Component {
                   </Link>
                   <Link to={"/clients/" + this.props.match.params.id + "/diary"}>
                     <button type="button" 
-            className={"mb-sm mr-sm btn btn-outline " + (this.routeActive('/clients/' + this.props.match.params.id + '/diary') ? 'btn-primary' : 'btn-default') }>
+            className={"mb-sm mr-sm btn btn-outline " + (this.routeActiveStart('/clients/' + this.props.match.params.id + '/diary') ? 'btn-primary' : 'btn-default') }>
                       Dziennik
                     </button>
-                  </Link>
-                  
+                  </Link>                  
                 </h3>
                 <Row>
                    <Col lg={12} md={12} sm={12}>
                     <Route exact path="/clients/:id" component={Profile}/>
                     <Route path="/clients/:id/survey" component={Survey}/>
                     <Route path="/clients/:id/advice" component={Advice}/>
-                    <Route path="/clients/:id/diary" component={Diary}/>
+                    <Route path="/clients/:id/diary/:day?" component={Diary}/>
                    </Col>
                 </Row>
             </ContentWrapper>

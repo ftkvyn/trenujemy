@@ -64,7 +64,7 @@ const Routes = ({ location }) => {
                             <Route path="/profile" component={ProfilePage}/>
                             <Route path="/survey" component={SurveyPage}/>
                             <Route path="/advice" component={AdvicePage}/>
-                            <Route path="/diary" component={DiaryPage}/>
+                            <Route path="/diary/:day?" component={DiaryPage}/>
                             <Route path="/clients/:id" component={ClientPage}/>
                             <Route path="/trainings/price" component={TrainingsPrice}/>
                             <Route path="/trainings/places" component={TrainingsPlaces}/>

@@ -40,10 +40,15 @@ class TextEditor extends React.Component {
     }
 
     componentWillUnmount(){
-      $('#summernote').summernote('destroy');
-      var markupStr = $('#summernote').summernote('code');
-      if(me.props.onChange){
-        me.props.onChange(markupStr);
+      try{
+        $('#summernote').summernote('destroy');
+        var markupStr = $('#summernote').summernote('code');
+        if(this.props.onChange){
+          this.props.onChange(markupStr);
+        }
+      }
+      catch(ex){
+        console.error(ex);
       }
     }
 

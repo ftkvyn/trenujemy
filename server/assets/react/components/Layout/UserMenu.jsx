@@ -46,7 +46,7 @@ class UserMenu extends React.Component {
                     <span>Panel Klienta</span>
                 </li>
 
-                <li className={ this.routeActive(['profile','survey']) ? 'active' : '' }>
+                <li className={ this.routeActive(['profile','survey','advice','diary']) ? 'active' : '' }>
                     <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'profile') }>
                         <em className="icon-user"></em>
                         <span>Konto</span>

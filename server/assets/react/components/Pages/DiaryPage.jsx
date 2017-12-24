@@ -15,7 +15,7 @@ class DiaryPage extends React.Component {
                           <h1><em className="fa fa-address-book-o"></em></h1>
                           <p>Tutaj uzupełniasz codziennie szczegóły swojej diety oraz treningu.</p>
                       </Well>
-                      <Diary></Diary>
+                      <Diary {...this.props} diaryRoot='/diary'></Diary>
                    </Col>
                 </Row>
             </ContentWrapper>
