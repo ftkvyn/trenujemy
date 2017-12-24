@@ -50,7 +50,7 @@ module.exports.routes = {
 
   '/activate': 'ViewsController.activate',  
 
-  '/dashboard/:path?/:path2?/:path3?': 'ViewsController.dashboard',
+  '/dashboard/:path?/:path2?/:path3?/:path4?/:path5?/:path6?/:path7?/:path8?': 'ViewsController.dashboard',
 
   'post /auth/login': 'AuthController.login',
 

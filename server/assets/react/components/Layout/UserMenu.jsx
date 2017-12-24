@@ -12,7 +12,7 @@ class UserMenu extends React.Component {
                 profile: this.routeActive(['profile']),
                 survey: this.routeActive(['survey']),
                 advice: this.routeActive(['advice']),
-                diary: this.routeActive(['diary']),
+                diary: this.routeActiveStart(['diary']),
             }
         };
     };
@@ -21,6 +21,17 @@ class UserMenu extends React.Component {
         paths = Array.isArray(paths) ? paths : [paths];
         if (paths.indexOf(this.props.location.pathname.replace('/','')) > -1)
             return true;
+        return false;
+    }
+
+    routeActiveStart(paths) {
+        paths = Array.isArray(paths) ? paths : [paths];
+        let currentPath = this.props.location.pathname;
+        for (var i = paths.length - 1; i >= 0; i--) {
+            if(currentPath.indexOf(paths[i]) != -1){
+                return true;
+            }
+        }
         return false;
     }
 
@@ -46,7 +57,7 @@ class UserMenu extends React.Component {
                     <span>Panel Klienta</span>
                 </li>
 
-                <li className={ this.routeActive(['profile','survey','advice','diary']) ? 'active' : '' }>
+                <li className={ this.routeActive(['profile','survey','advice']) || this.routeActiveStart(['diary']) ? 'active' : '' }>
                     <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'profile') }>
                         <em className="icon-user"></em>
                         <span>Konto</span>
@@ -69,7 +80,7 @@ class UserMenu extends React.Component {
                                 <span>Zalecenia</span>
                                 </Link>
                             </li>
-                            <li className={ this.routeActive('diary') ? 'diary' : '' }>
+                            <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
                                 <Link to="/diary" title="Dziennik aktywności">
                                 <span>Dziennik aktywności</span>
                                 </Link>

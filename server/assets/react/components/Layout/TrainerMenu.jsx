@@ -23,7 +23,7 @@ class TrainerMenu extends React.Component {
             return true;
         return false;
     }
-
+    
     toggleItemCollapse(stateName) {
         var newCollapseState = {};
         for (let c in this.state.collapse) {

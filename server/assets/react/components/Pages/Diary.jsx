@@ -2,6 +2,8 @@ import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
+import moment from 'moment';
+
 
 function destroyDp(){
     if($('#datetimepicker').data("DateTimePicker")) {
@@ -30,11 +32,22 @@ function setDatepicker(){
       defaultDate: new Date()
     });
     $("#datetimepicker").on("dp.change",  (e) => {
-        let newDate = e.date.toDate().toISOString().substring(0,10);
+        let newDate = getDateString(e.date);
         if(newDate){
           this.props.history.push(this.state.diaryRoot + '/' + newDate);
         }
     });        
+}
+
+function getDateString(date){
+  return moment(date).format('DD-MM-YYYY');
+}
+
+const weekDays = ['nie', 'pon','wt','śr','czw','pią','sob'];
+
+function getWeekDay(dateStr){
+  let dayNum = moment(dateStr, 'DD-MM-YYYY').day();
+  return weekDays[dayNum];
 }
 
 class Diary extends React.Component {
@@ -44,21 +57,26 @@ class Diary extends React.Component {
         let initialState = {
             data:{
                 bodySize:{},
-                customDate:''
-            }
+            },
+            dates:{},
+            customDate:''
         };
+        initialState.dates.beforeyesterday = getDateString(moment().add(-2, 'days'));
+        initialState.dates.yesterday = getDateString(moment().add(-1, 'days'));
+        initialState.dates.today = getDateString(moment());
+        initialState.dates.tomorow = getDateString(moment().add(1, 'days'));
         if(this.props.match && this.props.match.params && this.props.match.params.id){
             initialState.userId = this.props.match.params.id;
             initialState.diaryRoot = `/clients/${initialState.userId}/diary`;            
         }else{
             initialState.diaryRoot = this.props.diaryRoot;
         }
-        if(this.isCustomDate(this.props.match.params.day)){
+        if(this.isCustomDate(this.props.match.params.day, initialState)){
           initialState.customDate = this.props.match.params.day;
         }
         this.state = initialState; 
         if(!this.props.match.params.day){
-          this.props.history.push(initialState.diaryRoot + '/today/');
+          this.props.history.push(initialState.diaryRoot + '/' + initialState.dates.today);
         }               
     }
 
@@ -71,14 +89,19 @@ class Diary extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-      if(this.isCustomDate(nextProps.match.params.day)){
-        this.setState({customDate: nextProps.match.params.day});
-      }else{
-        this.setState({customDate: ''});
-      }
-      if(this.props.match.params.day != nextProps.match.params.day){
-        $('#datetimepicker').data("DateTimePicker").hide();
-      }
+      if(!nextProps.match.params.day){
+        this.props.history.push(this.state.diaryRoot + '/' + this.state.dates.today);
+      }   
+      setTimeout(() => {
+        if(this.isCustomDate(nextProps.match.params.day)){
+          this.setState({customDate: nextProps.match.params.day});
+        }else{
+          this.setState({customDate: ''});
+        }
+        if(this.props.match.params.day != nextProps.match.params.day){
+          $('#datetimepicker').data("DateTimePicker").hide();
+        }
+      });
     }
 
     routeActive(paths) {
@@ -92,8 +115,9 @@ class Diary extends React.Component {
         return false;
     }
 
-    isCustomDate(day) {
-        if(day != 'today' && day != 'yesterday' && day != 'tomrrow' && day != 'beforeyesterday'){
+    isCustomDate(day, initialState = this.state) {
+        if(day != initialState.dates.today && day != initialState.dates.yesterday && day != initialState.dates.tomorow
+         && day != initialState.dates.beforeyesterday){
           return true;
         }
         return false;
@@ -106,30 +130,30 @@ class Diary extends React.Component {
         return (
           <div>
             <h3>
-              <Link to={this.state.diaryRoot + "/beforeyesterday/"}>
+              <Link to={this.state.diaryRoot + "/" + this.state.dates.beforeyesterday}>
                 <button type="button" 
-        className={"mb-sm mr-sm btn btn-outline " + (this.routeActive(this.state.diaryRoot + "/beforeyesterday/") ? 'btn-primary' : 'btn-default') }>
-                  Przedwczoraj
+        className={"mb-sm mr-sm btn btn-outline " + (this.routeActive(this.state.diaryRoot + "/" + this.state.dates.beforeyesterday) ? 'btn-primary' : 'btn-default') }>
+                  Przedwczoraj (<span>{getWeekDay(this.state.dates.beforeyesterday)}</span>)
                 </button>  
               </Link>
-              <Link to={this.state.diaryRoot + "/yesterday/"}>
+              <Link to={this.state.diaryRoot + "/" + this.state.dates.yesterday}>
                 <button type="button" 
-        className={"mb-sm mr-sm btn btn-outline " + (this.routeActive(this.state.diaryRoot + "/yesterday/") ? 'btn-primary' : 'btn-default') }>
-                  Wczoraj
+        className={"mb-sm mr-sm btn btn-outline " + (this.routeActive(this.state.diaryRoot + "/" + this.state.dates.yesterday) ? 'btn-primary' : 'btn-default') }>
+                  Wczoraj (<span>{getWeekDay(this.state.dates.yesterday)}</span>)
                 </button>  
               </Link>
-              <Link to={this.state.diaryRoot + "/today/"}>
+              <Link to={this.state.diaryRoot + "/" + this.state.dates.today}>
                 <button type="button" 
-        className={"mb-sm mr-sm btn btn-outline " + (this.routeActive(this.state.diaryRoot + "/today/") ? 'btn-primary' : 'btn-default') }>
-                  Dzisiaj
+        className={"mb-sm mr-sm btn btn-outline " + (this.routeActive(this.state.diaryRoot + "/" + this.state.dates.today) ? 'btn-primary' : 'btn-default') }>
+                  Dzisiaj (<span>{getWeekDay(this.state.dates.today)}</span>)
                 </button>  
               </Link>
-              <Link to={this.state.diaryRoot + "/tomrrow/"}>
+              <Link to={this.state.diaryRoot + "/" + this.state.dates.tomorow}>
                 <button type="button" 
-        className={"mb-sm mr-sm btn btn-outline " + (this.routeActive(this.state.diaryRoot + "/tomrrow/") ? 'btn-primary' : 'btn-default') }>
-                  Jutro
+        className={"mb-sm mr-sm btn btn-outline " + (this.routeActive(this.state.diaryRoot + "/" + this.state.dates.tomorow) ? 'btn-primary' : 'btn-default') }>
+                  Jutro (<span>{getWeekDay(this.state.dates.tomorow)}</span>)
                 </button>  
-              </Link> 
+              </Link>              
               <a>
                 <button type="button" 
         className={"mb-sm mr-sm btn select-date-btn btn-outline " + (this.isCustomDate(this.props.match.params.day) ? 'btn-primary' : 'btn-default') }>
