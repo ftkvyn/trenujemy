@@ -8,7 +8,7 @@ module.exports = {
 		.exec(function(err, user){
 			if(err){
 				console.error(err);
-				return res.error(err);
+				return res.badRequest(err);
 			}
 			delete user.password;
 			delete user.activationCode;

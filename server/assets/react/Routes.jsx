@@ -10,6 +10,7 @@ import ProfilePage from './components/Pages/ProfilePage'
 import SurveyPage from  './components/Pages/SurveyPage'
 import AdvicePage from  './components/Pages/AdvicePage'
 import ClientPage from './components/Pages/ClientPage'
+import DiaryPage from './components/Pages/DiaryPage'
 
 import TrainingsPrice from './components/Pages/TrainingsPrice'
 import TrainingsPlaces from './components/Pages/TrainingsPlaces'
@@ -63,6 +64,7 @@ const Routes = ({ location }) => {
                             <Route path="/profile" component={ProfilePage}/>
                             <Route path="/survey" component={SurveyPage}/>
                             <Route path="/advice" component={AdvicePage}/>
+                            <Route path="/diary" component={DiaryPage}/>
                             <Route path="/clients/:id" component={ClientPage}/>
                             <Route path="/trainings/price" component={TrainingsPrice}/>
                             <Route path="/trainings/places" component={TrainingsPlaces}/>

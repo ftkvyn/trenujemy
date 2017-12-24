@@ -10,6 +10,9 @@ class UserMenu extends React.Component {
         this.state = {
             collapse: {
                 profile: this.routeActive(['profile']),
+                survey: this.routeActive(['survey']),
+                advice: this.routeActive(['advice']),
+                diary: this.routeActive(['diary']),
             }
         };
     };
@@ -64,6 +67,11 @@ class UserMenu extends React.Component {
                             <li className={ this.routeActive('advice') ? 'active' : '' }>
                                 <Link to="/advice" title="Zalecenia">
                                 <span>Zalecenia</span>
+                                </Link>
+                            </li>
+                            <li className={ this.routeActive('diary') ? 'diary' : '' }>
+                                <Link to="/diary" title="Dziennik aktywności">
+                                <span>Dziennik aktywności</span>
                                 </Link>
                             </li>
                         </ul>

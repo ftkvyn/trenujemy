@@ -12,8 +12,7 @@
 
  (function setEnv(){
  	require('dotenv').config();
- 	console.log('setted');
- })()
+ })();
 
 module.exports = {
 
