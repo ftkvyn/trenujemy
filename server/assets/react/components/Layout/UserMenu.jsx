@@ -59,21 +59,25 @@ class UserMenu extends React.Component {
 
                 <li className={ this.routeActive('profile') ? 'active' : '' }>
                     <Link to="/profile" title="Moje dane">
+                    <em className="icon-user"></em>
                     <span>Moje dane</span>
                     </Link>
                 </li>
                 <li className={ this.routeActive('survey') ? 'active' : '' }>
                     <Link to="/survey" title="Ankieta">
+                    <em className="fa fa-edit"></em>
                     <span>Ankieta</span>
                     </Link>
                 </li>
                 <li className={ this.routeActive('advice') ? 'active' : '' }>
                     <Link to="/advice" title="Zalecenia">
+                    <em className="fa fa-exclamation-triangle"></em>
                     <span>Zalecenia</span>
                     </Link>
                 </li>
                 <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
                     <Link to="/diary" title="Dziennik aktywności">
+                    <em className="fa fa-address-book-o"></em>
                     <span>Dziennik aktywności</span>
                     </Link>
                 </li>
