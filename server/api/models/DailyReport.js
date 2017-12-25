@@ -15,6 +15,19 @@ module.exports = {
 	date:{
 		type:'datetime',
 		required: true
+	},
+	bodySize:{
+		model:'BodySize',
+		required:true
+	},
+	trainings:{
+		collection:'DailyTraining'
+	},
+	userNotes:{
+		type:'text'
+	},
+	trainerNotes:{
+		type:'text'
 	}
   }
 };

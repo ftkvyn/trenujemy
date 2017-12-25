@@ -106,10 +106,24 @@ module.exports.policies = {
     'getDefaultVals':'isTrainer'
   },
 
+  DailyReportController:{
+    'find':'isTrainerForOtherUser',
+    'create':false,
+    'destroy':false,
+    'update':'isTrainerForOtherUser',
+  },
+
   UserRequirementController:{
     'find':'isTrainer',
     'create':false,
     'destroy':false,
     'update':'isTrainer',
   },
+
+  DailyTrainingController:{
+    'find':false,
+    'create':false,
+    'destroy':false,
+    'updateOrCreate':'usersDay',
+  }
 };

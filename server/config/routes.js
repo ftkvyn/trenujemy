@@ -89,6 +89,13 @@ module.exports.routes = {
   'get /api/advice/:userId?' : 'AdviceController.find',
 
   'get /api/userRequirement/:userId?' : 'UserRequirementController.find',
+
+  'get /api/diary/:date/:userId?' : 'DailyReportController.find',
+
+  'post /api/diary/:dayId/:userId?' : 'DailyReportController.update',
+
+  'post /api/dailyTraining/:dayId' : 'DailyTrainingController.updateOrCreate',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
