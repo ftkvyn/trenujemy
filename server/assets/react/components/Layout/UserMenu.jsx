@@ -57,36 +57,25 @@ class UserMenu extends React.Component {
                     <span>Panel Klienta</span>
                 </li>
 
-                <li className={ this.routeActive(['profile','survey','advice']) || this.routeActiveStart(['diary']) ? 'active' : '' }>
-                    <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'profile') }>
-                        <em className="icon-user"></em>
-                        <span>Konto</span>
-                    </div>
-                    <Collapse in={ this.state.collapse.profile } timeout={ 100 }>
-                        <ul id="profile" className="nav sidebar-subnav">
-                            <li className="sidebar-subnav-header">Konto</li>
-                            <li className={ this.routeActive('profile') ? 'active' : '' }>
-                                <Link to="/profile" title="Moje dane">
-                                <span>Moje dane</span>
-                                </Link>
-                            </li>
-                            <li className={ this.routeActive('survey') ? 'active' : '' }>
-                                <Link to="/survey" title="Ankieta">
-                                <span>Ankieta</span>
-                                </Link>
-                            </li>
-                            <li className={ this.routeActive('advice') ? 'active' : '' }>
-                                <Link to="/advice" title="Zalecenia">
-                                <span>Zalecenia</span>
-                                </Link>
-                            </li>
-                            <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
-                                <Link to="/diary" title="Dziennik aktywności">
-                                <span>Dziennik aktywności</span>
-                                </Link>
-                            </li>
-                        </ul>
-                    </Collapse>
+                <li className={ this.routeActive('profile') ? 'active' : '' }>
+                    <Link to="/profile" title="Moje dane">
+                    <span>Moje dane</span>
+                    </Link>
+                </li>
+                <li className={ this.routeActive('survey') ? 'active' : '' }>
+                    <Link to="/survey" title="Ankieta">
+                    <span>Ankieta</span>
+                    </Link>
+                </li>
+                <li className={ this.routeActive('advice') ? 'active' : '' }>
+                    <Link to="/advice" title="Zalecenia">
+                    <span>Zalecenia</span>
+                    </Link>
+                </li>
+                <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
+                    <Link to="/diary" title="Dziennik aktywności">
+                    <span>Dziennik aktywności</span>
+                    </Link>
                 </li>
 
             </ul>);
