@@ -37,6 +37,8 @@ module.exports = {
 						console.error(err);
 						return res.badRequest(err);
 					}
+					entry.bodySize = bodySize;
+					entry.trainings = [];
 					return res.json(entry);
 				});
 			});
@@ -55,6 +57,18 @@ module.exports = {
 			delete model.trainerNotes;
 		}
 		DailyReport.update({id: req.params.dayId}, model)
+		.exec(function(err, data){
+			if(err){
+				console.error(err);
+				return res.badRequest();
+			}
+			return res.json(data[0]);
+		});
+	},
+
+	saveBodySize:function(req, res){
+		const model = req.body;
+		BodySize.update({id: model.id, user: req.session.user.id}, model)
 		.exec(function(err, data){
 			if(err){
 				console.error(err);

@@ -43,4 +43,17 @@ function saveTraining(training, dayId){
 	  });
 }
 
-export {loadDay, saveDay, saveTraining}
+function saveBodySize(newData){
+	return new Promise((resolve, reject) => {
+		$.post(`/api/dailyBodySize`, newData)
+		.success(function(data) {
+			resolve(data);
+		})
+		.error(function(err){
+			console.error(err);
+			reject(err);
+		});
+	  });
+}
+
+export {loadDay, saveDay, saveTraining, saveBodySize}

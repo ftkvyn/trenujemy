@@ -4,8 +4,10 @@
 	cursor: pointer;
 }
 
+.form-control.short-input,
 .short-input{
-	width: 120px;
+	width: 80px;
+	display: inline-block;
 }
 
 body .modal-backdrop.in{
@@ -19,7 +21,9 @@ body .modal-backdrop.in{
     border-radius: 10px;
     background: #f6f7f7;
 }
-
+.label-stub{
+	height: 30px;
+}
 .select-date-btn{
 
 }

@@ -16,6 +16,11 @@ module.exports = {
 		type:'datetime',
 		required: true
 	},
+	weight:{
+		type:'integer',
+		required: true,
+		defaultsTo: 0
+	},
 	bodySize:{
 		model:'BodySize',
 		required:true

@@ -107,13 +107,13 @@ module.exports = {
 	weight:{
 		type:'integer',
 		required: true,
-		defaultsTo:75
+		defaultsTo:0
 	},
 
 	height:{
 		type:'integer',
 		required: true,
-		defaultsTo: 180
+		defaultsTo: 0
 	},
 
 	activity:{

@@ -125,5 +125,6 @@ module.exports.policies = {
     'create':false,
     'destroy':false,
     'updateOrCreate':'usersDay',
+    'saveBodySize':'sessionAuth'
   }
 };

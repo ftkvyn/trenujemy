@@ -96,6 +96,8 @@ module.exports.routes = {
 
   'post /api/dailyTraining/:dayId' : 'DailyTrainingController.updateOrCreate',
 
+  'post /api/dailyBodySize' : 'DailyReportController.saveBodySize',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
