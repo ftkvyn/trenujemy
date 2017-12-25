@@ -3,6 +3,7 @@ import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
 import moment from 'moment';
+import DiaryDay from './DiaryDay'
 
 
 function destroyDp(){
@@ -67,9 +68,11 @@ class Diary extends React.Component {
         initialState.dates.tomorow = getDateString(moment().add(1, 'days'));
         if(this.props.match && this.props.match.params && this.props.match.params.id){
             initialState.userId = this.props.match.params.id;
-            initialState.diaryRoot = `/clients/${initialState.userId}/diary`;            
+            initialState.diaryRoot = `/clients/${initialState.userId}/diary`;
+            initialState.diaryRootRoute = `/clients/:id/diary`;            
         }else{
             initialState.diaryRoot = this.props.diaryRoot;
+            initialState.diaryRootRoute = this.props.diaryRoot;
         }
         if(this.isCustomDate(this.props.match.params.day, initialState)){
           initialState.customDate = this.props.match.params.day;
@@ -172,13 +175,9 @@ class Diary extends React.Component {
             <Panel>
                 <form className="form-horizontal">     
                   <p>{this.props.location.pathname}</p>
-                  <b>{this.props.match.params.day || 'no day'}</b>
-                  <Route path={this.state.diaryRoot  + "/:day/"} render={props => (
-                                <div>
-                                  <b>{props.match.params.day}</b><br/>
-                                  <i>{props.location.pathname}</i>
-                                </div>
-                              )}/>
+                  <b>{this.props.match.params.day || 'no day'}</b><br/>
+                  <b>{this.props.match.params.id}</b><br/>
+                  <Route path={this.state.diaryRootRoute  + "/:day/"} component={DiaryDay}/>
                 </form>
             </Panel>
         </div>

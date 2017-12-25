@@ -74,5 +74,5 @@ class ClientPage extends React.Component {
 
 }
 
-export default ClientPage;
+export default withRouter(ClientPage);
 

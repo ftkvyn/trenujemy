@@ -13,7 +13,7 @@ module.exports = {
 		var userId = req.params.userId || req.session.user.id;
 		var date = moment(req.params.date + ' +0000', 'DD-MM-YYYY Z');
 		DailyReport
-		.findOne({user: userId, date: date})
+		.findOne({user: userId, date: date.toDate()})
 		.populate('bodySize')
 		.populate('trainings')
 		//ToDo: load dishes separate
@@ -25,9 +25,13 @@ module.exports = {
 			if(entry){
 				return res.json(entry);
 			}
+			if(req.session.user.role == 'trainer'){
+				//Not creating new data here.
+				return res.json({noData: true});
+			}
 			BodySize.create({user: userId})
 			.exec(function(err, bodySize){
-				DailyReport.create({user: userId, date: date, bodySize: bodySize})
+				DailyReport.create({user: userId, date: date.toDate(), bodySize: bodySize})
 				.exec(function(err, entry){
 					if(err){
 						console.error(err);
