@@ -4,6 +4,7 @@ import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, Drop
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
 import {loadDay, saveDay, saveTraining, saveBodySize} from '../Common/diaryService'
 import { loadSurvey } from '../Common/userDataService';
+import { saveImage } from '../Common/filesService';
 
 function setDay(dayData){
     $('.saveError').hide();
@@ -120,6 +121,35 @@ class DiaryDay extends React.Component {
         saveBodyHandler();
     }
 
+    imageClick(event){
+        if(this.state.userId){
+            return;
+        }
+        $('#dailyPicInput').click();
+    }
+
+    uploadImage(){
+        var formData = new FormData();
+        var fileData = $('#dailyPicInput')[0].files[0];
+        formData.append('file', fileData);
+        saveImage(formData)
+        .then((data) => {
+            let newData = this.state.data;
+            newData.image = data.url;
+            this.setState({data: newData});
+            if(saveHandler){
+                saveHandler.clear();
+            }
+            saveHandler = debounce(() => saveDataFn(newData), 100);        
+            saveHandler();
+        })
+        .catch(function(err){
+            $('.saveError').show();
+            clearTimeout(hideAlertError);
+            hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
+        });
+    }
+
     render() {  
         if(this.state.data.noData){
           return <p>Nie ma danych od użytkownika odnośnie tego dnia.</p>
@@ -134,8 +164,24 @@ class DiaryDay extends React.Component {
         }else{
           readonlyForUser = {readOnly: true};
         }
+        let picForm = ""; 
+        if(!this.state.userId){
+            picForm = <form id='dailyPicForm' style={{display:'none'}}>
+                <input type='file' name='file' id='dailyPicInput' accept="image/x-png,image/gif,image/jpeg" onChange={this.uploadImage.bind(this)}/>
+            </form>
+        }
         let surveyPart = "";
         if(this.state.survey.id && this.state.bodySize.id){
+          let dailyPic = "";
+          if(this.state.data.image){
+            dailyPic = <img src={this.state.data.image} className='daily-pic' onClick={this.imageClick.bind(this)}/>
+          }else{
+            if(!this.state.userId){
+              dailyPic = <button onClick={this.imageClick.bind(this)} className='btn btn-outline btn-primary'>Załaduj zdjęcie</button>
+            }else{
+              dailyPic = <p>Brak zdjęcia</p>
+            }
+          }                   
           surveyPart = <div>
               <legend>Pomiary ciała, zdjęcia</legend>
               <label className="col-lg-12">Zaktualizuj swoje wymiary</label>
@@ -178,7 +224,6 @@ class DiaryDay extends React.Component {
                       defaultValue={this.state.survey.bodySize.neck}/> cm
                   </Col>
               </FormGroup>
-
               <FormGroup className='form-inline'>                  
                   <label className="col-lg-2 col-md-2 control-label">Ramię:</label>
                   <Col lg={ 3 } md={ 3 }>
@@ -299,9 +344,18 @@ class DiaryDay extends React.Component {
                       defaultValue={this.state.survey.bodySize.shin}/> cm
                   </Col>
               </FormGroup>
+              <FormGroup>
+                  <label className="col-lg-12">Załaduj zdjęcie sylwetki</label>
+                  <label className="col-lg-3 col-md-3">Dziś: </label>
+                  <label className="col-lg-9 col-md-9 control-label label-stub"> </label>
+                  <Col lg={ 3 } md={ 3 }>
+                    {dailyPic}
+                  </Col>
+              </FormGroup>
           </div>
         }
         return (
+            <div>
               <form className="form-horizontal">
                 <FormGroup>
                     <label className="col-lg-12 text-center">Twoje uwagi dotyczące tego dnia (pytania do trenera, komentarze):</label>
@@ -337,8 +391,11 @@ class DiaryDay extends React.Component {
                 </div>  
                 <div role="alert" className="alert alert-danger saveError" style={{display:'none'}}>
                     Nie udało się zapisać dane.
-                </div>
+                </div>                
               </form>
+              {picForm}
+            </div>        
+
         );
     }
 

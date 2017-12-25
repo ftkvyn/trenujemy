@@ -33,6 +33,9 @@ module.exports = {
 	},
 	trainerNotes:{
 		type:'text'
+	},
+	image:{
+		type:'url'
 	}
   }
 };
