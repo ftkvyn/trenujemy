@@ -173,12 +173,7 @@ class Diary extends React.Component {
 
 
             <Panel>
-                <form className="form-horizontal">     
-                  <p>{this.props.location.pathname}</p>
-                  <b>{this.props.match.params.day || 'no day'}</b><br/>
-                  <b>{this.props.match.params.id}</b><br/>
-                  <Route path={this.state.diaryRootRoute  + "/:day/"} component={DiaryDay}/>
-                </form>
+                <Route path={this.state.diaryRootRoute  + "/:day/"} component={DiaryDay}/>
             </Panel>
         </div>
         );

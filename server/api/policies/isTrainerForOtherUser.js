@@ -4,7 +4,7 @@ module.exports = function(req, res, next) {
     return res.forbidden('You are not permitted to perform this action.');
   }
 
-  if(req.params.userId){
+  if(req.params.userId && req.params.userId != req.session.user.id){
     User.findOne({id: req.session.user.id})
     .exec(function(err, user){
     	if(err || !user){

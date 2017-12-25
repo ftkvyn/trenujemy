@@ -16,7 +16,7 @@ function loadDay(dateStr, userId){
 function saveDay(newData){
 	return new Promise((resolve, reject) => {
 		$.ajax({
-            url: `/api/diary/${newData.id}/{$newData.user}`,
+            url: `/api/diary/${newData.id}/${newData.user}`,
             type: 'POST',
             data: newData,
             success: function (data) {

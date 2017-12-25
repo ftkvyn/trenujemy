@@ -48,7 +48,7 @@ module.exports = {
 		if(req.session.user.role != 'trainer' && !req.params.userId){
 			return req.forbidden();
 		}
-		let model = req.session.body;
+		let model = req.body;
 		if(req.session.user.role == 'trainer'){
 			delete model.userNotes;
 		}else{

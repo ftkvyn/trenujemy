@@ -7,47 +7,47 @@ module.exports = {
 		neck:{
 			type:'integer',
 			required: true,
-			defaultsTo:38
+			defaultsTo:0
 		},
 		shoulder:{
 			type:'integer',
 			required: true,
-			defaultsTo:36
+			defaultsTo:0
 		},
 		forearm:{
 			type:'integer',
 			required: true,
-			defaultsTo:27
+			defaultsTo:0
 		},
 		wrist:{
 			type:'integer',
 			required: true,
-			defaultsTo:17
+			defaultsTo:0
 		},
 		chest:{
 			type:'integer',
 			required: true,
-			defaultsTo:103
+			defaultsTo:0
 		},
 		waist:{
 			type:'integer',
 			required: true,
-			defaultsTo:82
+			defaultsTo:0
 		},
 		hips:{
 			type:'integer',
 			required: true,
-			defaultsTo:91
+			defaultsTo:0
 		},
 		thigh:{
 			type:'integer',
 			required: true,
-			defaultsTo:52
+			defaultsTo:0
 		},
 		shin:{
 			type:'integer',
 			required: true,
-			defaultsTo:37
+			defaultsTo:0
 		}
 	}
 }

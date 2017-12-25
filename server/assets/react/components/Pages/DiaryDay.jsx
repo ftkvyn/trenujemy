@@ -7,8 +7,33 @@ import {loadDay, saveDay, saveTraining} from '../Common/diaryService'
 function setDay(dayData){
     $('.saveError').hide();
     $('.saveSuccess').hide();
-    this.setState({data: dayData, trainings: dayData.trainings || []});
+    const dayDataFlat = dayData;
+    delete dayDataFlat.bodySize;
+    delete dayDataFlat.trainings;
+    this.setState({data: dayDataFlat, trainings: dayData.trainings || []});
 }
+
+let saveHandler = null;
+
+let hideAlertSuccess = null;
+let hideAlertError = null;
+
+function saveDataFn(newData){
+    saveDay(newData)
+    .then(function(){
+        $('.saveError').hide();
+        $('.saveSuccess').show();
+        clearTimeout(hideAlertSuccess);
+        hideAlertSuccess = setTimeout(() => {$('.saveSuccess').hide()}, 6000);
+    })
+    .catch(function(){
+        $('.saveSuccess').hide();
+        $('.saveError').show();
+        clearTimeout(hideAlertError);
+        hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
+    });
+}
+
 
 class DiaryDay extends React.Component {
     constructor(props, context) {
@@ -42,14 +67,64 @@ class DiaryDay extends React.Component {
           .then((data) => setDay.call(this, data));
     }
 
+    handleChange(event) {
+        let fieldName = event.target.name;
+        let fieldVal = event.target.value;
+        let newData = this.state.data;
+        newData[fieldName] = fieldVal
+        this.setState({data: newData});
+
+        if(saveHandler){
+            saveHandler.clear();
+        }
+        saveHandler = debounce(() => saveDataFn(newData), 1000);        
+        saveHandler();
+    }
+
     render() {  
+        if(this.state.data.noData){
+          return <p>Nie ma danych od użytkownika odnośnie tego dnia.</p>
+        }
+        if(!this.state.data.id){
+          return <div></div>
+        }
+        let readonlyForUser = {};
+        let readonlyForTrainer = {};
+        if(this.state.userId){
+          readonlyForTrainer = {readOnly: true};
+        }else{
+          readonlyForUser = {readOnly: true};
+        }
         return (
-              <div>
-                <b>{this.props.match.params.day}</b><br/>
-                <b>{this.props.match.params.id}</b><br/>
-                <i>{this.props.location.pathname}</i><br/>
-                <p>Loaded data. DayId={this.state.data.id}, UserId={this.state.data.user}, date={this.state.data.date}</p>
-              </div>
+              <form className="form-horizontal">
+                <FormGroup>
+                    <label className="col-lg-12 text-center">Twoje uwagi dotyczące tego dnia (pytania do trenera, komentarze):</label>
+                    <Col lg={ 12 }>
+                        <textarea 
+                        className="form-control" 
+                        name='userNotes' {...readonlyForTrainer}
+                        value={this.state.data.userNotes || ''}
+                        onChange={this.handleChange.bind(this)}></textarea>
+                    </Col>
+                </FormGroup>  
+
+                <FormGroup>
+                    <label className="col-lg-12 text-center">Uwagi trenera do Twojego dnia:</label>
+                    <Col lg={ 12 }>
+                        <textarea 
+                        className="form-control" 
+                        name='trainerNotes' {...readonlyForUser}
+                        value={this.state.data.trainerNotes || ''}
+                        onChange={this.handleChange.bind(this)}></textarea>
+                    </Col>
+                </FormGroup>  
+                 <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
+                    Dane zapisane poprawnie.
+                </div>  
+                <div role="alert" className="alert alert-danger saveError" style={{display:'none'}}>
+                    Nie udało się zapisać dane.
+                </div>
+              </form>
         );
     }
 
