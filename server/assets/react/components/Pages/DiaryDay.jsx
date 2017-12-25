@@ -2,9 +2,10 @@ import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
-import {loadDay, saveDay, saveTraining, saveBodySize} from '../Common/diaryService'
+import {loadDay, saveDay, saveTraining, saveBodySize, getPastImages } from '../Common/diaryService'
 import { loadSurvey } from '../Common/userDataService';
 import { saveImage } from '../Common/filesService';
+import moment from 'moment';
 
 function setDay(dayData){
     $('.saveError').hide();
@@ -15,6 +16,9 @@ function setDay(dayData){
     delete dayDataFlat.bodySize;
     delete dayDataFlat.trainings;
     this.setState({data: dayDataFlat, bodySize: bodySize, trainings: trainings || []});
+    const date = moment(dayData.date).format('DD-MM-YYYY');
+    getPastImages(date, this.state.userId)
+      .then((images) => this.setState({pastImages: images}));
 }
 
 let saveHandler = null;
@@ -63,6 +67,7 @@ class DiaryDay extends React.Component {
             survey:{},
             bodySize:{},
             trainings:[],
+            pastImages:[]
         };
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
@@ -177,7 +182,9 @@ class DiaryDay extends React.Component {
             dailyPic = <img src={this.state.data.image} className='daily-pic' onClick={this.imageClick.bind(this)}/>
           }else{
             if(!this.state.userId){
-              dailyPic = <button onClick={this.imageClick.bind(this)} className='btn btn-outline btn-primary'>Załaduj zdjęcie</button>
+              dailyPic =<div> 
+                <div onClick={this.imageClick.bind(this)} className='btn btn-outline btn-primary'>Załaduj zdjęcie</div>
+              </div>
             }else{
               dailyPic = <p>Brak zdjęcia</p>
             }
@@ -346,11 +353,14 @@ class DiaryDay extends React.Component {
               </FormGroup>
               <FormGroup>
                   <label className="col-lg-12">Załaduj zdjęcie sylwetki</label>
-                  <label className="col-lg-3 col-md-3">Dziś: </label>
-                  <label className="col-lg-9 col-md-9 control-label label-stub"> </label>
                   <Col lg={ 3 } md={ 3 }>
+                    <label className="col-lg-12">Dziś: </label>
                     {dailyPic}
                   </Col>
+                  {this.state.pastImages.map((item) => <Col lg={ 3 } md={ 3 }>
+                    <label className="col-lg-12">{item.date}</label>
+                    <img className='daily-pic' src={item.image} />
+                  </Col>)}
               </FormGroup>
           </div>
         }

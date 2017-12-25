@@ -76,6 +76,27 @@ module.exports = {
 			}
 			return res.json(data[0]);
 		});
+	},
+
+	getPastImages:function(req, res){
+		const userId = req.params.userId || req.session.user.id;
+		const date = moment(req.params.date + ' +0000', 'DD-MM-YYYY Z');
+		DailyReport.find({user: userId, image: {'!': null}, date: {'<': date.toDate()}})
+			.sort('date DESC')
+			.limit(4)
+			.exec(function(err, data){
+				if(err){
+					console.error(err);
+					return res.badRequest();
+				}
+				const result = data.map((item) => {
+					let mapped = {};
+					mapped.date = moment(item.date).format('DD-MM-YYYY');
+					mapped.image = item.image;
+					return mapped;
+				});
+				return res.json(result);
+			});
 	}
 };
 

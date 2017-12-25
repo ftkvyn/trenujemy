@@ -56,4 +56,17 @@ function saveBodySize(newData){
 	  });
 }
 
-export {loadDay, saveDay, saveTraining, saveBodySize}
+function getPastImages(date, userId){
+	return new Promise((resolve, reject) => {
+		$.get(`/api/pastBodyImages/${date}/${userId || ''}`)
+		.success(function(data) {
+			resolve(data);
+		})
+		.error(function(err){
+			console.error(err);
+			reject(err);
+		});
+	  });
+}
+
+export {loadDay, saveDay, saveTraining, saveBodySize, getPastImages}

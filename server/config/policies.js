@@ -111,6 +111,8 @@ module.exports.policies = {
     'create':false,
     'destroy':false,
     'update':'isTrainerForOtherUser',
+    'getPastImages':'isTrainerForOtherUser',
+    'saveBodySize':'sessionAuth'
   },
 
   UserRequirementController:{
@@ -125,6 +127,6 @@ module.exports.policies = {
     'create':false,
     'destroy':false,
     'updateOrCreate':'usersDay',
-    'saveBodySize':'sessionAuth'
+    
   }
 };

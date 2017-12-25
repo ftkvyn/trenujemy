@@ -98,6 +98,8 @@ module.exports.routes = {
 
   'post /api/dailyBodySize' : 'DailyReportController.saveBodySize',
 
+  'get /api/pastBodyImages/:date/:userId?' : 'DailyReportController.getPastImages',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
