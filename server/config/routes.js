@@ -96,9 +96,13 @@ module.exports.routes = {
 
   'post /api/dailyTraining/:dayId' : 'DailyTrainingController.updateOrCreate',
 
+  'post /api/dayTypes/:userId?' : 'DailyTrainingController.getTrainingTypes',
+
   'post /api/dailyBodySize' : 'DailyReportController.saveBodySize',
 
   'get /api/pastBodyImages/:date/:userId?' : 'DailyReportController.getPastImages',
+
+  
 
   /***************************************************************************
   *                                                                          *

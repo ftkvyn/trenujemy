@@ -6,6 +6,7 @@
  */
 
 const modifiers = {
+	'none':0,
 	'gym': 0.12,
 	'bicycle': 0.10, 
 	'rollers': 0.10, 
@@ -22,9 +23,9 @@ module.exports = {
 	},
 	type:{
 		type:'string',
-		enum: ['gym', 'bicycle', 'rollers', 'jogging','swimming','walk'],
+		enum: ['none','gym', 'bicycle', 'rollers', 'jogging','swimming','walk'],
 		required: true,
-		defaultsTo: 'weight'
+		defaultsTo: 'none'
 	},
 	length:{
 		type:'integer',
@@ -40,7 +41,7 @@ module.exports = {
 		type:'text'
 	}	
   },
-  beforeSave: function (values, cb) {
+  beforeValidate: function (values, cb) {
   	values.calories = 0;
   	values.length = values.length || 0;
   	if(!values.length){
@@ -49,13 +50,19 @@ module.exports = {
   	}
   	DailyReport.findOne({id: values.dailyReport})
   	.exec(function(err, report){
-  		if(err){cb();}
+  		if(err){
+  			console.error(err);
+  			cb();
+  		}
   		UserInfo.findOne({user: report.user})
   		.exec(function(err, info){
-  			if(err){cb();}
+  			if(err){
+	  			console.error(err);
+	  			cb();
+	  		}
   			const weight =  info.weight || 0;
   			const modifier = modifiers[values.type] || 0;
-  			values.calories = values.length * weight * modifier;
+  			values.calories = Math.round(values.length * weight * modifier);
   			cb();
   		});
   	});

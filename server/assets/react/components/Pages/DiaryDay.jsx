@@ -2,7 +2,7 @@ import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
-import {loadDay, saveDay, saveTraining, saveBodySize, getPastImages } from '../Common/diaryService'
+import { loadDay, saveDay, saveTraining, saveBodySize, getPastImages } from '../Common/diaryService'
 import { loadSurvey } from '../Common/userDataService';
 import { saveImage } from '../Common/filesService';
 import moment from 'moment';
@@ -22,6 +22,7 @@ function setDay(dayData){
 }
 
 let saveHandler = null;
+let saveTraningHandlers = [null, null, null];
 let saveBodyHandler = null;
 
 let hideAlertSuccess = null;
@@ -67,7 +68,8 @@ class DiaryDay extends React.Component {
             survey:{},
             bodySize:{},
             trainings:[],
-            pastImages:[]
+            pastImages:[],
+            addingTraning: false
         };
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
@@ -126,6 +128,59 @@ class DiaryDay extends React.Component {
         saveBodyHandler();
     }
 
+    addTraining(){
+      this.setState({addingTraning: true});
+      let newTraning = {dailyReport: this.state.data.id};
+      saveTraining(newTraning)
+        .then((createdTraning) => {
+          let trainings = [...this.state.trainings, createdTraning];
+          this.setState({addingTraning: false, trainings: trainings});
+        });
+    }
+
+    handleTrainingChange(num, event) {
+        let fieldName = event.target.name;
+        let fieldVal = event.target.value;
+        let newData = this.state.trainings[num];
+        newData[fieldName] = fieldVal;
+        let trainings = [
+          ...this.state.trainings.slice(0, num),
+          newData,
+          ...this.state.trainings.slice(num+1)
+        ];
+        this.setState({trainings: trainings});
+
+        
+        if(saveTraningHandlers[num]){
+            saveTraningHandlers[num].clear();
+        }
+        saveTraningHandlers[num] = debounce(() => {
+          saveTraining(newData)
+            .then((savedTraning) => {
+                let newData = this.state.trainings[num];
+                newData.calories = savedTraning.calories;
+                let trainings = [
+                  ...this.state.trainings.slice(0, num),
+                  newData,
+                  ...this.state.trainings.slice(num+1)
+                ];
+                this.setState({trainings: trainings});
+
+                $('.saveError').hide();
+                $('.saveSuccess').show();
+                clearTimeout(hideAlertSuccess);
+                hideAlertSuccess = setTimeout(() => {$('.saveSuccess').hide()}, 6000);
+            })
+            .catch(function(){
+                $('.saveSuccess').hide();
+                $('.saveError').show();
+                clearTimeout(hideAlertError);
+                hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
+            });
+        }, 1000);        
+        saveTraningHandlers[num]();
+    }
+
     imageClick(event){
         if(this.state.userId){
             return;
@@ -168,6 +223,14 @@ class DiaryDay extends React.Component {
           readonlyForTrainer = {readOnly: true};
         }else{
           readonlyForUser = {readOnly: true};
+        }
+        let addTrainingBtn = "";
+        if(this.state.trainings.length < 3 && !this.state.addingTraning && this.state.data.id && !this.state.userId){
+          addTrainingBtn = <FormGroup>
+              <div className="col-lg-12 text-center">
+                <div onClick={this.addTraining.bind(this)} className='btn btn-outline btn-primary'>Dodaj kolejny trening</div>
+              </div>
+          </FormGroup>  
         }
         let picForm = ""; 
         if(!this.state.userId){
@@ -357,7 +420,7 @@ class DiaryDay extends React.Component {
                     <label className="col-lg-12">Dziś: </label>
                     {dailyPic}
                   </Col>
-                  {this.state.pastImages.map((item) => <Col lg={ 3 } md={ 3 }>
+                  {this.state.pastImages.map((item, num) => <Col lg={ 3 } md={ 3 } key={num}>
                     <label className="col-lg-12">{item.date}</label>
                     <img className='daily-pic' src={item.image} />
                   </Col>)}
@@ -394,7 +457,60 @@ class DiaryDay extends React.Component {
                         onChange={this.handleChange.bind(this)}></textarea>
                     </Col>
                     <Col lg={2} md={1}></Col>
-                </FormGroup>                  
+                </FormGroup>   
+
+                {this.state.trainings.map((training, num) => <FormGroup key={num}>
+                    <label className="col-lg-12">{`Trening ${num+1}:`}</label>
+                    <Col lg={2} md={1}></Col>
+                    <Col lg={2} md={2} sm={3}>
+                      <FormControl componentClass="select" name="type" 
+                        value={training.type}
+                        onChange={this.handleTrainingChange.bind(this, num)}
+                        {...readonlyForTrainer}
+                        className="form-control">
+                            <option value='none'>Brak</option>
+                            <option value='gym'>Siłownia</option>
+                            <option value='bicycle'>Rower</option>
+                            <option value='rollers'>Rolki</option>
+                            <option value='jogging'>Jogging</option>
+                            <option value='swimming'>Pływanie</option>
+                            <option value='walk'>Spacer</option>
+                        </FormControl>
+                    </Col>
+                    <Col lg={1} md={1} sm={1}>
+                      <label className="control-label">Minuty:</label>
+                    </Col>
+                    <Col lg={2} md={2} sm={3}>
+                        <FormControl type="number"
+                        className="form-control" {...readonlyForTrainer}
+                        name='length'
+                        value={training.length || 0}
+                        onChange={this.handleTrainingChange.bind(this, num)}/>
+                    </Col>
+                    <Col lg={2} md={2} sm={3}>
+                      <label className="control-label">Kalorie spalone (w przybliżeniu):</label>
+                    </Col>
+                    <Col lg={2} md={2} sm={3}>                        
+                        <FormControl type="number"
+                        className="form-control short-input" readOnly={true}
+                        value={training.calories || 0}/>
+                    </Col>
+                    <label className="col-lg-12 text-center"></label>
+                    <Col lg={2} md={1}></Col>
+                    <Col lg={ 8 } md={10}>
+                        <textarea 
+                        className="form-control" 
+                        maxLength='800'
+                        name='text' {...readonlyForTrainer}
+                        value={training.text || ''}
+                        onChange={this.handleTrainingChange.bind(this, num)}></textarea>
+                        <label className="col-lg-12 control-label">Maks. 800 znaków</label>
+                    </Col>
+                    <Col lg={2} md={1}></Col>
+                </FormGroup>   
+                )}
+                {addTrainingBtn}
+
                 {surveyPart}
                  <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
                     Dane zapisane poprawnie.                

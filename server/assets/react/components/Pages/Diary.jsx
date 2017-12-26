@@ -4,6 +4,8 @@ import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, Drop
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
 import moment from 'moment';
 import DiaryDay from './DiaryDay'
+import { getDayTypes } from '../Common/diaryService'
+
 
 
 function destroyDp(){
@@ -60,6 +62,7 @@ class Diary extends React.Component {
                 bodySize:{},
             },
             dates:{},
+            dateTypes:{},
             customDate:''
         };
         initialState.dates.beforeyesterday = getDateString(moment().add(-2, 'days'));
@@ -80,11 +83,21 @@ class Diary extends React.Component {
         this.state = initialState; 
         if(!this.props.match.params.day){
           this.props.history.push(initialState.diaryRoot + '/' + initialState.dates.today);
-        }               
+        }
     }
 
     componentDidMount(){
-        setTimeout(setDatepicker.call(this));        
+        setTimeout(setDatepicker.call(this));  
+        let days = [this.state.dates.beforeyesterday, this.state.dates.yesterday, this.state.dates.today, this.state.dates.tomorow];      
+        getDayTypes(days, this.state.userId)
+          .then((daysInfo) => {
+            let dateTypes = {};
+            dateTypes.beforeyesterday = daysInfo[0].type;
+            dateTypes.yesterday = daysInfo[1].type;
+            dateTypes.today = daysInfo[2].type;
+            dateTypes.tomorow = daysInfo[3].type;
+            this.setState({dateTypes: dateTypes});
+          });
     }
 
     componentWillUnmount(){
@@ -137,24 +150,36 @@ class Diary extends React.Component {
                 <button type="button" 
         className={"mb-sm mr-sm btn btn-outline " + (this.routeActive(this.state.diaryRoot + "/" + this.state.dates.beforeyesterday) ? 'btn-primary' : 'btn-default') }>
                   Przedwczoraj (<span>{getWeekDay(this.state.dates.beforeyesterday)}</span>)
+                  <div className='day-icon'>
+                    <img src={"/images/icons/" + (this.state.dateTypes.beforeyesterday || "empty") + ".png"}/>
+                  </div>
                 </button>  
               </Link>
               <Link to={this.state.diaryRoot + "/" + this.state.dates.yesterday}>
                 <button type="button" 
         className={"mb-sm mr-sm btn btn-outline " + (this.routeActive(this.state.diaryRoot + "/" + this.state.dates.yesterday) ? 'btn-primary' : 'btn-default') }>
                   Wczoraj (<span>{getWeekDay(this.state.dates.yesterday)}</span>)
+                  <div className='day-icon'>
+                    <img src={"/images/icons/" + (this.state.dateTypes.yesterday || "empty") + ".png"}/>
+                  </div>
                 </button>  
               </Link>
               <Link to={this.state.diaryRoot + "/" + this.state.dates.today}>
                 <button type="button" 
         className={"mb-sm mr-sm btn btn-outline " + (this.routeActive(this.state.diaryRoot + "/" + this.state.dates.today) ? 'btn-primary' : 'btn-default') }>
                   Dzisiaj (<span>{getWeekDay(this.state.dates.today)}</span>)
+                  <div className='day-icon'>
+                    <img src={"/images/icons/" + (this.state.dateTypes.today || "empty") + ".png"}/>
+                  </div>
                 </button>  
               </Link>
               <Link to={this.state.diaryRoot + "/" + this.state.dates.tomorow}>
                 <button type="button" 
         className={"mb-sm mr-sm btn btn-outline " + (this.routeActive(this.state.diaryRoot + "/" + this.state.dates.tomorow) ? 'btn-primary' : 'btn-default') }>
                   Jutro (<span>{getWeekDay(this.state.dates.tomorow)}</span>)
+                  <div className='day-icon'>
+                    <img src={"/images/icons/question.png"}/>
+                  </div>
                 </button>  
               </Link>              
               <a>

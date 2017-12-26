@@ -127,6 +127,6 @@ module.exports.policies = {
     'create':false,
     'destroy':false,
     'updateOrCreate':'usersDay',
-    
+    'getTrainingTypes':'isTrainerForOtherUser'
   }
 };

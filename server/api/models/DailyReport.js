@@ -26,7 +26,8 @@ module.exports = {
 		required:true
 	},
 	trainings:{
-		collection:'DailyTraining'
+		collection:'DailyTraining',
+		via:'dailyReport'
 	},
 	userNotes:{
 		type:'text'

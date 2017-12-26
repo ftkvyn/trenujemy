@@ -30,9 +30,9 @@ function saveDay(newData){
 	  });
 }
 
-function saveTraining(training, dayId){
+function saveTraining(training){
 	return new Promise((resolve, reject) => {
-		$.post(`/api/dailyTraining/${dayId}`, training)
+		$.post(`/api/dailyTraining/${training.dailyReport}`, training)
 		.success(function(data) {
 			resolve(data);
 		})
@@ -69,4 +69,17 @@ function getPastImages(date, userId){
 	  });
 }
 
-export {loadDay, saveDay, saveTraining, saveBodySize, getPastImages}
+function getDayTypes(dates, userId){
+	return new Promise((resolve, reject) => {
+		$.post(`/api/dayTypes/${userId || ''}`, {days: dates})
+		.success(function(data) {
+			resolve(data);
+		})
+		.error(function(err){
+			console.error(err);
+			reject(err);
+		});
+	  });
+}
+
+export {loadDay, saveDay, saveTraining, saveBodySize, getPastImages, getDayTypes}

@@ -18,7 +18,15 @@
 body .modal-backdrop.in{
 	display: none;
 }
-
+.day-icon{
+	display: block;
+	height: 40px;
+	text-align: center;
+}
+.day-icon img{
+	height: 40px;
+	max-width: 60px;
+}
 .sizes-requirement-panel{
 	padding-top: 10px;
     margin-bottom: 10px;
