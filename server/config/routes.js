@@ -102,7 +102,11 @@ module.exports.routes = {
 
   'get /api/pastBodyImages/:date/:userId?' : 'DailyReportController.getPastImages',
 
-  
+  'get /api/dishes/:dayId' : 'DailyReportController.findDishes',
+
+  'post /api/dish/addComponent/:dayId' : 'DishController.addComponent',
+
+  'post /api/dish/removeComponent/:dayId' : 'DishController.removeComponent',  
 
   /***************************************************************************
   *                                                                          *

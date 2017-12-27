@@ -12,9 +12,13 @@ module.exports = {
   		type:'string',
   		required: true
   	},
-  	defaultWeight:{
-  		type:'float'
-  	},
+    dish:{
+      type:'Dish',
+      required: true
+    },
+    weight:{
+      type:'float'
+    },
   	protein:{
   		type:'float'
   	},

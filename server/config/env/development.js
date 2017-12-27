@@ -9,11 +9,6 @@
  * any private information to this file!
  *
  */
-
- (function setEnv(){
- 	require('dotenv').config();
- })();
-
 module.exports = {
 
 	hookTimeout: 900000

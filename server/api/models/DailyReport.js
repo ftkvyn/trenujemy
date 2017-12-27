@@ -29,6 +29,10 @@ module.exports = {
 		collection:'DailyTraining',
 		via:'dailyReport'
 	},
+	dishes:{
+		collection:'Dish',
+		via:'dailyReport'
+	},
 	userNotes:{
 		type:'text'
 	},

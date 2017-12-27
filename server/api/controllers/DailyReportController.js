@@ -5,6 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 const moment = require('moment');
+const Q = require('q');
+const dishTimes = [800,1000,1200,1600,1900,2130];
 
 module.exports = {
 
@@ -15,8 +17,9 @@ module.exports = {
 		DailyReport
 		.findOne({user: userId, date: date.toDate()})
 		.populate('bodySize')
-		.populate('trainings')
+		.populate('trainings')		
 		//ToDo: load dishes separate
+		//.populate('dishes')
 		.exec(function(err, entry){
 			if(err){
 				console.error(err);
@@ -28,7 +31,7 @@ module.exports = {
 			if(req.session.user.role == 'trainer'){
 				//Not creating new data here.
 				return res.json({noData: true});
-			}
+			}			
 			BodySize.create({user: userId})
 			.exec(function(err, bodySize){
 				DailyReport.create({user: userId, date: date.toDate(), bodySize: bodySize})
@@ -37,13 +40,38 @@ module.exports = {
 						console.error(err);
 						return res.badRequest(err);
 					}
-					entry.bodySize = bodySize;
-					entry.trainings = [];
-					return res.json(entry);
+					let qs = [];
+					for(let i = 0; i < dishTimes; i++){
+						qs.push(Dish.create({dailyReport: entry.id, hour: dishTimes[i]}));
+					}
+					Q.all(qs)
+					.catch(function(err){
+						console.error(err);
+						return res.badRequest(err);
+					})
+					.done(function(data){
+						entry.bodySize = bodySize;
+						entry.trainings = [];
+						//entry.dishes = data;
+						return res.json(entry);	
+					});					
 				});
 			});
 		});
 	},	
+
+	findDishes:function(req, res){
+		Dish.find({dailyReport: req.params.dayId})
+		.sort('hour ASC')
+		.populate('components')
+		.exec(function (err, dishes) {
+			if(err){
+				console.error(err);
+				return res.badRequest(err);
+			}			
+			return res.json(dishes);
+		})
+	},
 
 	update:function(req, res){
 		const userId = req.params.userId || req.session.user.id;

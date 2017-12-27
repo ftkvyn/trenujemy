@@ -108,6 +108,7 @@ module.exports.policies = {
 
   DailyReportController:{
     'find':'isTrainerForOtherUser',
+    'findDishes':'usersDayOrTrainer',
     'create':false,
     'destroy':false,
     'update':'isTrainerForOtherUser',
@@ -128,5 +129,11 @@ module.exports.policies = {
     'destroy':false,
     'updateOrCreate':'usersDay',
     'getTrainingTypes':'isTrainerForOtherUser'
+  },
+
+  DishController:{
+    '*':false,
+    'addComponent':'usersDay',
+    'removeComponent':'usersDay',
   }
 };

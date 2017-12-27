@@ -8,14 +8,19 @@
 module.exports = {
 
   attributes: {
+    dailyReport:{
+      model:'DailyReport',
+      required: true
+    },
   	components:{
-  		collection:'UsedDishComponent',
+  		collection:'DishComponent',
   		via:'dish'
   	},
-  	user:{
-  		model: 'User',
-  		required:true	
-  	},
+    hour:{
+      type:'integer',
+      //required: true,
+      //defaultsTo: 730, //For 7:30
+    },  	
   }
 };
 

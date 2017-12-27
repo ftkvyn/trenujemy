@@ -18,6 +18,10 @@
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.connections.html
  */
+(function setEnv(){
+  require('dotenv').config();
+ })();
+ 
 var cs = process.env.TRENUJEMY_DATABASE_URL;
 var MYSQL_HOST = cs.substring(32,32+27);
 var MYSQL_USER = cs.substring(8,8+14);
