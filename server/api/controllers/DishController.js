@@ -4,7 +4,6 @@
  * @description :: Server-side logic for managing Trainplans
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
 module.exports = {
 	addComponent: function(req, res) {
 		let model = req.body;
