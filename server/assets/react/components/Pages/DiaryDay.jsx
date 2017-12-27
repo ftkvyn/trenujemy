@@ -5,6 +5,7 @@ import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from '
 import { loadDay, saveDay, saveTraining, saveBodySize, getPastImages } from '../Common/diaryService'
 import { loadSurvey } from '../Common/userDataService';
 import { saveImage } from '../Common/filesService';
+import { loadDishes, saveDish } from '../Common/dishService'
 import moment from 'moment';
 
 function setDay(dayData){
@@ -15,14 +16,45 @@ function setDay(dayData){
     const trainings = dayData.trainings;
     delete dayDataFlat.bodySize;
     delete dayDataFlat.trainings;
+    delete dayDataFlat.dishes;
     this.setState({data: dayDataFlat, bodySize: bodySize, trainings: trainings || []});
     const date = moment(dayData.date).format('DD-MM-YYYY');
     getPastImages(date, this.state.userId)
       .then((images) => this.setState({pastImages: images}));
+    loadDishes(dayData.id)
+      .then((dishes) => {
+        for(var i = 0; i < dishes.length; i++){
+          dishes[i].__collapsed = i > 0;
+          dishes[i].hour = formatHour(dishes[i].hour);
+        }        
+        this.setState({dishes: dishes},() =>{
+            if($.fn.inputmask){
+                $('[data-masked]').inputmask();
+                $('[data-masked]').off('change');
+                $('[data-masked]').change(this.handleDishHourChange.bind(this));
+            }
+        });
+    });
+}
+
+function formatHour(val) {
+    val = '' + val;
+    val = val.replace(':','');
+    if(isNaN(+val)){
+        return '0000';
+    }
+    if(+val >= 2400){
+        return '2359';
+    }
+    while(val.length < 4){
+        val = '0' + val;
+    }
+    return val;
 }
 
 let saveHandler = null;
 let saveTraningHandlers = [null, null, null];
+let saveDishHandlers = [];
 let saveBodyHandler = null;
 
 let hideAlertSuccess = null;
@@ -68,6 +100,7 @@ class DiaryDay extends React.Component {
             survey:{},
             bodySize:{},
             trainings:[],
+            dishes:[],
             pastImages:[],
             addingTraning: false
         };
@@ -90,14 +123,15 @@ class DiaryDay extends React.Component {
         if(this.state.day === nextDay){
             return;
         }
-        this.setState({day: nextDay, data:{}, bodySize:{}, trainings: []});
+        this.setState({day: nextDay, data:{}, bodySize:{}, trainings: [], dishes:[]});
         loadDay(nextDay, this.state.userId)
           .then((data) => setDay.call(this, data));
+        
     }
 
     componentDidMount(){
         loadDay(this.state.day, this.state.userId)
-          .then((data) => setDay.call(this, data));
+          .then((data) => setDay.call(this, data));        
     }
 
     handleChange(event) {
@@ -136,6 +170,58 @@ class DiaryDay extends React.Component {
           let trainings = [...this.state.trainings, createdTraning];
           this.setState({addingTraning: false, trainings: trainings});
         });
+    }
+
+    handleDishHourChange(num, event) {
+        if(typeof event == 'undefined'){
+          event = num;
+          num = +$(event.target).attr('data-num');
+        }
+        let fieldName = event.target.name;
+        let fieldVal = event.target.value;
+        if(fieldName == 'hour'){
+            fieldVal = fieldVal.replace(':','');   
+        }  
+        let newData = this.state.dishes[num];
+        newData[fieldName] = fieldVal;
+        let dishes = [
+          ...this.state.dishes.slice(0, num),
+          newData,
+          ...this.state.dishes.slice(num+1)
+        ];
+        this.setState({dishes: dishes});
+
+        
+        if(saveDishHandlers[num]){
+            saveDishHandlers[num].clear();
+        }
+        saveDishHandlers[num] = debounce(() => {
+          saveDish(newData)
+            .then((saved) => {
+                $('.saveError').hide();
+                $('.saveSuccess').show();
+                clearTimeout(hideAlertSuccess);
+                hideAlertSuccess = setTimeout(() => {$('.saveSuccess').hide()}, 6000);
+            })
+            .catch(function(){
+                $('.saveSuccess').hide();
+                $('.saveError').show();
+                clearTimeout(hideAlertError);
+                hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
+            });
+        }, 1000);        
+        saveDishHandlers[num]();
+    }
+
+    collapseDish(num){
+        let newData = this.state.dishes[num];
+        newData.__collapsed = !newData.__collapsed;
+        let dishes = [
+          ...this.state.dishes.slice(0, num),
+          newData,
+          ...this.state.dishes.slice(num+1)
+        ];
+        this.setState({dishes: dishes});
     }
 
     handleTrainingChange(num, event) {
@@ -458,6 +544,55 @@ class DiaryDay extends React.Component {
                     </Col>
                     <Col lg={2} md={1}></Col>
                 </FormGroup>   
+
+                {this.state.dishes.map((dish, num) => <div key={num} className='dish-item'>
+                      <div className='dish-header'>
+                        <Col lg={1} md={1} sm={2} xs={2}>
+                          <div>
+                            <em className="fa fa-arrow-circle-o-down" 
+                              style={!dish.__collapsed ? {display: 'none'} : {}}
+                              onClick={this.collapseDish.bind(this, num)}></em>
+                            <em className="fa fa-arrow-circle-o-up" 
+                              style={dish.__collapsed ? {display: 'none'} : {}}
+                              onClick={this.collapseDish.bind(this, num)}></em>
+                          </div>
+                        </Col>
+                        <Col lg={10} md={10} sm={8} xs={8}>
+                          <FormGroup className='form-inline'>                  
+                              <label className="col-lg-6 col-md-6 col-sm-6 col-xs-6">{"Posiłek " + (num + 1)}</label>
+                              <Col lg={ 6 } md={ 6 } sm={6} xs={6}>
+                                  Godzina:
+                                  <FormControl type="text"
+                                  className="form-control short-input" {...readonlyForTrainer}
+                                  name='hour'
+                                  data-num={num}
+                                  data-masked="" data-inputmask="'mask': '99:99'" 
+                                  value={dish.hour || 0}
+                                  onChange={this.handleDishHourChange.bind(this, num)}/>
+                              </Col>
+                          </FormGroup>
+                        </Col>
+                        <Col lg={1} md={1} sm={2} xs={2}>
+                          <div>
+                            <em className="fa fa-plus-square"></em>
+                          </div>
+                        </Col>
+                      </div>
+                      <div className='dish-body' style={dish.__collapsed ? {display: 'none'} : {}}>
+                        <Col lg={3} md={3} sm={4} xs={4}>
+                          <label className="control-label">Uwagi i pytania do trenera:</label>
+                        </Col>
+                        <Col  lg={9} md={9} sm={8} xs={8}>
+                            <textarea 
+                            maxLength='400'
+                            className="form-control" 
+                            name='comment' {...readonlyForTrainer}
+                            value={dish.comment || ''}
+                            onChange={this.handleDishHourChange.bind(this, num)}></textarea>
+                            <label className="col-lg-12 control-label">Maks. 400 znaków</label>
+                        </Col>
+                      </div>
+                  </div>)}
 
                 {this.state.trainings.map((training, num) => <FormGroup key={num}>
                     <label className="col-lg-12">{`Trening ${num+1}:`}</label>

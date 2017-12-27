@@ -13,6 +13,7 @@ let componentsList = [];
 		let component = {};
 		let dataLine = lines[i].split('\t');
 		component.name = dataLine[0];
+		component.num = i;
 		component.calories = parseFloat(dataLine[1]);
 		component.protein = parseFloat(dataLine[2]);
 		component.fat = parseFloat(dataLine[3]);
@@ -27,10 +28,6 @@ let componentsList = [];
 
 		componentsList.push(component);
 	}
-
-	console.log(componentsList[0]);
-	console.log(componentsList[1]);
-	console.log(componentsList.length);
 })();
 
 

@@ -66,3 +66,30 @@ body .modal-backdrop.in{
 .btn-primary .bootstrap-datetimepicker-widget{
 	color:black;
 }
+
+.dish-item{
+	border: 1px solid #e4eaec;
+    display: block;
+    overflow: hidden;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.dish-header{
+	display: block;
+    overflow: hidden;    
+    padding-top: 10px;
+    background-color: #fafafa;
+}
+
+.dish-header em{
+	font-size: 30px;
+	cursor: pointer;
+}
+
+.dish-body{
+	display: block;
+    overflow: hidden;
+    padding-top: 10px;
+    border-top: 1px solid #e4eaec;
+}

@@ -6,8 +6,6 @@ import moment from 'moment';
 import DiaryDay from './DiaryDay'
 import { getDayTypes } from '../Common/diaryService'
 
-
-
 function destroyDp(){
     if($('#datetimepicker').data("DateTimePicker")) {
         $('#datetimepicker').data("DateTimePicker").destroy();

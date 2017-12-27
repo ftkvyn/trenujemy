@@ -41,7 +41,7 @@ module.exports = {
 						return res.badRequest(err);
 					}
 					let qs = [];
-					for(let i = 0; i < dishTimes; i++){
+					for(let i = 0; i < dishTimes.length; i++){
 						qs.push(Dish.create({dailyReport: entry.id, hour: dishTimes[i]}));
 					}
 					Q.all(qs)
@@ -58,20 +58,7 @@ module.exports = {
 				});
 			});
 		});
-	},	
-
-	findDishes:function(req, res){
-		Dish.find({dailyReport: req.params.dayId})
-		.sort('hour ASC')
-		.populate('components')
-		.exec(function (err, dishes) {
-			if(err){
-				console.error(err);
-				return res.badRequest(err);
-			}			
-			return res.json(dishes);
-		})
-	},
+	},		
 
 	update:function(req, res){
 		const userId = req.params.userId || req.session.user.id;

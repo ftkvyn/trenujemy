@@ -21,6 +21,9 @@ module.exports = {
       //required: true,
       //defaultsTo: 730, //For 7:30
     },  	
+    comment:{
+      type:'text'
+    }
   }
 };
 
