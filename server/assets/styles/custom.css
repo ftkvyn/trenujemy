@@ -93,3 +93,47 @@ body .modal-backdrop.in{
     padding-top: 10px;
     border-top: 1px solid #e4eaec;
 }
+
+.dish-popup{
+	display: block;
+	min-width: 400px;
+	min-height: 600px;
+	background: white;
+	position: fixed;
+	left: 50%;
+	transform: translateX(-50%);
+	top: 60px;
+	-webkit-box-shadow: -2px 3px 39px -2px rgba(0,0,0,0.75);
+	-moz-box-shadow: -2px 3px 39px -2px rgba(0,0,0,0.75);
+	box-shadow: -2px 3px 39px -2px rgba(0,0,0,0.75);
+	padding: 20px;
+	z-index: 3000;
+}
+
+body.with-popup{
+	overflow: hidden;
+	position: relative;
+}
+
+.popup-overlay{
+	width: 100%;
+    height: 10000%;
+    top: 0;
+    left: 0;
+    background: rgba(50,50,50,0.5);
+    position: fixed;
+    z-index: 2000;
+    display: none;
+}
+
+body.with-popup .popup-overlay{
+	display: block;
+}
+
+body.with-popup .topnavbar{
+	z-index: 1;
+}
+body.with-popup .wrapper > .aside
+{
+	z-index: 0;
+}

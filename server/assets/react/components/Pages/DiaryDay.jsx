@@ -7,6 +7,8 @@ import { loadSurvey } from '../Common/userDataService';
 import { saveImage } from '../Common/filesService';
 import { loadDishes, saveDish } from '../Common/dishService'
 import moment from 'moment';
+import AddComponentFirstStep from './AddComponentFirstStep'
+import AddComponentSecondStep from './AddComponentSecondStep'
 
 function setDay(dayData){
     $('.saveError').hide();
@@ -102,7 +104,8 @@ class DiaryDay extends React.Component {
             trainings:[],
             dishes:[],
             pastImages:[],
-            addingTraning: false
+            addingTraning: false,
+            rootPath: this.props.location.pathname
         };
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
@@ -515,6 +518,9 @@ class DiaryDay extends React.Component {
         }
         return (
             <div>
+              <div className="popup-overlay"></div>
+              <Route path={this.state.rootPath  + `/dish/:dishId/addComponent`} component={AddComponentFirstStep}/>
+              <Route path={this.state.rootPath  + `/dish/:dishId/addComponent/:componentNum/quantity`} component={AddComponentSecondStep}/>
               <form className="form-horizontal">
                 <FormGroup>
                     <label className="col-lg-12 text-center">Twoje uwagi dotyczące tego dnia (pytania do trenera, komentarze):</label>
@@ -545,7 +551,8 @@ class DiaryDay extends React.Component {
                     <Col lg={2} md={1}></Col>
                 </FormGroup>   
 
-                {this.state.dishes.map((dish, num) => <div key={num} className='dish-item'>
+
+                {this.state.dishes.map((dish, num) => <div key={num} className='dish-item'>                      
                       <div className='dish-header'>
                         <Col lg={1} md={1} sm={2} xs={2}>
                           <div>
@@ -574,7 +581,9 @@ class DiaryDay extends React.Component {
                         </Col>
                         <Col lg={1} md={1} sm={2} xs={2}>
                           <div>
-                            <em className="fa fa-plus-square"></em>
+                            <Link to={this.state.rootPath  + `/dish/${dish.id}/addComponent`}>
+                                <em className="fa fa-plus-square"></em>
+                            </Link>
                           </div>
                         </Col>
                       </div>

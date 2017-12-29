@@ -122,7 +122,7 @@ class Diary extends React.Component {
         paths = Array.isArray(paths) ? paths : [paths];
         let currentPath = this.props.location.pathname;
         for (var i = paths.length - 1; i >= 0; i--) {
-            if(currentPath == paths[i]){
+            if(currentPath.indexOf(paths[i]) > -1){
                 return true;
             }
         }
