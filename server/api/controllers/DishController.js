@@ -10,6 +10,7 @@ const dishTimes = [800,1000,1200,1600,1900,2130];
 module.exports = {
 	addComponent: function(req, res) {
 		let model = req.body;
+		model.dish = +model.dish;
 		Dish.findOne({id: model.dish})
 		.populate('dailyReport')
 		.exec(function(err, dish){
@@ -23,6 +24,7 @@ module.exports = {
 			if(dish.dailyReport.user != req.session.user.id){
 				return res.forbidden();		
 			}
+			//ToDo: load calories and stuff
 			DishComponent.create(model)
 			.exec(function(err, data){
 				if(err){
@@ -42,25 +44,8 @@ module.exports = {
 			if(err){
 				console.error(err);
 				return res.badRequest(err);
-			}			
-			// if(dishes.length == 0){
-				//ToDo: remove code later
-				// console.log('creating');
-				// let qs = [];
-				// for(let i = 0; i < dishTimes.length; i++){
-				// 	qs.push(Dish.create({dailyReport: req.params.dayId, hour: dishTimes[i]}));
-				// }
-				// Q.all(qs)
-				// .catch(function(err){
-				// 	console.error(err);
-				// 	return res.badRequest(err);
-				// })
-				// .done(function(data){
-				// 	return res.json(data);	
-				// });		
-			// }else{
-				return res.json(dishes);
-			// }
+			}		
+			return res.json(dishes);
 		})
 	},
 
@@ -100,6 +85,11 @@ module.exports = {
 				return res.json(data);
 			});
 		});		
+	},
+
+	loadComponents: function(req, res){
+		let components = componentsService.getComponents();
+		return res.json(components);
 	}
 
 };

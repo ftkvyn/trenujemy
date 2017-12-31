@@ -126,7 +126,7 @@ class DiaryDay extends React.Component {
         if(this.state.day === nextDay){
             return;
         }
-        this.setState({day: nextDay, data:{}, bodySize:{}, trainings: [], dishes:[]});
+        this.setState({day: nextDay, data:{}, bodySize:{}, trainings: [], dishes:[], rootPath: this.props.location.pathname});
         loadDay(nextDay, this.state.userId)
           .then((data) => setDay.call(this, data));
         
@@ -519,8 +519,8 @@ class DiaryDay extends React.Component {
         return (
             <div>
               <div className="popup-overlay"></div>
-              <Route path={this.state.rootPath  + `/dish/:dishId/addComponent`} component={AddComponentFirstStep}/>
-              <Route path={this.state.rootPath  + `/dish/:dishId/addComponent/:componentNum/quantity`} component={AddComponentSecondStep}/>
+              <Route path={this.state.rootPath  + `/dish/:dishId/:dishNum/addComponent`} component={AddComponentFirstStep}/>
+              <Route path={this.state.rootPath  + `/dish/:dishId/:dishNum/addComponent/:componentNum/quantity`} component={AddComponentSecondStep}/>
               <form className="form-horizontal">
                 <FormGroup>
                     <label className="col-lg-12 text-center">Twoje uwagi dotyczące tego dnia (pytania do trenera, komentarze):</label>
@@ -581,13 +581,17 @@ class DiaryDay extends React.Component {
                         </Col>
                         <Col lg={1} md={1} sm={2} xs={2}>
                           <div>
-                            <Link to={this.state.rootPath  + `/dish/${dish.id}/addComponent`}>
+                            <Link to={this.state.rootPath  + `/dish/${dish.id}/${num+1}/addComponent`}>
                                 <em className="fa fa-plus-square"></em>
                             </Link>
                           </div>
                         </Col>
                       </div>
                       <div className='dish-body' style={dish.__collapsed ? {display: 'none'} : {}}>
+                        {dish.components.map((comp) => <Col lg={12} md={12} sm={12} xs={12} key={comp.id}>
+                              <label>{comp.name} - {comp.weight} g</label>
+                          </Col> )}
+                          
                         <Col lg={3} md={3} sm={4} xs={4}>
                           <label className="control-label">Uwagi i pytania do trenera:</label>
                         </Col>

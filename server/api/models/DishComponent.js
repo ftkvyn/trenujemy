@@ -13,7 +13,7 @@ module.exports = {
   		required: true
   	},
     dish:{
-      type:'Dish',
+      model:'Dish',
       required: true
     },
     weight:{

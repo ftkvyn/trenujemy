@@ -132,6 +132,7 @@ module.exports.policies = {
 
   DishController:{
     '*':false,
+    'loadComponents': 'sessionAuth',
     'findDishes':'usersDayOrTrainer',
     'addComponent':'usersDay',
     'removeComponent':'usersDay',

@@ -1,8 +1,11 @@
+let daysDictionary = {};
+
 
 function loadDay(dateStr, userId){
 	return new Promise((resolve, reject) => {
 		$.get(`/api/diary/${dateStr}/${userId || ''}`)
 		.success(function(data) {
+			daysDictionary[dateStr] = data;
 			resolve(data);
 		})
 		.error(function(err){
@@ -12,6 +15,9 @@ function loadDay(dateStr, userId){
 	  });
 }
 
+function getDayByStr(dateStr){
+	return daysDictionary[dateStr];
+}
 
 function saveDay(newData){
 	return new Promise((resolve, reject) => {
@@ -82,4 +88,4 @@ function getDayTypes(dates, userId){
 	  });
 }
 
-export {loadDay, saveDay, saveTraining, saveBodySize, getPastImages, getDayTypes}
+export {loadDay, saveDay, saveTraining, saveBodySize, getPastImages, getDayTypes, getDayByStr}

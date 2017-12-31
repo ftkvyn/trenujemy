@@ -110,6 +110,10 @@ body .modal-backdrop.in{
 	z-index: 3000;
 }
 
+body.with-second-popup .dish-popup.dish-popup-first{
+	z-index: 1000;
+}
+
 body.with-popup{
 	overflow: hidden;
 	position: relative;
@@ -136,4 +140,8 @@ body.with-popup .topnavbar{
 body.with-popup .wrapper > .aside
 {
 	z-index: 0;
+}
+
+.dish-components-list{
+	font-size: 150%;
 }

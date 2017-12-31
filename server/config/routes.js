@@ -110,6 +110,8 @@ module.exports.routes = {
 
   'post /api/dishes/:dayId'  : 'DishController.saveDish',
 
+  'get /api/dishComponents' : 'DishController.loadComponents',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
