@@ -1,5 +1,5 @@
 let daysDictionary = {};
-
+let updateTrainingHandlers = [];
 
 function loadDay(dateStr, userId){
 	return new Promise((resolve, reject) => {
@@ -41,6 +41,16 @@ function saveTraining(training){
 		$.post(`/api/dailyTraining/${training.dailyReport}`, training)
 		.success(function(data) {
 			resolve(data);
+			for(let i = 0; i < updateTrainingHandlers.length; i++){
+				if(updateTrainingHandlers[i]){
+					try{
+						updateTrainingHandlers[i](data);
+					}
+					catch(ex){
+						//Do nothing.
+					}
+				}
+			}
 		})
 		.error(function(err){
 			console.error(err);
@@ -88,4 +98,13 @@ function getDayTypes(dates, userId){
 	  });
 }
 
-export {loadDay, saveDay, saveTraining, saveBodySize, getPastImages, getDayTypes, getDayByStr}
+function addUpdateTrainingHandler(handler){
+	updateTrainingHandlers.push(handler);
+	return updateTrainingHandlers.length;
+}
+
+function removeUpdateTrainingHandler(number){
+	updateTrainingHandlers[number] = null;
+}
+
+export {loadDay, saveDay, saveTraining, saveBodySize, getPastImages, getDayTypes, getDayByStr, addUpdateTrainingHandler, removeUpdateTrainingHandler}

@@ -4,7 +4,7 @@ import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, Drop
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
 import moment from 'moment';
 import DiaryDay from './DiaryDay'
-import { getDayTypes } from '../Common/diaryService'
+import { getDayTypes, addUpdateTrainingHandler, removeUpdateTrainingHandler } from '../Common/diaryService'
 
 function destroyDp(){
     if($('#datetimepicker').data("DateTimePicker")) {
@@ -44,6 +44,19 @@ function getDateString(date){
   return moment(date).format('DD-MM-YYYY');
 }
 
+function updateDayTypes(){
+  let days = [this.state.dates.beforeyesterday, this.state.dates.yesterday, this.state.dates.today, this.state.dates.tomorow];
+  getDayTypes(days, this.state.userId)
+    .then((daysInfo) => {
+      let dateTypes = {};
+      dateTypes.beforeyesterday = daysInfo[0].type;
+      dateTypes.yesterday = daysInfo[1].type;
+      dateTypes.today = daysInfo[2].type;
+      dateTypes.tomorow = daysInfo[3].type;
+      this.setState({dateTypes: dateTypes});
+    });
+}
+
 const weekDays = ['nie', 'pon','wt','śr','czw','pią','sob'];
 
 function getWeekDay(dateStr){
@@ -67,6 +80,7 @@ class Diary extends React.Component {
         initialState.dates.yesterday = getDateString(moment().add(-1, 'days'));
         initialState.dates.today = getDateString(moment());
         initialState.dates.tomorow = getDateString(moment().add(1, 'days'));
+        initialState.updateHandlerToken = addUpdateTrainingHandler(updateDayTypes.bind(this));
         if(this.props.match && this.props.match.params && this.props.match.params.id){
             initialState.userId = this.props.match.params.id;
             initialState.diaryRoot = `/clients/${initialState.userId}/diary`;
@@ -84,18 +98,13 @@ class Diary extends React.Component {
         }
     }
 
+    componentWillUnmount(){
+      removeUpdateTrainingHandler(this.state.updateHandlerToken);
+    }
+
     componentDidMount(){
-        setTimeout(setDatepicker.call(this));  
-        let days = [this.state.dates.beforeyesterday, this.state.dates.yesterday, this.state.dates.today, this.state.dates.tomorow];      
-        getDayTypes(days, this.state.userId)
-          .then((daysInfo) => {
-            let dateTypes = {};
-            dateTypes.beforeyesterday = daysInfo[0].type;
-            dateTypes.yesterday = daysInfo[1].type;
-            dateTypes.today = daysInfo[2].type;
-            dateTypes.tomorow = daysInfo[3].type;
-            this.setState({dateTypes: dateTypes});
-          });
+        setTimeout(setDatepicker.call(this));          
+        updateDayTypes.call(this);
     }
 
     componentWillUnmount(){
