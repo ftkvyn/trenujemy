@@ -3,6 +3,7 @@ import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
 import { loadComponents } from '../Common/dishService'
+import DishInfo from '../Components/DishInfo'
 
 class AddComponentFirstStep extends React.Component {
     constructor(props, context) {
@@ -65,6 +66,9 @@ class AddComponentFirstStep extends React.Component {
                                   <em className="fa fa-plus-circle mr"></em>
                               </Link>   
                               <span>{comp.name}</span> 
+                              <label className='pull-right'>
+                                <DishInfo {...comp} />
+                              </label>
                             </Col>))}                          
                           </Row>
                       </Well>

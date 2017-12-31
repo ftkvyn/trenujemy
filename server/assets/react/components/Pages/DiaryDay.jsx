@@ -9,6 +9,7 @@ import { loadDishes, saveDish, addUpdateDishHandler, removeUpdateDishHandler } f
 import moment from 'moment';
 import AddComponentFirstStep from './AddComponentFirstStep'
 import AddComponentSecondStep from './AddComponentSecondStep'
+import DishInfo from '../Components/DishInfo'
 
 function updateDish(component){
   let num = this.state.dishes.findIndex((item) => item.id == component.dish);
@@ -644,7 +645,7 @@ class DiaryDay extends React.Component {
                                   onChange={this.handleDishHourChange.bind(this, num)}/>
                               </Col>
                               <label className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                {`B: ${Math.round(dish.protein || 0)} g, T: ${Math.round(dish.fat || 0)} g, W: ${Math.round(dish.carbohydrate || 0)} g, K: ${Math.round(dish.calories || 0)} kCal`}
+                                <DishInfo {...dish} />
                               </label>
                           </FormGroup>
                         </Col>
