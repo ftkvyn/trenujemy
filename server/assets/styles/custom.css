@@ -67,7 +67,8 @@ body .modal-backdrop.in{
 	color:black;
 }
 
-.dish-item{
+.dish-item,
+.size-item{
 	border: 1px solid #e4eaec;
     display: block;
     overflow: hidden;
@@ -75,19 +76,26 @@ body .modal-backdrop.in{
     margin-bottom: 15px;
 }
 
-.dish-header{
+.dish-header,
+.size-header{
 	display: block;
     overflow: hidden;    
     padding-top: 10px;
     background-color: #fafafa;
 }
 
-.dish-header em{
+.size-header legend{
+	border-bottom: none;
+}
+
+.dish-header em,
+.size-header em{
 	font-size: 30px;
 	cursor: pointer;
 }
 
-.dish-body{
+.dish-body,
+.size-body{
 	display: block;
     overflow: hidden;
     padding-top: 10px;

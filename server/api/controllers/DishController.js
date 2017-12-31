@@ -25,6 +25,14 @@ module.exports = {
 				return res.forbidden();		
 			}
 			//ToDo: load calories and stuff
+			let component = componentsService.getComponents()[model.num];
+			delete model.num;
+			for(var key in component){
+				if(key == 'name' || key == 'num'){
+					continue;
+				}
+				model[key] = (component[key] / 100) * model.weight;
+			}
 			DishComponent.create(model)
 			.exec(function(err, data){
 				if(err){

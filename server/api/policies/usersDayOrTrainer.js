@@ -3,7 +3,6 @@ module.exports = function(req, res, next) {
   if (!req.session.user) {
     return res.forbidden('You are not permitted to perform this action.');
   }
-
   DailyReport.findOne({id: req.params.dayId})
   .exec(function(err, dailyReport){
     if(err || !dailyReport){
@@ -13,7 +12,7 @@ module.exports = function(req, res, next) {
     if(dailyReport.user != req.session.user.id){
       User.findOne({id: req.session.user.id})
       .exec(function(err, user){
-        if(err || !dailyReport){
+        if(err || !user){
           console.error(err);
           return res.forbidden('You are not permitted to perform this action.');    
         }
@@ -23,7 +22,6 @@ module.exports = function(req, res, next) {
           return next();    
         }
       });
-      return res.forbidden('You are not permitted to perform this action.');    
     }else{
       return next();  
     }

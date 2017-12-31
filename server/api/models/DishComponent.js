@@ -31,6 +31,27 @@ module.exports = {
   	calories:{
   		type:'float'
   	},
+
+    sodium:{
+      type:'float'
+    },
+    potassium:{
+      type:'float'
+    },
+    calcium:{
+      type:'float'
+    },
+    iron:{
+      type:'float'
+    },
+    vitaminC:{
+      type:'float'
+    },
+    vitaminA:{
+      type:'float'
+    },
+    fiber:{
+      type:'float'
+    },
   }
 };
-

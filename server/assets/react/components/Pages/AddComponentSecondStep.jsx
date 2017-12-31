@@ -59,6 +59,7 @@ class AddComponentSecondStep extends React.Component {
       model.dish = this.props.match.params.dishId;
       model.name = this.state.selectedComponent.name;
       model.weight = value;
+      model.num = this.props.match.params.componentNum;
       addComponent(dayId, model)
         .then(function(){
             this.setState({adding: false});
