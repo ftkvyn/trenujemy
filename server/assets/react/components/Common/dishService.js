@@ -2,6 +2,7 @@ let allComponents = [];
 let loaded = false;
 let resolveWaiters = [];
 let rejectWaiters = [];
+let updateDishHandlers = [];
 
 function __loadComponents() {
 	$.get('/api/dishComponents')
@@ -77,12 +78,31 @@ function addComponent(dayId, model){
 		$.post(`/api/dish/addComponent/${dayId}`, model)
 		.success(function(data) {
 			resolve(data);
+			for(let i = 0; i < updateDishHandlers.length; i++){
+				if(updateDishHandlers[i]){
+					try{
+						updateDishHandlers[i](data);
+					}
+					catch(ex){
+						//Do nothing.
+					}
+				}
+			}
 		})
 		.error(function(err){
 			console.error(err);
 			reject(err);
 		});
 	  });
+}
+
+function addUpdateDishHandler(handler){
+	updateDishHandlers.push(handler);
+	return updateDishHandlers.length;
+}
+
+function removeUpdateDishHandler(number){
+	updateDishHandlers[number] = null;
 }
 
 function removeComponent(dayId, model){
@@ -98,4 +118,4 @@ function removeComponent(dayId, model){
 	  });
 }
 
-export{loadDishes, addComponent, removeComponent, saveDish, loadComponents}
+export{loadDishes, addComponent, removeComponent, saveDish, loadComponents, addUpdateDishHandler, removeUpdateDishHandler}

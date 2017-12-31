@@ -5,10 +5,24 @@ import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from '
 import { loadDay, saveDay, saveTraining, saveBodySize, getPastImages } from '../Common/diaryService'
 import { loadSurvey } from '../Common/userDataService';
 import { saveImage } from '../Common/filesService';
-import { loadDishes, saveDish } from '../Common/dishService'
+import { loadDishes, saveDish, addUpdateDishHandler, removeUpdateDishHandler } from '../Common/dishService'
 import moment from 'moment';
 import AddComponentFirstStep from './AddComponentFirstStep'
 import AddComponentSecondStep from './AddComponentSecondStep'
+
+function updateDish(component){
+  let num = this.state.dishes.findIndex((item) => item.id == component.dish);
+  if(num > -1){
+    let dish = this.state.dishes[num];
+    dish.components.push(component);
+    let dishes = [
+      ...this.state.dishes.slice(0, num),
+      dish,
+      ...this.state.dishes.slice(num+1)
+    ];
+    this.setState({dishes: dishes});
+  }
+}
 
 function setDay(dayData){
     $('.saveError').hide();
@@ -107,6 +121,7 @@ class DiaryDay extends React.Component {
             addingTraning: false,
             rootPath: this.props.location.pathname
         };
+        initialState.updateHandlerToken = addUpdateDishHandler(updateDish.bind(this));
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
             initialState.day = this.props.match.params.day;
@@ -116,7 +131,11 @@ class DiaryDay extends React.Component {
             .then((data) => {
               this.setState({survey: data});
             });      
-    };
+    }
+
+    componentWillUnmount(){
+      removeUpdateDishHandler(this.state.updateHandlerToken);
+    }
 
     componentWillReceiveProps(nextProps) {
         let nextDay = undefined;
