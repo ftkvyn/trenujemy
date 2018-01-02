@@ -110,6 +110,17 @@ function removeComponent(dayId, model){
 		$.post(`/api/dish/removeComponent/${dayId}`, model)
 		.success(function(data) {
 			resolve(data);
+			model.__removed = true;
+			for(let i = 0; i < updateDishHandlers.length; i++){
+				if(updateDishHandlers[i]){
+					try{
+						updateDishHandlers[i](model);
+					}
+					catch(ex){
+						//Do nothing.
+					}
+				}
+			}
 		})
 		.error(function(err){
 			console.error(err);

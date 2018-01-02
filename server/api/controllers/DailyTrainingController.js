@@ -47,10 +47,11 @@ module.exports = {
 			let num = 0;
 			for(let i = 0; i < days.length; i++){
 				let item = {};
-				item.date = moment(days[i]).format('DD-MM-YYYY');
+				item.date = moment(days[i]).format('DD-MM-YYYY');				
 				item.type = 'none';
 				if(data[num]){
-					if(days[i] - data[num].date == 0){
+					const loadedDate = moment(data[num].date).format('DD-MM-YYYY');
+					if(loadedDate == item.date){
 						let training = data[num].trainings.sort((a,b) => b.length - a.length)[0];
 						if(training){
 							item.type = training.type;

@@ -90,7 +90,7 @@ module.exports = {
 					console.error(err);
 					return res.badRequest();
 				}
-				return res.json(data);
+				return res.json(data[0]);
 			});
 		});		
 	},

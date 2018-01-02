@@ -5,17 +5,30 @@ import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from '
 import { loadDay, saveDay, saveTraining, saveBodySize, getPastImages } from '../Common/diaryService'
 import { loadSurvey } from '../Common/userDataService';
 import { saveImage } from '../Common/filesService';
-import { loadDishes, saveDish, addUpdateDishHandler, removeUpdateDishHandler } from '../Common/dishService'
+import { loadDishes, saveDish, addUpdateDishHandler, removeUpdateDishHandler, removeComponent } from '../Common/dishService'
+import { loadUserAdvice } from '../Common/adviceService';
 import moment from 'moment';
 import AddComponentFirstStep from './AddComponentFirstStep'
 import AddComponentSecondStep from './AddComponentSecondStep'
 import DishInfo from '../Components/DishInfo'
+import FoodInfoRow from '../Components/FoodInfoRow'
+
 
 function updateDish(component){
   let num = this.state.dishes.findIndex((item) => item.id == component.dish);
+  console.log(component);
   if(num > -1){
     let dish = this.state.dishes[num];
-    dish.components.push(component);
+    if(!component.__removed){
+      dish.components.push(component);
+    }else{      
+      let compNum = dish.components.findIndex((item) => item.id == component.id);
+      let components =  [
+        ...dish.components.slice(0, compNum),
+        ...dish.components.slice(compNum + 1)
+      ];
+      dish.components = components;
+    }
     let dishes = [
       ...this.state.dishes.slice(0, num),
       dish,
@@ -109,6 +122,14 @@ function saveBodyFn(newData){
     });
 }
 
+function getRootPath(path){
+  let index = path.indexOf('/dish');
+  if(index > -1){
+    path = path.substring(0, index);
+  }  
+  return path;
+}
+
 class DiaryDay extends React.Component {
     constructor(props, context) {
         super(props, context);
@@ -117,22 +138,25 @@ class DiaryDay extends React.Component {
             survey:{},
             bodySize:{},
             trainings:[],
+            advise:{},
             dishes:[],
             pastImages:[],
             addingTraning: false,
-            rootPath: this.props.location.pathname,
-            __sizeCollapsed: true
+            __sizeCollapsed: true,
+            __foodCollapsed: false
         };
         initialState.updateHandlerToken = addUpdateDishHandler(updateDish.bind(this));
+        initialState.rootPath = getRootPath(this.props.location.pathname);
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
             initialState.day = this.props.match.params.day;
         }
-        this.state = initialState; 
-        loadSurvey(initialState.userId)
-            .then((data) => {
-              this.setState({survey: data});
-            });      
+        if(initialState.userId){
+            initialState.rootRoute = "/clients/:id/diary/:day";        
+        }else{
+            initialState.rootRoute = "/diary/:day";
+        }
+        this.state = initialState;             
     }
 
     componentWillUnmount(){
@@ -147,15 +171,24 @@ class DiaryDay extends React.Component {
         if(this.state.day === nextDay){
             return;
         }
-        this.setState({day: nextDay, data:{}, bodySize:{}, trainings: [], dishes:[], rootPath: this.props.location.pathname});
+        this.setState({day: nextDay, data:{}, bodySize:{}, trainings: [], dishes:[], rootPath : getRootPath(nextProps.location.pathname)});
         loadDay(nextDay, this.state.userId)
           .then((data) => setDay.call(this, data));
-        
+        //Not loading survey here because here only days are changing. 
+        //Users changing with unmounting and recreating component.        
     }
 
     componentDidMount(){
         loadDay(this.state.day, this.state.userId)
-          .then((data) => setDay.call(this, data));        
+          .then((data) => setDay.call(this, data)); 
+        loadSurvey(this.state.userId)
+            .then((data) => {
+              this.setState({survey: data});
+            });    
+        loadUserAdvice(this.state.userId)
+            .then((data) => {
+              this.setState({advise: data});
+            });      
     }
 
     handleChange(event) {
@@ -237,6 +270,14 @@ class DiaryDay extends React.Component {
         saveDishHandlers[num]();
     }
 
+    deleteComponent(componentId, dishNum){
+      let model = {
+        id: componentId,
+        dish: this.state.dishes[dishNum].id
+      };
+      removeComponent(this.state.data.id, model);
+    }
+
     collapseDish(num){
         let newData = this.state.dishes[num];
         newData.__collapsed = !newData.__collapsed;
@@ -250,6 +291,10 @@ class DiaryDay extends React.Component {
 
     collapseSizes(){
       this.setState({__sizeCollapsed : !this.state.__sizeCollapsed})
+    }
+
+    collapseFood(){      
+      this.setState({__foodCollapsed : !this.state.__foodCollapsed})
     }
 
     handleTrainingChange(num, event) {
@@ -322,7 +367,7 @@ class DiaryDay extends React.Component {
             clearTimeout(hideAlertError);
             hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
         });
-    }
+    }    
 
     render() {  
         if(this.state.data.noData){
@@ -363,6 +408,7 @@ class DiaryDay extends React.Component {
             "vitaminC",
             "vitaminA",
             "fiber"];
+        let totalComponents = {};            
         let dishesProcessed = this.state.dishes.map((original) => {
           let item = Object.assign({}, original);
           for(let i = 0; i < item.components.length; i++){
@@ -371,11 +417,15 @@ class DiaryDay extends React.Component {
                   if(!item[field]){
                     item[field] = 0;
                   }
+                  if(!totalComponents[field]){
+                    totalComponents[field] = 0;
+                  }
                   item[field] += item.components[i][field];
+                  totalComponents[field] += item.components[i][field];
               }
           }
           return item;
-        });
+        });      
         let surveyPart = "";
         if(this.state.survey.id && this.state.bodySize.id){
           let dailyPic = "";
@@ -586,8 +636,51 @@ class DiaryDay extends React.Component {
         return (
             <div>
               <div className="popup-overlay"></div>
-              <Route path={this.state.rootPath  + `/dish/:dishId/:dishNum/addComponent`} component={AddComponentFirstStep}/>
-              <Route path={this.state.rootPath  + `/dish/:dishId/:dishNum/addComponent/:componentNum/quantity`} component={AddComponentSecondStep}/>
+              <Route path={this.state.rootRoute  + `/dish/:dishId/:dishNum/addComponent`} component={AddComponentFirstStep}/>
+              <Route path={this.state.rootRoute  + `/dish/:dishId/:dishNum/addComponent/:componentNum/quantity`} component={AddComponentSecondStep}/>
+              <Row>
+                <Col lg={2} md={2} sm={3} xs={4}></Col>
+                <Col lg={1} md={1} sm={2} xs={2}><label>Dziś:</label></Col>
+                <Col lg={7} md={7} sm={3} xs={2}></Col>
+                <Col lg={2} md={2} sm={4} xs={4}><label>Zalecenie:</label></Col>
+              </Row>              
+
+              <FoodInfoRow title="Białka" today={totalComponents.protein} advise={this.state.advise.protein}></FoodInfoRow>
+              <FoodInfoRow title="Tłuszcze" today={totalComponents.fat} advise={this.state.advise.fat}></FoodInfoRow>
+              <FoodInfoRow title="Węglowodany" today={totalComponents.carbohydrate} advise={this.state.advise.carbo}></FoodInfoRow>
+              <FoodInfoRow title="Kalorie" today={totalComponents.calories} advise={this.state.advise.calories}></FoodInfoRow>
+              <div className='dish-item' 
+    style={this.state.advise.show_fiber || this.state.advise.show_sodium || this.state.advise.show_potassium
+    || this.state.advise.show_calcium || this.state.advise.show_iron 
+    || this.state.advise.show_vitaminC || this.state.advise.show_vitminA ? {} : {display: 'none'}}>                      
+                <div className='dish-header'>
+                  <Col lg={1} md={1} sm={2} xs={2}>
+                    <div>
+                      <em className="fa fa-arrow-circle-o-down" 
+                        style={!this.state.__foodCollapsed ? {display: 'none'} : {}}
+                        onClick={this.collapseFood.bind(this)}></em>
+                      <em className="fa fa-arrow-circle-o-up" 
+                        style={this.state.__foodCollapsed ? {display: 'none'} : {}}
+                        onClick={this.collapseFood.bind(this)}></em>
+                    </div>
+                  </Col>
+                  <Col lg={10} md={10} sm={8} xs={8}>
+                    <legend>Pozostałe</legend>
+                  </Col>
+                  <Col lg={1} md={1} sm={2} xs={2}>
+                  </Col>
+                </div>
+                <div className='dish-body' style={this.state.__foodCollapsed ? {display: 'none'} : {}}>
+                  <FoodInfoRow title="Błonnik" today={totalComponents.fiber} advise={this.state.advise.fiber} hide={!this.state.advise.show_fiber}></FoodInfoRow>
+                  <FoodInfoRow title="Sód" today={totalComponents.sodium} advise={this.state.advise.sodium} hide={!this.state.advise.show_sodium}></FoodInfoRow>
+                  <FoodInfoRow title="Potas" today={totalComponents.potassium} advise={this.state.advise.potassium} hide={!this.state.advise.show_potassium}></FoodInfoRow>
+                  <FoodInfoRow title="Wapń" today={totalComponents.calcium} advise={this.state.advise.calcium} hide={!this.state.advise.show_calcium}></FoodInfoRow>
+                  <FoodInfoRow title="Żelazo" today={totalComponents.iron} advise={this.state.advise.iron} hide={!this.state.advise.show_iron}></FoodInfoRow>
+                  <FoodInfoRow title="Witamina C" today={totalComponents.vitaminC} advise={this.state.advise.vitaminC} hide={!this.state.advise.show_vitaminC}></FoodInfoRow>
+                  <FoodInfoRow title="Witamina A" today={totalComponents.vitaminA} advise={this.state.advise.vitaminA} hide={!this.state.advise.show_vitaminA}></FoodInfoRow>
+                </div>
+              </div>
+
               <form className="form-horizontal">
                 <FormGroup>
                     <label className="col-lg-12 text-center">Twoje uwagi dotyczące tego dnia (pytania do trenera, komentarze):</label>
@@ -658,8 +751,18 @@ class DiaryDay extends React.Component {
                         </Col>
                       </div>
                       <div className='dish-body' style={dish.__collapsed ? {display: 'none'} : {}}>
+                        <Col lg={12} md={12} sm={12} xs={12}>
+                            <label className="col-lg-3 col-md-3 col-sm-3 col-xs-3">Składniki:</label>
+                            <label className="col-lg-1 col-md-1 col-sm-1 col-xs-1">Ilość</label>
+                            <label className="col-lg-1 col-md-1 col-sm-1 col-xs-1">Kalorie</label>
+                        </Col>
                         {dish.components.map((comp) => <Col lg={12} md={12} sm={12} xs={12} key={comp.id}>
-                              <label>{comp.name} - {comp.weight} g</label>
+                              <label className="col-lg-3 col-md-3 col-sm-3 col-xs-3">{comp.name}</label>
+                              <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">{comp.weight} g</div>
+                              <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">{comp.calories}</div>
+                              <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                <em className="fa fa-times" style={{cursor:'pointer'}} onClick={this.deleteComponent.bind(this, comp.id, num)}></em>
+                              </div>
                           </Col> )}
                           
                         <Col lg={3} md={3} sm={4} xs={4}>

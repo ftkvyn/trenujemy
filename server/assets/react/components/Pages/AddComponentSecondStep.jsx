@@ -86,7 +86,7 @@ class AddComponentSecondStep extends React.Component {
                     <a style={{'cursor':'pointer'}}>
                       <em className="fa fa-plus-circle mr" onClick={this.setGramms.bind(this, value)}></em>
                     </a>
-                    <span>{value}</span> 
+                    <span>{value} g</span> 
                   </Col>))}    
                   <Col lg={12} md={12} sm={12}>
                     <a style={{'cursor':'pointer'}}>
@@ -95,8 +95,9 @@ class AddComponentSecondStep extends React.Component {
                     <FormControl type="number"
                         className="form-control short-input"
                         name='weight'
+                        style={{fontSize:'100%'}}
                         value={this.state.weight || ''}
-                        onChange={this.handleWeightChange.bind(this)}/>
+                        onChange={this.handleWeightChange.bind(this)}/> g
                   </Col>                     
                 </Row>
             </div>

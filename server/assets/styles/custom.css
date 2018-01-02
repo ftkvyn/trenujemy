@@ -84,6 +84,7 @@ body .modal-backdrop.in{
     background-color: #fafafa;
 }
 
+.dish-header legend,
 .size-header legend{
 	border-bottom: none;
 }
@@ -152,4 +153,22 @@ body.with-popup .wrapper > .aside
 
 .dish-components-list{
 	font-size: 150%;
+}
+
+.progress-bar-container{
+	position: relative;
+	height: 10px;
+	background: #edf1f2;
+	display: block;
+	width: 100%;
+	margin-top: 5px;
+}
+
+.progress-bar-custom{
+	display: block;
+	height: 10px;
+	position: absolute;
+	left: 0;top: 0;
+	transition: all 1s;
+	color:white;
 }
