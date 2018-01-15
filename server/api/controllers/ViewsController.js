@@ -10,6 +10,10 @@ module.exports = {
 		return res.view('homepage', {locals: {user: req.session.user}});	
 	},
 
+	about: function(req,res){
+		return res.view('about', {locals: {user: req.session.user}});	
+	},
+
 	history: function(req,res){
 		return res.view('history', {locals: {user: req.session.user}});	
 	},

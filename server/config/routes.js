@@ -36,6 +36,8 @@ module.exports.routes = {
 
   '/history': 'ViewsController.history',
 
+  '/about': 'ViewsController.about',
+
   '/training': 'ViewsController.training',
 
   '/plans': 'ViewsController.plans',
