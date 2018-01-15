@@ -31,6 +31,13 @@ module.exports = {
   		isRecomended:{
   			type:'boolean'
   		}
+  },
+
+  beforeValidate: function (values, cb) {
+    if(!values.priceOld){
+      delete values.priceOld;
+    }
+    cb();
   }
 };
 

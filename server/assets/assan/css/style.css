@@ -4239,3 +4239,12 @@ Footer
     position: absolute;
     background: rgba(0, 0, 0, 0.4);
 }
+
+.old-price{
+  font-size: 80%;
+  color:#999;
+}
+.pricing-card.active .old-price{
+  font-size: 80%;
+  color:#ddd;
+}

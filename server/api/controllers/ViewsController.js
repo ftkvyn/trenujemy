@@ -7,7 +7,13 @@
 
 module.exports = {
 	home: function(req,res){
-		return res.view('homepage', {locals: {user: req.session.user}});	
+		TrainPlan.find({isActive: true})
+		.exec(function(err, trainPlans){
+			if(err){
+				console.error(err);
+			}
+			return res.view('homepage', {locals: {user: req.session.user, trainPlans: trainPlans}});	
+		});		
 	},
 
 	about: function(req,res){

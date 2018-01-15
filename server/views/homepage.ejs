@@ -296,7 +296,7 @@
 </div>
 
 <div class="">
-    <div class="container pt60">
+    <div class="container pt60" id='trainings'>
         <div class="title-heading1 mb40">
             <h3>Jak zacząć?</h3>
         </div>           
@@ -338,119 +338,52 @@
 
 </div>
 
+<% if(!locals.trainPlans || !locals.trainPlans.length) {%>
+    <h3 style="color:red;">Błąd ładowania planów treningowych.</h3>
+<% } else {%>
 <section id="pricing" class="bg-faded pt90 pb50">
     <div class="container">
+        <% let cardClassWidth = (12 / locals.trainPlans.length); %>
+        <% if(cardClassWidth > 6){cardClassWidth = 6;} %>
+        <% if(cardClassWidth < 3){cardClassWidth = 3;} %>
+        <% const cardClass = "col-md-" + cardClassWidth; %>
         <div class="row">
-            <div class="col-md-6 ml-auto mr-auto text-center mb30">
-                <div class="section-title">
-                    <span class="section-subTitle">Pick a plan today. 14 days free trail.</span>
-                    <h3 class="mb0">Our pricing</h3>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4 mb40 wow fadeInUp" data-wow-delay=".1s">
-                <div class="pricing-card">
+        <% for(let i = 0; i < locals.trainPlans.length; i++) {%>
+            <% let plan = locals.trainPlans[i]; %>
+            <div class="<%- cardClass %> mb40 wow fadeInUp" data-wow-delay=".<%- i+1 %>s">
+                <div class="pricing-card <%- plan.isRecomended ? 'active':'' %>">
                     <header class="pricing-header clearfix">
                         <div class="float-right price">
-                            <sup>$ </sup>15/<sub>M</sub>
+                            <% if(plan.priceOld) {%>
+                            <span class='old-price'> <sup>$ </sup><strike><%- plan.priceOld %></strike>/<sub>M</sub> </span>
+                            <% } %>
+                            <sup>$ </sup><%- plan.price %>/<sub>M</sub>
                         </div>
-                        <div class="price-title">basic plan</div>
+                        <div class="price-title"><%- plan.name %></div>
                     </header>
                     <div class="pricing-features">
                         <ul class="list-unstyled">
+                            <% const features = (plan.description || '').split(/\n/); %>
+                            <% for(let k = 0; k < features.length; k++) {%>
                             <li>
-                                Free 15+ Templates
+                                <%- features[k] %>   
                             </li>
-                            <li>
-                                $53 Free Plugins
-                            </li>
-                            <li>
-                                Single user
-                            </li>
-                            <li>
-                                Free updates
-                            </li>
-                            <li>
-                                Free Support
-                            </li>
+                            <% } %>
                         </ul>                              
                     </div><!--pricing features-->
                     <footer class="pricing-footer text-center">
-                        <a href="#" class="btn btn-outline-info">Sign Up</a>
+                        <a href="#" class="btn btn-outline-info">Dodaj do koszyka</a>
                     </footer>
                 </div><!--/pricing card-->
             </div>
-            <div class="col-md-4 mb40 wow fadeInUp" data-wow-delay=".2s">
-                <div class="pricing-card active">
-                    <header class="pricing-header clearfix">
-                        <div class="float-right price">
-                            <sup>$ </sup>60/<sub>M</sub>
-                        </div>
-                        <div class="price-title">Pro plan</div>
-                    </header>
-                    <div class="pricing-features">
-                        <ul class="list-unstyled">
-                            <li>
-                                Free 15+ Templates
-                            </li>
-                            <li>
-                                $53 Free Plugins
-                            </li>
-                            <li>
-                                2+ user
-                            </li>
-                            <li>
-                                Free updates
-                            </li>
-                            <li>
-                                Free Support
-                            </li>
-                        </ul>                              
-                    </div><!--pricing features-->
-                    <footer class="pricing-footer text-center">
-                        <a href="#" class="btn btn-white-outline">Sign Up</a>
-                    </footer>
-                </div><!--/pricing card-->
-            </div>
-            <div class="col-md-4 mb40 wow fadeInUp" data-wow-delay=".3s">
-                <div class="pricing-card">
-                    <header class="pricing-header clearfix">
-                        <div class="float-right price">
-                            <sup>$ </sup>699/<sub>M</sub>
-                        </div>
-                        <div class="price-title">Extended plan</div>
-                    </header>
-                    <div class="pricing-features">
-                        <ul class="list-unstyled">
-                            <li>
-                                Free 15+ Templates
-                            </li>
-                            <li>
-                                $53 Free Plugins
-                            </li>
-                            <li>
-                                10+ users
-                            </li>
-                            <li>
-                                Free updates
-                            </li>
-                            <li>
-                                Free Support
-                            </li>
-                        </ul>                              
-                    </div><!--pricing features-->
-                    <footer class="pricing-footer text-center">
-                        <a href="#" class="btn btn-outline-info">Sign Up</a>
-                    </footer>
-                </div><!--/pricing card-->
-            </div>
+        <% } %>
         </div>
     </div>
 </section>
+<% } %>
 
 <div>
-    <div class="container pt60">
+    <div class="container pt60" id='feedPlans'>
         <div class="title-heading1 mb40">
             <h3>Plany dietetyczne i treningowe</h3>
         </div>           

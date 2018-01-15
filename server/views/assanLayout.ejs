@@ -93,13 +93,13 @@
                           <a class="nav-link" aria-expanded="false" href="/#galery">Galeria</a>
                       </li>
                       <li class="nav-item active">
-                          <a class="nav-link" aria-expanded="false" href="/#plans">Treningi</a>
+                          <a class="nav-link" aria-expanded="false" href="/#trainings" onclick="ScrollTo('trainings', event)">Treningi</a>
                       </li>
                       <li class="nav-item active">
-                          <a class="nav-link" aria-expanded="false" href="/#feed">Plany żywieniowe</a>
+                          <a class="nav-link" aria-expanded="false" href="/#feedPlans" onclick="ScrollTo('feedPlans', event)">Plany żywieniowe</a>
                       </li>
                       <li class="nav-item active">
-                          <a class="nav-link" aria-expanded="false" href="/#contact">Kontakt</a>
+                          <a class="nav-link" aria-expanded="false" href="/#contact" onclick="ScrollTo('contact', event)">Kontakt</a>
                       </li>
                       <% if(!locals.user) {%>
                       <li class="nav-item active">
@@ -131,7 +131,15 @@
       </nav>
 
       <%- body %>
-
+      <script type="text/javascript">
+        function ScrollTo(name, event) {
+          event.preventDefault();
+          $(document.body).animate({
+              'scrollTop':   $('#' + name).offset().top - 50
+          }, 1000);
+          return false;
+        }
+      </script>
       
       <footer class="footer pt90 bg-faded pb90">
             <div class="container text-center">
