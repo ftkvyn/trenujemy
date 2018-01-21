@@ -386,7 +386,12 @@
                         </ul>                              
                     </div><!--pricing features-->
                     <footer class="pricing-footer text-center">
-                        <a href="#" class="btn btn-outline-info">Dodaj do koszyka</a>
+                            
+                        <% if(locals.user) {%>
+                            <a class="btn btn-outline-info">Dodaj do koszyka</a>
+                        <% } else {%>
+                            <a href="/login?returnUrl=%2F%23trainings" class="btn btn-outline-info">Dodaj do koszyka</a>
+                        <% }%>
                     </footer>
                 </div><!--/pricing card-->
             </div>
@@ -451,7 +456,7 @@
     </div>
 </div>
 
-<div class="">
+<div class="" id='yourGoal'>
     <div class="container pt60">
         <div class="title-heading1 mb40">
             <h3>Jaki jest Twój cel?</h3>
@@ -566,7 +571,11 @@
 <div class="container pb30">
     <div class="row">
         <div class="col-lg-12">
-            <button type="submit" class="btn btn-primary btn-lg pull-right">Do koszyka</button>
+            <% if(locals.user) {%>
+                <button type="submit" class="btn btn-primary btn-lg pull-right">Do koszyka</button>
+            <% } else {%>
+                <a class="btn btn-primary btn-lg pull-right" href='/login?returnUrl=%2F%23yourGoal'>Do koszyka</a>
+            <% }%>
         </div>
     </div>
 </div>
