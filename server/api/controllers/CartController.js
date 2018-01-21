@@ -15,7 +15,7 @@ module.exports = {
 
 	removeItem: function (req, res){
 	    if(req.session.cart && req.session.cart.totalItems){
-	    	req.session.cart.totalItems ++;
+	    	req.session.cart.totalItems --;
 	    }	    
 	    res.redirect('/cart');
 	}

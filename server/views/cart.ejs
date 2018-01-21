@@ -5,7 +5,7 @@
             <!-- SLIDE  -->
             <li data-index="rs-3045" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off"  data-easein="Power4.easeInOut" data-easeout="Power4.easeInOut" data-title="Koszyk - podsumowanie" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="">
                 <!-- MAIN IMAGE -->
-                <img src="/images/foto/10.jpg"  alt=""  data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10" class="rev-slidebg" data-no-retina>
+                <img src="/images/foto/20.jpg"  alt=""  data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10" class="rev-slidebg" data-no-retina>
                 <!-- LAYERS -->
                 <!-- LAYER NR. 1 -->
                 <div class="tp-caption mainSlide-Title-Centered   tp-resizeme" 
@@ -33,24 +33,20 @@
 </div><!-- END REVOLUTION SLIDER -->
 <div class="container pb40 pt40">
     <h4 class="font300 mb30">
-        You have <%= locals.cart.totalItems %> items in your cart
+        Podsumowanie koszyka:
     </h4>
     <table class="table table-condensed table-responsive cart-table mb40">
         <thead>
             <tr>
-                <th></th>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
+                <th>Produkt</th>
+                <th>Cena</th>
+                <th>Ilość</th>
+                <th>Razem</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="product-image">
-                    <img src="images/shop/p1.jpg" alt="" width="50">
-                </td>
                 <td class="product-name"><a href="#">Men's Backpack</a></td>
                 <td class="product-price">$299.00</td>
                 <td class="product-quantity">
@@ -61,39 +57,10 @@
                 </td>
                 <td class="product-delete">
                     <form action="/removeItemFromCart" method="POST">
-                        <button type="submit" 
-                        data-toggle="tooltip" 
-                        data-placement="top" title="" data-original-title="Remove this item"><i class="fa fa-times"></i></button>
+                        <a onclick="submitForm(event)" 
+                        href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Usuń produkt z koszyku"><i class="fa fa-times"></i></a>
                     </form>
                 </td>
-            </tr>
-            <tr>
-                <td class="product-image">
-                    <img src="images/shop/p2.jpg" alt="" width="50">
-                </td>
-                <td class="product-name"><a href="#">Cream T-shirt</a></td>
-                <td class="product-price">$299.00</td>
-                <td class="product-quantity">
-                    <input type="number" value="1" min="1" class="fl qty-text" name="quantity">
-                </td>
-                <td class="product-total">
-                    $299.00
-                </td>
-                <td class="product-delete"><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove this item"><i class="fa fa-times"></i></a></td>
-            </tr>
-            <tr>
-                <td class="product-image">
-                    <img src="images/shop/p3.jpg" alt="" width="50">
-                </td>
-                <td class="product-name"><a href="#">Men's Watch</a></td>
-                <td class="product-price">$599.00</td>
-                <td class="product-quantity">
-                    <input type="number" value="1" min="1" class="fl qty-text" name="quantity">
-                </td>
-                <td class="product-total">
-                    $599.00
-                </td>
-                <td class="product-delete"><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove this item"><i class="fa fa-times"></i></a></td>
             </tr>
         </tbody>
     </table>
@@ -104,9 +71,9 @@
         </div>
          <div class="col-sm-6 text-right">
              <div class="pb20">
-                 <h3><small>Your Cart Total - </small> $249</h3>
+                 <h3><small>Razem w koszyku - </small> $249</h3>
              </div>
-            <a href="/cart" class="btn btn-primary">Checkout</a>
+            <a href="/cart" class="btn btn-primary">Płacę</a>
         </div>
     </div>
 </div>
@@ -136,6 +103,10 @@
     /**Hero  script**/
     var tpj = jQuery;
 
+    var submitForm = function(event){
+        $(event.target).closest('form').submit();
+    }
+
     var revapi1078;
     tpj(document).ready(function () {
         if (tpj("#rev_slider_1078_1").revolution == undefined) {
@@ -161,7 +132,7 @@
                 responsiveLevels: [1240, 1024, 778, 480],
                 visibilityLevels: [1240, 1024, 778, 480],
                 gridwidth: [1140, 992, 700, 465],
-                gridheight: [600, 600, 500, 480],
+                gridheight: [300, 300, 200, 140],
                 lazyType: "none",
                 parallax: {
                     type: "mouse",
