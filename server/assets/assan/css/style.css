@@ -4248,3 +4248,7 @@ Footer
   font-size: 80%;
   color:#ddd;
 }
+
+.pricing-features ul li.empty-point:before{
+  content: "";
+}

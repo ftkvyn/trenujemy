@@ -348,6 +348,15 @@
         <% if(cardClassWidth < 3){cardClassWidth = 3;} %>
         <% const cardClass = "col-md-" + cardClassWidth; %>
         <div class="row">
+        <% 
+            let maxPointsCount = 0;
+            for(let i = 0; i < locals.trainPlans.length; i++) {
+                const pointsCount = (locals.trainPlans[i].description || '').split(/\n/).length;
+                if(maxPointsCount < pointsCount){
+                    maxPointsCount = pointsCount;
+                }
+            }
+        %>
         <% for(let i = 0; i < locals.trainPlans.length; i++) {%>
             <% let plan = locals.trainPlans[i]; %>
             <div class="<%- cardClass %> mb40 wow fadeInUp" data-wow-delay=".<%- i+1 %>s">
@@ -367,6 +376,11 @@
                             <% for(let k = 0; k < features.length; k++) {%>
                             <li>
                                 <%- features[k] %>   
+                            </li>
+                            <% } %>
+                            <% for(let k = 0; k < maxPointsCount - features.length; k++) {%>
+                            <li class='empty-point'>
+                                &nbsp;
                             </li>
                             <% } %>
                         </ul>                              
