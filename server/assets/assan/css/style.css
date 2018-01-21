@@ -4254,29 +4254,31 @@ Footer
 }
 
 .feed-plans{
-    background: #d6dee1;
-    padding: 40px;
+    background: #4683df;
+    padding: 20px 40px;
     margin-bottom: 40px;
+    border-radius: 7px;
 }
 
 .feed-plans .feed-header{
-  color: black;
-  font-size: 120%;
+  color: white;
+  font-weight: bold;
+  font-size: 140%;
   margin-bottom: 10px;
 }
 
 .feed-plans .feed-item{
-  background: #edf6f5;
+  background: white;
   margin-bottom: 10px;
   padding-top: 15px;
 }
 
 .feed-plans .feed-item .feed-title{
-  color: #1c61ae;
+  color: #0d4e96;
 }
 
 .feed-plans .feed-item .feed-description{
-  color: #1c61ae;
+  color: #0d4e96;
 }
 
 .feed-plans .feed-item .custom-control-indicator{
