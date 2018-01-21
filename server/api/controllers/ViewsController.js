@@ -17,7 +17,8 @@ module.exports = {
 		.catch(function(err){
 			console.error(err);
 			return res.view('homepage', {locals: {
-				user: req.session.user, 
+				user: req.session.user,
+				cart: req.session.cart, 
 				trainPlans: [],
 				feedPlans: [],
 				feedPlanTarget: []
@@ -40,6 +41,7 @@ module.exports = {
 			}
 			return res.view('homepage', {locals: {
 				user: req.session.user, 
+				cart: req.session.cart,
 				trainPlans: data[0],
 				feedPlans: plans,
 				feedPlanTarget: data[2]
@@ -64,7 +66,12 @@ module.exports = {
 	},
 
 	cart: function(req,res){
-		return res.view('cart', {locals: {user: req.session.user}});	
+		if(!req.session.cart){
+	    	req.session.cart = {
+	    		totalItems:0
+	    	};
+	    }
+		return res.view('cart', {locals: {user: req.session.user, cart: req.session.cart}});	
 	},
 
 	login: function(req,res){

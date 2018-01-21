@@ -61,6 +61,7 @@ module.exports = {
 
 	logout: function (req, res){
 	    req.session.user = null;
+	    req.session.cart = {};
 	    res.redirect('/');
 	},
 

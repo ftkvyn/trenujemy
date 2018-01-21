@@ -52,6 +52,10 @@ module.exports.policies = {
     '*':true
   },
 
+  CartController:{
+    '*':'sessionAuthRedirectToLogin',
+  },
+
   ViewsController:{
     '*' : true,
     'dashboard' : 'sessionAuthRedirectToLogin',

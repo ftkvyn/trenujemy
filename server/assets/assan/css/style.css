@@ -4303,3 +4303,10 @@ Footer
 .feed-prices{
 
 }
+.cart-top{
+  width: 100%;
+  height: 60px;
+  background: #444444;
+  display: block;overflow: hidden;
+  margin-bottom: 30px;
+}
