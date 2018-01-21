@@ -64,7 +64,7 @@ class FeedPlansPrice extends React.Component {
         
         let fieldName = event.target.name;
         let fieldVal = event.target.value;
-        if((typeof event.target.type) != 'text'){
+        if(fieldName != 'name'){
           fieldVal = event.target.checked;
         }
         targetItem[fieldName] = fieldVal;
@@ -153,7 +153,7 @@ class FeedPlansPrice extends React.Component {
 
     render() {      
         const months = [1,2,3,6]; 
-        const monthWords = ['mięsiąc', 'miesiący', 'miesiący', 'miesięcy']; 
+        const monthWords = ['miesiąc', 'miesiący', 'miesiący', 'miesięcy']; 
         let plansMapped = [];
         if(this.state.plans.length){
           plansMapped = months.map((month, num) => {

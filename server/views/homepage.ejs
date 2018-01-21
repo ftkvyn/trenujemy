@@ -451,6 +451,126 @@
     </div>
 </div>
 
+<div class="">
+    <div class="container pt60">
+        <div class="title-heading1 mb40">
+            <h3>Jaki jest Twój cel?</h3>
+        </div>           
+    </div>
+</div>
+
+<div class="container">
+    <div class="row pb60">
+        <% let targetClassWidth = (12 / locals.feedPlanTarget.length); %>
+        <% if(targetClassWidth < 2){targetClassWidth = 2;} %>
+        <% const targetCardClass = "col-md-" + targetClassWidth; %>
+        <% for(let i = 0; i < locals.feedPlanTarget.length; i++) {%>
+            <% let target = locals.feedPlanTarget[i]; %>
+            <div class="<%- targetCardClass %> wow zoomInUp" data-wow-delay="<%- (i+1)*200 %>ms" data-wow-duration=".4s">
+                <div>
+                    <label class="custom-control custom-radio">
+                        <input name="target" type="radio" value="<%- target.id %>" 
+                        <% if(i === 0) {%>
+                            checked='checked'
+                        <% } %>
+                        class="custom-control-input">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description"><%- target.name %></span>
+                    </label>
+                </div>
+            </div><!--/col-->
+        <% } %>
+    </div>
+</div>
+
+
+<div class="container feed-plans">
+    <div class="row feed-header">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <label>Dieta + plan treningowy</label>
+        </div>
+        <div class="col-md-4">
+            <label>Dieta + plan treningowy + bieżąca codzienna konsultacja</label>
+        </div>
+    </div>
+
+    <% for(let i = 0; i < locals.feedPlans.length; i++) {%>
+        <% let plan = locals.feedPlans[i]; let word = 'miesięcy'; %>
+        <% if(plan.months < 6){word = 'miesiące';} %>
+        <% if(plan.months == 1){word = 'miesiąc';} %>        
+        <div class="row feed-item">
+            <div class="col-md-4 feed-cell">
+                <h3 class='feed-title'><%- plan.months %> <%- word %></h3>
+                <p class="feed-description">Abonament na <%- plan.months %> <%- word %></p>
+            </div>
+            <div class="col-md-4 feed-cell">
+                <div class='row'>
+                    <div class="feed-checkbox">
+                        <label class="custom-control custom-radio">
+                            <input name="feedPlan" type="radio" value="<%- plan.noConsult.id %>" 
+                            <% if(i === 0) {%>
+                                checked='checked'
+                            <% } %>
+                            class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                        </label>
+                    </div>
+                    <div class="feed-prices">
+                        <div class="row">
+                            <div class="col-md-12 feed-old-price" style="min-height: 25px;">
+                                <% if(plan.noConsult.priceOld){ %>
+                                    <strike><%- plan.noConsult.priceOld %> zł</strike>
+                                <% } %>
+                            </div>
+                            <div class="col-md-12 feed-price"><%- plan.noConsult.price %> zł</div>
+                            <div class="col-md-12 feed-monthly" style="min-height: 25px;">
+                                <% if(plan.months > 1){ %>
+                                    <%- (plan.noConsult.price / plan.months).toFixed(2) %> zł/mc
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 feed-cell">
+                <div class='row'>
+                    <div class="feed-checkbox">
+                        <label class="custom-control custom-radio">
+                            <input name="feedPlan" type="radio" value="<%- plan.consult.id %>" 
+                            class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                        </label>
+                    </div>
+                    <div class="feed-prices">
+                        <div class="row">
+                            <div class="col-md-12 feed-old-price" style="min-height: 25px;">
+                                <% if(plan.consult.priceOld){ %>
+                                    <strike><%- plan.consult.priceOld %> zł</strike>
+                                <% } %>
+                            </div>
+                            <div class="col-md-12 feed-price"><%- plan.consult.price %> zł</div>
+                            <div class="col-md-12 feed-monthly" style="min-height: 25px;">
+                                <% if(plan.months > 1){ %>
+                                    <%- (plan.consult.price / plan.months).toFixed(2) %> zł/mc
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>
+
+<div class="container pb30">
+    <div class="row">
+        <div class="col-lg-12">
+            <button type="submit" class="btn btn-primary btn-lg pull-right">Do koszyka</button>
+        </div>
+    </div>
+</div>
+
 <div class="bg-parallax parallax-overlay" data-jarallax='{"speed": 0.2 }' style='background-image: url("/images/foto/6.jpg")'>
     <div class="container pt90 pb60">
         <div class="row align-items-center">

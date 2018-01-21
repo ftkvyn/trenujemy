@@ -5,15 +5,46 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+const Q = require('q');
+
 module.exports = {
 	home: function(req,res){
-		TrainPlan.find({isActive: true})
-		.exec(function(err, trainPlans){
-			if(err){
-				console.error(err);
+		let qs = [];
+		qs.push(TrainPlan.find({isActive: true}));
+		qs.push(FeedPlan.find({isVisible: true}));
+		qs.push(FeedPlanTarget.find({isVisible: true}));
+		Q.all(qs)
+		.catch(function(err){
+			console.error(err);
+			return res.view('homepage', {locals: {
+				user: req.session.user, 
+				trainPlans: [],
+				feedPlans: [],
+				feedPlanTarget: []
+			}});	
+		})
+		.done(function(data){
+			const rawPlans =  data[1];
+			let plans = [];
+			for(let i = 0; i < rawPlans.length; i++){
+				let plan = plans.find( (item) => item.months == rawPlans[i].months );
+				if(!plan){
+					plan = rawPlans[i];
+					plans.push(plan);
+				}
+				if(rawPlans[i].isWithConsulting){
+					plan.consult = rawPlans[i];
+				}else{
+					plan.noConsult = rawPlans[i];
+				}
 			}
-			return res.view('homepage', {locals: {user: req.session.user, trainPlans: trainPlans}});	
-		});		
+			return res.view('homepage', {locals: {
+				user: req.session.user, 
+				trainPlans: data[0],
+				feedPlans: plans,
+				feedPlanTarget: data[2]
+			}});	
+		});	
 	},
 
 	about: function(req,res){

@@ -28,6 +28,16 @@ module.exports = {
   		price:{
   			type:'integer',
   		},
+  },
+
+  beforeValidate: function (values, cb) {
+    if(typeof values.priceOld == 'undefined' || values.priceOld === '' || isNaN(values.priceOld)){
+      values.priceOld = null;
+    }
+    if(typeof values.price == 'undefined' || values.price === '' || isNaN(values.price)){
+      values.price = null;
+    }
+    cb();
   }
 };
 

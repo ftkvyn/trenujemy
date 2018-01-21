@@ -4252,3 +4252,54 @@ Footer
 .pricing-features ul li.empty-point:before{
   content: "";
 }
+
+.feed-plans{
+    background: #d6dee1;
+    padding: 40px;
+    margin-bottom: 40px;
+}
+
+.feed-plans .feed-header{
+  color: black;
+  font-size: 120%;
+  margin-bottom: 10px;
+}
+
+.feed-plans .feed-item{
+  background: #edf6f5;
+  margin-bottom: 10px;
+  padding-top: 15px;
+}
+
+.feed-plans .feed-item .feed-title{
+  color: #1c61ae;
+}
+
+.feed-plans .feed-item .feed-description{
+  color: #1c61ae;
+}
+
+.feed-plans .feed-item .custom-control-indicator{
+    width: 2rem;
+    height: 2rem;
+}
+.custom-control{
+  cursor: pointer;
+}
+.feed-plans .feed-item .custom-control{
+    min-height: 3rem;
+    padding-left: 3rem;
+    margin: 1rem;
+}
+
+.feed-plans .feed-item .feed-price{
+    color: black;
+    font-weight: bold;
+    font-size: 200%;
+}
+.feed-checkbox{
+
+}
+.feed-prices{
+
+}
