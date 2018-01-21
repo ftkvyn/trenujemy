@@ -68,10 +68,46 @@ module.exports = {
 	cart: function(req,res){
 		if(!req.session.cart){
 	    	req.session.cart = {
-	    		totalItems:0
+	    		totalItems:0,
+	    		trainings: []
 	    	};
 	    }
-		return res.view('cart', {locals: {user: req.session.user, cart: req.session.cart}});	
+	    let qs = [];
+	    qs.push(TrainPlan.find({isActive: true, id: req.session.cart.trainings || []}));
+		if(req.session.cart.feedPlan){
+			qs.push(FeedPlan.findOne({isVisible: true, id: req.session.cart.feedPlan}));
+			qs.push(FeedPlanTarget.findOne({isVisible: true, id: req.session.cart.target}));
+		}
+		Q.all(qs)
+		.catch(function(err){
+			console.error(err);
+			return res.view('cart', {locals: {
+				user: req.session.user, 
+				cartMessage: "Błąd przy ładowaniu koszyka",
+				cart: req.session.cart}});
+		})
+		.done(function(data){
+			let cartItems = [];
+			const feedPlan = data[1];
+			if(feedPlan){
+				feedPlan.target = data[2];
+				feedPlan.isFeedPlan = true;
+				cartItems.push(feedPlan);
+			}
+			const trainings = [];
+			for(var i = 0; i < req.session.cart.trainings.length; i++){
+				const training = data[0].find((item) => item.id == req.session.cart.trainings[i]);
+				cartItems.push(training);
+			}
+			cartItems.push(...trainings);
+			const cartMessage = req.session.cartMessage;
+			req.session.cartMessage = undefined;
+			return res.view('cart', {locals: {
+				user: req.session.user, 
+				cartMessage: cartMessage,
+				cartItems: cartItems,
+				cart: req.session.cart}});
+		});		
 	},
 
 	login: function(req,res){

@@ -341,7 +341,6 @@
 <% if(!locals.trainPlans || !locals.trainPlans.length) {%>
     <h3 style="color:red;">Błąd ładowania planów treningowych.</h3>
 <% } else {%>
-<form action="/addItemToCart" method="POST">
     <section id="pricing" class="bg-faded pt90 pb50">
         <div class="container">
             <% let cardClassWidth = (12 / locals.trainPlans.length); %>
@@ -361,47 +360,49 @@
             <% for(let i = 0; i < locals.trainPlans.length; i++) {%>
                 <% let plan = locals.trainPlans[i]; %>
                 <div class="<%- cardClass %> mb40 wow fadeInUp" data-wow-delay=".<%- i+1 %>s">
-                    <input type="hidden" name="plan" value="<%- plan.id %>">
-                    <div class="pricing-card <%- plan.isRecomended ? 'active':'' %>">
-                        <header class="pricing-header clearfix">
-                            <div class="float-right price">
-                                <% if(plan.priceOld) {%>
-                                <span class='old-price'> <sup>$ </sup><strike><%- plan.priceOld %></strike>/<sub>M</sub> </span>
-                                <% } %>
-                                <sup>$ </sup><%- plan.price %>/<sub>M</sub>
-                            </div>
-                            <div class="price-title"><%- plan.name %></div>
-                        </header>
-                        <div class="pricing-features">
-                            <ul class="list-unstyled">
-                                <% const features = (plan.description || '').split(/\n/); %>
-                                <% for(let k = 0; k < features.length; k++) {%>
-                                <li>
-                                    <%- features[k] %>   
-                                </li>
-                                <% } %>
-                                <% for(let k = 0; k < maxPointsCount - features.length; k++) {%>
-                                <li class='empty-point'>
-                                    &nbsp;
-                                </li>
-                                <% } %>
-                            </ul>                              
-                        </div><!--pricing features-->
-                        <footer class="pricing-footer text-center">
-                                
-                            <% if(locals.user) {%>
-                                <button type="submit" class="btn btn-outline-info">Dodaj do koszyka</button>
-                            <% } else {%>
-                                <a href="/login?returnUrl=%2F%23trainings" class="btn btn-outline-info">Dodaj do koszyka</a>
-                            <% }%>
-                        </footer>
-                    </div><!--/pricing card-->
+                    <form action="/addItemToCart" method="POST">
+                        <input type="hidden" name="trainingPlan" value="<%- plan.id %>">
+                        <div class="pricing-card <%- plan.isRecomended ? 'active':'' %>">
+                            <header class="pricing-header clearfix">
+                                <div class="float-right price">
+                                    <% if(plan.priceOld) {%>
+                                    <span class='old-price'><strike><%- plan.priceOld %></strike> <sup>zł</sup>/<sub>M</sub> </span>
+                                    <% } %>
+                                    <%- plan.price %> <sup>zł</sup>/<sub>M</sub>
+                                </div>
+                                <div class="price-title"><%- plan.name %></div>
+                            </header>
+                            <div class="pricing-features">
+                                <ul class="list-unstyled">
+                                    <% const features = (plan.description || '').split(/\n/); %>
+                                    <% for(let k = 0; k < features.length; k++) {%>
+                                    <li>
+                                        <%- features[k] %>   
+                                    </li>
+                                    <% } %>
+                                    <% for(let k = 0; k < maxPointsCount - features.length; k++) {%>
+                                    <li class='empty-point'>
+                                        &nbsp;
+                                    </li>
+                                    <% } %>
+                                </ul>                              
+                            </div><!--pricing features-->
+                            <footer class="pricing-footer text-center">
+                                    
+                                <% if(locals.user) {%>
+                                    <button type="submit" class="btn btn-outline-info">Dodaj do koszyka</button>
+                                <% } else {%>
+                                    <a href="/login?returnUrl=%2F%23trainings" class="btn btn-outline-info">Dodaj do koszyka</a>
+                                <% }%>
+                            </footer>
+                        </div><!--/pricing card-->
+                    </form>
                 </div>
             <% } %>
             </div>
         </div>
     </section>
-</form>
+
 <% } %>
 
 <div>

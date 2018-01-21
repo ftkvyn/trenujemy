@@ -83,11 +83,13 @@
       <%- body %>
       <script type="text/javascript">
         function ScrollTo(name, event) {
-          event.preventDefault();
-          $(document.body).animate({
-              'scrollTop':   $('#' + name).offset().top - 50
-          }, 1000);
-          return false;
+          if($('#' + name).length){
+            event.preventDefault();
+            $(document.body).animate({
+                'scrollTop':   $('#' + name).offset().top - 50
+            }, 1000);
+            return false;
+          }
         }
       </script>
       

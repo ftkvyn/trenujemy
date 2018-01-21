@@ -32,6 +32,11 @@
         <div class="tp-bannertimer" style="height: 7px; background-color: rgba(255, 255, 255, 0.25);"></div>  </div>
 </div><!-- END REVOLUTION SLIDER -->
 <div class="container pb40 pt40">
+    <% if(locals.cartMessage){%>
+        <div class="alert alert-danger" role="alert">
+            <%= locals.cartMessage %>
+        </div>
+    <%}%>
     <h4 class="font300 mb30">
         Podsumowanie koszyka:
     </h4>
@@ -46,22 +51,46 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="product-name"><a href="#">Men's Backpack</a></td>
-                <td class="product-price">$299.00</td>
-                <td class="product-quantity">
-                    <input type="number" value="1" min="1" class="fl qty-text" name="quantity">
-                </td>
-                <td class="product-total">
-                    $299.00
-                </td>
-                <td class="product-delete">
-                    <form action="/removeItemFromCart" method="POST">
-                        <a onclick="submitForm(event)" 
-                        href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Usuń produkt z koszyku"><i class="fa fa-times"></i></a>
-                    </form>
-                </td>
-            </tr>
+            <% let sum = 0; %>            
+            <% for(let i = 0; i < locals.cartItems.length; i++) {%>
+                <% let item = locals.cartItems[i]; sum += item.price;%>            
+                <tr>
+                    <% if(item.isFeedPlan){%>
+                        <% let word = 'miesięcy'; %>
+                        <% if(item.months < 6){word = 'miesiące';} %>
+                        <% if(item.months == 1){word = 'miesiąc';} %>  
+                        <td class="product-name">
+                            Plan żywieniowy, abonament na <%= item.months %> <%= word %>
+                            <% if(item.isWithConsulting){%>
+                               <br/> <b>z codzienną konsultacją</b>
+                            <%}%>
+                            <br/>Cel: <b> <%= item.target.name %> </b>                            
+                        </td>
+                    <% }else{%>
+                        <td class="product-name">
+                            <%= item.name %>
+                        </td>
+                    <% } %>
+                    <td class="product-price"><%= item.price %> zł</td>
+                    <td class="product-quantity">
+                        1
+                    </td>
+                    <td class="product-total">
+                        <%= item.price %> zł
+                    </td>
+                    <td class="product-delete">
+                        <form action="/removeItemFromCart" method="POST">
+                            <% if(item.isFeedPlan){%>
+                                <input type="hidden" name="feedPlan" value="<%- item.id %>">
+                            <% }else{%>
+                                <input type="hidden" name="trainingPlan" value="<%- item.id %>">
+                            <% } %>
+                            <a onclick="submitForm(event)" 
+                            href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Usuń produkt z koszyku"><i class="fa fa-times"></i></a>
+                        </form>
+                    </td>
+                </tr>
+            <% } %>
         </tbody>
     </table>
     <hr class="mb40" />
@@ -71,7 +100,7 @@
         </div>
          <div class="col-sm-6 text-right">
              <div class="pb20">
-                 <h3><small>Razem w koszyku - </small> $249</h3>
+                 <h3><small>Razem w koszyku - </small> <%= sum %> zł</h3>
              </div>
             <a href="/cart" class="btn btn-primary">Płacę</a>
         </div>
