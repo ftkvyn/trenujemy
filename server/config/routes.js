@@ -48,6 +48,8 @@ module.exports.routes = {
 
   'post /removeItemFromCart': 'CartController.removeItem',
 
+  '/payment': 'CartController.payment',
+
   '/login': 'ViewsController.login',
 
   '/recoverPassword': 'ViewsController.recoverPassword',
