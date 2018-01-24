@@ -44,11 +44,15 @@ module.exports.routes = {
 
   '/cart': 'ViewsController.cart',
 
+  '/paymentEnd': 'ViewsController.paymentEnd',  
+
   'post /addItemToCart': 'CartController.addItem',
 
   'post /removeItemFromCart': 'CartController.removeItem',
 
   '/payment': 'CartController.payment',
+
+  '/verify': 'CartController.verify',
 
   '/login': 'ViewsController.login',
 
