@@ -37,6 +37,13 @@
             <%= locals.cartMessage %>
         </div>
     <%}%>
+
+    <% if(locals.cartSuccessMessage){%>
+        <div class="alert alert-success" role="alert">
+            <%= locals.cartSuccessMessage %>
+        </div>
+    <%}%>
+    
     <h4 class="font300 mb30">
         Podsumowanie koszyka:
     </h4>

@@ -3,10 +3,11 @@ const Q = require('q');
 const request = require('request');
 const md5 = require('md5');
 const uuidv4 = require('uuid/v4');
+const queryString = require('query-string');
 
-const pos_id = process.env.TRENUJEMY_POS_ID;
-const merchant_id = process.env.TRENUJEMY_MERCHANT_ID;
-const crc = process.env.TRENUJEMY_CRC;
+const pos_id = +process.env.TRENUJEMY_POS_ID;
+const merchant_id = +process.env.TRENUJEMY_MERCHANT_ID;
+const crc = 'a9738dc05e1c8aad';//process.env.TRENUJEMY_CRC;
 const payment_url = process.env.TRENUJEMY_ENV === 'DEV' ?
  process.env.TRENUJEMY_SANDBOX_PAYMENT_URL :
  process.env.TRENUJEMY_PAYMENT_URL;
@@ -102,13 +103,13 @@ module.exports = {
 				    	p24_client: user.name,
 				    	p24_country: 'PL',
 				    	p24_language: 'pl',
-				    	p24_url_return: process.env.TRENUJEMY_ROOT_HOST + '/paymentEnd',
-				    	p24_url_status: process.env.TRENUJEMY_ROOT_HOST + '/verify',
+				    	p24_url_return: process.env.TRENUJEMY_ROOT_HOST + 'paymentEnd',
+				    	p24_url_status: process.env.TRENUJEMY_ROOT_HOST + 'verify',
 				    	p24_api_version: '3.2'				    	
 				    	//p24_sign: md5Hash
 					};
 
-					for(let i = 0, i < cartItems.length; i++){
+					for(let i = 0; i < cartItems.length; i++){
 						let item = cartItems[i];
 						if(item.isFeedPlan){
 							let word = 'miesięcy';
@@ -127,30 +128,36 @@ module.exports = {
 					}
 
 					const sign = `${paymentData.p24_session_id}|${paymentData.p24_merchant_id}|${paymentData.p24_amount}|${paymentData.p24_currency}|${crc}`;
+					console.log('sign = ' + sign);
 					const md5Hash = md5(sign);
 					paymentData.p24_sign = md5Hash;
 
 					console.log("====== Requesting przelewy 24 ======");
 					console.log(paymentData);
-					cartService.initCart(req, true);
-
+					
 					let postOptions = {  
 					    url: payment_url + '/trnRegister',
 					    form: paymentData
 					};
 
-					request.post(options, function(err, response, body) {  
+					request.post(postOptions, function(err, response, body) {  
 						if(err){
 							console.error(err);
 							req.session.cartMessage = 'Błąd płatności';
 							return res.redirect('/cart');
 						}
+						cartService.initCart(req, true);
 						console.log("====== Przelewy 24 response ======");
 					    console.log(body);
-					    if(body.token){
-						    return res.redirect(payment_url + '/trnRequest/' + body.token);
+					    const bodyData = queryString.parse(body);
+					    if(bodyData.token){
+						    return res.redirect(payment_url + '/trnRequest/' + bodyData.token);
 						}else{
-							console.error(body.errorMessage);
+							console.error(bodyData.errorMessage);
+							Transaction.update({id: transaction.id}, {status: 'Payment error', errorMessage: bodyData.errorMessage})
+							.exec(function(){
+								//Do nothing.
+							});
 							req.session.cartMessage = 'Błąd płatności';
 							return res.redirect('/cart');
 						}
@@ -194,17 +201,18 @@ module.exports = {
 			    form: verifyData
 			};
 
-			request.post(options, function(err, response, body) {  
+			request.post(postOptions, function(err, response, body) {  
 				if(err){
 					console.error(err);
 					return res.badRequest();
 				}
 				console.log("====== Przelewy verify 24 response ======");
 			    console.log(body);
-			    if(!body.errorMessage){
+			    const bodyData = queryString.parse(body);
+			    if(!bodyData.errorMessage){
 				    return res.send('Ok');
 				}else{
-					console.error(body.errorMessage);
+					console.error(bodyData.errorMessage);
 					return res.badRequest();
 				}
 			}); 

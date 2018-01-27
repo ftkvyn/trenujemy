@@ -89,10 +89,10 @@ module.exports = {
 	paymentEnd: function(req,res){
 		return res.view('cart', {locals: {
 				user: req.session.user, 
-				cartMessage: "Płatność w trakcie",
+				cartSuccessMessage: "Dziękujemy za dokonanie zakupu. Zaraz po zaksięgowaniu Twojej wpłaty otrzymasz dostęp do panelu klienta",
 				cartItems: [],
 				cart: req.session.cart}});
-	}
+	},
 
 	login: function(req,res){
 		if(req.query.returnUrl){
