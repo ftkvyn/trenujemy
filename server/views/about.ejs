@@ -123,6 +123,56 @@
         </div>
 </div>
 
+<div class="bg-faded">
+    <div class="container pt60">
+        <div class="title-heading1 mb40">
+            <h3>Oferta</h3>
+        </div>   
+
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ml-auto mb30 text-center">
+                <p class="lead text-black text-center" style="color:black;">
+                    Trening personalny na siłowni
+                </p>
+                <a href="/#trainings" class="btn btn-primary btn-lg">Zamów</a>
+            </div>  
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ml-auto mb30 text-center">
+                <p class="lead text-black text-center" style="color:black;">
+                    Plany dietetyczne i treningowe
+                </p>
+                <a href="/#feedPlans" class="btn btn-primary btn-lg">Zamów</a>
+            </div>        
+        </div>
+    </div>
+</div>
+
+
+<div class='pt90 pb90 clearfix' id='gallery'>
+    <div class='container gallery-row clearfix text-center'>
+        <div class="title-heading1 mb40">
+            <h3>Galeria</h3>
+        </div>   
+        <a href='/images/foto/14.jpg'>
+            <img src='/images/foto/14.jpg' alt='' class='img-fluid'>
+        </a>
+        <a href='/images/foto/15.jpg'>
+            <img src='/images/foto/15.jpg' alt='' class='img-fluid'>
+        </a>
+        <a href='/images/foto/16.jpg'>
+            <img src='/images/foto/16.jpg' alt='' class='img-fluid'>
+        </a>
+        <a href='/images/foto/17.jpg'>
+            <img src='/images/foto/17.jpg' alt='' class='img-fluid'>
+        </a>
+        <a href='/images/foto/18.jpg'>
+            <img src='/images/foto/18.jpg' alt='' class='img-fluid'>
+        </a>
+        <a href='/images/foto/19.jpg'>
+            <img src='/images/foto/19.jpg' alt='' class='img-fluid'>
+        </a>
+    </div>
+</div>
 
 <% include ./partials/contact %>
 
@@ -200,5 +250,24 @@
                 }
             });
         }
+
+        $('.gallery-row').each(function () {
+            $(this).magnificPopup({
+                delegate: 'a',
+                type: 'image',
+                mainClass: 'mfp-with-zoom',
+                gallery: {
+                    enabled: true
+                },
+                zoom: {
+                    enabled: true,
+                    duration: 300,
+                    easing: 'ease-in-out',
+                    opener: function (openerElement) {
+                        return openerElement.is('img') ? openerElement : openerElement.find('img');
+                    }
+                }
+            });
+        });
     }); 
 </script> 

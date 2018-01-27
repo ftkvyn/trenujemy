@@ -1,5 +1,5 @@
 const helper = require('sendgrid').mail;
-const from_email = new helper.Email(process.env.TRENUJEMY_FROM_EMAIL;
+const from_email = new helper.Email(process.env.TRENUJEMY_FROM_EMAIL);
 const rootHost = process.env.TRENUJEMY_ROOT_HOST;
 const contactEmail = process.env.TRENUJEMY_CONTACT_EMAIL;
 const fs = require('fs');

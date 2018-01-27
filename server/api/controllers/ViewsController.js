@@ -57,8 +57,27 @@ module.exports = {
 		return res.view('history', {locals: {user: req.session.user}});	
 	},
 
-	training: function(req,res){
-		return res.view('training', {locals: {user: req.session.user}});	
+	trainings: function(req,res){
+		let qs = [];
+		qs.push(TrainPlaces.find({}));
+		qs.push(TrainTimes.find({}));
+		Q.all(qs)
+		.catch(function(err){
+			console.error(err);
+			return res.view('training', {locals: {
+				user: req.session.user,
+				places: [],
+				times: []
+			}});	
+		})
+		.done(function(data){
+			return res.view('training', {locals: {
+				user: req.session.user,
+				places: data[0],
+				times: data[1]
+			}});	
+		});	
+			
 	},
 
 	plans: function(req,res){
