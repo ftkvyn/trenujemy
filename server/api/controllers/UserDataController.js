@@ -1,15 +1,28 @@
+const Q = require('q');
+
 module.exports = {
 	getUserData: function(req,res){
 		var model = req.session.user;
 		if(!model){
 			return res.json({});
 		}
-		User.findOne({id: model.id})
-		.exec(function(err, user){
+		let qs = [];
+
+		qs.push(User.findOne({id: model.id}));
+		qs.push(FeedPlanPurchase.find({user: model.id, isActive: true}));
+		qs.push(TrainPlanPurchase.find({user: model.id, isActive: true}));
+
+		Q.all(qs)
+		.catch(function(err){
 			if(err){
 				console.error(err);
 				return res.badRequest(err);
 			}
+		})
+		.done(function(data){
+			const user = data[0];
+			const feedPlans = data[1];
+			const trainPlans = data[2];
 			delete user.password;
 			delete user.activationCode;
 			delete user.passwordRecoveryKey;
@@ -23,17 +36,41 @@ module.exports = {
 			}
 
 			if(user.role != 'trainer'){
-				return res.json(user);	
+				return res.json({user: user, feedPlans: feedPlans, trainPlans: trainPlans});	
 			}else{
 				TrainerInfo.findOrCreate({user: user.id}, {user: user.id})
 				.exec(function(err, info){
 					if(!err && info){
 						user.invoiceInfo = info.invoiceInfo;
-						return res.json(user);	
+						return res.json({user: user});	
 					}
 				});
 			}			
 		});
+	},
+
+	getUserPurchases: function(req, res){
+		var userId = req.params.userId || req.session.user.id;
+
+		let qs = [];
+
+		qs.push(FeedPlanPurchase.find({user: model.id}).populate('plan').populate('target'));
+		qs.push(TrainPlanPurchase.find({user: model.id}).populate('plan'));
+
+		Q.all(qs)
+		.catch(function(err){
+			if(err){
+				console.error(err);
+				return res.badRequest(err);
+			}
+		})
+		.done(function(data){
+			const feedPlans = data[0];
+			const trainPlans = data[1];
+
+			return res.json({feedPlans: feedPlans, trainPlans: trainPlans});		
+		});
+
 	},
 
 	saveUserData:function(req, res){

@@ -2,6 +2,7 @@ import React from 'react';
 import ProfileData from './ProfileData';
 import { Router, Route, Link, History, withRouter } from 'react-router-dom';
 import { Collapse } from 'react-bootstrap';
+import { loadUser } from '../Common/userDataService';
 
 class UserMenu extends React.Component {
     constructor(props, context) {
@@ -12,9 +13,18 @@ class UserMenu extends React.Component {
                 profile: this.routeActive(['profile']),
                 survey: this.routeActive(['survey']),
                 advice: this.routeActive(['advice']),
-                diary: this.routeActiveStart(['diary']),
+                diary: this.routeActiveStart(['diary'])                
+            },
+            userData:{
+                feedPlans:[],
+                trainPlans:[]
             }
         };
+
+        loadUser()
+        .then(function(userData) {              
+            this.setState({userData: userData});
+        }.bind(this));
     };
 
     routeActive(paths) {
@@ -48,7 +58,33 @@ class UserMenu extends React.Component {
         });
     }
 
-    render() {      
+    render() {   
+        let surveyItem = '';
+        let diaryItem = '';
+        let adviceItem = '';
+        if(this.state.userData.feedPlans.length){
+            surveyItem = <li className={ this.routeActive('survey') ? 'active' : '' }>
+                <Link to="/survey" title="Ankieta">
+                <em className="fa fa-edit"></em>
+                <span>Ankieta</span>
+                </Link>
+            </li>
+        }   
+        if(this.state.userData.feedPlans.length || this.state.userData.trainPlans.length){
+            adviceItem = <li className={ this.routeActive('advice') ? 'active' : '' }>
+                <Link to="/advice" title="Zalecenia">
+                <em className="fa fa-exclamation-triangle"></em>
+                <span>Zalecenia</span>
+                </Link>
+            </li>
+
+            diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
+                <Link to="/diary" title="Dziennik aktywności">
+                <em className="fa fa-address-book-o"></em>
+                <span>Dziennik aktywności</span>
+                </Link>
+            </li>
+        }
         return (
             <ul className="nav">
                 <ProfileData defaultProfilePic='img/user/13.jpg'></ProfileData>
@@ -63,25 +99,9 @@ class UserMenu extends React.Component {
                     <span>Moje dane</span>
                     </Link>
                 </li>
-                <li className={ this.routeActive('survey') ? 'active' : '' }>
-                    <Link to="/survey" title="Ankieta">
-                    <em className="fa fa-edit"></em>
-                    <span>Ankieta</span>
-                    </Link>
-                </li>
-                <li className={ this.routeActive('advice') ? 'active' : '' }>
-                    <Link to="/advice" title="Zalecenia">
-                    <em className="fa fa-exclamation-triangle"></em>
-                    <span>Zalecenia</span>
-                    </Link>
-                </li>
-                <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
-                    <Link to="/diary" title="Dziennik aktywności">
-                    <em className="fa fa-address-book-o"></em>
-                    <span>Dziennik aktywności</span>
-                    </Link>
-                </li>
-
+                {surveyItem}                
+                {adviceItem}                
+                {diaryItem}
             </ul>);
     }
 

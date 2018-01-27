@@ -1,10 +1,9 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
-import { loadUser, saveUser, loadRequirements, saveRequirements } from '../Common/userDataService';
+import { loadUser, saveUser, loadRequirements, saveRequirements, loadSurvey, loadPurchases } from '../Common/userDataService';
 import { saveImage, getFileLink } from '../Common/filesService';
 import { loadClients } from '../Common/clientsService';
-import { loadSurvey } from '../Common/userDataService';
 
 let hideAlertSuccess = null;
 let hideAlertError = null;
@@ -136,7 +135,7 @@ class Profile extends React.Component {
         this.setState({userId: nextId});
         if(!nextId){
             loadUser()
-            .then((data) => setUser.call(this, data));
+            .then((data) => setUser.call(this, data.user));
         }else{
             loadClientData.call(this, nextId);
         }
@@ -163,7 +162,7 @@ class Profile extends React.Component {
     componentDidMount(){
         if(!this.state.userId){
             loadUser()
-            .then((data) => setUser.call(this, data));
+            .then((data) => setUser.call(this, data.user));
         }else{
             loadClientData.call(this, this.state.userId);
         }

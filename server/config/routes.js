@@ -80,6 +80,8 @@ module.exports.routes = {
 
   'get /api/userData' : 'UserDataController.getUserData',
 
+  'get /api/userPurchases/:userId?' : 'UserDataController.getUserPurchases',  
+
   'post /api/userData' : 'UserDataController.saveUserData',
 
   'get /api/clients': 'UserDataController.getClientsData',

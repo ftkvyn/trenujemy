@@ -1,7 +1,6 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
-import { loadUser, saveUser } from '../Common/userDataService';
 import { loadUserAdvice, loadDefaultAdvice, saveAdvice } from '../Common/adviceService';
 
 import TextEditor from '../Components/TextEditor'

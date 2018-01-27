@@ -70,12 +70,25 @@ module.exports = {
 	},
 
 	payment: function(req, res){
-		User.findOne(req.session.user.id)
-		.exec(function(err, user){
+		let qs = [];
+		qs.push(User.findOne(req.session.user.id));
+		qs.push(FeedPlanPurchase.find({ user: req.session.user.id, isActive: true}));
+		
+		Q.all(qs)
+		.catch(function(err){
 			if(err){
 				console.error(err);
 				return res.badRequest(err);
 			}
+		})
+		.done(function(data){
+			const user = data[0];
+			const plans = data[1];
+			if(plans.length){
+	    		req.session.cartMessage = 'Na tym koncie aktywna jest wybrana usługa. Nie możesz mieć równocześnie więcej niż jednej aktywnej usługi tego samego typu na jednym koncie';
+	    		return res.redirect('/cart');
+	    	}
+			
 			cartService.loadCartItems(req.session.cart)
 			.catch(function(err){
 				req.session.cartMessage = "Błąd płatności";

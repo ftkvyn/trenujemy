@@ -19,7 +19,7 @@ class Sidebar extends React.Component {
         let me = this;
         loadUser()
         .then(function(userData) {              
-            me.setState({user: userData});
+            me.setState({user: userData.user});
         });
     };
 

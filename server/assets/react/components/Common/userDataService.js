@@ -33,7 +33,7 @@ $.get('/api/userData')
 
 function loadUser(){
 	return new Promise((resolve, reject) => {
-		if(userData.login){
+		if(userData.user){
 			return resolve(userData);
 		}
 		resolveWaiters.push(resolve);
@@ -52,6 +52,24 @@ function saveUser(newUser){
 			reject(err);
 		});
 	  });
+}
+
+function loadPurchases(userId){
+	let promise = new Promise((resolve, reject) => {
+		let url = '/api/userPurchases';
+		if(userId){
+			url += '/' + userId;
+		}
+		$.get(url)
+		.success(function(data) {
+			resolve(data);
+		})
+		.error(function(err){
+			console.error(err);
+			reject(err);
+		});
+	});
+	return promise;
 }
 
 function loadSurvey(userId){
@@ -123,4 +141,4 @@ function saveRequirements(model){
 	return promise;
 }
 
-export {loadUser, saveUser, loadSurvey, saveSurvey, loadRequirements, saveRequirements};
+export {loadUser, saveUser, loadSurvey, saveSurvey, loadRequirements, saveRequirements, loadPurchases};
