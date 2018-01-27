@@ -25,24 +25,32 @@ function calculateTotalItems(cart){
 
 module.exports = {
 	addItem: function (req, res){
-	    cartService.initCart(req);
-	    //req.session.cartMessage = 'Testing error';
-	    if(req.body.feedPlan){
-	    	//ToDo: check if user have existing feed plan.
-	    	if(req.session.cart.feedPlan){
-	    		req.session.cartMessage = 'Nie możesz zakupić jednocześnie więcej niż jednej usługi tego samego typu dla jednego konta';
-	    	}
-	    	req.session.cart.feedPlan = req.body.feedPlan;
-	    	req.session.cart.target = req.body.target;
-	    }
-	    if(req.body.trainingPlan){
-	    	if(!req.session.cart.trainings){
-	    		req.session.cart.trainings = [];
-	    	}
-	    	req.session.cart.trainings.push(req.body.trainingPlan);
-	    }
-	    calculateTotalItems(req.session.cart);
-	    res.redirect('/cart');
+		FeedPlanPurchase.find({user: req.session.user.id, isActive: true})
+		.exec(function(err, plans){
+			if(!plans){
+				plans = [];
+			}
+		    cartService.initCart(req);
+		    //req.session.cartMessage = 'Testing error';
+		    if(req.body.feedPlan){
+		    	if(plans.length){
+		    		req.session.cartMessage = 'Na tym koncie aktywna jest wybrana usługa. Nie możesz mieć równocześnie więcej niż jednej aktywnej usługi tego samego typu na jednym koncie';
+		    		return res.redirect('/cart');
+		    	}else if(req.session.cart.feedPlan){
+		    		req.session.cartMessage = 'Nie możesz zakupić jednocześnie więcej niż jednej usługi tego samego typu dla jednego konta';
+		    	}
+		    	req.session.cart.feedPlan = req.body.feedPlan;
+		    	req.session.cart.target = req.body.target;
+		    }
+		    if(req.body.trainingPlan){
+		    	if(!req.session.cart.trainings){
+		    		req.session.cart.trainings = [];
+		    	}
+		    	req.session.cart.trainings.push(req.body.trainingPlan);
+		    }
+		    calculateTotalItems(req.session.cart);
+		    res.redirect('/cart');
+	    });
 	},
 
 	removeItem: function (req, res){
@@ -220,15 +228,35 @@ module.exports = {
 			    const bodyData = queryString.parse(body);
 			    if(!bodyData.errorMessage){
 			    	Transaction.update({id: transaction.id}, {status: 'Complete'})
-					.exec(function(){
-						//ToDo: create user purchases.
+					.exec(function(err, transactions){
+						try{
+							cartService.purchaseItems(transactions[0])
+							.catch(function(err){
+								console.error(err);
+								Transaction.update({id: transactions[0].id}, {status: 'Error while creating purchases', errorMessage: err.toString()})
+								.exec(function(){
+									//Do nothing.						
+								})
+							})
+							.done(function(data){
+								console.log('=========Created items:==========');
+								console.log(data);
+							});		
+						}
+						catch(ex){
+							console.error(ex);
+							Transaction.update({id: transactions[0].id}, {status: 'Error while creating purchases', errorMessage: ex.toString()})
+							.exec(function(){
+								//Do nothing.						
+							});
+						}
 					});
 				    return res.send('Ok');
 				}else{
 					console.error(bodyData.errorMessage);
 					Transaction.update({id: transaction.id}, {status: 'Error while verifying', errorMessage: bodyData.errorMessage})
 					.exec(function(){
-						//Do nothing.
+						//Do nothing.						
 					});
 					return res.badRequest();
 				}
