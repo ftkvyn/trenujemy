@@ -151,6 +151,10 @@ module.exports = {
 					    console.log(body);
 					    const bodyData = queryString.parse(body);
 					    if(bodyData.token){
+					    	Transaction.update({id: transaction.id}, {status: 'Redirected to płatności24'})
+							.exec(function(){
+								//Do nothing.
+							});
 						    return res.redirect(payment_url + '/trnRequest/' + bodyData.token);
 						}else{
 							console.error(bodyData.errorMessage);
@@ -192,7 +196,12 @@ module.exports = {
 		    	//p24_sign: md5Hash
 			};
 
-			const sign = `${paymentData.p24_session_id}|${paymentData.p24_order_id}|${paymentData.p24_amount}|${paymentData.p24_currency}|${crc}`;
+			Transaction.update({id: transaction.id}, {status: 'Verifying'})
+			.exec(function(){
+				//Do nothing.
+			});
+
+			const sign = `${verifyData.p24_session_id}|${verifyData.p24_order_id}|${verifyData.p24_amount}|${verifyData.p24_currency}|${crc}`;
 			const md5Hash = md5(sign);
 			verifyData.p24_sign = md5Hash;
 
@@ -210,9 +219,17 @@ module.exports = {
 			    console.log(body);
 			    const bodyData = queryString.parse(body);
 			    if(!bodyData.errorMessage){
+			    	Transaction.update({id: transaction.id}, {status: 'Complete'})
+					.exec(function(){
+						//ToDo: create user purchases.
+					});
 				    return res.send('Ok');
 				}else{
 					console.error(bodyData.errorMessage);
+					Transaction.update({id: transaction.id}, {status: 'Error while verifying', errorMessage: bodyData.errorMessage})
+					.exec(function(){
+						//Do nothing.
+					});
 					return res.badRequest();
 				}
 			}); 

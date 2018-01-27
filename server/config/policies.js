@@ -54,6 +54,7 @@ module.exports.policies = {
 
   CartController:{
     '*':'sessionAuthRedirectToLogin',
+    'verify':true
   },
 
   ViewsController:{

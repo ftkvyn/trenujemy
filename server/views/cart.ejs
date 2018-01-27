@@ -109,7 +109,11 @@
              <div class="pb20">
                  <h3><small>Razem w koszyku - </small> <%= sum %> zł</h3>
              </div>
-            <a href="/payment" class="btn btn-primary">Płacę</a>
+            <% if(locals.cartItems && locals.cartItems.length) {%>
+                <a href="/payment" class="btn btn-primary">Płacę</a>
+            <% }else{%>
+                <a class="btn btn-seconary disabled">Płacę</a>
+            <% }%>
         </div>
     </div>
 </div>
