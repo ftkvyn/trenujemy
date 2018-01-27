@@ -42,22 +42,23 @@
         </div>
        <div class="row">
            <div class="col-lg-8 mr-auto ml-auto">
-                <form role="form">
-            <div class="row">
-                <div class="col-md-6">
-                    <input type="text" class="form-control mb20" placeholder="Imię" required="">
-                </div>
-                <div class="col-md-6">
-                    <input type="email" class="form-control mb20" placeholder="Email" required="">
-                </div>
-                <div class="col-md-12">
-                    <textarea class="form-control mb20" rows="5" placeholder="Wiadomość"></textarea>
-                </div>
-                 <div class="col-md-12 text-center">
-                     <button type="submit" class="btn btn-primary btn-lg">Wyślij</button>
-                </div>
-            </div>
-        </form>
+                <form role="form" class='contact-form'>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" name='name' class="form-control mb20 name" placeholder="Imię" required="">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="email" name='email' class="form-control mb20 email" placeholder="Email" required="">
+                        </div>
+                        <div class="col-md-12">
+                            <textarea class="form-control mb20 text" name='text' rows="5" placeholder="Wiadomość"></textarea>
+                        </div>
+                         <div class="col-md-12 text-center">
+                             <button type="submit" class="btn btn-primary btn-lg">Wyślij</button>
+                        </div>
+                    </div>
+                </form>
+                <p class="contact-info" style="display: none;text-align: center;">Twoja wiadomość została wysłana.</p>
            </div>
        </div>
     </div>

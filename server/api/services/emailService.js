@@ -1,20 +1,21 @@
-var helper = require('sendgrid').mail;
-var from_email = new helper.Email('service@trenujemy.com');
-var rootHost = process.env.TRENUJEMY_ROOT_HOST;
-var fs = require('fs');
+const helper = require('sendgrid').mail;
+const from_email = new helper.Email(process.env.TRENUJEMY_FROM_EMAIL;
+const rootHost = process.env.TRENUJEMY_ROOT_HOST;
+const contactEmail = process.env.TRENUJEMY_CONTACT_EMAIL;
+const fs = require('fs');
 
 
-var activationEmailTemplate = fs.readFileSync('./emails/activate.html', 'utf8');
-var passwordRecoveryEmailTemplate = fs.readFileSync('./emails/passwordRecovery.html', 'utf8');
+const activationEmailTemplate = fs.readFileSync('./emails/activate.html', 'utf8');
+const passwordRecoveryEmailTemplate = fs.readFileSync('./emails/passwordRecovery.html', 'utf8');
+const contactEmailTemplate = fs.readFileSync('./emails/contact.html', 'utf8');
 
-function sendMail(toMail, body){
-	var to_email = new helper.Email(toMail);
-	var subject = 'Zmiana hasła';
-	var content = new helper.Content('text/html', body);
-	var mail = new helper.Mail(from_email, subject, to_email, content);
+function sendMail(toMail, subject, body){
+	const to_email = new helper.Email(toMail);
+	const content = new helper.Content('text/html', body);
+	const mail = new helper.Mail(from_email, subject, to_email, content);
 
-	var sg = require('sendgrid')(process.env.TRENUJEMY_SENDGRID_API);
-	var request = sg.emptyRequest({
+	const sg = require('sendgrid')(process.env.TRENUJEMY_SENDGRID_API);
+	const request = sg.emptyRequest({
 	  method: 'POST',
 	  path: '/v3/mail/send',
 	  body: mail.toJSON(),
@@ -29,15 +30,24 @@ function sendMail(toMail, body){
 
 
 exports.sendPasswordRecoveryMail = function(user) {
-	var body = passwordRecoveryEmailTemplate
+	const body = passwordRecoveryEmailTemplate
 		.replace('%NAME%', user.email || user.login)
 		.replace('%URL%', `${rootHost}changePassword?code=${user.passwordRecoveryKey}`);
-	sendMail(user.email || user.login, body);
+	sendMail(user.email || user.login, 'Zmiana hasła', body);
 }
 
 exports.sendActivationMail = function(user) {
-	var body = activationEmailTemplate
+	const body = activationEmailTemplate
 		.replace('%NAME%', user.email || user.login)
 		.replace('%URL%', `${rootHost}auth/activate?activationCode=${user.activationCode}`);
-	sendMail(user.email || user.login, body);
+	sendMail(user.email || user.login, 'Aktywacja konta',body);
+}
+
+exports.sendContactMail = function(model){
+	const body = contactEmailTemplate
+		.replace('%NAME%', model.name)
+		.replace('%EMAIL%', model.email)
+		.replace('%TEXT%', model.text);
+	sendMail(contactEmail, 'Formularz kontaktowy', body);
+
 }

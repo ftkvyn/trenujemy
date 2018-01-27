@@ -115,6 +115,11 @@ module.exports = {
 
 	dashboard: function(req,res){
 		return res.view('dashboard', {layout: null, locals: {user: req.session.user}});	
+	},
+
+	contact:function(req,res){
+		emailService.sendContactMail(req.body);
+		return res.send('Ok');
 	}
 };
 

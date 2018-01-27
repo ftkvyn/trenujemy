@@ -92,6 +92,25 @@
           }
         }
       </script>
+
+      <script>
+          $(function() {
+              $('body').on('submit', '.contact-form',function(event){
+                  event.preventDefault();
+                  var model = {};
+                  model.name = $('.contact-form .name').val();
+                  model.email = $('.contact-form .email').val();
+                  model.text = $('.contact-form .text').val();
+                  $.post('/api/contact', model, function(data){
+                      
+                  });
+                  $('.contact-form').hide();
+                  $('.contact-info').show();
+                  return false;
+              });
+          });
+      </script> 
+
       
       <footer class="footer pt90 bg-faded pb90">
             <div class="container text-center">
