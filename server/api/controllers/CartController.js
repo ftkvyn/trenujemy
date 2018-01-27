@@ -7,7 +7,7 @@ const queryString = require('query-string');
 
 const pos_id = +process.env.TRENUJEMY_POS_ID;
 const merchant_id = +process.env.TRENUJEMY_MERCHANT_ID;
-const crc = 'a9738dc05e1c8aad';//process.env.TRENUJEMY_CRC;
+const crc = process.env.TRENUJEMY_CRC;
 const payment_url = process.env.TRENUJEMY_ENV === 'DEV' ?
  process.env.TRENUJEMY_SANDBOX_PAYMENT_URL :
  process.env.TRENUJEMY_PAYMENT_URL;
@@ -88,7 +88,7 @@ module.exports = {
 	    		req.session.cartMessage = 'Na tym koncie aktywna jest wybrana usługa. Nie możesz mieć równocześnie więcej niż jednej aktywnej usługi tego samego typu na jednym koncie';
 	    		return res.redirect('/cart');
 	    	}
-			
+
 			cartService.loadCartItems(req.session.cart)
 			.catch(function(err){
 				req.session.cartMessage = "Błąd płatności";
