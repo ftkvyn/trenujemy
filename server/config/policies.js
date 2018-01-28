@@ -144,5 +144,16 @@ module.exports.policies = {
     'saveDish':'usersDay',
   },
 
-  
+  AdviseTemplateController:{
+    '*':'isTrainer'
+  },
+
+  AnswerTemplateController:{
+    '*':'isTrainer'
+  },
+
+  TrainerHintsController:{
+    '*':'isTrainer',
+    'userHints':'isTrainerForOtherUser'
+  },
 };

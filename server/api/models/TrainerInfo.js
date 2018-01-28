@@ -14,6 +14,9 @@ module.exports = {
 	},
 	invoiceInfo:{
 		type:'text'
+	},
+	sendHints:{
+		type:'boolean'
 	}
   }
 };

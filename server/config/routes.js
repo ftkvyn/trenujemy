@@ -128,6 +128,8 @@ module.exports.routes = {
 
   'get /api/dishComponents' : 'DishController.loadComponents',
 
+  'get /api/hints/:userId?' : 'TrainerHintsController.userHints',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
