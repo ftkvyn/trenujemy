@@ -96,7 +96,7 @@ class Goods extends React.Component {
                         if(existingTrain){
                             existingTrain.trainsLeft += train.trainsLeft;
                         }else{
-                            trains.push(train);
+                            trains.push(Object.assign({}, train));
                         }
                     }
                 }

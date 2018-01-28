@@ -84,7 +84,7 @@ module.exports = {
 		.done(function(data){
 			const user = data[0];
 			const plans = data[1];
-			if(plans.length){
+			if(req.session.cart.feedPlan && plans.length){
 	    		req.session.cartMessage = 'Na tym koncie aktywna jest wybrana usługa. Nie możesz mieć równocześnie więcej niż jednej aktywnej usługi tego samego typu na jednym koncie';
 	    		return res.redirect('/cart');
 	    	}
@@ -166,8 +166,7 @@ module.exports = {
 							console.error(err);
 							req.session.cartMessage = 'Błąd płatności';
 							return res.redirect('/cart');
-						}
-						cartService.initCart(req, true);
+						}						
 						console.log("====== Przelewy 24 response ======");
 					    console.log(body);
 					    const bodyData = queryString.parse(body);
@@ -176,6 +175,7 @@ module.exports = {
 							.exec(function(){
 								//Do nothing.
 							});
+							cartService.initCart(req, true);
 						    return res.redirect(payment_url + '/trnRequest/' + bodyData.token);
 						}else{
 							console.error(bodyData.errorMessage);
