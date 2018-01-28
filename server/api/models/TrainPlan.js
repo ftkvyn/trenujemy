@@ -20,6 +20,10 @@ module.exports = {
   			type:'integer',
   		},
 
+      trainsCount:{
+        type:'integer',
+      },
+
   		description:{
   			type:'text',
   		},

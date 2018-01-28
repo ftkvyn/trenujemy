@@ -17,6 +17,12 @@ module.exports = {
 		model: 'TrainPlan',
 		required:true	
 	},
+	trainsCount:{
+        type:'integer',
+    },
+    trainsLeft:{
+    	type:'integer',
+    },
 	isActive:{
 		type:'boolean',
 		required:true
@@ -33,6 +39,13 @@ module.exports = {
       	obj.validFromStr = moment(obj.updatedAt).format('YYYY-MM-DD');
         return obj;
     }
+  },
+
+  beforeUpdate: function (values, cb) {
+  	if(!values.trainsLeft){
+  		values.isActive = false;
+  	}
+    cb();
   }
 };
 

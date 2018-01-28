@@ -48,39 +48,52 @@ exports.purchaseItems = function(transaction){
 	if(transaction.status != 'Complete'){
 		deferred.reject(new Error('Wrong transaction status - ' + transaction.status));
 	}
-	let qs = [];
-	for(let i = 0; i < cart.trainings.length; i++){
-		qs.push(TrainPlanPurchase.create({
-			user: transaction.user,
-			transaction: transaction.id,
-			plan: cart.trainings[i],
-			isActive: true
-		}));		
-	}
-	if(cart.trainings.length){
-		//Updating all user active trainings to update valid period.
-		qs.push(TrainPlanPurchase.update({
-			user: transaction.user,
-			isActive: true,
-			//trainsLeft : {'>' : 0}
-		},{}));
-	}
-	if(cart.feedPlan){
-		qs.push(FeedPlanPurchase.update({user: transaction.user.id, isActive: false}));
-		qs.push(FeedPlanPurchase.create({
-			user: transaction.user,
-			transaction: transaction.id,
-			plan: cart.feedPlan,
-			target: cart.target,
-			isActive: true
-		}));
-	}
-	Q.all(qs)
-	.catch(function(err){
-		deferred.reject(new Error(err));
-	})
-	.done(function(data){
-		deferred.resolve(data);
-	});		
+
+	TrainPlan.find({isActive: true, id: cart.trainings || []})
+	.exec(function(err, trainPlans){
+		if(err){
+			return deferred.reject(err);
+		}
+
+		let qs = [];
+		for(let i = 0; i < cart.trainings.length; i++){
+			let plan = trainPlans.find( (item) => item.id == cart.trainings[i]);
+			if(plan){
+				qs.push(TrainPlanPurchase.create({
+					user: transaction.user,
+					transaction: transaction.id,
+					plan: cart.trainings[i],
+					trainsCount: plan.trainsCount,
+					trainsLeft: plan.trainsCount,
+					isActive: true
+				}));	
+			}	
+		}
+		if(cart.trainings.length && qs.length){
+			//Updating all user active trainings to update valid period.
+			qs.push(TrainPlanPurchase.update({
+				user: transaction.user,
+				isActive: true,
+				//trainsLeft : {'>' : 0}
+			},{}));
+		}
+		if(cart.feedPlan){
+			qs.push(FeedPlanPurchase.update({user: transaction.user.id, isActive: false}));
+			qs.push(FeedPlanPurchase.create({
+				user: transaction.user,
+				transaction: transaction.id,
+				plan: cart.feedPlan,
+				target: cart.target,
+				isActive: true
+			}));
+		}
+		Q.all(qs)
+		.catch(function(err){
+			deferred.reject(new Error(err));
+		})
+		.done(function(data){
+			deferred.resolve(data);
+		});		
+	});
 	return deferred.promise;
 }

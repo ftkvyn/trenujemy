@@ -126,6 +126,17 @@ class TrainingsPrice extends React.Component {
                                     onChange={this.handleChange.bind(this, plan.id)}></textarea>
                                 </Col>
                             </FormGroup>
+
+                            <FormGroup>
+                                <Col lg={ 12 }>
+                                    <FormControl type="number" placeholder="Liczba treningów" 
+                                    className="form-control"
+                                    name='trainsCount'
+                                    value={plan.trainsCount || 0}
+                                    onChange={this.handleChange.bind(this, plan.id)}/>
+                                </Col>
+                            </FormGroup>
+
                             <FormGroup>
                               <label className="col-lg-6 col-md-6 col-sm-6 col-xs-6 control-label">Widoczne na stronie</label>
                               <Col lg={ 6 } md={ 6 } sm={6} xs={6}>

@@ -94,9 +94,8 @@ class Goods extends React.Component {
                         let train = this.state.goods.trainPlans[i];
                         let existingTrain = trains.find( (item) => item.plan.id == train.plan.id);
                         if(existingTrain){
-                            existingTrain.trainsCount ++;
+                            existingTrain.trainsLeft += train.trainsLeft;
                         }else{
-                            train.trainsCount = 1;
                             trains.push(train);
                         }
                     }
@@ -136,7 +135,7 @@ class Goods extends React.Component {
                                 <Row>
                                     <label className="col-lg-2 col-md-4 control-label text-right">Do wykorzystania</label>
                                     <Col lg={ 10 } md={8}>
-                                        Treinigów: <b>{item.trainsCount}</b>&nbsp;&nbsp;<a type="button" href='/#trainings' className="btn btn-xs btn-primary">Wykup dodatkowe treningi</a>
+                                        Treinigów: <b>{item.trainsLeft}</b>&nbsp;&nbsp;<a type="button" href='/#trainings' className="btn btn-xs btn-primary">Wykup dodatkowe treningi</a>
                                     </Col>
                                 </Row></div>)}
                             </div>
