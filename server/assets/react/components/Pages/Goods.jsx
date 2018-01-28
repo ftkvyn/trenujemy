@@ -49,6 +49,7 @@ class Goods extends React.Component {
 
     render() {  
         let purchasedFeedPlanItem = '';
+        let additionalGoods = '';
         let trains = [];
         if(this.state.goodsLoaded){
             console.log(this.state.goods);
@@ -99,9 +100,24 @@ class Goods extends React.Component {
                             trains.push(Object.assign({}, train));
                         }
                     }
+                    additionalGoods = <div>
+                        <hr/>
+                        <h3 className='text-center'>Proponowane pozostałe usługi w panelu:</h3>
+                        <Row className='text-center'>
+                            <Col lg={ 6 } md={6} sm={6} xs={12}>
+                                <h4>Plany dietetyczne i treningowe</h4>
+                                <a type="button" href='/#feedPlans' className="btn btn-primary">Zamów</a>
+                            </Col>
+                            <Col lg={ 6 } md={6} sm={6} xs={12}>
+                                <h4>Codzienna konsultacja</h4>
+                                <a type="button" href='/#feedPlans' className="btn btn-primary">Zamów</a>
+                            </Col>
+                        </Row>
+                    </div>
                 }
             }
         }
+        
         return (
         	<ContentWrapper>
                 <h3>Panel klienta</h3>
@@ -138,6 +154,7 @@ class Goods extends React.Component {
                                         Treinigów: <b>{item.trainsLeft}</b>&nbsp;&nbsp;<a type="button" href='/#trainings' className="btn btn-xs btn-primary">Wykup dodatkowe treningi</a>
                                     </Col>
                                 </Row></div>)}
+                                {additionalGoods}
                             </div>
 		                </Panel>
 	            	</Col>
