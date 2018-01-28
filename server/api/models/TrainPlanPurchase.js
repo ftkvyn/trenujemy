@@ -4,6 +4,7 @@
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
+const moment = require('moment');
 
 module.exports = {
 
@@ -23,7 +24,15 @@ module.exports = {
 	transaction:{
 		model:'Transaction',
 		required:true
-	}
+	},
+
+	toJSON: function() {
+        var obj = this.toObject();
+      	obj.validTo = moment(obj.updatedAt).add(12, 'months').toDate();
+      	obj.validToStr = moment(obj.validTo).format('YYYY-MM-DD');
+      	obj.validFromStr = moment(obj.updatedAt).format('YYYY-MM-DD');
+        return obj;
+    }
   }
 };
 

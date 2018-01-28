@@ -130,16 +130,13 @@ class Goods extends React.Component {
                                 <Row>
                                     <label className="col-lg-2 col-md-4 control-label text-right">Termin ważności:</label>
                                     <Col lg={ 10 } md={8}>
-                                        ????
+                                        {item.validToStr}
                                     </Col>
                                 </Row>
                                 <Row>
                                     <label className="col-lg-2 col-md-4 control-label text-right">Do wykorzystania</label>
-                                    <Col lg={ 5 } md={4}>
-                                        Treinigów: <span>{item.trainsCount}</span>
-                                    </Col>
-                                    <Col lg={ 5 } md={4}>
-                                        <a type="button" href='/#trainings' className="btn btn-xs btn-primary">Wykup dodatkowe treningi</a>
+                                    <Col lg={ 10 } md={8}>
+                                        Treinigów: <b>{item.trainsCount}</b>&nbsp;&nbsp;<a type="button" href='/#trainings' className="btn btn-xs btn-primary">Wykup dodatkowe treningi</a>
                                     </Col>
                                 </Row></div>)}
                             </div>

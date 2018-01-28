@@ -142,5 +142,7 @@ module.exports.policies = {
     'addComponent':'usersDay',
     'removeComponent':'usersDay',
     'saveDish':'usersDay',
-  }
+  },
+
+  
 };

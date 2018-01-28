@@ -55,7 +55,15 @@ exports.purchaseItems = function(transaction){
 			transaction: transaction.id,
 			plan: cart.trainings[i],
 			isActive: true
-		}));
+		}));		
+	}
+	if(cart.trainings.length){
+		//Updating all user active trainings to update valid period.
+		qs.push(TrainPlanPurchase.update({
+			user: transaction.user,
+			isActive: true,
+			//trainsLeft : {'>' : 0}
+		},{}));
 	}
 	if(cart.feedPlan){
 		qs.push(FeedPlanPurchase.update({user: transaction.user.id, isActive: false}));
