@@ -9,7 +9,7 @@ module.exports = {
 		let qs = [];
 
 		qs.push(User.findOne({id: model.id}));
-		qs.push(FeedPlanPurchase.find({user: model.id, isActive: true}));
+		qs.push(FeedPlanPurchase.find({user: model.id, isActive: true}).populate('plan'));
 		qs.push(TrainPlanPurchase.find({user: model.id, isActive: true}));
 
 		Q.all(qs)
@@ -54,8 +54,8 @@ module.exports = {
 
 		let qs = [];
 
-		qs.push(FeedPlanPurchase.find({user: model.id}).populate('plan').populate('target'));
-		qs.push(TrainPlanPurchase.find({user: model.id}).populate('plan'));
+		qs.push(FeedPlanPurchase.find({user: userId}).populate('plan').populate('target'));
+		qs.push(TrainPlanPurchase.find({user: userId}).populate('plan'));
 
 		Q.all(qs)
 		.catch(function(err){
@@ -67,8 +67,16 @@ module.exports = {
 		.done(function(data){
 			const feedPlans = data[0];
 			const trainPlans = data[1];
+			const model = {};
+			if(feedPlans && feedPlans.length){
+				model.feedPlan = feedPlans[0];
+				model.allFeedPlans = feedPlans;
+			}
+			if(trainPlans && trainPlans.length){
+				model.trainPlans = trainPlans;
+			}
 
-			return res.json({feedPlans: feedPlans, trainPlans: trainPlans});		
+			return res.json(model);		
 		});
 
 	},

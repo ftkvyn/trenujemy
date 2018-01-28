@@ -78,12 +78,14 @@ class UserMenu extends React.Component {
                 </Link>
             </li>
 
-            diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
-                <Link to="/diary" title="Dziennik aktywności">
-                <em className="fa fa-address-book-o"></em>
-                <span>Dziennik aktywności</span>
-                </Link>
-            </li>
+            if(this.state.userData.feedPlans.length && this.state.userData.feedPlans[0].isWithConsulting){
+                diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
+                    <Link to="/diary" title="Dziennik aktywności">
+                    <em className="fa fa-address-book-o"></em>
+                    <span>Dziennik aktywności</span>
+                    </Link>
+                </li>
+            }
         }
         return (
             <ul className="nav">
@@ -92,7 +94,12 @@ class UserMenu extends React.Component {
                 <li className="nav-heading ">
                     <span>Panel Klienta</span>
                 </li>
-
+                <li className={ this.routeActive('goods') ? 'active' : '' }>
+                    <Link to="/goods" title="Usługi">
+                    <em className="fa fa-id-card-o"></em>
+                    <span>Usługi</span>
+                    </Link>
+                </li>
                 <li className={ this.routeActive('profile') ? 'active' : '' }>
                     <Link to="/profile" title="Moje dane">
                     <em className="icon-user"></em>

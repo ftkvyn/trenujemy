@@ -7,6 +7,7 @@ import BasePage from './components/Layout/BasePage';
 import BaseHorizontal from './components/Layout/BaseHorizontal';
 
 import ProfilePage from './components/Pages/ProfilePage'
+import Goods from './components/Pages/Goods'
 import SurveyPage from  './components/Pages/SurveyPage'
 import AdvicePage from  './components/Pages/AdvicePage'
 import ClientPage from './components/Pages/ClientPage'
@@ -62,6 +63,7 @@ const Routes = ({ location }) => {
                     <div>
                         <Switch location={location}>
                             <Route path="/profile" component={ProfilePage}/>
+                            <Route path="/goods" component={Goods}/>
                             <Route path="/survey" component={SurveyPage}/>
                             <Route path="/advice" component={AdvicePage}/>
                             <Route path="/diary/:day?" component={DiaryPage}/>

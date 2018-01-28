@@ -50,6 +50,7 @@ module.exports = {
 	              }
 	              req.session.user = user;
 	              var url = req.session.returnUrl || '/dashboard';
+	              req.session.returnUrl = null;
 	              return res.send({
 		              success: true,
 		              url: url
