@@ -72,7 +72,7 @@ const Routes = ({ location }) => {
                             <Route path="/trainings/places" component={TrainingsPlaces}/>
                             <Route path="/trainings/hours" component={TrainingsHours}/>
                             <Route path="/plans/price" component={FeedPlansPrice}/>
-                            <Redirect to="/profile"/>
+                            <Redirect to="/goods"/>
                         </Switch>
                     </div>
                 </CSSTransition>

@@ -4360,3 +4360,17 @@ Footer
     }
   .gallery-row a:hover .img-fluid {
     transform: translateY(-8px); }
+div.navbar-right-elements{
+  top: 22px;
+}
+.logo-txt{
+  font-family: Montserrat, sans-serif;
+      text-transform: uppercase;
+    font-weight: 500;
+}
+.logo-light.logo-txt{
+  color:white;
+}
+.logo-dark.logo-txt{
+  color: rgb(71, 130, 211);
+}

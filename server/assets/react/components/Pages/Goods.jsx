@@ -1,6 +1,7 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 import { loadUser, loadPurchases } from '../Common/userDataService';
 
 class Goods extends React.Component {
@@ -17,7 +18,13 @@ class Goods extends React.Component {
     componentDidMount(){
         let me = this;
         loadUser()
-            .then((data) => this.setState({user: data.user}));
+            .then((data) => {
+                if(data.user.role == 'trainer'){
+                    this.props.history.push('/profile');
+                    return;
+                }
+                this.setState({user: data.user});
+            });
         loadPurchases()
             .then((data) => this.setState({goods: data, goodsLoaded: true}));
     }
@@ -165,5 +172,5 @@ class Goods extends React.Component {
 
 }
 
-export default Goods;
+export default withRouter(Goods);
 

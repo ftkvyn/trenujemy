@@ -172,3 +172,13 @@ body.with-popup .wrapper > .aside
 	transition: all 1s;
 	color:white;
 }
+
+.navbar-brand .logo-txt{
+	color: white;
+    font-size: 23px;
+    padding-top: 10px;
+}
+
+.navbar-brand .brand-logo .logo-txt{
+	padding-top: 8px;
+}
