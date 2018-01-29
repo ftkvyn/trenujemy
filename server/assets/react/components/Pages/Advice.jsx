@@ -124,7 +124,7 @@ class Advice extends React.Component {
                 return <Panel></Panel>
             }
             planControl = <TextEditor label="Plan dietetyczny i treningowy" text={this.state.data.plan} 
-                        onChange={this.handlePlanChange.bind(this)}></TextEditor>
+                        onExit={this.handlePlanChange.bind(this)} onBlur={this.handlePlanChange.bind(this)}></TextEditor>
         } else{
             //User
             readonlyProps = {readOnly: true};
