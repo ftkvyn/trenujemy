@@ -182,3 +182,13 @@ body.with-popup .wrapper > .aside
 .navbar-brand .brand-logo .logo-txt{
 	padding-top: 8px;
 }
+
+.template-textarea textarea{
+	min-height: 200px;
+}
+.template-textarea label.control-label{
+	padding-right: 0;
+}
+.pointer{
+	cursor: pointer;
+}

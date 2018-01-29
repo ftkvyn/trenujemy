@@ -106,6 +106,27 @@ class TrainerMenu extends React.Component {
                         </ul>
                     </Collapse>
                 </li>
+
+                <li className={ this.routeActive('answers') ? 'active' : '' }>
+                    <Link to="/answers" title="Szablony odpowiedzi">
+                    <em className="fa fa-comments-o"></em>
+                    <span>Szablony odpowiedzi</span>
+                    </Link>
+                </li>
+
+                <li className={ this.routeActive('adviceTemplates') ? 'active' : '' }>
+                    <Link to="/adviceTemplates" title="Szablony zaleceń">
+                    <em className="fa fa-list-alt"></em>
+                    <span>Szablony zaleceń</span>
+                    </Link>
+                </li>
+
+                <li className={ this.routeActive('trainerHints') ? 'active' : '' }>
+                    <Link to="/trainerHints" title="Wskazówki trenera">
+                    <em className="fa fa-lightbulb-o"></em>
+                    <span>Wskazówki trenera</span>
+                    </Link>
+                </li>
             </ul>);
     }
 

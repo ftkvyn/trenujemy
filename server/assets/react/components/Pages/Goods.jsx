@@ -16,7 +16,6 @@ class Goods extends React.Component {
     };
 
     componentDidMount(){
-        let me = this;
         loadUser()
             .then((data) => {
                 if(data.user.role == 'trainer'){
@@ -59,7 +58,6 @@ class Goods extends React.Component {
         let additionalGoods = '';
         let trains = [];
         if(this.state.goodsLoaded){
-            console.log(this.state.goods);
             if(!this.state.goods.feedPlan && !this.state.goods.trainPlans){
                 purchasedFeedPlanItem = <Row className='list-group-item'>
                     <label className="col-lg-2 col-md-4 control-label text-right">Wykupiona usługa:</label>

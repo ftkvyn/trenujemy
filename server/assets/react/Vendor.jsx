@@ -29,5 +29,7 @@ import '../../node_modules/codemirror/lib/codemirror.css';
 import '../../node_modules/codemirror/lib/codemirror.js';
 import '../../node_modules/summernote/dist/summernote.css';
 import '../../node_modules/summernote/dist/summernote.min.js';
+// Slimscroll
+import '../../node_modules/jquery-slimscroll/jquery.slimscroll.min.js';
 //debounce
 window.debounce = require('debounce');
