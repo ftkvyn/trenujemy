@@ -78,7 +78,7 @@ class UserMenu extends React.Component {
                 </Link>
             </li>
 
-            if(this.state.userData.feedPlans.length && this.state.userData.feedPlans[0].isWithConsulting){
+            if(this.state.userData.feedPlans.length && this.state.userData.feedPlans[0].plan.isWithConsulting){
                 diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
                     <Link to="/diary" title="Dziennik aktywności">
                     <em className="fa fa-address-book-o"></em>

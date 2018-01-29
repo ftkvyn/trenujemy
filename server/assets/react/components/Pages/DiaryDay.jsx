@@ -7,6 +7,7 @@ import { loadSurvey } from '../Common/userDataService';
 import { saveImage } from '../Common/filesService';
 import { loadDishes, saveDish, addUpdateDishHandler, removeUpdateDishHandler, removeComponent } from '../Common/dishService'
 import { loadUserAdvice } from '../Common/adviceService';
+import { loadAnswers } from '../Common/answerTemplatesService';
 import moment from 'moment';
 import AddComponentFirstStep from './AddComponentFirstStep'
 import AddComponentSecondStep from './AddComponentSecondStep'
@@ -140,6 +141,7 @@ class DiaryDay extends React.Component {
             trainings:[],
             advise:{},
             dishes:[],
+            templates: [],
             pastImages:[],
             addingTraning: false,
             __sizeCollapsed: true,
@@ -188,7 +190,11 @@ class DiaryDay extends React.Component {
         loadUserAdvice(this.state.userId)
             .then((data) => {
               this.setState({advise: data});
-            });      
+            });    
+        if(this.state.userId){
+          loadAnswers()
+            .then((data) => this.setState({templates: data})); 
+        }  
     }
 
     handleChange(event) {
@@ -203,6 +209,22 @@ class DiaryDay extends React.Component {
         }
         saveHandler = debounce(() => saveDataFn(newData), 1000);        
         saveHandler();
+    }
+
+    useAnswerTemplate(event){
+      let fieldVal = event.target.value;
+      let template = this.state.templates.find((i) => i.id == fieldVal);
+      if(template){
+        let oldData = this.state.data;
+        oldData.trainerNotes = template.text;
+        this.setState({data: oldData});
+
+        if(saveHandler){
+            saveHandler.clear();
+        }
+        saveHandler = debounce(() => saveDataFn(newData), 1000);        
+        saveHandler();
+      }
     }
 
     handleBodySizeChange(event) {
@@ -396,6 +418,16 @@ class DiaryDay extends React.Component {
             picForm = <form id='dailyPicForm' style={{display:'none'}}>
                 <input type='file' name='file' id='dailyPicInput' accept="image/x-png,image/gif,image/jpeg" onChange={this.uploadImage.bind(this)}/>
             </form>
+        }
+        let answerTemplates = "";
+        if(this.state.userId && this.state.templates.length){
+          answerTemplates = <FormControl componentClass="select" name="answer" 
+                value={'none'}
+                onChange={this.useAnswerTemplate.bind(this)}
+                className="form-control">
+                    <option value='none'>Wybierz szablon odpowiedzi</option>
+                    {this.state.templates.map((template) => <option value={template.id} key={template.id}>{template.name}</option>)}
+                </FormControl>
         }
         let dishFields = ["calories",
             "protein",
@@ -707,8 +739,9 @@ class DiaryDay extends React.Component {
                         name='trainerNotes' {...readonlyForUser}
                         value={this.state.data.trainerNotes || ''}
                         onChange={this.handleChange.bind(this)}></textarea>
+                        {answerTemplates}
                     </Col>
-                    <Col lg={2} md={1}></Col>
+                    <Col lg={2} md={1}></Col>                    
                 </FormGroup>   
 
 

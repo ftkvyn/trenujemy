@@ -49,7 +49,7 @@ module.exports = {
 						console.error(err);
 						return res.badRequest(err);
 					})
-					.done(function(data){
+					.then(function(data){
 						entry.bodySize = bodySize;
 						entry.trainings = [];
 						//entry.dishes = data;

@@ -50,7 +50,7 @@ function addAnswer(name){
 		$.ajax({
             url: '/api/AnswerTemplate/',
             type: 'POST',
-            data:{name: name, text:'.'},
+            data:{name: name},
             success: function (data) {
             	resolve(data);                
             },

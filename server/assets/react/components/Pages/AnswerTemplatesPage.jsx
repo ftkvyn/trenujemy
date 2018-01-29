@@ -57,7 +57,8 @@ class AnswerTemplatesPage extends React.Component {
         this.setState({selectedItemId:id, templateText: item.text});
     }
 
-    removeItem(id){
+    removeItem(id, event){
+        event.stopPropagation();
         removeAnswer(id)
              .then((data) => {
                     let itemNum = this.state.items.findIndex((item) => item.id == data.id);
@@ -151,11 +152,12 @@ class AnswerTemplatesPage extends React.Component {
                                     <Col lg={6} md={6} sm={6} xs={12}>
                                         <div data-height="200" data-scrollable="" className="list-group">
                                             {this.state.items.map( (item) => <div 
-                                                className={this.state.selectedItemId == item.id ? 'selected list-group-item' : 'list-group-item'}
-                                                key={item.id}>
+                                                className={this.state.selectedItemId == item.id ? 'selected list-group-item pointer' : 'list-group-item pointer'}
+                                                key={item.id}
+                                                onClick={this.selectItem.bind(this, item.id)}>
                                                 <div className="media-box">
                                                     <div className="media-box-body clearfix">
-                                                        <span className="mb-sm pointer" onClick={this.selectItem.bind(this, item.id)}>
+                                                        <span className="mb-sm pointer">
                                                             {item.name}
                                                         </span>
                                                         <div className="pull-right">
