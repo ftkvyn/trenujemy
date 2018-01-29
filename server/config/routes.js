@@ -130,6 +130,10 @@ module.exports.routes = {
 
   'get /api/hints/:userId?' : 'TrainerHintsController.userHints',
 
+  'get /api/sendTrainerHints' : 'TrainerHintsController.getSendHints',
+
+  'post /api/sendTrainerHints' : 'TrainerHintsController.saveSendHints',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

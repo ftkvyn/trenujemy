@@ -17,6 +17,28 @@ module.exports = {
 			}
 			return res.json(data);
 		});
-	}
+	},
+
+	getSendHints: function(req, res) {
+		TrainerInfo.findOne({user: req.session.user.id})
+		.exec(function(err, data){
+			if(err || !data){
+				console.error(err);
+				return res.badRequest(err);
+			}		
+			return res.json({value: data.sendHints});
+		});
+	},
+
+	saveSendHints: function(req, res) {
+		TrainerInfo.update({user: req.session.user.id}, {sendHints: req.body.value})
+		.exec(function(err, data){
+			if(err){
+				console.error(err);
+				return res.badRequest(err);
+			}		
+			return res.json({success: true});
+		});
+	},
 };
 

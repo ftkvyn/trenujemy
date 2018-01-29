@@ -38,7 +38,7 @@ module.exports = {
 			if(user.role != 'trainer'){
 				return res.json({user: user, feedPlans: feedPlans, trainPlans: trainPlans});	
 			}else{
-				TrainerInfo.findOrCreate({user: user.id}, {user: user.id})
+				TrainerInfo.findOrCreate({user: user.id}, {user: user.id, sendHints: true})
 				.exec(function(err, info){
 					if(!err && info){
 						user.invoiceInfo = info.invoiceInfo;
