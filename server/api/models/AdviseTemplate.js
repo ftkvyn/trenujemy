@@ -14,7 +14,6 @@ module.exports = {
   	},
   	text:{
   		type:'text',
-  		required:true
   	}
   }
 };

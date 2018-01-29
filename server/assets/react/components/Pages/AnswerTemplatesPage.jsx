@@ -1,12 +1,39 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
+import { loadAnswers, saveAnswer, removeAnswer, addAnswer } from '../Common/answerTemplatesService';
+
+let hideAlertSuccess = null;
+let hideAlertError = null;
+
+let saveHandler = null;
+
+
+function saveDataFn(itemId, text){
+    saveAnswer(itemId, text)
+    .then(function(){
+        $('.saveError').hide();
+        $('.saveSuccess').show();
+        clearTimeout(hideAlertSuccess);
+        hideAlertSuccess = setTimeout(() => {$('.saveSuccess').hide()}, 6000);
+    })
+    .catch(function(){
+        $('.saveSuccess').hide();
+        $('.saveError').show();
+        clearTimeout(hideAlertError);
+        hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
+    });
+}
+
 
 class AnswerTemplatesPage extends React.Component {
     constructor(props, context) {
         super(props, context);
         let initialState = {
-            
+            newItemName: '',
+            selectedItemId: null,
+            templateText: '',
+            items: []
         };
         this.state = initialState;        
     };
@@ -15,48 +42,88 @@ class AnswerTemplatesPage extends React.Component {
         $('[data-scrollable]').slimScroll({
             height: ($('[data-scrollable]').data('height') || 200)
         });
-        // loadUser()
-        //     .then((data) => {
-        //         if(data.user.role == 'trainer'){
-        //             this.props.history.push('/profile');
-        //             return;
-        //         }
-        //         this.setState({user: data.user});
-        //     });
-        // loadPurchases()
-        //     .then((data) => this.setState({goods: data, goodsLoaded: true}));
+        loadAnswers()
+            .then((data) => {
+                if(data.length){
+                    this.setState({items: data, selectedItemId:data[0].id, templateText:data[0].text});
+                }else{
+                    this.setState({items: data});
+                }
+            });
+    }
+
+    selectItem(id){
+        let item = this.state.items.find((i) => i.id == id);
+        this.setState({selectedItemId:id, templateText: item.text});
     }
 
     removeItem(id){
-
+        removeAnswer(id)
+             .then((data) => {
+                    let itemNum = this.state.items.findIndex((item) => item.id == data.id);
+                    let items = [
+                        ...this.state.items.slice(0, itemNum),
+                        ...this.state.items.slice(itemNum + 1)];
+                    let selectedId = this.state.selectedItemId;
+                    let templateText = this.state.templateText;
+                    if(this.state.selectedItemId == id){
+                        if(items.length){
+                            selectedId = items[0].id;
+                            templateText = items[0].text;
+                        }else{
+                            selectedId = null;
+                            templateText = '';
+                        }
+                    }
+                    this.setState({items: items, selectedItemId: selectedId, templateText: templateText});
+                });
     }
 
-    handleChange(event) {
-        // let fieldName = event.target.name;
-        // let newData = this.state.data;
-        // if(fieldName.indexOf('bool:') > -1){
-        //     fieldName = fieldName.replace('bool:','');
-        //     newData[fieldName] = event.target.checked;
-        // }else if(fieldName.indexOf('default:') > -1){
-        //     fieldName = fieldName.replace('default:','');
-        //     newData[fieldName] = this.state.defaultAdvice[fieldName];
-        // }else{
-        //     let fieldVal = event.target.value;
-        //     if(fieldName == 'sameInTrainingDays'){
-        //         fieldVal = '' + fieldVal == 'true';
-        //     }
-        //     newData[fieldName] = fieldVal
-        // }
-        // this.setState({data: newData});
+    onFormSubmit(event){
+        this.addNewItem();
+        event.preventDefault();
+        return false;
+    }
 
-        // if(saveHandler){
-        //     saveHandler.clear();
-        // }
-        // saveHandler = debounce(() => saveDataFn(newData), 1000);        
-        // saveHandler();
+    addNewItem(){
+        if(!this.state.newItemName){
+            return;
+        }
+        const name = this.state.newItemName;
+        this.setState({newItemName: ''});
+        addAnswer(name)
+             .then((item) => {
+                    let items = [item, ...this.state.items];
+                    this.setState({items: items, selectedItemId: item.id, templateText: ''});
+                });
+    }
+
+    handleNewItemChange(event) {
+        this.setState({newItemName: event.target.value});
+    }
+
+    handleTemplateChange(event) {
+        let fieldVal = event.target.value;
+        this.setState({templateText: fieldVal});
+        let item = this.state.items.find((i) => i.id == this.state.selectedItemId);
+        if(item){
+            item.text = fieldVal;
+        }
+
+        if(fieldVal){
+            if(saveHandler){
+                saveHandler.clear();
+            }
+            saveHandler = debounce(() => saveDataFn(this.state.selectedItemId, fieldVal), 1000);        
+            saveHandler();
+        }
     }
 
     render() {  
+        let textareaReadonly = {}
+        if(!this.state.selectedItemId){
+          textareaReadonly = {readOnly: true};
+        }
         
         return (
         	<ContentWrapper>
@@ -69,33 +136,57 @@ class AnswerTemplatesPage extends React.Component {
                       	</Well>
 		              	<Panel>
                             <Row>
-                                <Col lg={6} md={6} sm={6} xs={12}>
-                                    <div className='template-textarea'>
-                                        <textarea maxLength='800'
-                                        placeholder='Treść szablonu odpowiedzi'
-                                        className="form-control"></textarea>
-                                        <label className="col-lg-12 control-label text-right">Maks. 800 znaków</label>
-                                    </div>
-                                </Col>
-                                <Col lg={6} md={6} sm={6} xs={12}>
-                                    { /* START list group */ }
-                                    <div data-height="200" data-scrollable="" className="list-group">
-                                        { /* START list group item */ }
-                                        <div className="list-group-item">
-                                            <div className="media-box">
-                                                <div className="media-box-body clearfix">
-                                                    <span className="mb-sm">
-                                                        Cras sit amet nibh libero, in gravida nulla. Nulla...
-                                                    </span>
-                                                    <div className="pull-right">
-                                                        <em className="fa fa-trash pointer" onClick={this.removeItem.bind(this, 1)} />
-                                                    </div>
-                                                </div>                                                
-                                            </div>
+                                <form className="form-horizontal" onSubmit={this.onFormSubmit.bind(this)}>
+                                    <Col lg={6} md={6} sm={6} xs={12}>
+                                        <div className='template-textarea'>
+                                            <textarea maxLength='800'
+                                            {...textareaReadonly}
+                                            value={this.state.templateText}
+                                            onChange={this.handleTemplateChange.bind(this)}
+                                            placeholder='Treść szablonu odpowiedzi'
+                                            className="form-control"></textarea>
+                                            <label className="col-lg-12 control-label text-right">Maks. 800 znaków</label>
                                         </div>
-                                        { /* END list group item */ }
-                                    </div>
-                                </Col>
+                                    </Col>
+                                    <Col lg={6} md={6} sm={6} xs={12}>
+                                        <div data-height="200" data-scrollable="" className="list-group">
+                                            {this.state.items.map( (item) => <div 
+                                                className={this.state.selectedItemId == item.id ? 'selected list-group-item' : 'list-group-item'}
+                                                key={item.id}>
+                                                <div className="media-box">
+                                                    <div className="media-box-body clearfix">
+                                                        <span className="mb-sm pointer" onClick={this.selectItem.bind(this, item.id)}>
+                                                            {item.name}
+                                                        </span>
+                                                        <div className="pull-right">
+                                                            <em className="fa fa-trash pointer" onClick={this.removeItem.bind(this, item.id)} />
+                                                        </div>
+                                                    </div>                                                
+                                                </div>
+                                            </div>)}                                            
+                                        </div>
+
+                                        <FormControl type="text" placeholder="Nazwa nowego szablonu" 
+                                            maxLength='80'
+                                            className="form-control"
+                                            name='name'
+                                            value={this.state.newItemName}
+                                            onChange={this.handleNewItemChange.bind(this)}/>
+                                        <label className="col-lg-12 control-label text-right no-padding">Maks. 80 znaków</label>
+                                        <div>
+                                            <div type="button" onClick={this.addNewItem.bind(this)} className="btn btn-primary pull-right">Dodaj nowy</div>
+                                        </div>
+                                    </Col>
+
+                                    <Col lg={12}>
+                                        <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
+                                            Dane zapisane poprawnie.                
+                                        </div>  
+                                        <div role="alert" className="alert alert-danger saveError" style={{display:'none'}}>
+                                            Nie udało się zapisać dane.
+                                        </div>   
+                                    </Col>
+                                </form>
                             </Row>
 		                </Panel>
 	            	</Col>

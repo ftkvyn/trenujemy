@@ -192,3 +192,9 @@ body.with-popup .wrapper > .aside
 .pointer{
 	cursor: pointer;
 }
+.no-padding{
+	padding:0;
+}
+.list-group-item.selected{
+	background: aliceblue;
+}
