@@ -198,3 +198,9 @@ body.with-popup .wrapper > .aside
 .list-group-item.selected{
 	background: aliceblue;
 }
+.actual-sizes-box{
+	padding: 10px;
+	border-radius: 5px;
+	border: 1px solid #dde6e9;
+	background: #f6f7f7;
+}

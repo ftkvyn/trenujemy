@@ -148,20 +148,20 @@ class TrainerHintsPage extends React.Component {
                             <Row>
                                 <form className="form-horizontal" onSubmit={this.onFormSubmit.bind(this)}>
                                     <FormGroup>
-                                      <Col lg={ 1 } md={2} sm={2} xs={2}>
-                                        <div className="checkbox c-checkbox pull-right">
-                                            <label>
-                                                <input type="checkbox" name="sendHints" id='sendHints'
-                                                checked={this.state.sendHints} 
-                                                onChange={this.handleSendHintsChange.bind(this)} />
-                                                <em className="fa fa-check"></em>
-                                            </label>
-                                        </div>
-                                    </Col>
-                                    <Col lg={ 9 } md={10} sm={10} xs={10}>
-                                        <label className="control-label pointer" htmlFor='sendHints'>Chcę wysyłać wskazówki do moich klientów</label>
-                                    </Col>
-                                  </FormGroup>
+                                        <Col lg={ 1 } md={2} sm={2} xs={2}>
+                                            <div className="checkbox c-checkbox pull-right">
+                                                <label>
+                                                    <input type="checkbox" name="sendHints" id='sendHints'
+                                                    checked={this.state.sendHints} 
+                                                    onChange={this.handleSendHintsChange.bind(this)} />
+                                                    <em className="fa fa-check"></em>
+                                                </label>
+                                            </div>
+                                        </Col>
+                                        <Col lg={ 9 } md={10} sm={10} xs={10}>
+                                            <label className="control-label pointer" htmlFor='sendHints'>Chcę wysyłać wskazówki do moich klientów</label>
+                                        </Col>
+                                    </FormGroup>
                                     <Col lg={12} md={12} sm={12} xs={12}>
                                         <div className='template-textarea'>
                                             <textarea maxLength='800'

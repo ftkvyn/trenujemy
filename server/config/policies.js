@@ -156,4 +156,11 @@ module.exports.policies = {
     '*':'isTrainer',
     'userHints':'isTrainerForOtherUser'
   },
+
+  SurveySettngsController:{
+    '*':'isTrainer',
+    'find':'sessionAuth',
+    'create':false,
+    'destroy':false,
+  },
 };

@@ -121,6 +121,8 @@ class Goods extends React.Component {
                     </div>
                 }
             }
+        }else{
+            return <div></div>
         }
         
         return (

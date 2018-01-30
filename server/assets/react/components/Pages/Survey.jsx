@@ -278,7 +278,7 @@ class Survey extends React.Component {
                             </div>
                         </Col>
                     </FormGroup>
-                    <legend>2) Typ sylwetki</legend>
+                    <legend>1) Typ sylwetki</legend>
                     <div style={{'paddingLeft':'50px','paddingBottom':'20px'}}>
                         <img src='/images/body_types.jpg'/>
                         <div>
