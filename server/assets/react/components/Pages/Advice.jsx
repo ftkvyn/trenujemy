@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
 import { loadUserAdvice, loadDefaultAdvice, saveAdvice } from '../Common/adviceService';
+import { loadAdviceTemplates } from '../Common/adviceTemplateService';
 
 import TextEditor from '../Components/TextEditor'
 
@@ -36,7 +37,8 @@ class Advice extends React.Component {
         super(props, context);
         let initialState = {
             data:{},
-            defaultAdvice:{}
+            defaultAdvice:{},
+            templates:[]
         };
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
@@ -56,6 +58,8 @@ class Advice extends React.Component {
         this.setState({userId: nextId});
         loadUserAdvice(nextId)
             .then((data) => setData(data, me));
+        loadAdviceTemplates()
+                .then((data) => this.setState({templates: data})); 
     }
 
     componentDidMount(){
@@ -68,6 +72,8 @@ class Advice extends React.Component {
                 .then((data) => {
                     me.setState({defaultAdvice: data});
                 });
+            loadAdviceTemplates()
+                .then((data) => this.setState({templates: data})); 
         }
     }
 
@@ -96,6 +102,22 @@ class Advice extends React.Component {
         saveHandler();
     }
 
+    useAdviseTemplate(event){
+      let fieldVal = event.target.value;
+      let template = this.state.templates.find((i) => i.id == fieldVal);
+      if(template){
+        let newData = this.state.data;
+        newData.plan = template.text;
+        this.setState({data: newData});
+
+        if(saveHandler){
+            saveHandler.clear();
+        }
+        saveHandler = debounce(() => saveDataFn(newData), 200);        
+        saveHandler();
+      }
+    }
+
     handlePlanChange(code){
         let newData = this.state.data;
         newData.plan = code;
@@ -106,7 +128,6 @@ class Advice extends React.Component {
         }
         saveHandler = debounce(() => saveDataFn(newData), 1000);        
         saveHandler();
-
     }
 
     render() {  
@@ -118,10 +139,20 @@ class Advice extends React.Component {
         let planControl = {};
         let sameInTrainingStyle = {};
         let notSameInTrainingStyle = {};
+        let adviseTemplates = "";        
         if(this.state.userId){
             //Trainer
             if(!this.state.defaultAdvice.hasOwnProperty('fiber')){
                 return <Panel></Panel>
+            }
+            if(this.state.templates.length){
+                adviseTemplates = <FormControl componentClass="select" name="answer" 
+                    value={'none'}
+                    onChange={this.useAdviseTemplate.bind(this)}
+                    className="form-control">
+                        <option value='none'>Wybierz szablon zalecenia</option>
+                        {this.state.templates.map((template) => <option value={template.id} key={template.id}>{template.name}</option>)}
+                    </FormControl>
             }
             planControl = <TextEditor label="Plan dietetyczny i treningowy" text={this.state.data.plan} 
                         onExit={this.handlePlanChange.bind(this)} onBlur={this.handlePlanChange.bind(this)}></TextEditor>
@@ -423,7 +454,7 @@ class Advice extends React.Component {
                               </Col>
                               <label className="col-lg-9 col-md-8">W dni treningowe podnieś wartości kcal, B, W, T proporcjonalnie do zwiększonego zapotrzebowania kCal</label>
                         </FormGroup>
-
+                        {adviseTemplates}
                         {planControl}                        
 
                         <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
