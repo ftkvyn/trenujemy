@@ -16,8 +16,6 @@ function destroySummernote(){
     }
 }
 
-let num = 0;
-
 function initSummernote(text){
     let me = this;
     $('#summernote').summernote({
@@ -25,7 +23,6 @@ function initSummernote(text){
       callbacks: {
           onBlur: function() {
             var markupStr = $('#summernote').summernote('code');
-            console.log('blur');
             if(me.props.onBlur){
               me.props.onBlur(markupStr);
             }
@@ -62,17 +59,9 @@ class TextEditor extends React.Component {
     }
 
     componentWillUpdate(nextProps) {
-        if(num > 40){
-          return;
-        }
-        console.log(this.props.text);
-        console.log(nextProps.text);
-        num++;
-        // console.log(prevProps.text.localeCompare(this.props.text));
-        if((nextProps.text.localeCompare(this.props.text) != 0 )){
-            console.log('updating summernote');
-            destroySummernote.call(this);
-            initSummernote.call(this, nextProps.text);
+        var markupStr = $('#summernote').summernote('code');
+        if((typeof markupStr == 'undefined') || (markupStr.localeCompare(nextProps.text) != 0 )){
+            $('#summernote').summernote('code', nextProps.text);
         }
     }
 

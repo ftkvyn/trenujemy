@@ -58,6 +58,7 @@ class AdviceTemplatesPage extends React.Component {
           var markupStr = $('#summernote').summernote('code');
           let item = this.state.items.find((item) => item.id == this.state.selectedItemId);
           item.text = markupStr;
+          this.setState({templateText: markupStr});
           saveDataFn(this.state.selectedItemId, markupStr);
         }
         catch(ex){
@@ -176,7 +177,7 @@ class AdviceTemplatesPage extends React.Component {
                                     </Col>
                                     <Col lg={12} md={12} sm={12} xs={12} style={{'marginTop':'20px'}}>
                                         <div className='template-textarea'>
-                                            <TextEditor text={this.state.templateText} label="Plan dietetyczny i treningowy"></TextEditor>
+                                            <TextEditor text={this.state.templateText} label="Plan dietetyczny i treningowy" onBlur={this.saveTemplate.bind(this)}></TextEditor>
                                             <div type="button" onClick={this.saveTemplate.bind(this)} className="btn btn-primary pull-right">Zapisz</div>
                                         </div>
                                     </Col>
