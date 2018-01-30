@@ -36,7 +36,9 @@ function load() {
 }
 
 function loadClients(){
-	load();
+	if(!loaded){
+		load();
+	}
 	return new Promise((resolve, reject) => {
 		if(loaded){
 			return resolve(clients);

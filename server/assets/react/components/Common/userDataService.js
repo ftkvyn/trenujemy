@@ -31,14 +31,29 @@ $.get('/api/userData')
 	rejectWaiters = [];
 });
 
-function loadUser(){
-	return new Promise((resolve, reject) => {
-		if(userData.user){
-			return resolve(userData);
-		}
-		resolveWaiters.push(resolve);
-		rejectWaiters.push(reject);
-	  });
+function loadUser(userId){
+	if(!userId){
+		return new Promise((resolve, reject) => {
+			if(userData.user){
+				return resolve(userData);
+			}
+			resolveWaiters.push(resolve);
+			rejectWaiters.push(reject);
+		  });
+	}else{
+		let promise = new Promise((resolve, reject) => {
+			let url = '/api/userData/'+ userId;			
+			$.get(url)
+			.success(function(data) {
+				resolve(data);
+			})
+			.error(function(err){
+				console.error(err);
+				reject(err);
+			});
+		});
+		return promise;
+	}
 }
 
 function saveUser(newUser){

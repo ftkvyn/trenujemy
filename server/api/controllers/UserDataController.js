@@ -6,11 +6,12 @@ module.exports = {
 		if(!model){
 			return res.json({});
 		}
+		var userId = req.params.userId || req.session.user.id;
 		let qs = [];
 
-		qs.push(User.findOne({id: model.id}));
-		qs.push(FeedPlanPurchase.find({user: model.id, isActive: true}).populate('plan'));
-		qs.push(TrainPlanPurchase.find({user: model.id, isActive: true}));
+		qs.push(User.findOne({id: userId}));
+		qs.push(FeedPlanPurchase.find({user: userId, isActive: true}).populate('plan'));
+		qs.push(TrainPlanPurchase.find({user: userId, isActive: true}));
 
 		Q.all(qs)
 		.catch(function(err){

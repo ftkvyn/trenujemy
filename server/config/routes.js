@@ -78,7 +78,7 @@ module.exports.routes = {
 
   'post /auth/changePassword': 'AuthController.changePassword',
 
-  'get /api/userData' : 'UserDataController.getUserData',
+  'get /api/userData/:userId?' : 'UserDataController.getUserData',
 
   'post /api/contact' : 'ViewsController.contact',
 
