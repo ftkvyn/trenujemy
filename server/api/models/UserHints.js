@@ -14,14 +14,17 @@ module.exports = {
   	},
 
   	hint:{
-  		model:'TrainerHints',
-  		required:true
+  		model:'TrainerHints'
   	},
 
   	text:{
   		type:'text',
   		required:true
-  	}
+  	},
+
+    isRead:{
+      type:'boolean'
+    }
   }
 };
 

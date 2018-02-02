@@ -9,9 +9,21 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
+const scheduler = require('node-schedule');
+
 module.exports.bootstrap = function(cb) {
-	process.env.TZ = 'UTC'
+  process.env.TZ = 'UTC'
+  const hintConfigs = hintsService.hintConfigs;
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
+  for(var i = 0; i < hintConfigs.length; i++){
+  	let config = hintConfigs[i][1];
+  	let period = hintConfigs[i][0];
+  	if(config){
+  		var job  = scheduler.scheduleJob(config, function(){
+		    hintsService.sendHints(period);
+		  });
+  	}
+  }
   cb();
 };

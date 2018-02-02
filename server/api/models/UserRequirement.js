@@ -5,6 +5,8 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
+const hintPeriods = hintsService.hintPeriods;
+
 module.exports = {
 
   attributes: {
@@ -16,8 +18,9 @@ module.exports = {
 
   		sendTips:{
   			type:'string',
-  			enum: ['never', 'weekly', 'each_third_day', 
-  			'each_second_day', 'each_day', 'twice_a_day'],
+  			// enum: ['never', 'weekly', 'each_third_day', 
+  			// 'each_second_day', 'each_day', 'twice_a_day'],
+        enum: hintPeriods,
   			required:true,
   			defaultsTo:'never'
   		},

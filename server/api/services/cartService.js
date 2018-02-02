@@ -23,7 +23,7 @@ exports.loadCartItems = function(cart){
 	.catch(function(err){
 		deferred.reject(new Error(err));
 	})
-	.done(function(data){
+	.then(function(data){
 		let cartItems = [];
 		const feedPlan = data[1];
 		if(feedPlan){
@@ -91,7 +91,7 @@ exports.purchaseItems = function(transaction){
 		.catch(function(err){
 			deferred.reject(new Error(err));
 		})
-		.done(function(data){
+		.then(function(data){
 			deferred.resolve(data);
 		});		
 	});
