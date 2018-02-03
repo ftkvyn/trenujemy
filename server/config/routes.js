@@ -138,6 +138,8 @@ module.exports.routes = {
 
   'get /api/transactions/:year/:month' : 'TransactionsController.find',
 
+  'get /api/training/:userId?': 'TrainingController.find',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

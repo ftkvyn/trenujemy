@@ -41,14 +41,9 @@ function saveRequirementsFn(data){
 }
 
 function loadClientData(id){
-    loadClients()
-    .then((clients) => {
-        for (var i = clients.length - 1; i >= 0; i--) {
-            if(clients[i].id == id){
-                setUser.call(this, clients[i]);
-                return;
-            }
-        }
+    loadUser(id)
+    .then((userData) => {
+        setUser.call(this, userData);
     });
 
     this.setState({requirements: {}});
@@ -78,7 +73,8 @@ function setUser(userData){
     $('.saveError').hide();
     $('.saveSuccess').hide();
     destroyDp();
-    this.setState({user: userData});
+    let user = userData.user || userData;
+    this.setState({user: userData, feedPlans: userData.feedPlans, trainPlans: userData.trainPlans});
     $('#datetimepicker').datetimepicker({
         icons: {
             time: 'fa fa-clock-o',
@@ -116,7 +112,9 @@ class Profile extends React.Component {
         let initialState = {
             user:{},
             userData:{},
-            requirements:{}
+            requirements:{},
+            feedPlans:[],
+            trainPlans:[]
         };
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
@@ -135,7 +133,7 @@ class Profile extends React.Component {
         this.setState({userId: nextId});
         if(!nextId){
             loadUser()
-            .then((data) => setUser.call(this, data.user));
+            .then((data) => setUser.call(this, data));
         }else{
             loadClientData.call(this, nextId);
         }
@@ -162,7 +160,7 @@ class Profile extends React.Component {
     componentDidMount(){
         if(!this.state.userId){
             loadUser()
-            .then((data) => setUser.call(this, data.user));
+            .then((data) => setUser.call(this, data));
         }else{
             loadClientData.call(this, this.state.userId);
         }
@@ -265,131 +263,38 @@ class Profile extends React.Component {
                         </Col>
                     </FormGroup> 
                 }
-                requirementsForm = <div>
-                    <hr/>
-                    <FormGroup>
-                        <label className="col-lg-2 control-label">Wysyłaj ciekawostki i wskazówki:</label>
-                        <Col lg={ 10 }>
-                            <FormControl componentClass="select" name="sendTips" 
-                            value={this.state.requirements.sendTips}
-                            onChange={this.handleChangeRequirements.bind(this)}
-                            className="form-control">
-                                <option value='twice_a_day'>Dwa razy dziennie</option>
-                                <option value='each_day'>Raz dziennie</option>
-                                <option value='each_second_day'>Co drugi dzień</option>
-                                <option value='each_third_day'>Co trzeci dzień</option>
-                                <option value='weekly'>Raz w tygodniu</option>
-                                <option value='never'>Nie wysyłaj</option>
-                            </FormControl>
-                        </Col>
-                    </FormGroup>
-                    <legend>Wymagaj dokonania pomiarów przez klienta:</legend>
-                    <FormGroup className='form-inline'>
-                        <label className="col-lg-2 control-label">Waga:</label>
-                        <Col lg={ 10 }>
-                            <FormControl type="number" placeholder="Waga" 
-                            className="form-control" {...readonlyProps}
-                            name='weight'
-                            value={this.state.userData.weight}/><span> kg </span> 
-                            <FormControl componentClass="select" name="provideWeight" 
-                            value={this.state.requirements.provideWeight}
-                            onChange={this.handleChangeRequirements.bind(this)}
-                            className="form-control">
-                                <option value='twice_a_day'>Dwa razy dziennie</option>
-                                <option value='each_day'>Codziennie</option>
-                                <option value='each_second_day'>Co drugi dzień</option>
-                                <option value='each_third_day'>Co trzeci dzień</option>
-                                <option value='weekly'>Raz w tygodniu</option>
-                                <option value='each_second_week'>Raz na dwa tygodnie</option>
-                                <option value='monthly'>Raz na miesiąc</option>
-                                <option value='never'>Nigdy</option>
-                            </FormControl>
-                        </Col>
-                    </FormGroup> 
-                    <hr/>
-                    <div className='sizes-requirement-panel'>
-                        <FormGroup className='form-inline'>
-                            <label className="col-lg-2 control-label">Kark:</label>
+                if( (this.state.feedPlans && this.state.feedPlans.length) ||
+                    (this.state.trainPlans && this.state.trainPlans.length)){
+                    requirementsForm = <div>
+                        <hr/>
+                        <FormGroup>
+                            <label className="col-lg-2 control-label">Wysyłaj ciekawostki i wskazówki:</label>
                             <Col lg={ 10 }>
-                                <FormControl type="number" placeholder="Kark" 
-                                className="form-control" {...readonlyProps}
-                                name='neck'
-                                value={this.state.userData.bodySize.neck}/> cm
-                                <label className="checkbox-inline c-checkbox">
-                                <input type="checkbox" name="bool:neck" 
-                                    className='needsclick'
-                                    checked={this.state.requirements.neck || false} 
-                                    onChange={this.handleChangeRequirements.bind(this)} />
-                                    <em className="fa fa-check"></em>
-                                </label>
-                            </Col>
-                        </FormGroup> 
-                        <FormGroup className='form-inline'>
-                            <label className="col-lg-2 control-label">Ramię:</label>
-                            <Col lg={ 10 }>
-                                <FormControl type="number" placeholder="Ramię" 
-                                className="form-control" {...readonlyProps}
-                                name='shoulder'
-                                value={this.state.userData.bodySize.shoulder}/> cm
-                                <label className="checkbox-inline c-checkbox">
-                                <input type="checkbox" name="bool:shoulder" 
-                                    className='needsclick'
-                                    checked={this.state.requirements.shoulder || false} 
-                                    onChange={this.handleChangeRequirements.bind(this)} />
-                                    <em className="fa fa-check"></em>
-                                </label>
-                            </Col>
-                        </FormGroup> 
-                        <FormGroup className='form-inline'>
-                            <label className="col-lg-2 control-label">Przedramię:</label>
-                            <Col lg={ 10 }>
-                                <FormControl type="number" placeholder="Przedramię" 
-                                className="form-control" {...readonlyProps}
-                                name='forearm'
-                                value={this.state.userData.bodySize.forearm}/> cm
-                                <label className="checkbox-inline c-checkbox">
-                                <input type="checkbox" name="bool:forearm" 
-                                    className='needsclick'
-                                    checked={this.state.requirements.forearm || false} 
-                                    onChange={this.handleChangeRequirements.bind(this)} />
-                                    <em className="fa fa-check"></em>
-                                </label>
-                            </Col>
-                        </FormGroup> 
-                        <FormGroup className='form-inline'>
-                            <label className="col-lg-2 control-label">Nadgarstek:</label>
-                            <Col lg={ 10 }>
-                                <FormControl type="number" placeholder="Nadgarstek" 
-                                className="form-control" {...readonlyProps}
-                                name='wrist'
-                                value={this.state.userData.bodySize.wrist}/> cm
-                                <label className="checkbox-inline c-checkbox">
-                                <input type="checkbox" name="bool:wrist" 
-                                    className='needsclick'
-                                    checked={this.state.requirements.wrist || false} 
-                                    onChange={this.handleChangeRequirements.bind(this)} />
-                                    <em className="fa fa-check"></em>
-                                </label>
-                            </Col>
-                        </FormGroup> 
-                        <FormGroup className='form-inline'>
-                            <label className="col-lg-2 control-label">Klatka piersiowa:</label>
-                            <Col lg={ 10 }>
-                                <FormControl type="number" placeholder="Klatka piersiowa" 
-                                className="form-control" {...readonlyProps}
-                                name='chest'
-                                value={this.state.userData.bodySize.chest}/> cm
-                                <label className="checkbox-inline c-checkbox">
-                                <input type="checkbox" name="bool:chest" 
-                                    className='needsclick'
-                                    checked={this.state.requirements.chest || false} 
-                                    onChange={this.handleChangeRequirements.bind(this)} />
-                                    <em className="fa fa-check"></em>
-                                </label>
-                                <FormControl componentClass="select" name="provideSizes" 
-                                value={this.state.requirements.provideSizes}
+                                <FormControl componentClass="select" name="sendTips" 
+                                value={this.state.requirements.sendTips}
                                 onChange={this.handleChangeRequirements.bind(this)}
-                                className="form-control m-l">
+                                className="form-control">
+                                    <option value='twice_a_day'>Dwa razy dziennie</option>
+                                    <option value='each_day'>Raz dziennie</option>
+                                    <option value='each_second_day'>Co drugi dzień</option>
+                                    <option value='each_third_day'>Co trzeci dzień</option>
+                                    <option value='weekly'>Raz w tygodniu</option>
+                                    <option value='never'>Nie wysyłaj</option>
+                                </FormControl>
+                            </Col>
+                        </FormGroup>
+                        <legend>Wymagaj dokonania pomiarów przez klienta:</legend>
+                        <FormGroup className='form-inline'>
+                            <label className="col-lg-2 control-label">Waga:</label>
+                            <Col lg={ 10 }>
+                                <FormControl type="number" placeholder="Waga" 
+                                className="form-control" {...readonlyProps}
+                                name='weight'
+                                value={this.state.userData.weight}/><span> kg </span> 
+                                <FormControl componentClass="select" name="provideWeight" 
+                                value={this.state.requirements.provideWeight}
+                                onChange={this.handleChangeRequirements.bind(this)}
+                                className="form-control">
                                     <option value='twice_a_day'>Dwa razy dziennie</option>
                                     <option value='each_day'>Codziennie</option>
                                     <option value='each_second_day'>Co drugi dzień</option>
@@ -401,104 +306,200 @@ class Profile extends React.Component {
                                 </FormControl>
                             </Col>
                         </FormGroup> 
-                        <FormGroup className='form-inline'>
-                            <label className="col-lg-2 control-label">Talia (brzuch):</label>
-                            <Col lg={ 10 }>
-                                <FormControl type="number" placeholder="Talia (brzuch)" 
-                                className="form-control" {...readonlyProps}
-                                name='waist'
-                                value={this.state.userData.bodySize.waist}/> cm
-                                <label className="checkbox-inline c-checkbox">
-                                <input type="checkbox" name="bool:waist" 
-                                    className='needsclick'
-                                    checked={this.state.requirements.waist || false} 
-                                    onChange={this.handleChangeRequirements.bind(this)} />
-                                    <em className="fa fa-check"></em>
-                                </label>
-                            </Col>
-                        </FormGroup> 
-                        <FormGroup className='form-inline'>
-                            <label className="col-lg-2 control-label">Biodra:</label>
-                            <Col lg={ 10 }>
-                                <FormControl type="number" placeholder="Biodra" 
-                                className="form-control" {...readonlyProps}
-                                name='hips'
-                                value={this.state.userData.bodySize.hips}/> cm
-                                <label className="checkbox-inline c-checkbox">
-                                <input type="checkbox" name="bool:hips" 
-                                    className='needsclick'
-                                    checked={this.state.requirements.hips || false} 
-                                    onChange={this.handleChangeRequirements.bind(this)} />
-                                    <em className="fa fa-check"></em>
-                                </label>
-                            </Col>
-                        </FormGroup> 
-                        <FormGroup className='form-inline'>
-                            <label className="col-lg-2 control-label">Udo:</label>
-                            <Col lg={ 10 }>
-                                <FormControl type="number" placeholder="Udo" 
-                                className="form-control" {...readonlyProps}
-                                name='thigh'
-                                value={this.state.userData.bodySize.thigh}/> cm
-                                <label className="checkbox-inline c-checkbox">
-                                <input type="checkbox" name="bool:thigh" 
-                                    className='needsclick'
-                                    checked={this.state.requirements.thigh || false} 
-                                    onChange={this.handleChangeRequirements.bind(this)} />
-                                    <em className="fa fa-check"></em>
-                                </label>
-                            </Col>
-                        </FormGroup> 
-                        <FormGroup className='form-inline'>
-                            <label className="col-lg-2 control-label">Łydka:</label>
-                            <Col lg={ 10 }>
-                                <FormControl type="number" placeholder="Łydka" 
-                                className="form-control" {...readonlyProps}
-                                name='shin'
-                                value={this.state.userData.bodySize.shin}/> cm
-                                <label className="checkbox-inline c-checkbox">
-                                <input type="checkbox" name="bool:shin" 
-                                    className='needsclick'
-                                    checked={this.state.requirements.shin || false} 
-                                    onChange={this.handleChangeRequirements.bind(this)} />
-                                    <em className="fa fa-check"></em>
-                                </label>
-                            </Col>
-                        </FormGroup> 
-                    </div>
+                        <hr/>
+                        <div className='sizes-requirement-panel'>
+                            <FormGroup className='form-inline'>
+                                <label className="col-lg-2 control-label">Kark:</label>
+                                <Col lg={ 10 }>
+                                    <FormControl type="number" placeholder="Kark" 
+                                    className="form-control" {...readonlyProps}
+                                    name='neck'
+                                    value={this.state.userData.bodySize.neck}/> cm
+                                    <label className="checkbox-inline c-checkbox">
+                                    <input type="checkbox" name="bool:neck" 
+                                        className='needsclick'
+                                        checked={this.state.requirements.neck || false} 
+                                        onChange={this.handleChangeRequirements.bind(this)} />
+                                        <em className="fa fa-check"></em>
+                                    </label>
+                                </Col>
+                            </FormGroup> 
+                            <FormGroup className='form-inline'>
+                                <label className="col-lg-2 control-label">Ramię:</label>
+                                <Col lg={ 10 }>
+                                    <FormControl type="number" placeholder="Ramię" 
+                                    className="form-control" {...readonlyProps}
+                                    name='shoulder'
+                                    value={this.state.userData.bodySize.shoulder}/> cm
+                                    <label className="checkbox-inline c-checkbox">
+                                    <input type="checkbox" name="bool:shoulder" 
+                                        className='needsclick'
+                                        checked={this.state.requirements.shoulder || false} 
+                                        onChange={this.handleChangeRequirements.bind(this)} />
+                                        <em className="fa fa-check"></em>
+                                    </label>
+                                </Col>
+                            </FormGroup> 
+                            <FormGroup className='form-inline'>
+                                <label className="col-lg-2 control-label">Przedramię:</label>
+                                <Col lg={ 10 }>
+                                    <FormControl type="number" placeholder="Przedramię" 
+                                    className="form-control" {...readonlyProps}
+                                    name='forearm'
+                                    value={this.state.userData.bodySize.forearm}/> cm
+                                    <label className="checkbox-inline c-checkbox">
+                                    <input type="checkbox" name="bool:forearm" 
+                                        className='needsclick'
+                                        checked={this.state.requirements.forearm || false} 
+                                        onChange={this.handleChangeRequirements.bind(this)} />
+                                        <em className="fa fa-check"></em>
+                                    </label>
+                                </Col>
+                            </FormGroup> 
+                            <FormGroup className='form-inline'>
+                                <label className="col-lg-2 control-label">Nadgarstek:</label>
+                                <Col lg={ 10 }>
+                                    <FormControl type="number" placeholder="Nadgarstek" 
+                                    className="form-control" {...readonlyProps}
+                                    name='wrist'
+                                    value={this.state.userData.bodySize.wrist}/> cm
+                                    <label className="checkbox-inline c-checkbox">
+                                    <input type="checkbox" name="bool:wrist" 
+                                        className='needsclick'
+                                        checked={this.state.requirements.wrist || false} 
+                                        onChange={this.handleChangeRequirements.bind(this)} />
+                                        <em className="fa fa-check"></em>
+                                    </label>
+                                </Col>
+                            </FormGroup> 
+                            <FormGroup className='form-inline'>
+                                <label className="col-lg-2 control-label">Klatka piersiowa:</label>
+                                <Col lg={ 10 }>
+                                    <FormControl type="number" placeholder="Klatka piersiowa" 
+                                    className="form-control" {...readonlyProps}
+                                    name='chest'
+                                    value={this.state.userData.bodySize.chest}/> cm
+                                    <label className="checkbox-inline c-checkbox">
+                                    <input type="checkbox" name="bool:chest" 
+                                        className='needsclick'
+                                        checked={this.state.requirements.chest || false} 
+                                        onChange={this.handleChangeRequirements.bind(this)} />
+                                        <em className="fa fa-check"></em>
+                                    </label>
+                                    <FormControl componentClass="select" name="provideSizes" 
+                                    value={this.state.requirements.provideSizes}
+                                    onChange={this.handleChangeRequirements.bind(this)}
+                                    className="form-control m-l">
+                                        <option value='twice_a_day'>Dwa razy dziennie</option>
+                                        <option value='each_day'>Codziennie</option>
+                                        <option value='each_second_day'>Co drugi dzień</option>
+                                        <option value='each_third_day'>Co trzeci dzień</option>
+                                        <option value='weekly'>Raz w tygodniu</option>
+                                        <option value='each_second_week'>Raz na dwa tygodnie</option>
+                                        <option value='monthly'>Raz na miesiąc</option>
+                                        <option value='never'>Nigdy</option>
+                                    </FormControl>
+                                </Col>
+                            </FormGroup> 
+                            <FormGroup className='form-inline'>
+                                <label className="col-lg-2 control-label">Talia (brzuch):</label>
+                                <Col lg={ 10 }>
+                                    <FormControl type="number" placeholder="Talia (brzuch)" 
+                                    className="form-control" {...readonlyProps}
+                                    name='waist'
+                                    value={this.state.userData.bodySize.waist}/> cm
+                                    <label className="checkbox-inline c-checkbox">
+                                    <input type="checkbox" name="bool:waist" 
+                                        className='needsclick'
+                                        checked={this.state.requirements.waist || false} 
+                                        onChange={this.handleChangeRequirements.bind(this)} />
+                                        <em className="fa fa-check"></em>
+                                    </label>
+                                </Col>
+                            </FormGroup> 
+                            <FormGroup className='form-inline'>
+                                <label className="col-lg-2 control-label">Biodra:</label>
+                                <Col lg={ 10 }>
+                                    <FormControl type="number" placeholder="Biodra" 
+                                    className="form-control" {...readonlyProps}
+                                    name='hips'
+                                    value={this.state.userData.bodySize.hips}/> cm
+                                    <label className="checkbox-inline c-checkbox">
+                                    <input type="checkbox" name="bool:hips" 
+                                        className='needsclick'
+                                        checked={this.state.requirements.hips || false} 
+                                        onChange={this.handleChangeRequirements.bind(this)} />
+                                        <em className="fa fa-check"></em>
+                                    </label>
+                                </Col>
+                            </FormGroup> 
+                            <FormGroup className='form-inline'>
+                                <label className="col-lg-2 control-label">Udo:</label>
+                                <Col lg={ 10 }>
+                                    <FormControl type="number" placeholder="Udo" 
+                                    className="form-control" {...readonlyProps}
+                                    name='thigh'
+                                    value={this.state.userData.bodySize.thigh}/> cm
+                                    <label className="checkbox-inline c-checkbox">
+                                    <input type="checkbox" name="bool:thigh" 
+                                        className='needsclick'
+                                        checked={this.state.requirements.thigh || false} 
+                                        onChange={this.handleChangeRequirements.bind(this)} />
+                                        <em className="fa fa-check"></em>
+                                    </label>
+                                </Col>
+                            </FormGroup> 
+                            <FormGroup className='form-inline'>
+                                <label className="col-lg-2 control-label">Łydka:</label>
+                                <Col lg={ 10 }>
+                                    <FormControl type="number" placeholder="Łydka" 
+                                    className="form-control" {...readonlyProps}
+                                    name='shin'
+                                    value={this.state.userData.bodySize.shin}/> cm
+                                    <label className="checkbox-inline c-checkbox">
+                                    <input type="checkbox" name="bool:shin" 
+                                        className='needsclick'
+                                        checked={this.state.requirements.shin || false} 
+                                        onChange={this.handleChangeRequirements.bind(this)} />
+                                        <em className="fa fa-check"></em>
+                                    </label>
+                                </Col>
+                            </FormGroup> 
+                        </div>
 
-                    <FormGroup>
-                        <label className="col-lg-2 control-label">Wymagaj ładowania zdjęcia sylwetki przez klienta:</label>
-                        <Col lg={ 10 }>
-                            <FormControl componentClass="select" name="providePhoto" 
-                            value={this.state.requirements.providePhoto}
-                            onChange={this.handleChangeRequirements.bind(this)}
-                            className="form-control">
-                                <option value='twice_a_day'>Dwa razy dziennie</option>
-                                <option value='each_day'>Codziennie</option>
-                                <option value='each_second_day'>Co drugi dzień</option>
-                                <option value='each_third_day'>Co trzeci dzień</option>
-                                <option value='weekly'>Raz w tygodniu</option>
-                                <option value='each_second_week'>Raz na dwa tygodnie</option>
-                                <option value='monthly'>Raz na miesiąc</option>
-                                <option value='never'>Nigdy</option>
-                            </FormControl>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup>
-                        <label className="col-lg-2 control-label">Wymagaj dostarczenia badań przez klienta:</label>
-                        <Col lg={ 10 }>
-                            <FormControl componentClass="select" name="boolSelect:provideMedicalSurvey" 
-                            value={this.state.requirements.provideMedicalSurvey}
-                            onChange={this.handleChangeRequirements.bind(this)}
-                            className="form-control">
-                                <option value='true'>Tak</option>
-                                <option value='false'>Nie</option>
-                            </FormControl>
-                        </Col>
-                    </FormGroup>
-                    {downloadForm}
-                </div>  
+                        <FormGroup>
+                            <label className="col-lg-2 control-label">Wymagaj ładowania zdjęcia sylwetki przez klienta:</label>
+                            <Col lg={ 10 }>
+                                <FormControl componentClass="select" name="providePhoto" 
+                                value={this.state.requirements.providePhoto}
+                                onChange={this.handleChangeRequirements.bind(this)}
+                                className="form-control">
+                                    <option value='twice_a_day'>Dwa razy dziennie</option>
+                                    <option value='each_day'>Codziennie</option>
+                                    <option value='each_second_day'>Co drugi dzień</option>
+                                    <option value='each_third_day'>Co trzeci dzień</option>
+                                    <option value='weekly'>Raz w tygodniu</option>
+                                    <option value='each_second_week'>Raz na dwa tygodnie</option>
+                                    <option value='monthly'>Raz na miesiąc</option>
+                                    <option value='never'>Nigdy</option>
+                                </FormControl>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup>
+                            <label className="col-lg-2 control-label">Wymagaj dostarczenia badań przez klienta:</label>
+                            <Col lg={ 10 }>
+                                <FormControl componentClass="select" name="boolSelect:provideMedicalSurvey" 
+                                value={this.state.requirements.provideMedicalSurvey}
+                                onChange={this.handleChangeRequirements.bind(this)}
+                                className="form-control">
+                                    <option value='true'>Tak</option>
+                                    <option value='false'>Nie</option>
+                                </FormControl>
+                            </Col>
+                        </FormGroup>
+                        {downloadForm}
+                    </div>  
+                }
             }
         }
         let profilePic = this.state.user.profilePic || '/images/no_image_user.png';

@@ -8,6 +8,7 @@ import Profile from './Profile'
 import Survey from './Survey'
 import Advice from './Advice'
 import Diary from './Diary'
+import Trainings from './Trainings'
 
 class ClientPage extends React.Component {
     constructor(props, context) {
@@ -67,6 +68,7 @@ class ClientPage extends React.Component {
         let surveyLinkItem = '';
         let adviceLinkItem = '';
         let diaryLinkItem = '';
+        let trainingsLinkItem = '';
         if(this.state.userData.feedPlans){
           if(this.state.userData.feedPlans.some( item => item.plan && item.plan.isWithConsulting)){
             diaryLinkItem = <Link to={"/clients/" + this.props.match.params.id + "/diary"}>
@@ -78,7 +80,7 @@ class ClientPage extends React.Component {
           }
         }
         if( (this.state.userData.feedPlans && this.state.userData.feedPlans.length) || 
-          (this.state.userData.trainPlans && this.state.userData.feedPlans.trainPlans)){
+          (this.state.userData.trainPlans && this.state.userData.trainPlans.length)){
           surveyLinkItem = <Link to={"/clients/" + this.props.match.params.id + "/survey"}>
                 <button type="button" 
         className={"mb-sm mr-sm btn btn-outline " + (this.routeActive('/clients/' + this.props.match.params.id + '/survey') ? 'btn-primary' : 'btn-default') }>
@@ -89,6 +91,14 @@ class ClientPage extends React.Component {
             <button type="button" 
     className={"mb-sm mr-sm btn btn-outline " + (this.routeActive('/clients/' + this.props.match.params.id + '/advice') ? 'btn-primary' : 'btn-default') }>
               Zalecenia
+            </button>
+          </Link>
+        }
+        if(this.state.userData.trainPlans && this.state.userData.trainPlans.length){
+          trainingsLinkItem = <Link to={"/clients/" + this.props.match.params.id + "/trainings"}>
+            <button type="button" 
+    className={"mb-sm mr-sm btn btn-outline " + (this.routeActive('/clients/' + this.props.match.params.id + '/trainings') ? 'btn-primary' : 'btn-default') }>
+              Treningi
             </button>
           </Link>
         }
@@ -104,7 +114,8 @@ class ClientPage extends React.Component {
                   </Link>
                   {surveyLinkItem}                  
                   {adviceLinkItem}
-                  {diaryLinkItem}                
+                  {diaryLinkItem}    
+                  {trainingsLinkItem}            
                 </h3>
                 <Row>
                    <Col lg={12} md={12} sm={12}>
@@ -112,6 +123,7 @@ class ClientPage extends React.Component {
                     <Route path="/clients/:id/survey" component={Survey}/>
                     <Route path="/clients/:id/advice" component={Advice}/>
                     <Route path="/clients/:id/diary/:day?" component={Diary}/>
+                    <Route path="/clients/:id/trainings" component={Trainings}/>
                    </Col>
                 </Row>
             </ContentWrapper>

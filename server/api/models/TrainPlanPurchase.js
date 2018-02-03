@@ -10,35 +10,35 @@ module.exports = {
 
   attributes: {
   	user:{
-		model: 'User',
-		required:true	
-	},
-	plan:{
-		model: 'TrainPlan',
-		required:true	
-	},
-	trainsCount:{
-        type:'integer',
+  		model: 'User',
+  		required:true	
+  	},
+  	plan:{
+  		model: 'TrainPlan',
+  		required:true	
+  	},
+  	trainsCount:{
+          type:'integer',
     },
     trainsLeft:{
     	type:'integer',
     },
-	isActive:{
-		type:'boolean',
-		required:true
-	},
-	transaction:{
-		model:'Transaction',
-		required:true
-	},
+  	isActive:{
+  		type:'boolean',
+  		required:true
+  	},
+  	transaction:{
+  		model:'Transaction',
+  		required:true
+  	},
 
-	toJSON: function() {
-        var obj = this.toObject();
-      	obj.validTo = moment(obj.updatedAt).add(12, 'months').toDate();
-      	obj.validToStr = moment(obj.validTo).format('YYYY-MM-DD');
-      	obj.validFromStr = moment(obj.updatedAt).format('YYYY-MM-DD');
-        return obj;
-    }
+  	toJSON: function() {
+          var obj = this.toObject();
+        	obj.validTo = moment(obj.updatedAt).add(12, 'months').toDate();
+        	obj.validToStr = moment(obj.validTo).format('YYYY-MM-DD');
+        	obj.validFromStr = moment(obj.updatedAt).format('YYYY-MM-DD');
+          return obj;
+      }
   },
 
   beforeUpdate: function (values, cb) {

@@ -171,5 +171,10 @@ module.exports.policies = {
   TransactionsController:{
     '*': false,
     'find':'isTrainer'
+  },
+
+  TrainingController:{
+    '*':'isTrainer',
+    'find':'isTrainerForOtherUser'
   }
 };
