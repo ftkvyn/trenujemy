@@ -134,6 +134,8 @@ module.exports.routes = {
 
   'post /api/sendTrainerHints' : 'TrainerHintsController.saveSendHints',
 
+  'get /api/notifications/hints' : 'NotificationsController.hints',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

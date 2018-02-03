@@ -3,6 +3,8 @@ import ProfileData from './ProfileData';
 import { Router, Route, Link, History, withRouter } from 'react-router-dom';
 import { Collapse } from 'react-bootstrap';
 import { loadUser } from '../Common/userDataService';
+import { loadNewHintsCount, addNotificationsListener, removeNotificationsListener } from '../Common/notificationsService';
+import Notification from '../Components/Notification'
 
 class UserMenu extends React.Component {
     constructor(props, context) {
@@ -18,14 +20,36 @@ class UserMenu extends React.Component {
             userData:{
                 feedPlans:[],
                 trainPlans:[]
-            }
+            },
+            notifications:{
+                hints: 0
+            },
+            listenerKey: null
         };
 
-        loadUser()
-        .then(function(userData) {              
-            this.setState({userData: userData});
-        }.bind(this));
+        
     };
+
+    componentDidMount(){
+        loadUser()
+        .then(userData => {              
+            this.setState({userData: userData});
+        });
+        loadNewHintsCount()
+        .then(data => {              
+            this.setState({notifications: {hints: data.count}});
+        });
+        let key = addNotificationsListener( newData => {
+            let oldData = this.state.notifications;
+            let updatedData = Object.assign(oldData, newData);
+            this.setState({notifications: updatedData});
+        });
+        this.setState({listenerKey: key});
+    }
+
+    componentWillUnmount(){
+        removeNotificationsListener(this.state.listenerKey);
+    }
 
     routeActive(paths) {
         paths = Array.isArray(paths) ? paths : [paths];
@@ -65,24 +89,24 @@ class UserMenu extends React.Component {
         if(this.state.userData.feedPlans.length){
             surveyItem = <li className={ this.routeActive('survey') ? 'active' : '' }>
                 <Link to="/survey" title="Ankieta">
-                <em className="fa fa-edit"></em>
-                <span>Ankieta</span>
+                    <em className="fa fa-edit"></em>
+                    <span>Ankieta</span>
                 </Link>
             </li>
         }   
         if(this.state.userData.feedPlans.length || this.state.userData.trainPlans.length){
             adviceItem = <li className={ this.routeActive('advice') ? 'active' : '' }>
                 <Link to="/advice" title="Zalecenia">
-                <em className="fa fa-exclamation-triangle"></em>
-                <span>Zalecenia</span>
+                    <em className="fa fa-exclamation-triangle"></em>
+                    <span>Zalecenia</span>
                 </Link>
             </li>
 
             if(this.state.userData.feedPlans.length && this.state.userData.feedPlans[0].plan.isWithConsulting){
                 diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
                     <Link to="/diary" title="Dziennik aktywności">
-                    <em className="fa fa-address-book-o"></em>
-                    <span>Dziennik aktywności</span>
+                        <em className="fa fa-address-book-o"></em>
+                        <span>Dziennik aktywności</span>
                     </Link>
                 </li>
             }
@@ -96,19 +120,26 @@ class UserMenu extends React.Component {
                 </li>
                 <li className={ this.routeActive('goods') ? 'active' : '' }>
                     <Link to="/goods" title="Usługi">
-                    <em className="fa fa-id-card-o"></em>
-                    <span>Usługi</span>
+                        <em className="fa fa-id-card-o"></em>
+                        <span>Usługi</span>
                     </Link>
                 </li>
                 <li className={ this.routeActive('profile') ? 'active' : '' }>
                     <Link to="/profile" title="Moje dane">
-                    <em className="icon-user"></em>
-                    <span>Moje dane</span>
+                        <em className="icon-user"></em>
+                        <span>Moje dane</span>
                     </Link>
                 </li>
                 {surveyItem}                
                 {adviceItem}                
                 {diaryItem}
+                <li className={ this.routeActive('hints') ? 'active' : '' }>
+                    <Link to="/hints" title="Ciekawostki od trenera">
+                        <Notification count={this.state.notifications.hints}></Notification>
+                        <em className="fa fa-lightbulb-o"></em>
+                        <span>Ciekawostki</span>
+                    </Link>
+                </li>
             </ul>);
     }
 

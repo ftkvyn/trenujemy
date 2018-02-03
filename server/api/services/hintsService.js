@@ -7,6 +7,7 @@ const _hintPeriodsConfig = [
 ['each_second_day', '0 8 */2 * *'],
 ['each_day', '0 8 * * *'], 
 ['twice_a_day', '0 8,16 * * *']];
+// ['twice_a_day', '0,30 * * * * *']];
 
 const _hintPeriods = _hintPeriodsConfig.map( item => item[0] );
 
@@ -15,6 +16,7 @@ exports.hintConfigs = [... _hintPeriodsConfig];
 
 
 exports.sendHints = function(period){
+	console.log('sending hints - ' + period);
 	TrainerInfo.find()
 	.exec(function(err, trainers){
 		if(err){
@@ -30,7 +32,7 @@ exports.sendHints = function(period){
 			console.log('Not sending any hints - disabled by trainer');
 			return;
 		}
-		if(!hintPeriods.some( item => item == period)){
+		if(!_hintPeriods.some( item => item == period)){
 			console.error('Error sending hints - wrong period: ' + period);
 		}
 		UserRequirement.find({sendTips: period})
@@ -44,8 +46,7 @@ exports.sendHints = function(period){
 				console.log(`Not sending any hints ${period} - no such users`);
 				return;
 			}
-			userIds = usersData.map( item => item.user);
-
+			let userIds = usersData.map( item => item.user);
 			let qs = [];
 			qs.push(TrainerHints.find());
 			qs.push(UserHints.find({user: userIds}));
@@ -64,7 +65,7 @@ exports.sendHints = function(period){
 				for(let i = 0; i < userIds.length; i++){
 					let id = userIds[i];
 					let oldHintIds = userHints.filter( item => item.user == id).map( item => item.hint);
-					let notUsedHints = hint.filter( item => !oldHintIds.some( oldItemId => oldItemId == item.id ));
+					let notUsedHints = hints.filter( item => !oldHintIds.some( oldItemId => oldItemId == item.id ));
 					if(notUsedHints.length){
 						let newHint = notUsedHints[Math.floor(Math.random()*notUsedHints.length)];
 						let model = {
@@ -76,7 +77,7 @@ exports.sendHints = function(period){
 						createQs.push(UserHints.create(model));
 					}
 				}
-				Q.all(qs)
+				Q.all(createQs)
 				.catch(function(err){
 					if(err){
 						console.error('Error sending hints - creating hints');

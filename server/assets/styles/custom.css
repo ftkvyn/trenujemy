@@ -204,3 +204,18 @@ body.with-popup .wrapper > .aside
 	border: 1px solid #dde6e9;
 	background: #f6f7f7;
 }
+
+.user-hint.read .user-hint-label{
+	display: none;
+}
+
+.user-hint .user-hint-label{
+	position: absolute;
+    right: 10px;
+    top: 33px;
+}
+
+.user-hint.not-read .user-hint-container{
+	background: aliceblue;
+	color: black;
+}

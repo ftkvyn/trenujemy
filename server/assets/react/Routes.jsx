@@ -21,6 +21,7 @@ import TrainingsHours from './components/Pages/TrainingsHours'
 import AnswerTemplatesPage from './components/Pages/AnswerTemplatesPage'
 import AdviceTemplatesPage from './components/Pages/AdviceTemplatesPage'
 import TrainerHintsPage from './components/Pages/TrainerHintsPage'
+import UserHints from './components/Pages/UserHints'
                            
 import FeedPlansPrice from './components/Pages/FeedPlansPrice'
 
@@ -80,6 +81,7 @@ const Routes = ({ location }) => {
                             <Route path="/answers" component={AnswerTemplatesPage}/>
                             <Route path="/adviceTemplates" component={AdviceTemplatesPage}/>
                             <Route path="/trainerHints" component={TrainerHintsPage}/>
+                            <Route path="/hints" component={UserHints}/>                            
                             <Route path="/surveySettngs/:type" component={SurveySettngs}/>                            
                             <Redirect to="/goods"/>
                         </Switch>

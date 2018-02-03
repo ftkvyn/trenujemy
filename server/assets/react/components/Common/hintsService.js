@@ -1,3 +1,17 @@
+function loadUserHints(userId){
+    return new Promise((resolve, reject) => {
+        let url = `/api/hints/${userId || ''}`;
+        $.get(url)
+        .success(function(data) {
+            resolve(data);
+        })
+        .error(function(err){
+            console.error(err);
+            reject(err);
+        });
+      });
+}
+
 function loadHints(){
 	return new Promise((resolve, reject) => {
 		let url = '/api/TrainerHints/';
@@ -90,4 +104,4 @@ function saveSendHints(value){
       });
 }
 
-export {loadHints, saveHint, removeHint, addHint, loadSendHints, saveSendHints};
+export {loadHints, saveHint, removeHint, addHint, loadSendHints, saveSendHints, loadUserHints};

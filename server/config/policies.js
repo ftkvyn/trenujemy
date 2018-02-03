@@ -163,4 +163,8 @@ module.exports.policies = {
     'create':false,
     'destroy':false,
   },
+
+  NotificationsController:{
+    '*':'sessionAuth'
+  }
 };

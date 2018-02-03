@@ -15,7 +15,12 @@ module.exports = {
 				console.error(err);
 				return res.badRequest();
 			}
-			return res.json(data);
+			res.json(data);
+
+			setTimeout(function(){
+				UserHints.update({user: userId}, {isRead: true})
+				.exec(function(err, data){});
+			}, 2000);
 		});
 	},
 
