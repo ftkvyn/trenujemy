@@ -127,7 +127,7 @@ class TrainingsPrice extends React.Component {
                                 </Col>
                             </FormGroup>
 
-                            <FormGroup>
+                            <FormGroup className='clearfix'>
                                 <Col lg={ 12 }>
                                     <FormControl type="number" placeholder="Liczba treningów" 
                                     className="form-control"
@@ -136,8 +136,8 @@ class TrainingsPrice extends React.Component {
                                     onChange={this.handleChange.bind(this, plan.id)}/>
                                 </Col>
                             </FormGroup>
-
-                            <FormGroup>
+                            <hr/>
+                            <FormGroup className='clearfix'>
                               <label className="col-lg-6 col-md-6 col-sm-6 col-xs-6 control-label">Widoczne na stronie</label>
                               <Col lg={ 6 } md={ 6 } sm={6} xs={6}>
                                   <div className="checkbox c-checkbox">
@@ -150,7 +150,8 @@ class TrainingsPrice extends React.Component {
                                   </div>
                               </Col>
                             </FormGroup>
-                            <FormGroup>
+                            <hr/>
+                            <FormGroup  className='clearfix'>
                               <label className="col-lg-6 col-md-6 col-sm-6 col-xs-6 control-label">Opcja rekomendowana:</label>
                               <Col lg={ 6 } md={ 6 } sm={6} xs={6}>
                                   <div className="radio c-radio">
