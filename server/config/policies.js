@@ -166,5 +166,10 @@ module.exports.policies = {
 
   NotificationsController:{
     '*':'sessionAuth'
+  },
+
+  TransactionsController:{
+    '*': false,
+    'find':'isTrainer'
   }
 };

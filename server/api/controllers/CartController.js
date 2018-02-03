@@ -129,6 +129,7 @@ module.exports = {
 				    	p24_api_version: '3.2'				    	
 				    	//p24_sign: md5Hash
 					};
+					let title = '';
 
 					for(let i = 0; i < cartItems.length; i++){
 						let item = cartItems[i];
@@ -143,6 +144,7 @@ module.exports = {
 						}else{
 							paymentData['p24_name_' + (i+1)] = item.name;
 						}	
+						title += paymentData['p24_name_' + (i+1)] + '; ';
 						paymentData['p24_quantity_' + (i+1)] = 1;
 						paymentData['p24_price_' + (i+1)] = item.price * 100;
 						paymentData['p24_number_' + (i+1)] = item.id;
@@ -171,7 +173,7 @@ module.exports = {
 					    console.log(body);
 					    const bodyData = queryString.parse(body);
 					    if(bodyData.token){
-					    	Transaction.update({id: transaction.id}, {status: 'Redirected to płatności24'})
+					    	Transaction.update({id: transaction.id}, {status: 'Redirected to płatności24', title: title})
 							.exec(function(){
 								//Do nothing.
 							});

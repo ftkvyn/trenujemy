@@ -18,6 +18,10 @@ module.exports = {
 		required: true
 	},
 
+	title:{
+		type:'string'
+	},
+
 	amount:{ // PLN * 100
 		type:'integer',
 		required: true

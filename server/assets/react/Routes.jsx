@@ -17,6 +17,7 @@ import SurveySettngs from './components/Pages/SurveySettngs'
 import TrainingsPrice from './components/Pages/TrainingsPrice'
 import TrainingsPlaces from './components/Pages/TrainingsPlaces'
 import TrainingsHours from './components/Pages/TrainingsHours'
+import TransactionsPage from './components/Pages/TransactionsPage'
 
 import AnswerTemplatesPage from './components/Pages/AnswerTemplatesPage'
 import AdviceTemplatesPage from './components/Pages/AdviceTemplatesPage'
@@ -81,6 +82,7 @@ const Routes = ({ location }) => {
                             <Route path="/answers" component={AnswerTemplatesPage}/>
                             <Route path="/adviceTemplates" component={AdviceTemplatesPage}/>
                             <Route path="/trainerHints" component={TrainerHintsPage}/>
+                            <Route path="/transactions" component={TransactionsPage}/>                            
                             <Route path="/hints" component={UserHints}/>                            
                             <Route path="/surveySettngs/:type" component={SurveySettngs}/>                            
                             <Redirect to="/goods"/>

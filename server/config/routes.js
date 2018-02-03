@@ -136,6 +136,8 @@ module.exports.routes = {
 
   'get /api/notifications/hints' : 'NotificationsController.hints',
 
+  'get /api/transactions/:year/:month' : 'TransactionsController.find',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
