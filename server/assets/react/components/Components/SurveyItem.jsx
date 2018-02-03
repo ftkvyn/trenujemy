@@ -21,13 +21,9 @@ const SurveyItem = (props) => {
     isShowItem = items.some( (item) => item.startsWith('bodySize'));
   }
   if(isShowItem){
-    if(Array.isArray(props.children)){
-      return <div>
+    return <div>
         {props.children}
       </div>
-    }else{
-      return props.children;
-    }
   }else{    
     return null;
   }

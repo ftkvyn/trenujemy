@@ -49,6 +49,9 @@ function loadComponents(){
 
 function loadDishes(dayId){
 	return new Promise((resolve, reject) => {
+		if(!dayId){
+			return resolve([]);
+		}
 		$.get(`/api/dishes/${dayId}`)
 		.success(function(data) {
 			resolve(data);

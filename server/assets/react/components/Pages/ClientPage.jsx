@@ -2,6 +2,7 @@ import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
+import { loadUser } from '../Common/userDataService';
 
 import Profile from './Profile'
 import Survey from './Survey'
@@ -9,6 +10,15 @@ import Advice from './Advice'
 import Diary from './Diary'
 
 class ClientPage extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        let initialState = {
+            userData:{},
+            userId: this.props.match.params.id
+        };
+        this.state = initialState;        
+    };
+
     routeActive(paths) {
         paths = Array.isArray(paths) ? paths : [paths];
         let currentPath = this.props.location.pathname;
@@ -18,6 +28,28 @@ class ClientPage extends React.Component {
             }
         }
         return false;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        var nextId = undefined;
+        if(nextProps.match && nextProps.match.params){
+            nextId = nextProps.match.params.id;
+        }
+        if(this.state.userId === nextId){
+            return;
+        }
+        this.setState({userId: nextId});
+        loadUser(nextId)
+            .then((userData) => {              
+                this.setState({userData: userData});
+            });
+    }
+
+    componentDidMount(){
+      loadUser(this.state.userId)
+          .then((userData) => {              
+              this.setState({userData: userData});
+          });
     }
 
     routeActiveStart(paths) {
@@ -32,6 +64,35 @@ class ClientPage extends React.Component {
     }
     
     render() {  
+        let surveyLinkItem = '';
+        let adviceLinkItem = '';
+        let diaryLinkItem = '';
+        if(this.state.userData.feedPlans){
+          if(this.state.userData.feedPlans.some( item => item.plan && item.plan.isWithConsulting)){
+            diaryLinkItem = <Link to={"/clients/" + this.props.match.params.id + "/diary"}>
+              <button type="button" 
+      className={"mb-sm mr-sm btn btn-outline " + (this.routeActiveStart('/clients/' + this.props.match.params.id + '/diary') ? 'btn-primary' : 'btn-default') }>
+                Dziennik
+              </button>
+            </Link>  
+          }
+        }
+        if( (this.state.userData.feedPlans && this.state.userData.feedPlans.length) || 
+          (this.state.userData.trainPlans && this.state.userData.feedPlans.trainPlans)){
+          surveyLinkItem = <Link to={"/clients/" + this.props.match.params.id + "/survey"}>
+                <button type="button" 
+        className={"mb-sm mr-sm btn btn-outline " + (this.routeActive('/clients/' + this.props.match.params.id + '/survey') ? 'btn-primary' : 'btn-default') }>
+                  Ankieta
+                </button>
+              </Link>
+          adviceLinkItem = <Link to={"/clients/" + this.props.match.params.id + "/advice"}>
+            <button type="button" 
+    className={"mb-sm mr-sm btn btn-outline " + (this.routeActive('/clients/' + this.props.match.params.id + '/advice') ? 'btn-primary' : 'btn-default') }>
+              Zalecenia
+            </button>
+          </Link>
+        }
+
         return (
             <ContentWrapper>
                 <h3>
@@ -41,24 +102,9 @@ class ClientPage extends React.Component {
                       Dane
                     </button>  
                   </Link>
-                  <Link to={"/clients/" + this.props.match.params.id + "/survey"}>
-                    <button type="button" 
-            className={"mb-sm mr-sm btn btn-outline " + (this.routeActive('/clients/' + this.props.match.params.id + '/survey') ? 'btn-primary' : 'btn-default') }>
-                      Ankieta
-                    </button>
-                  </Link>
-                  <Link to={"/clients/" + this.props.match.params.id + "/advice"}>
-                    <button type="button" 
-            className={"mb-sm mr-sm btn btn-outline " + (this.routeActive('/clients/' + this.props.match.params.id + '/advice') ? 'btn-primary' : 'btn-default') }>
-                      Zalecenia
-                    </button>
-                  </Link>
-                  <Link to={"/clients/" + this.props.match.params.id + "/diary"}>
-                    <button type="button" 
-            className={"mb-sm mr-sm btn btn-outline " + (this.routeActiveStart('/clients/' + this.props.match.params.id + '/diary') ? 'btn-primary' : 'btn-default') }>
-                      Dziennik
-                    </button>
-                  </Link>                  
+                  {surveyLinkItem}                  
+                  {adviceLinkItem}
+                  {diaryLinkItem}                
                 </h3>
                 <Row>
                    <Col lg={12} md={12} sm={12}>
