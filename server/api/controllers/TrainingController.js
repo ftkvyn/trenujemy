@@ -24,9 +24,10 @@ module.exports = {
 	update:function(req, res){
 		let model = {};
 		if(req.session.user.role == 'trainer'){
-			model.userComment = req.body.comment;
-		}else{
 			model.trainerComment = req.body.comment;
+		}else{
+			model.userComment = req.body.comment;
+			model.user = req.session.user.id;
 		}
 		Training.update({id: req.params.id}, model)
 		.exec(function(err, data){
@@ -57,6 +58,33 @@ module.exports = {
 
 			qs.push(TrainPlanPurchase.update({id: plan.id},{trainsLeft: plan.trainsLeft - 1}));
 			qs.push(Training.create(model));
+
+			Q.all(qs)
+			.catch(function(err){
+				if(err){
+					console.error(err);
+					return res.badRequest(err);
+				}
+			})
+			.then(function(data){
+				res.json(data[1]);
+			});
+		});
+	},
+
+	destroy:function(req, res){
+		Training.findOne(req.params.id)
+		.populate('purchase')
+		.exec(function(err, data){
+			if(err || !data){
+				console.error(err);
+				return res.badRequest(err);
+			}
+
+			let qs = [];
+
+			qs.push(TrainPlanPurchase.update({id: data.purchase.id},{trainsLeft: data.purchase.trainsLeft + 1, isActive: true}));
+			qs.push(Training.destroy({id:req.params.id}));
 
 			Q.all(qs)
 			.catch(function(err){

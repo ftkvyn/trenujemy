@@ -1,6 +1,6 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
-import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
 import Trainings from './Trainings'
 
 class TrainingsPage extends React.Component {

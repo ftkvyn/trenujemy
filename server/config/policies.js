@@ -175,6 +175,7 @@ module.exports.policies = {
 
   TrainingController:{
     '*':'isTrainer',
-    'find':'isTrainerForOtherUser'
+    'find':'isTrainerForOtherUser',
+    'update':'sessionAuth'
   }
 };

@@ -81,6 +81,7 @@ body .modal-backdrop.in{
 	display: block;
     overflow: hidden;    
     padding-top: 10px;
+    padding-bottom: 10px;
     background-color: #fafafa;
 }
 

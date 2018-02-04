@@ -34,7 +34,7 @@ function createUserTrainings(model){
 function removeTrainings(trainingId){
 	return new Promise((resolve, reject) => {
 		$.ajax({
-            url: '/api/training/'+data.id,
+            url: '/api/training/'+trainingId,
             type: 'DELETE',
             success: function (data) {
             	resolve(data);                
@@ -47,10 +47,10 @@ function removeTrainings(trainingId){
 	  });
 }
 
-function saveComment(trainingId, comment){
+function saveTrainingComment(trainingId, comment){
 	return new Promise((resolve, reject) => {
 		$.ajax({
-            url: '/api/training/'+data.id,
+            url: '/api/training/'+trainingId,
             type: 'PUT',
             data: {comment: comment},
             success: function (data) {
@@ -65,4 +65,4 @@ function saveComment(trainingId, comment){
 }
 
 
-export {loadUserTrainings, createUserTrainings, saveComment, removeTrainings};
+export {loadUserTrainings, createUserTrainings, saveTrainingComment, removeTrainings};
