@@ -2,9 +2,29 @@ import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
 import Survey from './Survey'
+import { loadNotifications, saveNotifications, updateNotifications } from '../Common/notificationsService';
 
 class SurveyPage extends React.Component {
-    
+    constructor(props, context) {
+        super(props, context);
+        let initialState = {
+            notifications: {},
+        };
+        this.state = initialState;        
+    };
+
+    componentDidMount(){
+        loadNotifications()
+            .then((data) => this.setState({notifications: data}));
+    }
+
+    componentWillUnmount(){
+        if(this.state.notifications.id){
+            saveNotifications({id: this.state.notifications.id, updateSurvey: false});
+        }
+        updateNotifications({survey: 0});
+    }
+
     render() {  
         return (
             <ContentWrapper>

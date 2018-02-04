@@ -16,5 +16,17 @@ module.exports = {
 			return res.json({count: count});
 		})
 	},
+
+	find: function(req, res){
+		Notifications.findOne({user: req.session.user.id})
+		.exec(function(err, data) {
+			if(err){
+				console.error(err);
+				return res.badRequest(err);
+			}
+			return res.json(data);
+		})
+	}
+
 };
 

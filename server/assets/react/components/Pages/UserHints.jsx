@@ -2,7 +2,7 @@ import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
 import { loadUserHints } from '../Common/hintsService';
-import { updateNewHintsCount } from '../Common/notificationsService';
+import { updateNotifications } from '../Common/notificationsService';
 import moment from 'moment';
 
 class UserHintsPage extends React.Component {
@@ -24,7 +24,7 @@ class UserHintsPage extends React.Component {
     }
 
     componentWillUnmount(){
-        updateNewHintsCount(0);
+        updateNotifications({hints:0});
     }
 
     render() {  

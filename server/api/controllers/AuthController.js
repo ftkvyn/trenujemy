@@ -96,7 +96,9 @@ module.exports = {
 	                		return res.badRequest('Error.');		
 						}
 	                  	if (user) {            	              
-	                  		emailService.sendActivationMail(user);     	
+	                  		emailService.sendActivationMail(user); 
+	                  		Notification.create({user: user.id, helloMessage: true})
+	                  		.exec(function(){});    	
 	                    	return res.send({success: true});
           				}else{
           					console.error('No user created');

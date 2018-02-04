@@ -3,7 +3,7 @@ import ProfileData from './ProfileData';
 import { Router, Route, Link, History, withRouter } from 'react-router-dom';
 import { Collapse } from 'react-bootstrap';
 import { loadUser } from '../Common/userDataService';
-import { loadNewHintsCount, addNotificationsListener, removeNotificationsListener } from '../Common/notificationsService';
+import { loadNewHintsCount, addNotificationsListener, removeNotificationsListener, loadNotifications } from '../Common/notificationsService';
 import Notification from '../Components/Notification'
 
 class UserMenu extends React.Component {
@@ -22,7 +22,8 @@ class UserMenu extends React.Component {
                 trainPlans:[]
             },
             notifications:{
-                hints: 0
+                hints: 0,
+                survey: false
             },
             listenerKey: null
         };
@@ -36,8 +37,18 @@ class UserMenu extends React.Component {
             this.setState({userData: userData});
         });
         loadNewHintsCount()
-        .then(data => {              
-            this.setState({notifications: {hints: data.count}});
+        .then(data => {  
+            let model = Object.assign({}, this.state.notifications);         
+            model.hints = data.count;
+            this.setState({notifications: model});
+        });
+        loadNotifications()
+        .then(data => {     
+            let model = Object.assign({}, this.state.notifications);         
+            if(data.updateSurvey){
+                model.survey = 1;
+            }
+            this.setState({notifications: model});
         });
         let key = addNotificationsListener( newData => {
             let oldData = this.state.notifications;
@@ -90,6 +101,7 @@ class UserMenu extends React.Component {
         if(this.state.userData.feedPlans.length){
             surveyItem = <li className={ this.routeActive('survey') ? 'active' : '' }>
                 <Link to="/survey" title="Ankieta">
+                    <Notification count={this.state.notifications.survey}></Notification>
                     <em className="fa fa-edit"></em>
                     <span>Ankieta</span>
                 </Link>

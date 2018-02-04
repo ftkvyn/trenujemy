@@ -4,6 +4,7 @@ import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, Drop
 import { withRouter } from 'react-router-dom';
 import { loadUser, loadPurchases } from '../Common/userDataService';
 import GoodsInfo from '../Components/GoodsInfo'
+import { loadNotifications, saveNotifications  } from '../Common/notificationsService';
 
 class Goods extends React.Component {
     constructor(props, context) {
@@ -11,7 +12,9 @@ class Goods extends React.Component {
         let initialState = {
             user:{},
             goods:{},
-            goodsLoaded: false
+            goodsLoaded: false,
+            notifications: {},
+            dontRemind: false
         };
         this.state = initialState;        
     };
@@ -27,6 +30,37 @@ class Goods extends React.Component {
             });
         loadPurchases()
             .then((data) => this.setState({goods: data, goodsLoaded: true}));
+        loadNotifications()
+            .then((data) => this.setState({notifications: data}));
+    }
+
+    componentWillUnmount(){
+        if(this.state.notifications.id){
+            saveNotifications({id: this.state.notifications.id, helloMessage: false, newPurchase: false});
+        }
+    }
+
+    handleNotificationsCheckbox(event){
+        let newValue = !this.state.dontRemind;
+        this.setState({dontRemind: newValue});
+        let model = Object.assign({}, this.state.notifications);
+        if(typeof model.trainingInfo == 'boolean'){
+            model.trainingInfo = !newValue;
+        }else{
+            delete model.trainingInfo;
+        }
+        if(typeof model.feedInfo == 'boolean'){
+            model.feedInfo = !newValue;
+        }else{
+            delete model.feedInfo;
+        }
+        if(typeof model.consultInfo == 'boolean'){
+            model.consultInfo = !newValue;
+        }else{
+            delete model.consultInfo;
+        }
+
+        saveNotifications(model);
     }
 
     handleChange(event) {
@@ -61,7 +95,79 @@ class Goods extends React.Component {
         if(!this.state.goodsLoaded){
             return <div></div>
         }
-        
+        let infoPanel = '';
+        if(this.state.notifications.id){
+            let infoPanelContent = null;
+            let notify = this.state.notifications;
+            if(notify.helloMessage){
+                infoPanelContent = <div className='hello-message'>
+                    <p>Witaj w swoim panelu!</p>
+                    <br/>
+                    <p>Aby w pełni korzystać z jego możliwości wykup jedną z usług dostępnych <a href='/'>na stronie</a>.</p>
+                </div>
+            }
+            let startText = <p>Witaj w swoim panelu!</p>
+            if(notify.newPurchase){
+                startText = <p>Dziękuję za dokonanie zakupu!</p>
+            }
+            if(notify.trainingInfo && notify.feedInfo){
+                infoPanelContent = <div className='hello-message'>
+                    {startText}
+                    <br/>
+                    <p>W tym miejscu będziemy wspólnie wymieniać się informacjami w ramach naszej współpracy. Otrzymasz ode mnie pełny plan żywieniowo-treningowy. Codziennie podzielisz się ze mną szczegółami swojego dnia a ja udzielę Ci wyczerpującej konsultacji - wspólnie osiągniemy cel!</p>
+                    <br/>
+                    <p>Po każdym treningu ze mną będziesz mógł/mogła podzielić się ze mną swoimi spostrzeżeniemi a ja udzielę Ci wyczerpującej odpowiedzi. </p>
+                    <br/>
+                    <p>Aby kontynuować uzupełnij teraz odpowiednie formularze ("Moje dane" oraz "Ankieta"). Dzięki temu lepiej dopasuję Twój plan do Twoich indywidualnych potrzeb.</p>
+                </div>
+            }else{
+                if(notify.trainingInfo){
+                    infoPanelContent = <div className='hello-message'>
+                        {startText}
+                        <br/>
+                        <p>W tym miejscu będziemy wspólnie wymieniać się informacjami w ramach naszej współpracy. Po każdym treningu będziesz mógł/mogła podzielić się ze mną swoimi spostrzeżeniemi a ja udzielę Ci wyczerpującej odpowiedzi. </p>
+                        <br/>
+                        <p>Aby kontynuować uzupełnij teraz odpowiednie formularze ("Moje dane" oraz "Ankieta"). Dzięki temu będę w stanie lepiej dopasować trening do Twoich potrzeb.</p>
+                    </div>
+                }
+                if(notify.feedInfo){
+                    if(notify.consultInfo){
+                        infoPanelContent = <div className='hello-message'>
+                            {startText}
+                            <br/>
+                            <p>W tym miejscu będziemy wspólnie wymieniać się informacjami w ramach naszej współpracy. Otrzymasz od mnie pełny plan żywieniowo-treningowy. Codziennie podzielisz się ze mną szczegółami swojego dnia a ja udzielę Ci wyczerpującej konsultacji - wspólnie osiągniemy cel!</p>
+                            <br/>
+                            <p>Aby kontynuować uzupełnij teraz odpowiednie formularze ("Moje dane" oraz "Ankieta"). Dzięki temu lepiej dopasuję Twój plan do Twoich indywidualnych potrzeb.</p>
+                        </div>
+                    }else{
+                        infoPanelContent = <div className='hello-message'>
+                            {startText}
+                            <br/>
+                            <p>W tym miejscu będziemy wspólnie wymieniać się informacjami w ramach naszej współpracy. Otrzymasz od mnie pełny plan żywieniowo-treningowy. Trzymając się go z pewnością osiągniesz zamierzony cel!</p>
+                            <br/>
+                            <p>Aby kontynuować uzupełnij teraz odpowiednie formularze ("Moje dane" oraz "Ankieta"). Dzięki temu lepiej dopasuję Twój plan do Twoich indywidualnych potrzeb.</p>
+                        </div>
+                    }
+                }
+            }
+
+            if(infoPanelContent){
+                infoPanel = <Well bsSize="large" style={{'textAlign':'center'}}>
+                    {infoPanelContent}
+                    <div className='text-right'>
+                        <label htmlFor='dontRemind' className='pointer' style={{margin: '9px 10px 0 0'}}>Nie przypominaj mi o tym następnym razem</label>
+                        <div className="checkbox c-checkbox pull-right">
+                            <label>
+                                <input type="checkbox" name="dontRemind" id='dontRemind'
+                                checked={this.state.dontRemind} 
+                                onChange={this.handleNotificationsCheckbox.bind(this)} />
+                                <em className="fa fa-check"></em>
+                            </label>
+                        </div>
+                    </div>
+                </Well>
+            }
+        }
         return (
         	<ContentWrapper>
                 <h3>Panel klienta</h3>
@@ -80,6 +186,8 @@ class Goods extends React.Component {
 		                    </Row>
                             <GoodsInfo goods={this.state.goods}></GoodsInfo>
 		                </Panel>
+
+                        {infoPanel}
 	            	</Col>
                 </Row>
             </ContentWrapper>

@@ -165,7 +165,9 @@ module.exports.policies = {
   },
 
   NotificationsController:{
-    '*':'sessionAuth'
+    '*':'sessionAuth',
+    'create':false,
+    'destroy': false
   },
 
   TransactionsController:{

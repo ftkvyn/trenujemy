@@ -49,13 +49,34 @@ exports.purchaseItems = function(transaction){
 		deferred.reject(new Error('Wrong transaction status - ' + transaction.status));
 	}
 
-	TrainPlan.find({isActive: true, id: cart.trainings || []})
-	.exec(function(err, trainPlans){
+	let loadQs = [];
+
+	loadQs.push(TrainPlan.find({isActive: true, id: cart.trainings || []}));
+	loadQs.push(Notifications.findOne({user: transaction.user}));
+	loadQs.push(TrainPlanPurchase.count({user: transaction.user}));
+	loadQs.push(FeedPlanPurchase.count({user: transaction.user}));
+	if(cart.feedPlan){
+		loadQs.push(FeedPlan.findOne({id: cart.feedPlan}));
+	}
+
+	Q.all(loadQs)
+	.catch(function(err){
+		deferred.reject(new Error(err));
+	})
+	.then(function(data){
+		deferred.resolve(data);
+		let trainPlans = data[0];
+		let oldNotification = data[1];
+		let oldTrainsCount = data[2];
+		let oldFeedsCount = data[3];
+		let feedPlan = data[4];
 		if(err){
 			return deferred.reject(err);
 		}
 
 		let qs = [];
+		let notificationModel = {user: transaction.user};
+		notificationModel.newPurchase = true;
 		for(let i = 0; i < cart.trainings.length; i++){
 			let plan = trainPlans.find( (item) => item.id == cart.trainings[i]);
 			if(plan){
@@ -67,6 +88,12 @@ exports.purchaseItems = function(transaction){
 					trainsLeft: plan.trainsCount,
 					isActive: true
 				}));	
+				// if(typeof oldNotification.trainingInfo != 'boolean'){
+					notificationModel.trainingInfo = true;
+				// }
+				if(!oldTrainsCount){
+					notificationModel.updateSurvey = true;
+				}
 			}	
 		}
 		if(cart.trainings.length && qs.length){
@@ -79,7 +106,7 @@ exports.purchaseItems = function(transaction){
 			},{ createdAt: now }));
 		}
 		if(cart.feedPlan){
-			qs.push(FeedPlanPurchase.update({user: transaction.user.id}, {isActive: false}));
+			qs.push(FeedPlanPurchase.update({user: transaction.user}, {isActive: false}));
 			qs.push(FeedPlanPurchase.create({
 				user: transaction.user,
 				transaction: transaction.id,
@@ -87,7 +114,19 @@ exports.purchaseItems = function(transaction){
 				target: cart.target,
 				isActive: true
 			}));
+			// if(typeof oldNotification.feedInfo != 'boolean'){
+				notificationModel.feedInfo = true;
+			// }
+			if(feedPlan.isWithConsulting){
+				// if(typeof oldNotification.consultInfo != 'boolean'){
+					notificationModel.consultInfo = true;
+				// }
+			}
+			if(!oldFeedsCount){
+				notificationModel.updateSurvey = true;
+			}
 		}
+		qs.push(Notifications.update({id: oldNotification.id},notificationModel));
 		Q.all(qs)
 		.catch(function(err){
 			deferred.reject(new Error(err));

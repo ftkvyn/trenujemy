@@ -220,3 +220,8 @@ body.with-popup .wrapper > .aside
 	background: aliceblue;
 	color: black;
 }
+
+.hello-message{
+	max-width: 600px;
+    margin: auto;
+}
