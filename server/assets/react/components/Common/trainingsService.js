@@ -31,6 +31,22 @@ function createUserTrainings(model){
 	  });
 }
 
+function removeTrainings(trainingId){
+	return new Promise((resolve, reject) => {
+		$.ajax({
+            url: '/api/training/'+data.id,
+            type: 'DELETE',
+            success: function (data) {
+            	resolve(data);                
+            },
+            error: function(err){
+                console.error(err);
+                reject(err);                
+            }
+        });
+	  });
+}
+
 function saveComment(trainingId, comment){
 	return new Promise((resolve, reject) => {
 		$.ajax({
@@ -49,4 +65,4 @@ function saveComment(trainingId, comment){
 }
 
 
-export {loadUserAdvice, loadDefaultAdvice, saveAdvice};
+export {loadUserTrainings, createUserTrainings, saveComment, removeTrainings};

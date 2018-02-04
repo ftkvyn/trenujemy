@@ -86,11 +86,20 @@ class UserMenu extends React.Component {
         let surveyItem = '';
         let diaryItem = '';
         let adviceItem = '';
+        let trainingItem = '';
         if(this.state.userData.feedPlans.length){
             surveyItem = <li className={ this.routeActive('survey') ? 'active' : '' }>
                 <Link to="/survey" title="Ankieta">
                     <em className="fa fa-edit"></em>
                     <span>Ankieta</span>
+                </Link>
+            </li>
+        }   
+        if(this.state.userData.trainPlans.length){
+            trainingItem = <li className={ this.routeActive('trainings') ? 'active' : '' }>
+                <Link to="/trainings" title="Treningi">
+                    <em className="fa fa-calendar-check-o"></em>
+                    <span>Treningi</span>
                 </Link>
             </li>
         }   
@@ -133,6 +142,7 @@ class UserMenu extends React.Component {
                 {surveyItem}                
                 {adviceItem}                
                 {diaryItem}
+                {trainingItem}
                 <li className={ this.routeActive('hints') ? 'active' : '' }>
                     <Link to="/hints" title="Ciekawostki od trenera">
                         <Notification count={this.state.notifications.hints}></Notification>

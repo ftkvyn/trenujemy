@@ -88,7 +88,7 @@ function setUser(userData){
       },
       format:'DD.MM.YYYY',
       keepOpen: false,
-      defaultDate: userData.birthday
+      defaultDate: user.birthday
     });
     $("#datetimepicker").on("dp.change",  (e) => {
         let newDate = e.date.toDate().toISOString();
@@ -530,7 +530,7 @@ class Profile extends React.Component {
                                 onChange={this.handleChange.bind(this)}/>
                             </Col>
                         </FormGroup> 
-                         <FormGroup>
+                        <FormGroup>
                             <label className="col-lg-2 control-label">Data urodzenia:</label>
                             <Col lg={ 10 }>
                                 <div id="datetimepicker" className="input-group date">

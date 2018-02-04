@@ -21,14 +21,28 @@ module.exports = {
   		required:true
   	},
   	date:{
-		type:'datetime'
-	},
-	userComment:{
-		type:'text'
-	},
-	trainerComment:{
-		type:'text'
-	}
+  		type:'datetime'
+  	},
+  	userComment:{
+  		type:'text'
+  	},
+  	trainerComment:{
+  		type:'text'
+  	},
+
+    userGoogleEventId:{
+      type:'string'
+    },
+    trainerGoogleEventId:{
+      type:'string'
+    },
+
+    toJSON: function() {
+        var obj = this.toObject();
+        delete obj.userGoogleEventId;
+        delete obj.trainerGoogleEventId;
+        return obj;
+    }
   }
 };
 

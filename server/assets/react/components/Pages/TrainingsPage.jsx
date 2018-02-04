@@ -11,6 +11,10 @@ class TrainingsPage extends React.Component {
                 <h3>Twoje treningi</h3>
                 <Row>
                    <Col lg={12} md={12} sm={12}>
+                      <Well bsSize="large" style={{'textAlign':'center'}}>
+                          <h1><em className="icon-energy"></em></h1>
+                          <p>Treningi</p>
+                      </Well>
                       <Trainings></Trainings>
                    </Col>
                 </Row>

@@ -117,28 +117,28 @@ class TransactionsPage extends React.Component {
                                 </Col>
                             </Row>
                             <Well>
-                                    <p>{monthName}{this.state.year}</p>
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <td>Suma wpłat od klientów:</td>
-                                                <td>{ (totalSum/100).toFixed(2)}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Prowizja serwisu + prowizja Płatności24: &nbsp;&nbsp;</td>
-                                                <td>{ (provision/100).toFixed(2)}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <h3>Twój dochód:</h3>
-                                                </td>
-                                                <td>
-                                                    <h3>{ (income/100).toFixed(2)}</h3>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </Well>
+                                <p>{monthName}{this.state.year}</p>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>Suma wpłat od klientów:</td>
+                                            <td>{ (totalSum/100).toFixed(2)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Prowizja serwisu + prowizja Płatności24: &nbsp;&nbsp;</td>
+                                            <td>{ (provision/100).toFixed(2)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h3>Twój dochód:</h3>
+                                            </td>
+                                            <td>
+                                                <h3>{ (income/100).toFixed(2)}</h3>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </Well>
                             <Table responsive striped bordered hover>
                                 <thead>
                                     <tr>
