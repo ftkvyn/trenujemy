@@ -42,7 +42,7 @@ module.exports = {
   },
 
   beforeUpdate: function (values, cb) {
-  	if(!values.trainsLeft){
+  	if(values.trainsLeft === 0){
   		values.isActive = false;
   	}
     cb();

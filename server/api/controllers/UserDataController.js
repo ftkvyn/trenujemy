@@ -20,7 +20,7 @@ module.exports = {
 				return res.badRequest(err);
 			}
 		})
-		.done(function(data){
+		.then(function(data){
 			const user = data[0];
 			const feedPlans = data[1];
 			const trainPlans = data[2];
@@ -55,8 +55,8 @@ module.exports = {
 
 		let qs = [];
 
-		qs.push(FeedPlanPurchase.find({user: userId}).populate('plan').populate('target'));
-		qs.push(TrainPlanPurchase.find({user: userId}).populate('plan'));
+		qs.push(FeedPlanPurchase.find({user: userId, isActive: true}).populate('plan').populate('target'));
+		qs.push(TrainPlanPurchase.find({user: userId, isActive: true}).populate('plan'));
 
 		Q.all(qs)
 		.catch(function(err){
@@ -65,7 +65,7 @@ module.exports = {
 				return res.badRequest(err);
 			}
 		})
-		.done(function(data){
+		.then(function(data){
 			const feedPlans = data[0];
 			const trainPlans = data[1];
 			const model = {};

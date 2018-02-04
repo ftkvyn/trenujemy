@@ -277,7 +277,7 @@
 </div>
 
 <div>
-    <div class="container pb60">
+    <div class="container pb20">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb30">
                     <div class="cbp-caption-defaultWrap" style="padding: 20px;">
@@ -298,13 +298,13 @@
 </div>
 
 <div class="">
-    <div class="container pt60" id='trainings'>
-        <div class="title-heading1 mb40">
+    <div class="container" id='trainings'>
+        <div class="title-heading1">
             <h3>Jak zacząć?</h3>
         </div>           
     </div>
 </div>
-<div class="container pt90">
+<div class="container">
 
     <div class="row pb60">
         <div class="col-lg-4 mb30 wow zoomInUp" data-wow-delay="100ms" data-wow-duration=".4s">
@@ -343,7 +343,7 @@
 <% if(!locals.trainPlans || !locals.trainPlans.length) {%>
     <h3 style="color:red;">Błąd ładowania planów treningowych.</h3>
 <% } else {%>
-    <section id="pricing" class="bg-faded pt90 pb50">
+    <section id="pricing" class="bg-faded pb50">
         <div class="container">
             <% let cardClassWidth = (12 / locals.trainPlans.length); %>
             <% if(cardClassWidth > 6){cardClassWidth = 6;} %>

@@ -16,14 +16,19 @@ module.exports.bootstrap = function(cb) {
   const hintConfigs = hintsService.hintConfigs;
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  for(var i = 0; i < hintConfigs.length; i++){
+  for(let i = 0; i < hintConfigs.length; i++){
   	let config = hintConfigs[i][1];
   	let period = hintConfigs[i][0];
   	if(config){
-  		var job  = scheduler.scheduleJob(config, function(){
+  		let job  = scheduler.scheduleJob(config, function(){
 		    hintsService.sendHints(period);
 		  });
   	}
   }
+
+  // expiringService.expirePlans();
+  scheduler.scheduleJob('10 0 * * *', function(){
+    expiringService.expirePlans();
+  });  
   cb();
 };

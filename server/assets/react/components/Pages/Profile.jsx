@@ -73,8 +73,8 @@ function setUser(userData){
     $('.saveError').hide();
     $('.saveSuccess').hide();
     destroyDp();
-    let user = userData.user || userData;
-    this.setState({user: userData, feedPlans: userData.feedPlans, trainPlans: userData.trainPlans});
+    let user = userData.user;
+    this.setState({user: user, feedPlans: userData.feedPlans, trainPlans: userData.trainPlans});
     $('#datetimepicker').datetimepicker({
         icons: {
             time: 'fa fa-clock-o',

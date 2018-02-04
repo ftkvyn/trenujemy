@@ -74,11 +74,11 @@ exports.purchaseItems = function(transaction){
 			qs.push(TrainPlanPurchase.update({
 				user: transaction.user,
 				isActive: true,
-				//trainsLeft : {'>' : 0}
+				trainsLeft : {'>' : 0}
 			},{}));
 		}
 		if(cart.feedPlan){
-			qs.push(FeedPlanPurchase.update({user: transaction.user.id, isActive: false}));
+			qs.push(FeedPlanPurchase.update({user: transaction.user.id}, {isActive: false}));
 			qs.push(FeedPlanPurchase.create({
 				user: transaction.user,
 				transaction: transaction.id,
