@@ -4,6 +4,7 @@ import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
 import { loadUser, saveUser, loadRequirements, saveRequirements, loadSurvey, loadPurchases } from '../Common/userDataService';
 import { loadUserTrainings, createUserTrainings, saveTrainingComment, removeTrainings } from '../Common/trainingsService';
+import GoodsInfo from '../Components/GoodsInfo'
 
 
 let hideAlertSuccess = null;
@@ -167,7 +168,7 @@ class Trainings extends React.Component {
         removeTrainings(data.id)
         .then( data => {
             let goods = this.state.goods;
-            let plan = goods.trainPlans[0];
+            let plan = goods.trainPlans.find( tp => tp.id == data.purchase);
             plan.trainsLeft++;
 
             let trainings = [
@@ -223,6 +224,7 @@ class Trainings extends React.Component {
         }
         let addForm = '';
         let headerText = '';
+        let phoneForm = '';
         if(this.state.userId){
             addForm = <form className="form-horizontal">   
                 <h3>Dodaj nowy trening</h3>                         
@@ -254,15 +256,31 @@ class Trainings extends React.Component {
                 </FormGroup> 
             </form>
             headerText = <h2>Tutaj zarządzasz treningami z klientem</h2>
+        }else{
+            phoneForm = <Row className='text-center'>
+                <Col lg={12} md={12} sm={12} xs={12}>
+                    <h3>Umów telefonicznie kolejny trening</h3>
+                </Col>
+                <Col lg={12} md={12} sm={12} xs={12}>
+                    <h3>
+                        <a href="tel:+48-796-756-558">
+                            <i className="fa fa-phone" aria-hidden="true"></i>
+                            <span>796 756 558</span>
+                            <i className="fa fa-phone" aria-hidden="true"></i>
+                        </a>
+                    </h3>
+                </Col>
+            </Row>
         }
+
         return (
             <Panel>
                 {headerText}
                 <Well>
-                    <p>Zostało treingów: <b>{trainingsLeft}</b></p>
-                    <p>Termin wykorzystania: <b>{validToStr}</b></p>                    
+                    <GoodsInfo goods={this.state.goods} onlyTrainings={true} noPurchaseButton={!!this.state.userId}></GoodsInfo>                  
                 </Well>                
                 {addForm}
+                {phoneForm}
                 <form className="form-horizontal"> 
 
                     <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>

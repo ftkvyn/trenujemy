@@ -94,7 +94,7 @@ module.exports = {
 				}
 			})
 			.then(function(data){
-				res.json(data[1]);
+				res.json(data[1][0]);
 			});
 		});
 	}
