@@ -34,9 +34,9 @@ module.exports = {
 
   	toJSON: function() {
           var obj = this.toObject();
-        	obj.validTo = moment(obj.updatedAt).add(12, 'months').toDate();
+        	obj.validTo = moment(obj.createdAt).add(12, 'months').toDate();
         	obj.validToStr = moment(obj.validTo).format('YYYY-MM-DD');
-        	obj.validFromStr = moment(obj.updatedAt).format('YYYY-MM-DD');
+        	obj.validFromStr = moment(obj.createdAt).format('YYYY-MM-DD');
           return obj;
       }
   },

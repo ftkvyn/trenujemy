@@ -71,11 +71,12 @@ exports.purchaseItems = function(transaction){
 		}
 		if(cart.trainings.length && qs.length){
 			//Updating all user active trainings to update valid period.
+			let now = new Date();
 			qs.push(TrainPlanPurchase.update({
 				user: transaction.user,
 				isActive: true,
 				trainsLeft : {'>' : 0}
-			},{}));
+			},{ createdAt: now }));
 		}
 		if(cart.feedPlan){
 			qs.push(FeedPlanPurchase.update({user: transaction.user.id}, {isActive: false}));

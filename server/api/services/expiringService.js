@@ -2,6 +2,7 @@ const Q = require('q');
 const moment = require('moment');
 
 exports.expirePlans = function(){
+
 	let now = moment().startOf('day').toDate();
 	let loadQs = [];
 
