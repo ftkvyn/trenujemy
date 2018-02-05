@@ -1,6 +1,6 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
-import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
+import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
 import moment from 'moment';
 import DiaryDay from './DiaryDay'
@@ -117,7 +117,8 @@ class Diary extends React.Component {
               let model = Object.assign({}, this.state.notifications);  
               if(data.diaryDays){
                 model.diaryDays = data.diaryDays;
-              }       
+              }      
+              model.id = data.id; 
               this.setState({notifications: model});
           });
 
@@ -172,14 +173,39 @@ class Diary extends React.Component {
     
     render() {  
         let calendarNotificationDays = this.state.notifications.diaryDays
-          .filter( notifyDay => {
+          .filter( notifyDay => (
             this.state.dates.beforeyesterday != notifyDay &&
             this.state.dates.yesterday != notifyDay &&
             this.state.dates.today != notifyDay &&
-            this.state.dates.tomorow != notifyDay;
-          });
+            this.state.dates.tomorow != notifyDay
+          ));
+        let calendarNotification = '';
+        if(calendarNotificationDays.length){
+          const tooltip = (
+              <Tooltip id="ttip">
+                <strong>Są nowe powiadomienia w dniach</strong>
+                {calendarNotificationDays.map( (item, num) => <p key={num}>{item}</p>)}
+              </Tooltip>
+          );
+          // not working
+          calendarNotification = <OverlayTrigger placement="top" overlay={ tooltip }>
+                  <Notification count={calendarNotificationDays.length}></Notification>
+                </OverlayTrigger>
+        }
+        let calendarButton = <button type="button" title={calendarNotificationDays.length ? calendarNotificationDays.join(', ') : ''}
+          className={"mb-sm mr-sm btn select-date-btn btn-outline " + (this.isCustomDate(this.props.match.params.day) ? 'btn-primary' : 'btn-default') }>
+            <span>{this.state.customDate}</span>
+            <div id="datetimepicker" className="input-group date">
+                <input type="text" name='selectedDate' className='date-input'/>
+                <span className="input-group-addon">
+                  <span className="fa fa-calendar"></span>
+                </span>                      
+            </div>
+            {calendarNotification}
+          </button>  
+        
         return (
-          <div>
+          <div className='diary-days-list'>
             <h3>
               <Link to={this.state.diaryRoot + "/" + this.state.dates.beforeyesterday}>
                 <button type="button" 
@@ -222,17 +248,7 @@ class Diary extends React.Component {
                 </button>  
               </Link>              
               <a>
-                <button type="button" 
-        className={"mb-sm mr-sm btn select-date-btn btn-outline " + (this.isCustomDate(this.props.match.params.day) ? 'btn-primary' : 'btn-default') }>
-                  <span>{this.state.customDate}</span>
-                  <div id="datetimepicker" className="input-group date">
-                      <input type="text" name='selectedDate' className='date-input'/>
-                      <span className="input-group-addon">
-                        <span className="fa fa-calendar"></span>
-                      </span>                      
-                  </div>
-                  <Notification title={calendarNotificationDays.join(', ')} count={calendarNotificationDays.length}></Notification>
-                </button>  
+                {calendarButton}
               </a>
             </h3>
 

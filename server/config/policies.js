@@ -121,7 +121,7 @@ module.exports.policies = {
   },
 
   UserRequirementController:{
-    'find':'isTrainer',
+    'find':'isTrainerForOtherUser',
     'create':false,
     'destroy':false,
     'update':'isTrainer',

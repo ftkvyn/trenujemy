@@ -72,6 +72,7 @@ function saveNotifications(newData){
             type: 'PUT',
             data: newData,
             success: function (data) {
+            	notifyData = data;
             	resolve(data);                
             },
             error: function(err){

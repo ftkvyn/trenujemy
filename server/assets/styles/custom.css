@@ -236,3 +236,13 @@ body.with-popup .wrapper > .aside
 	font-size: 110%;
 	background: wheat;
 }
+
+.diary-days-list button{
+	position: relative;
+}
+
+.diary-days-list button.btn .menu-notification.label{
+	position: absolute;
+	top: -5px;
+    right: -6px;
+}

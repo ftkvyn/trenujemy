@@ -27,15 +27,27 @@ const bodySizes = [
 exports.checkUserRequirements = function(userId) {
 	let deferred = Q.defer();
 
-	UserRequirement.find({user: userId})
-	.exec(function(err, data){
-		if(err){
-			return deferred.reject(new Error(err));
+	let initQs = [];
+
+	initQs.push(UserRequirement.find({user: userId}));
+	initQs.push(FeedPlanPurchase.find({user: userId, isActive: true}));
+
+	Q.all(qs)
+	.catch(function(err){
+		deferred.reject(new Error(err));
+	})
+	.then(function(data){
+	//.exec(function(err, data){
+		let reqData = data[0];
+		let feedPlans = data[1];
+		if(!reqData || !reqData.length){
+			return deferred.resolve({});
 		}
-		if(!data || !data.length){
-			deferred.resolve({});
+		if(!feedPlans || !feedPlans.length){
+			return deferred.resolve({});
 		}
-		let userRequirement = data[0];
+		let userRequirement = reqData[0];
+		let feedPlan = feedPlans[0];
 
 		let minRequirementNum = 0;
 		let reqKeys = ['provideWeight','provideSizes','providePhoto'];
@@ -49,6 +61,9 @@ exports.checkUserRequirements = function(userId) {
 		let requirement = requirementDayAgo[minRequirementNum];
 		console.log(requirementDayAgo[minRequirementNum]);
 		let searchDate = moment(0, "HH").subtract(requirement[1][0], requirement[1][1]).toDate();
+		if(searchDate < feedPlan.createdAt){
+			return deferred.resolve({});
+		}
 		DailyReport.find({user: userId, date: {'>' : searchDate}})
 		.populate('bodySize')
 		.sort('date DESC')

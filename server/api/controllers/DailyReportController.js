@@ -13,7 +13,7 @@ module.exports = {
 	find:function(req, res){
 		var model = req.body;
 		var userId = req.params.userId || req.session.user.id;
-		var date = moment(req.params.date, 'DD-MM-YYYY');
+		var date = moment(req.params.date, 'DD-MM-YYYY').startOf('day');
 		DailyReport
 		.findOne({user: userId, date: date.toDate()})
 		.populate('bodySize')
@@ -66,6 +66,7 @@ module.exports = {
 			return req.forbidden();
 		}
 		let model = req.body;
+		delete model.date;
 		if(req.session.user.role == 'trainer'){
 			delete model.userNotes;
 		}else{
@@ -80,8 +81,8 @@ module.exports = {
 			if(req.session.user.role == 'trainer' && model.trainerNotes){
 				Notifications.findOne( {user: data[0].user} )
 				.exec(function(err, notification){
-					let days = notification.diaryDays;
-					let dayStr =  moment(req.params.date).format('DD-MM-YYYY');
+					let days = notification.diaryDays || [];
+					let dayStr =  moment(data[0].date).format('DD-MM-YYYY');
 					if(!days.some( day => day == dayStr)){
 						days = [...days, dayStr];
 						Notifications.update({id: notification.id},{diaryDays : days})
@@ -109,7 +110,7 @@ module.exports = {
 
 	getPastImages:function(req, res){
 		const userId = req.params.userId || req.session.user.id;
-		const date = moment(req.params.date + ' +0000', 'DD-MM-YYYY Z');
+		const date = moment(req.params.date, 'DD-MM-YYYY').startOf('day');;
 		DailyReport.find({user: userId, image: {'!': null}, date: {'<': date.toDate()}})
 			.sort('date DESC')
 			.limit(4)

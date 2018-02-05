@@ -134,6 +134,23 @@ function getRootPath(path){
   return path;
 }
 
+function clearDayNotifications(){
+    if(!this.state.userId){
+        if(this.state.notifications.id && this.state.notifications.diaryDays.length){
+          let days = this.state.notifications.diaryDays;
+
+          if(days.some( day => day == this.state.day )){
+            let newDays = days.filter( day => day != this.state.day);
+            saveNotifications({id: this.state.notifications.id, diaryDays: newDays});
+            updateNotifications({diaryDays: newDays});
+            let notifications = this.state.notifications;
+            notifications.diaryDays = newDays;
+            this.setState({notifications: notifications});
+          }              
+        }        
+      }
+}
+
 class DiaryDay extends React.Component {
     constructor(props, context) {
         super(props, context);
@@ -182,7 +199,8 @@ class DiaryDay extends React.Component {
         loadDay(nextDay, this.state.userId)
           .then((data) => setDay.call(this, data));
         //Not loading survey here because here only days are changing. 
-        //Users changing with unmounting and recreating component.        
+        //Users changing with unmounting and recreating component.  
+        clearDayNotifications.call(this);
     }
 
     componentDidMount(){
@@ -209,7 +227,7 @@ class DiaryDay extends React.Component {
             .then((data) => this.setState({templates: data})); 
         }  
         if(!this.state.userId){
-          loadRequirements(id)
+          loadRequirements(this.state.userId)
             .then((data) => {
                 this.setState({requirements: data});
             });
@@ -218,23 +236,15 @@ class DiaryDay extends React.Component {
               let model = Object.assign({}, this.state.notifications);  
               if(data.diaryDays){
                 model.diaryDays = data.diaryDays;
-              }       
+              }      
+              model.id = data.id; 
               this.setState({notifications: model});
           });
         }
     }
 
      componentWillUnmount(){
-      if(!this.state.userId){
-        if(this.state.notifications.id && this.state.notifications.diaryDays.length){
-          let days = this.state.notifications.diaryDays.length;
-          if(days.some( day => day == this.state.day )){
-            let newDays = days.filter( day => day != this.state.day);
-            saveNotifications({id: this.state.notifications.id, diaryDays: newDays});
-            updateNotifications({diaryDays: newDays});
-          }              
-        }        
-      }
+      clearDayNotifications.call(this);
     }
 
     handleChange(event) {
