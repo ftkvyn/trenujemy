@@ -37,7 +37,8 @@ exports.checkUserRequirements = function(userId) {
 		deferred.reject(new Error(err));
 	})
 	.then(function(data){
-	//.exec(function(err, data){
+		//Not working yet
+		return deferred.resolve({});
 		let reqData = data[0];
 		let feedPlans = data[1];
 		if(!reqData || !reqData.length){
