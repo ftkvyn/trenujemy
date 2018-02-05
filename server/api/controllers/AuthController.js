@@ -97,7 +97,7 @@ module.exports = {
 						}
 	                  	if (user) {            	              
 	                  		emailService.sendActivationMail(user); 
-	                  		Notification.create({user: user.id, helloMessage: true})
+	                  		Notifications.create({user: user.id, helloMessage: true})
 	                  		.exec(function(){});    	
 	                    	return res.send({success: true});
           				}else{

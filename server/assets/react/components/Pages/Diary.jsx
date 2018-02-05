@@ -5,6 +5,8 @@ import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from '
 import moment from 'moment';
 import DiaryDay from './DiaryDay'
 import { getDayTypes, addUpdateTrainingHandler, removeUpdateTrainingHandler } from '../Common/diaryService'
+import { addNotificationsListener, removeNotificationsListener, loadNotifications } from '../Common/notificationsService';
+import Notification from '../Components/Notification'
 
 function destroyDp(){
     if($('#datetimepicker').data("DateTimePicker")) {
@@ -74,7 +76,11 @@ class Diary extends React.Component {
             },
             dates:{},
             dateTypes:{},
-            customDate:''
+            customDate:'',
+            notifications:{
+                diaryDays: []
+            },
+            listenerKey: null
         };
         initialState.dates.beforeyesterday = getDateString(moment().add(-2, 'days'));
         initialState.dates.yesterday = getDateString(moment().add(-1, 'days'));
@@ -105,10 +111,28 @@ class Diary extends React.Component {
     componentDidMount(){
         setTimeout(setDatepicker.call(this));          
         updateDayTypes.call(this);
+        if(!this.state.userId){
+          loadNotifications()
+          .then(data => {     
+              let model = Object.assign({}, this.state.notifications);  
+              if(data.diaryDays){
+                model.diaryDays = data.diaryDays;
+              }       
+              this.setState({notifications: model});
+          });
+
+          let key = addNotificationsListener( newData => {
+              let oldData = this.state.notifications;
+              let updatedData = Object.assign(oldData, newData);
+              this.setState({notifications: updatedData});
+          });
+          this.setState({listenerKey: key});
+        }
     }
 
     componentWillUnmount(){
         destroyDp();
+        removeNotificationsListener(this.state.listenerKey);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -147,9 +171,13 @@ class Diary extends React.Component {
     }
     
     render() {  
-        if(!this.props.match.params.day){
-
-        }
+        let calendarNotificationDays = this.state.notifications.diaryDays
+          .filter( notifyDay => {
+            this.state.dates.beforeyesterday != notifyDay &&
+            this.state.dates.yesterday != notifyDay &&
+            this.state.dates.today != notifyDay &&
+            this.state.dates.tomorow != notifyDay;
+          });
         return (
           <div>
             <h3>
@@ -160,6 +188,7 @@ class Diary extends React.Component {
                   <div className='day-icon'>
                     <img src={"/images/icons/" + (this.state.dateTypes.beforeyesterday || "empty") + ".png"}/>
                   </div>
+                  <Notification count={this.state.notifications.diaryDays.some( notifyDay => notifyDay == this.state.dates.beforeyesterday) ? 1 : 0}></Notification>
                 </button>  
               </Link>
               <Link to={this.state.diaryRoot + "/" + this.state.dates.yesterday}>
@@ -169,6 +198,7 @@ class Diary extends React.Component {
                   <div className='day-icon'>
                     <img src={"/images/icons/" + (this.state.dateTypes.yesterday || "empty") + ".png"}/>
                   </div>
+                  <Notification count={this.state.notifications.diaryDays.some( notifyDay => notifyDay == this.state.dates.yesterday) ? 1 : 0}></Notification>
                 </button>  
               </Link>
               <Link to={this.state.diaryRoot + "/" + this.state.dates.today}>
@@ -178,6 +208,7 @@ class Diary extends React.Component {
                   <div className='day-icon'>
                     <img src={"/images/icons/" + (this.state.dateTypes.today || "empty") + ".png"}/>
                   </div>
+                  <Notification count={this.state.notifications.diaryDays.some( notifyDay => notifyDay == this.state.dates.today) ? 1 : 0}></Notification>
                 </button>  
               </Link>
               <Link to={this.state.diaryRoot + "/" + this.state.dates.tomorow}>
@@ -187,6 +218,7 @@ class Diary extends React.Component {
                   <div className='day-icon'>
                     <img src={"/images/icons/question.png"}/>
                   </div>
+                  <Notification count={this.state.notifications.diaryDays.some( notifyDay => notifyDay == this.state.dates.tomorow) ? 1 : 0}></Notification>
                 </button>  
               </Link>              
               <a>
@@ -199,6 +231,7 @@ class Diary extends React.Component {
                         <span className="fa fa-calendar"></span>
                       </span>                      
                   </div>
+                  <Notification title={calendarNotificationDays.join(', ')} count={calendarNotificationDays.length}></Notification>
                 </button>  
               </a>
             </h3>

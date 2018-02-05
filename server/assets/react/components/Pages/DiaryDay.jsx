@@ -3,17 +3,20 @@ import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
 import { loadDay, saveDay, saveTraining, saveBodySize, getPastImages } from '../Common/diaryService'
-import { loadSurvey } from '../Common/userDataService';
+import { loadSurvey, loadUser, loadRequirements } from '../Common/userDataService';
 import { saveImage } from '../Common/filesService';
 import { loadDishes, saveDish, addUpdateDishHandler, removeUpdateDishHandler, removeComponent } from '../Common/dishService'
+import { updateNotifications, saveNotifications, loadNotifications } from '../Common/notificationsService';
 import { loadUserAdvice } from '../Common/adviceService';
 import { loadAnswers } from '../Common/answerTemplatesService';
+import { loadSurveySettngs } from '../Common/surveySettngsService';
 import moment from 'moment';
 import AddComponentFirstStep from './AddComponentFirstStep'
 import AddComponentSecondStep from './AddComponentSecondStep'
 import DishInfo from '../Components/DishInfo'
 import FoodInfoRow from '../Components/FoodInfoRow'
-
+import SurveyItem from '../Components/SurveyItem';
+import RequirementRow from '../Components/RequirementRow';
 
 function updateDish(component){
   let num = this.state.dishes.findIndex((item) => item.id == component.dish);
@@ -139,11 +142,17 @@ class DiaryDay extends React.Component {
             survey:{},
             bodySize:{},
             trainings:[],
+            userData:{},
+            surveySettings:[],
             advise:{},
             dishes:[],
             templates: [],
             pastImages:[],
             addingTraning: false,
+            requirements: {},
+            notifications:{
+                diaryDays: []
+            },
             __sizeCollapsed: true,
             __foodCollapsed: false
         };
@@ -159,10 +168,6 @@ class DiaryDay extends React.Component {
             initialState.rootRoute = "/diary/:day";
         }
         this.state = initialState;             
-    }
-
-    componentWillUnmount(){
-      removeUpdateDishHandler(this.state.updateHandlerToken);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -190,11 +195,46 @@ class DiaryDay extends React.Component {
         loadUserAdvice(this.state.userId)
             .then((data) => {
               this.setState({advise: data});
-            });    
+            });  
+        loadUser(this.state.userId)
+            .then((userData) => {              
+                this.setState({userData: userData});
+            });     
+        loadSurveySettngs()
+            .then((data) => {
+              this.setState({surveySettings: data})
+            });  
         if(this.state.userId){
           loadAnswers()
             .then((data) => this.setState({templates: data})); 
         }  
+        if(!this.state.userId){
+          loadRequirements(id)
+            .then((data) => {
+                this.setState({requirements: data});
+            });
+          loadNotifications()
+          .then(data => {     
+              let model = Object.assign({}, this.state.notifications);  
+              if(data.diaryDays){
+                model.diaryDays = data.diaryDays;
+              }       
+              this.setState({notifications: model});
+          });
+        }
+    }
+
+     componentWillUnmount(){
+      if(!this.state.userId){
+        if(this.state.notifications.id && this.state.notifications.diaryDays.length){
+          let days = this.state.notifications.diaryDays.length;
+          if(days.some( day => day == this.state.day )){
+            let newDays = days.filter( day => day != this.state.day);
+            saveNotifications({id: this.state.notifications.id, diaryDays: newDays});
+            updateNotifications({diaryDays: newDays});
+          }              
+        }        
+      }
     }
 
     handleChange(event) {
@@ -491,166 +531,190 @@ class DiaryDay extends React.Component {
                         </Col>
                       </div>
               <div className='dish-body' style={this.state.__sizeCollapsed ? {display: 'none'} : {}}>
-                <label className="col-lg-12">Zaktualizuj swoje wymiary</label>
-                <FormGroup className='form-inline'>
-                    <label className="col-lg-2 col-md-2 control-label label-stub"> </label>
-                    <label className="col-lg-3 col-md-3 hidden-sm hidden-xs">Dziś:</label>
-                    <label className="col-lg-3 col-md-3 hidden-sm hidden-xs">W ankiecie początkowej:</label>
-                    <label className="col-lg-4 col-md-4 control-label label-stub"> </label>
-                    <label className="col-lg-2 col-md-2 control-label">Waga:</label>
-                    <Col lg={ 3 } md={ 3 }>
-                        <FormControl type="number" placeholder="Waga" 
-                        className="form-control short-input" {...readonlyForTrainer}
-                        name='weight'
-                        value={this.state.data.weight || 0}
-                        onChange={this.handleChange.bind(this)}/> kg
-                    </Col>
-                    <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
-                        <FormControl type="number" placeholder="Waga" 
-                        className="form-control short-input" readOnly={true}
-                        defaultValue={this.state.survey.weight}/> kg
-                    </Col>
-                </FormGroup>
-                <label className="col-lg-12">Wymiary</label>
-                <label className="col-lg-2 col-md-2 control-label label-stub"> </label>
-                <label className="col-lg-3 col-md-3 hidden-sm hidden-xs">Dziś:</label>
-                <label className="col-lg-3 col-md-3 hidden-sm hidden-xs">W ankiecie początkowej:</label>
-                <label className="col-lg-4 col-md-4 control-label label-stub"> </label>
-                <FormGroup className='form-inline'>                  
-                    <label className="col-lg-2 col-md-2 control-label">Kark:</label>
-                    <Col lg={ 3 } md={ 3 }>
-                        <FormControl type="number" placeholder="Kark" 
-                        className="form-control short-input" {...readonlyForTrainer}
-                        name='neck'
-                        value={this.state.bodySize.neck || 0}
-                        onChange={this.handleBodySizeChange.bind(this)}/> cm
-                    </Col>
-                    <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
-                        <FormControl type="number" placeholder="Kark" 
-                        className="form-control short-input" readOnly={true}
-                        defaultValue={this.state.survey.bodySize.neck}/> cm
-                    </Col>
-                </FormGroup>
-                <FormGroup className='form-inline'>                  
-                    <label className="col-lg-2 col-md-2 control-label">Ramię:</label>
-                    <Col lg={ 3 } md={ 3 }>
-                        <FormControl type="number" placeholder="Ramię" 
-                        className="form-control short-input" {...readonlyForTrainer}
-                        name='shoulder'
-                        value={this.state.bodySize.shoulder || 0}
-                        onChange={this.handleBodySizeChange.bind(this)}/> cm
-                    </Col>
-                    <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
-                        <FormControl type="number" placeholder="Ramię" 
-                        className="form-control short-input" readOnly={true}
-                        defaultValue={this.state.survey.bodySize.shoulder}/> cm
-                    </Col>
-                </FormGroup>
-                <FormGroup className='form-inline'>                  
-                    <label className="col-lg-2 col-md-2 control-label">Przedramię:</label>
-                    <Col lg={ 3 } md={ 3 }>
-                        <FormControl type="number" placeholder="Przedramię" 
-                        className="form-control short-input" {...readonlyForTrainer}
-                        name='forearm'
-                        value={this.state.bodySize.forearm || 0}
-                        onChange={this.handleBodySizeChange.bind(this)}/> cm
-                    </Col>
-                    <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
-                        <FormControl type="number" placeholder="Przedramię" 
-                        className="form-control short-input" readOnly={true}
-                        defaultValue={this.state.survey.bodySize.forearm}/> cm
-                    </Col>
-                </FormGroup>
-                <FormGroup className='form-inline'>                  
-                    <label className="col-lg-2 col-md-2 control-label">Nadgarstek:</label>
-                    <Col lg={ 3 } md={ 3 }>
-                        <FormControl type="number" placeholder="Nadgarstek" 
-                        className="form-control short-input" {...readonlyForTrainer}
-                        name='wrist'
-                        value={this.state.bodySize.wrist || 0}
-                        onChange={this.handleBodySizeChange.bind(this)}/> cm
-                    </Col>
-                    <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
-                        <FormControl type="number" placeholder="Nadgarstek" 
-                        className="form-control short-input" readOnly={true}
-                        defaultValue={this.state.survey.bodySize.wrist}/> cm
-                    </Col>
-                </FormGroup>
-                <FormGroup className='form-inline'>                  
-                    <label className="col-lg-2 col-md-2 control-label">Klatka piersiowa:</label>
-                    <Col lg={ 3 } md={ 3 }>
-                        <FormControl type="number" placeholder="Klatka piersiowa" 
-                        className="form-control short-input" {...readonlyForTrainer}
-                        name='chest'
-                        value={this.state.bodySize.chest || 0}
-                        onChange={this.handleBodySizeChange.bind(this)}/> cm
-                    </Col>
-                    <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
-                        <FormControl type="number" placeholder="Klatka piersiowa" 
-                        className="form-control short-input" readOnly={true}
-                        defaultValue={this.state.survey.bodySize.chest}/> cm
-                    </Col>
-                </FormGroup>
-                <FormGroup className='form-inline'>                  
-                    <label className="col-lg-2 col-md-2 control-label">Talia (brzuch):</label>
-                    <Col lg={ 3 } md={ 3 }>
-                        <FormControl type="number" placeholder="Talia (brzuch)" 
-                        className="form-control short-input" {...readonlyForTrainer}
-                        name='waist'
-                        value={this.state.bodySize.waist || 0}
-                        onChange={this.handleBodySizeChange.bind(this)}/> cm
-                    </Col>
-                    <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
-                        <FormControl type="number" placeholder="Talia (brzuch)" 
-                        className="form-control short-input" readOnly={true}
-                        defaultValue={this.state.survey.bodySize.waist}/> cm
-                    </Col>
-                </FormGroup>
-                <FormGroup className='form-inline'>                  
-                    <label className="col-lg-2 col-md-2 control-label">Biodra:</label>
-                    <Col lg={ 3 } md={ 3 }>
-                        <FormControl type="number" placeholder="Biodra" 
-                        className="form-control short-input" {...readonlyForTrainer}
-                        name='hips'
-                        value={this.state.bodySize.hips || 0}
-                        onChange={this.handleBodySizeChange.bind(this)}/> cm
-                    </Col>
-                    <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
-                        <FormControl type="number" placeholder="Biodra" 
-                        className="form-control short-input" readOnly={true}
-                        defaultValue={this.state.survey.bodySize.hips}/> cm
-                    </Col>
-                </FormGroup>
-                <FormGroup className='form-inline'>                  
-                    <label className="col-lg-2 col-md-2 control-label">Udo:</label>
-                    <Col lg={ 3 } md={ 3 }>
-                        <FormControl type="number" placeholder="Udo" 
-                        className="form-control short-input" {...readonlyForTrainer}
-                        name='thigh'
-                        value={this.state.bodySize.thigh || 0}
-                        onChange={this.handleBodySizeChange.bind(this)}/> cm
-                    </Col>
-                    <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
-                        <FormControl type="number" placeholder="Udo" 
-                        className="form-control short-input" readOnly={true}
-                        defaultValue={this.state.survey.bodySize.thigh}/> cm
-                    </Col>
-                </FormGroup>
-                <FormGroup className='form-inline'>                  
-                    <label className="col-lg-2 col-md-2 control-label">Łydka:</label>
-                    <Col lg={ 3 } md={ 3 }>
-                        <FormControl type="number" placeholder="Łydka" 
-                        className="form-control short-input" {...readonlyForTrainer}
-                        name='shin'
-                        value={this.state.bodySize.shin || 0}
-                        onChange={this.handleBodySizeChange.bind(this)}/> cm
-                    </Col>
-                    <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
-                        <FormControl type="number" placeholder="Łydka" 
-                        className="form-control short-input" readOnly={true}
-                        defaultValue={this.state.survey.bodySize.shin}/> cm
-                    </Col>
-                </FormGroup>
+                <SurveyItem name='weight' settings={this.state.surveySettings} userData={this.state.userData}>                  
+                  <label className="col-lg-12">Zaktualizuj swoje wymiary</label>
+                  <FormGroup className='form-inline'>
+                      <label className="col-lg-2 col-md-2 control-label label-stub"> </label>
+                      <label className="col-lg-3 col-md-3 hidden-sm hidden-xs">Dziś:</label>
+                      <label className="col-lg-3 col-md-3 hidden-sm hidden-xs">W ankiecie początkowej:</label>
+                      <label className="col-lg-4 col-md-4 control-label label-stub"> </label>
+                      <label className="col-lg-2 col-md-2 control-label">Waga:</label>
+                      <Col lg={ 3 } md={ 3 }>
+                          <FormControl type="number" placeholder="Waga" 
+                          className="form-control short-input" {...readonlyForTrainer}
+                          name='weight'
+                          value={this.state.data.weight || 0}
+                          onChange={this.handleChange.bind(this)}/> kg
+                      </Col>
+                      <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                          <FormControl type="number" placeholder="Waga" 
+                          className="form-control short-input" readOnly={true}
+                          defaultValue={this.state.survey.weight}/> kg
+                      </Col>
+                  </FormGroup>
+                  <RequirementRow name="provideWeight" period={this.state.requirements.provideWeight}></RequirementRow>
+                </SurveyItem>
+                <SurveyItem name='bodySize' settings={this.state.surveySettings} userData={this.state.userData}>                
+                  <label className="col-lg-12">Wymiary</label>
+                  <label className="col-lg-2 col-md-2 control-label label-stub"> </label>
+                  <label className="col-lg-3 col-md-3 hidden-sm hidden-xs">Dziś:</label>
+                  <label className="col-lg-3 col-md-3 hidden-sm hidden-xs">W ankiecie początkowej:</label>
+                  <label className="col-lg-4 col-md-4 control-label label-stub"> </label>
+                  <SurveyItem name='bodySize.neck' settings={this.state.surveySettings} userData={this.state.userData}>
+                    <FormGroup className='form-inline'>                  
+                        <label className="col-lg-2 col-md-2 control-label">Kark:</label>
+                        <Col lg={ 3 } md={ 3 }>
+                            <FormControl type="number" placeholder="Kark" 
+                            className="form-control short-input" {...readonlyForTrainer}
+                            name='neck'
+                            value={this.state.bodySize.neck || 0}
+                            onChange={this.handleBodySizeChange.bind(this)}/> cm
+                        </Col>
+                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                            <FormControl type="number" placeholder="Kark" 
+                            className="form-control short-input" readOnly={true}
+                            defaultValue={this.state.survey.bodySize.neck}/> cm
+                        </Col>
+                    </FormGroup>
+                  </SurveyItem>
+                  <SurveyItem name='bodySize.shoulder' settings={this.state.surveySettings} userData={this.state.userData}>
+                    <FormGroup className='form-inline'>                  
+                        <label className="col-lg-2 col-md-2 control-label">Ramię:</label>
+                        <Col lg={ 3 } md={ 3 }>
+                            <FormControl type="number" placeholder="Ramię" 
+                            className="form-control short-input" {...readonlyForTrainer}
+                            name='shoulder'
+                            value={this.state.bodySize.shoulder || 0}
+                            onChange={this.handleBodySizeChange.bind(this)}/> cm
+                        </Col>
+                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                            <FormControl type="number" placeholder="Ramię" 
+                            className="form-control short-input" readOnly={true}
+                            defaultValue={this.state.survey.bodySize.shoulder}/> cm
+                        </Col>
+                    </FormGroup>
+                  </SurveyItem>
+                  <SurveyItem name='bodySize.forearm' settings={this.state.surveySettings} userData={this.state.userData}>
+                    <FormGroup className='form-inline'>                  
+                        <label className="col-lg-2 col-md-2 control-label">Przedramię:</label>
+                        <Col lg={ 3 } md={ 3 }>
+                            <FormControl type="number" placeholder="Przedramię" 
+                            className="form-control short-input" {...readonlyForTrainer}
+                            name='forearm'
+                            value={this.state.bodySize.forearm || 0}
+                            onChange={this.handleBodySizeChange.bind(this)}/> cm
+                        </Col>
+                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                            <FormControl type="number" placeholder="Przedramię" 
+                            className="form-control short-input" readOnly={true}
+                            defaultValue={this.state.survey.bodySize.forearm}/> cm
+                        </Col>
+                    </FormGroup>
+                  </SurveyItem>
+                  <SurveyItem name='bodySize.wrist' settings={this.state.surveySettings} userData={this.state.userData}>
+                    <FormGroup className='form-inline'>                  
+                        <label className="col-lg-2 col-md-2 control-label">Nadgarstek:</label>
+                        <Col lg={ 3 } md={ 3 }>
+                            <FormControl type="number" placeholder="Nadgarstek" 
+                            className="form-control short-input" {...readonlyForTrainer}
+                            name='wrist'
+                            value={this.state.bodySize.wrist || 0}
+                            onChange={this.handleBodySizeChange.bind(this)}/> cm
+                        </Col>
+                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                            <FormControl type="number" placeholder="Nadgarstek" 
+                            className="form-control short-input" readOnly={true}
+                            defaultValue={this.state.survey.bodySize.wrist}/> cm
+                        </Col>
+                    </FormGroup>
+                  </SurveyItem>
+                  <SurveyItem name='bodySize.chest' settings={this.state.surveySettings} userData={this.state.userData}>
+                    <FormGroup className='form-inline'>                  
+                        <label className="col-lg-2 col-md-2 control-label">Klatka piersiowa:</label>
+                        <Col lg={ 3 } md={ 3 }>
+                            <FormControl type="number" placeholder="Klatka piersiowa" 
+                            className="form-control short-input" {...readonlyForTrainer}
+                            name='chest'
+                            value={this.state.bodySize.chest || 0}
+                            onChange={this.handleBodySizeChange.bind(this)}/> cm
+                        </Col>
+                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                            <FormControl type="number" placeholder="Klatka piersiowa" 
+                            className="form-control short-input" readOnly={true}
+                            defaultValue={this.state.survey.bodySize.chest}/> cm
+                        </Col>
+                    </FormGroup>
+                  </SurveyItem>
+                  <SurveyItem name='bodySize.waist' settings={this.state.surveySettings} userData={this.state.userData}>
+                    <FormGroup className='form-inline'>                  
+                        <label className="col-lg-2 col-md-2 control-label">Talia (brzuch):</label>
+                        <Col lg={ 3 } md={ 3 }>
+                            <FormControl type="number" placeholder="Talia (brzuch)" 
+                            className="form-control short-input" {...readonlyForTrainer}
+                            name='waist'
+                            value={this.state.bodySize.waist || 0}
+                            onChange={this.handleBodySizeChange.bind(this)}/> cm
+                        </Col>
+                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                            <FormControl type="number" placeholder="Talia (brzuch)" 
+                            className="form-control short-input" readOnly={true}
+                            defaultValue={this.state.survey.bodySize.waist}/> cm
+                        </Col>
+                    </FormGroup>
+                  </SurveyItem>
+                  <SurveyItem name='bodySize.hips' settings={this.state.surveySettings} userData={this.state.userData}>
+                    <FormGroup className='form-inline'>                  
+                        <label className="col-lg-2 col-md-2 control-label">Biodra:</label>
+                        <Col lg={ 3 } md={ 3 }>
+                            <FormControl type="number" placeholder="Biodra" 
+                            className="form-control short-input" {...readonlyForTrainer}
+                            name='hips'
+                            value={this.state.bodySize.hips || 0}
+                            onChange={this.handleBodySizeChange.bind(this)}/> cm
+                        </Col>
+                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                            <FormControl type="number" placeholder="Biodra" 
+                            className="form-control short-input" readOnly={true}
+                            defaultValue={this.state.survey.bodySize.hips}/> cm
+                        </Col>
+                    </FormGroup>
+                  </SurveyItem>
+                  <SurveyItem name='bodySize.thigh' settings={this.state.surveySettings} userData={this.state.userData}>
+                    <FormGroup className='form-inline'>                  
+                        <label className="col-lg-2 col-md-2 control-label">Udo:</label>
+                        <Col lg={ 3 } md={ 3 }>
+                            <FormControl type="number" placeholder="Udo" 
+                            className="form-control short-input" {...readonlyForTrainer}
+                            name='thigh'
+                            value={this.state.bodySize.thigh || 0}
+                            onChange={this.handleBodySizeChange.bind(this)}/> cm
+                        </Col>
+                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                            <FormControl type="number" placeholder="Udo" 
+                            className="form-control short-input" readOnly={true}
+                            defaultValue={this.state.survey.bodySize.thigh}/> cm
+                        </Col>
+                    </FormGroup>
+                  </SurveyItem>
+                  <SurveyItem name='bodySize.shin' settings={this.state.surveySettings} userData={this.state.userData}>
+                    <FormGroup className='form-inline'>                  
+                        <label className="col-lg-2 col-md-2 control-label">Łydka:</label>
+                        <Col lg={ 3 } md={ 3 }>
+                            <FormControl type="number" placeholder="Łydka" 
+                            className="form-control short-input" {...readonlyForTrainer}
+                            name='shin'
+                            value={this.state.bodySize.shin || 0}
+                            onChange={this.handleBodySizeChange.bind(this)}/> cm
+                        </Col>
+                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                            <FormControl type="number" placeholder="Łydka" 
+                            className="form-control short-input" readOnly={true}
+                            defaultValue={this.state.survey.bodySize.shin}/> cm
+                        </Col>
+                    </FormGroup>
+                  </SurveyItem>
+                  <RequirementRow name="provideSizes" period={this.state.requirements.provideSizes}></RequirementRow>
+                </SurveyItem>
                 <FormGroup>
                     <label className="col-lg-12">Załaduj zdjęcie sylwetki</label>
                     <Col lg={ 3 } md={ 3 }>
@@ -662,6 +726,7 @@ class DiaryDay extends React.Component {
                       <img className='daily-pic' src={item.image} />
                     </Col>)}
                 </FormGroup>
+                <RequirementRow name="providePhoto" period={this.state.requirements.providePhoto}></RequirementRow>
               </div>
           </div>
         }

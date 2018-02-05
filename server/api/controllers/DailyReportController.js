@@ -13,7 +13,7 @@ module.exports = {
 	find:function(req, res){
 		var model = req.body;
 		var userId = req.params.userId || req.session.user.id;
-		var date = moment(req.params.date + ' +0000', 'DD-MM-YYYY Z');
+		var date = moment(req.params.date, 'DD-MM-YYYY');
 		DailyReport
 		.findOne({user: userId, date: date.toDate()})
 		.populate('bodySize')
@@ -76,6 +76,20 @@ module.exports = {
 			if(err){
 				console.error(err);
 				return res.badRequest();
+			}
+			if(req.session.user.role == 'trainer' && model.trainerNotes){
+				Notifications.findOne( {user: data[0].user} )
+				.exec(function(err, notification){
+					let days = notification.diaryDays;
+					let dayStr =  moment(req.params.date).format('DD-MM-YYYY');
+					if(!days.some( day => day == dayStr)){
+						days = [...days, dayStr];
+						Notifications.update({id: notification.id},{diaryDays : days})
+						.exec(function(err, data){
+							//Do nothing
+						});
+					}
+				});
 			}
 			return res.json(data[0]);
 		});

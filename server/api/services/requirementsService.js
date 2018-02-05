@@ -3,13 +3,13 @@ const Q = require('q');
 const moment = require('moment');
 
 const requirementDayAgo = [
- ['never',null]
- ['monthly', [1, 'months']]
- ['each_second_week', [2, 'weeks']]
- ['weekly', [2, 'weeks']]
- ['each_third_day', [3, 'days']]
- ['each_second_day', [2, 'days']]
- ['each_day', [1, 'days']]
+ ['never',null],
+ ['monthly', [1, 'months']],
+ ['each_second_week', [2, 'weeks']],
+ ['weekly', [2, 'weeks']],
+ ['each_third_day', [3, 'days']],
+ ['each_second_day', [2, 'days']],
+ ['each_day', [1, 'days']],
  ];
 
 const bodySizes = [

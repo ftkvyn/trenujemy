@@ -97,4 +97,4 @@ function loadNewHintsCount(){
       });
 }
 
-export { loadNewHintsCount, updateNotifications, addNotificationsListener, removeNotificationsListener, loadNotifications, saveNotifications };
+export { loadNewHintsCount, updateNotifications, saveNotifications, addNotificationsListener, removeNotificationsListener, loadNotifications };

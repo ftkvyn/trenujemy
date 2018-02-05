@@ -23,7 +23,8 @@ class UserMenu extends React.Component {
             },
             notifications:{
                 hints: 0,
-                survey: false
+                survey: false,
+                diaryDays: []
             },
             listenerKey: null
         };
@@ -47,6 +48,9 @@ class UserMenu extends React.Component {
             let model = Object.assign({}, this.state.notifications);         
             if(data.updateSurvey){
                 model.survey = 1;
+            }
+            if(data.diaryDays){
+                model.diaryDays = data.diaryDays;
             }
             this.setState({notifications: model});
         });
@@ -126,6 +130,7 @@ class UserMenu extends React.Component {
             if(this.state.userData.feedPlans.length && this.state.userData.feedPlans[0].plan.isWithConsulting){
                 diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
                     <Link to="/diary" title="Dziennik aktywności">
+                        <Notification count={this.state.notifications.diaryDays.length}></Notification>
                         <em className="fa fa-address-book-o"></em>
                         <span>Dziennik aktywności</span>
                     </Link>
