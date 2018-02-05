@@ -295,7 +295,6 @@ class Profile extends React.Component {
                                 value={this.state.requirements.provideWeight}
                                 onChange={this.handleChangeRequirements.bind(this)}
                                 className="form-control">
-                                    <option value='twice_a_day'>Dwa razy dziennie</option>
                                     <option value='each_day'>Codziennie</option>
                                     <option value='each_second_day'>Co drugi dzień</option>
                                     <option value='each_third_day'>Co trzeci dzień</option>
@@ -390,7 +389,6 @@ class Profile extends React.Component {
                                     value={this.state.requirements.provideSizes}
                                     onChange={this.handleChangeRequirements.bind(this)}
                                     className="form-control m-l">
-                                        <option value='twice_a_day'>Dwa razy dziennie</option>
                                         <option value='each_day'>Codziennie</option>
                                         <option value='each_second_day'>Co drugi dzień</option>
                                         <option value='each_third_day'>Co trzeci dzień</option>
@@ -474,7 +472,6 @@ class Profile extends React.Component {
                                 value={this.state.requirements.providePhoto}
                                 onChange={this.handleChangeRequirements.bind(this)}
                                 className="form-control">
-                                    <option value='twice_a_day'>Dwa razy dziennie</option>
                                     <option value='each_day'>Codziennie</option>
                                     <option value='each_second_day'>Co drugi dzień</option>
                                     <option value='each_third_day'>Co trzeci dzień</option>

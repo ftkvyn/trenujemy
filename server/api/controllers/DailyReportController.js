@@ -18,8 +18,6 @@ module.exports = {
 		.findOne({user: userId, date: date.toDate()})
 		.populate('bodySize')
 		.populate('trainings')		
-		//ToDo: load dishes separate
-		//.populate('dishes')
 		.exec(function(err, entry){
 			if(err){
 				console.error(err);
@@ -32,29 +30,45 @@ module.exports = {
 				//Not creating new data here.
 				return res.json({noData: true});
 			}			
-			BodySize.create({user: userId})
-			.exec(function(err, bodySize){
-				DailyReport.create({user: userId, date: date.toDate(), bodySize: bodySize})
-				.exec(function(err, entry){
-					if(err){
-						console.error(err);
-						return res.badRequest(err);
-					}
-					let qs = [];
-					for(let i = 0; i < dishTimes.length; i++){
-						qs.push(Dish.create({dailyReport: entry.id, hour: dishTimes[i]}));
-					}
-					Q.all(qs)
-					.catch(function(err){
-						console.error(err);
-						return res.badRequest(err);
-					})
-					.then(function(data){
-						entry.bodySize = bodySize;
-						entry.trainings = [];
-						//entry.dishes = data;
-						return res.json(entry);	
-					});					
+			let today = moment().startOf('day');
+			if(date.toDate() > today.toDate()){
+				return res.json({future: true});
+			}
+			requirementsService.checkUserRequirements(userId)
+			.catch(function(err){
+				console.error(err);
+				return res.badRequest(err);
+			})
+			.then(function(requirementsResult){
+				console.log(requirementsResult);
+				if(requirementsResult.image || requirementsResult.bodySize || requirementsResult.weight){
+					return res.json({ requirementsNotFulfilled: true, errors: requirementsResult});
+				}		
+
+				BodySize.create({user: userId})
+				.exec(function(err, bodySize){
+					DailyReport.create({user: userId, date: date.toDate(), bodySize: bodySize})
+					.exec(function(err, entry){
+						if(err){
+							console.error(err);
+							return res.badRequest(err);
+						}
+						let qs = [];
+						for(let i = 0; i < dishTimes.length; i++){
+							qs.push(Dish.create({dailyReport: entry.id, hour: dishTimes[i]}));
+						}
+						Q.all(qs)
+						.catch(function(err){
+							console.error(err);
+							return res.badRequest(err);
+						})
+						.then(function(data){
+							entry.bodySize = bodySize;
+							entry.trainings = [];
+							//entry.dishes = data;
+							return res.json(entry);	
+						});					
+					});
 				});
 			});
 		});
@@ -111,7 +125,7 @@ module.exports = {
 	getPastImages:function(req, res){
 		const userId = req.params.userId || req.session.user.id;
 		const date = moment(req.params.date, 'DD-MM-YYYY').startOf('day');;
-		DailyReport.find({user: userId, image: {'!': null}, date: {'<': date.toDate()}})
+		DailyReport.find({user: userId, image: {'!': ""}, date: {'<': date.toDate()}})
 			.sort('date DESC')
 			.limit(4)
 			.exec(function(err, data){

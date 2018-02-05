@@ -20,7 +20,6 @@ import RequirementRow from '../Components/RequirementRow';
 
 function updateDish(component){
   let num = this.state.dishes.findIndex((item) => item.id == component.dish);
-  console.log(component);
   if(num > -1){
     let dish = this.state.dishes[num];
     if(!component.__removed){
@@ -444,6 +443,31 @@ class DiaryDay extends React.Component {
     render() {  
         if(this.state.data.noData){
           return <p>Nie ma danych od użytkownika odnośnie tego dnia.</p>
+        }
+        if(this.state.data.future){
+          return <p>Nie wolno wprowadzać dane w przyszłości.</p>   
+        }
+        if(this.state.data.requirementsNotFulfilled){
+          let imageTxt = '';
+          let weightTxt = '';
+          let bodySizeTxt = '';
+          let errors = this.state.data.errors;
+          if(errors.image){
+            imageTxt = <p>Należy załadować zdjęcie sylwetki nie wcześniej niż <b>{moment(errors.image.lastDate).format('DD-MM-YYYY')}</b></p>
+          }
+          if(errors.weight){
+            weightTxt = <p>Należy wprowadzić wagę nie wcześniej niż <b>{moment(errors.weight.lastDate).format('DD-MM-YYYY')}</b></p>
+          }
+          if(errors.bodySize){
+
+            bodySizeTxt = <p>Należy wprowadzić pomiary ciała nie wcześniej niż <b>{moment(errors.bodySize.lastDate).format('DD-MM-YYYY')}</b></p>
+          }
+          return <div className='requirements-not-fulfilled'>
+                <p className='requirements-not-fulfilled-title'>Wcześniejsze wymagania nie są spełnione.</p>
+                {imageTxt}
+                {weightTxt}
+                {bodySizeTxt}
+            </div>   
         }
         if(!this.state.data.id){
           return <div></div>

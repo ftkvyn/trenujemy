@@ -24,6 +24,7 @@ class AddComponentFirstStep extends React.Component {
     componentDidMount(){
         loadComponents()
           .then((data) => this.setState({allComponents: data, filteredComponents: data, filterText: ""}));        
+        this.mainInput.focus(); 
     }
 
     componentWillMount(){
@@ -57,6 +58,7 @@ class AddComponentFirstStep extends React.Component {
                             <InputGroup.Addon><em className="fa fa-search"></em></InputGroup.Addon>
                             <FormControl type="text" placeholder="Wyszukaj składnik" 
                             name='search'
+                            ref={(input) => { this.mainInput = input; }} 
                             value={this.state.filterText}
                             onChange={this.searchComponent.bind(this)}/>
                           </InputGroup>

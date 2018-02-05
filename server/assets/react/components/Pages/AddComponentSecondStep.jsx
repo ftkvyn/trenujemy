@@ -32,6 +32,7 @@ class AddComponentSecondStep extends React.Component {
               const selectedItem = data.find((item) => item.num == this.props.match.params.componentNum);
               this.setState({allComponents: data, selectedComponent: selectedItem});  
           });
+        this.mainInput.focus(); 
     }
 
     componentWillMount(){
@@ -95,6 +96,7 @@ class AddComponentSecondStep extends React.Component {
                     <FormControl type="number"
                         className="form-control short-input"
                         name='weight'
+                        ref={(input) => { this.mainInput = input; }} 
                         style={{fontSize:'100%'}}
                         value={this.state.weight || ''}
                         onChange={this.handleWeightChange.bind(this)}/> g

@@ -24,7 +24,7 @@ const RequirementRow = (props) => {
 	let text = `Twój trener zaleca, abyś ${names[props.name]} ${periods[props.period]}.`
 	return (
 	  <div className="requirement-row">
-	    
+	    	{text}
 	  </div>
 )}
 

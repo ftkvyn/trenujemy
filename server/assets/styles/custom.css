@@ -246,3 +246,16 @@ body.with-popup .wrapper > .aside
 	top: -5px;
     right: -6px;
 }
+
+.requirements-not-fulfilled{
+	padding: 20px;
+	text-align: center;
+	color: black;
+	background: #ff9a9a;
+	border: 2px solid #c77f7f;
+	border-radius: 6px;
+}
+.requirements-not-fulfilled-title{
+	font-size: 120%;
+	font-weight: bold;
+}
