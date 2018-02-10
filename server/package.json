@@ -5,6 +5,7 @@
   "description": "a training application",
   "keywords": [],
   "dependencies": {
+    "@jh3y/whirl": "github:jh3y/whirl",
     "animate.css": "3.5.2",
     "animo": "github:thrivingkings/animo.js",
     "aws-sdk": "^2.161.0",

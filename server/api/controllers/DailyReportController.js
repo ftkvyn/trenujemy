@@ -36,21 +36,25 @@ module.exports = {
 				return res.badRequest(err);
 			})
 			.then(function(requirementsResult){
-				// console.log('result requirements:');
-				// console.log(requirementsResult);
 				if(requirementsResult.image || requirementsResult.bodySize || requirementsResult.weight){
 					return res.json({ requirementsNotFulfilled: true, errors: requirementsResult});
 				}	
 
-				return res.json({Ok : true});
 				BodySize.create({user: userId})
 				.exec(function(err, bodySize){
-					DailyReport.create({user: userId, date: date.toDate(), bodySize: bodySize})
+					console.log('creating report');
+					let reportDate = date.clone().utcOffset(0);
+					console.log(reportDate);
+					console.log(reportDate.toDate());
+
+					DailyReport.create({user: userId, date: reportDate.toDate(), bodySize: bodySize})
 					.exec(function(err, entry){
 						if(err){
 							console.error(err);
 							return res.badRequest(err);
 						}
+						console.log('report created');
+						console.log(entry.date);
 						let qs = [];
 						for(let i = 0; i < dishTimes.length; i++){
 							qs.push(Dish.create({dailyReport: entry.id, hour: dishTimes[i]}));

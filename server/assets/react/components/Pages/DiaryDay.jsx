@@ -444,9 +444,6 @@ class DiaryDay extends React.Component {
         if(this.state.data.noData){
           return <p>Nie ma danych od użytkownika odnośnie tego dnia.</p>
         }
-        if(this.state.data.Ok){
-          return <p>Ok</p>
-        }
         if(this.state.data.requirementsNotFulfilled){
           let imageTxt = '';
           let weightTxt = '';

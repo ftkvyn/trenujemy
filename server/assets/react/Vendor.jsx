@@ -7,7 +7,7 @@ window.$.localStorage = require('js-storage').localStorage;
 // jQuery easing
 import '../../node_modules/jquery.easing/jquery.easing.min.js';
 // Whirl
-import '../../node_modules/whirl/dist/whirl.css';
+import './styles/whirl.css';
 // Animo
 import '../../node_modules/animo/animo.js';
 // Font Awesome
