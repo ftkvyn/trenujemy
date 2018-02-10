@@ -583,21 +583,23 @@ class DiaryDay extends React.Component {
                       </div>
               <div className='dish-body' style={this.state.__sizeCollapsed ? {display: 'none'} : {}}>
                 <SurveyItem name='weight' settings={this.state.surveySettings} userData={this.state.userData}>                  
-                  <label className="col-lg-12">Zaktualizuj swoje wymiary</label>
+                  <div className="col-lg-12 text-bold">Zaktualizuj swoje wymiary</div>
                   <FormGroup className='form-inline'>
-                      <label className="col-lg-2 col-md-2 control-label label-stub"> </label>
-                      <label className="col-lg-3 col-md-3 hidden-sm hidden-xs">Dziś:</label>
-                      <label className="col-lg-3 col-md-3 hidden-sm hidden-xs">W ankiecie początkowej:</label>
-                      <label className="col-lg-4 col-md-4 control-label label-stub"> </label>
+                      <Row style={{margin:0}}>
+                          <label className="col-lg-2 col-md-2 hidden-xs hidden-sm control-label label-stub"> </label>
+                          <label className="col-lg-3 col-md-3 col-sm-6 col-xs-6 col-xs-6 ">Dziś:</label>
+                          <label className="col-lg-3 col-md-3 col-sm-6 col-xs-6 col-xs-6 ">W ankiecie początkowej:</label>
+                          <label className="col-lg-4 col-md-4 hidden-xs hidden-sm control-label label-stub"> </label>
+                      </Row>
                       <label className="col-lg-2 col-md-2 control-label">Waga:</label>
-                      <Col lg={ 3 } md={ 3 }>
+                      <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
                           <FormControl type="number" placeholder="Waga" 
                           className="form-control short-input" {...readonlyForTrainer}
                           name='weight'
                           value={this.state.data.weight || 0}
                           onChange={this.handleChange.bind(this)}/> kg
                       </Col>
-                      <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                      <Col lg={ 3 } md={ 3 } sm={6} xs={6} className="hidden-xs">
                           <FormControl type="number" placeholder="Waga" 
                           className="form-control short-input" readOnly={true}
                           defaultValue={this.state.survey.weight}/> kg
@@ -606,22 +608,24 @@ class DiaryDay extends React.Component {
                   <RequirementRow name="provideWeight" period={this.state.requirements.provideWeight}></RequirementRow>
                 </SurveyItem>
                 <SurveyItem name='bodySize' settings={this.state.surveySettings} userData={this.state.userData}>                
-                  <label className="col-lg-12">Wymiary</label>
-                  <label className="col-lg-2 col-md-2 control-label label-stub"> </label>
-                  <label className="col-lg-3 col-md-3 hidden-sm hidden-xs">Dziś:</label>
-                  <label className="col-lg-3 col-md-3 hidden-sm hidden-xs">W ankiecie początkowej:</label>
-                  <label className="col-lg-4 col-md-4 control-label label-stub"> </label>
+                  <div className="col-lg-12 text-bold">Wymiary</div>
+                  <Row>
+                      <label className="col-lg-2 col-md-2 hidden-xs hidden-sm control-label label-stub"> </label>
+                      <label className="col-lg-3 col-md-3 col-sm-6 col-xs-6 ">Dziś:</label>
+                      <label className="col-lg-3 col-md-3 col-sm-6 col-xs-6 ">W ankiecie początkowej:</label>
+                      <label className="col-lg-4 col-md-4 hidden-xs hidden-sm control-label label-stub"> </label>
+                  </Row>
                   <SurveyItem name='bodySize.neck' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Kark:</label>
-                        <Col lg={ 3 } md={ 3 }>
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
                             <FormControl type="number" placeholder="Kark" 
                             className="form-control short-input" {...readonlyForTrainer}
                             name='neck'
                             value={this.state.bodySize.neck || 0}
                             onChange={this.handleBodySizeChange.bind(this)}/> cm
                         </Col>
-                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6} className="">
                             <FormControl type="number" placeholder="Kark" 
                             className="form-control short-input" readOnly={true}
                             defaultValue={this.state.survey.bodySize.neck}/> cm
@@ -631,14 +635,14 @@ class DiaryDay extends React.Component {
                   <SurveyItem name='bodySize.shoulder' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Ramię:</label>
-                        <Col lg={ 3 } md={ 3 }>
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
                             <FormControl type="number" placeholder="Ramię" 
                             className="form-control short-input" {...readonlyForTrainer}
                             name='shoulder'
                             value={this.state.bodySize.shoulder || 0}
                             onChange={this.handleBodySizeChange.bind(this)}/> cm
                         </Col>
-                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6} className="">
                             <FormControl type="number" placeholder="Ramię" 
                             className="form-control short-input" readOnly={true}
                             defaultValue={this.state.survey.bodySize.shoulder}/> cm
@@ -648,14 +652,14 @@ class DiaryDay extends React.Component {
                   <SurveyItem name='bodySize.forearm' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Przedramię:</label>
-                        <Col lg={ 3 } md={ 3 }>
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
                             <FormControl type="number" placeholder="Przedramię" 
                             className="form-control short-input" {...readonlyForTrainer}
                             name='forearm'
                             value={this.state.bodySize.forearm || 0}
                             onChange={this.handleBodySizeChange.bind(this)}/> cm
                         </Col>
-                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6} className="">
                             <FormControl type="number" placeholder="Przedramię" 
                             className="form-control short-input" readOnly={true}
                             defaultValue={this.state.survey.bodySize.forearm}/> cm
@@ -665,14 +669,14 @@ class DiaryDay extends React.Component {
                   <SurveyItem name='bodySize.wrist' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Nadgarstek:</label>
-                        <Col lg={ 3 } md={ 3 }>
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
                             <FormControl type="number" placeholder="Nadgarstek" 
                             className="form-control short-input" {...readonlyForTrainer}
                             name='wrist'
                             value={this.state.bodySize.wrist || 0}
                             onChange={this.handleBodySizeChange.bind(this)}/> cm
                         </Col>
-                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6} className="">
                             <FormControl type="number" placeholder="Nadgarstek" 
                             className="form-control short-input" readOnly={true}
                             defaultValue={this.state.survey.bodySize.wrist}/> cm
@@ -682,14 +686,14 @@ class DiaryDay extends React.Component {
                   <SurveyItem name='bodySize.chest' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Klatka piersiowa:</label>
-                        <Col lg={ 3 } md={ 3 }>
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
                             <FormControl type="number" placeholder="Klatka piersiowa" 
                             className="form-control short-input" {...readonlyForTrainer}
                             name='chest'
                             value={this.state.bodySize.chest || 0}
                             onChange={this.handleBodySizeChange.bind(this)}/> cm
                         </Col>
-                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6} className="">
                             <FormControl type="number" placeholder="Klatka piersiowa" 
                             className="form-control short-input" readOnly={true}
                             defaultValue={this.state.survey.bodySize.chest}/> cm
@@ -699,14 +703,14 @@ class DiaryDay extends React.Component {
                   <SurveyItem name='bodySize.waist' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Talia (brzuch):</label>
-                        <Col lg={ 3 } md={ 3 }>
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
                             <FormControl type="number" placeholder="Talia (brzuch)" 
                             className="form-control short-input" {...readonlyForTrainer}
                             name='waist'
                             value={this.state.bodySize.waist || 0}
                             onChange={this.handleBodySizeChange.bind(this)}/> cm
                         </Col>
-                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6} className="">
                             <FormControl type="number" placeholder="Talia (brzuch)" 
                             className="form-control short-input" readOnly={true}
                             defaultValue={this.state.survey.bodySize.waist}/> cm
@@ -716,14 +720,14 @@ class DiaryDay extends React.Component {
                   <SurveyItem name='bodySize.hips' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Biodra:</label>
-                        <Col lg={ 3 } md={ 3 }>
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
                             <FormControl type="number" placeholder="Biodra" 
                             className="form-control short-input" {...readonlyForTrainer}
                             name='hips'
                             value={this.state.bodySize.hips || 0}
                             onChange={this.handleBodySizeChange.bind(this)}/> cm
                         </Col>
-                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6} className="">
                             <FormControl type="number" placeholder="Biodra" 
                             className="form-control short-input" readOnly={true}
                             defaultValue={this.state.survey.bodySize.hips}/> cm
@@ -733,14 +737,14 @@ class DiaryDay extends React.Component {
                   <SurveyItem name='bodySize.thigh' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Udo:</label>
-                        <Col lg={ 3 } md={ 3 }>
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
                             <FormControl type="number" placeholder="Udo" 
                             className="form-control short-input" {...readonlyForTrainer}
                             name='thigh'
                             value={this.state.bodySize.thigh || 0}
                             onChange={this.handleBodySizeChange.bind(this)}/> cm
                         </Col>
-                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6} className="">
                             <FormControl type="number" placeholder="Udo" 
                             className="form-control short-input" readOnly={true}
                             defaultValue={this.state.survey.bodySize.thigh}/> cm
@@ -750,14 +754,14 @@ class DiaryDay extends React.Component {
                   <SurveyItem name='bodySize.shin' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Łydka:</label>
-                        <Col lg={ 3 } md={ 3 }>
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
                             <FormControl type="number" placeholder="Łydka" 
                             className="form-control short-input" {...readonlyForTrainer}
                             name='shin'
                             value={this.state.bodySize.shin || 0}
                             onChange={this.handleBodySizeChange.bind(this)}/> cm
                         </Col>
-                        <Col lg={ 3 } md={ 3 } className="hidden-sm hidden-xs">
+                        <Col lg={ 3 } md={ 3 } sm={6} xs={6} className="">
                             <FormControl type="number" placeholder="Łydka" 
                             className="form-control short-input" readOnly={true}
                             defaultValue={this.state.survey.bodySize.shin}/> cm
@@ -766,16 +770,22 @@ class DiaryDay extends React.Component {
                   </SurveyItem>
                   <RequirementRow name="provideSizes" period={this.state.requirements.provideSizes}></RequirementRow>
                 </SurveyItem>
-                <FormGroup>
-                    <label className="col-lg-12">Załaduj zdjęcie sylwetki</label>
+                <FormGroup className='daily-pics-container'>
+                    <Col lg={ 12 } md={ 12 }>
+                        <label className="">Załaduj zdjęcie sylwetki</label>
+                    </Col>
                     <Col lg={ 3 } md={ 3 }>
                       <label className="col-lg-12">Dziś: </label>
                       {dailyPic}
                     </Col>
-                    {this.state.pastImages.map((item, num) => <Col lg={ 3 } md={ 3 } key={num}>
-                      <label className="col-lg-12">{item.date}</label>
-                      <img className='daily-pic' src={item.image} />
-                    </Col>)}
+                    <Col lg={9} md={9}>
+                        <Row>  
+                            {this.state.pastImages.map((item, num) => <Col lg={ 3 } md={ 3 } className='text-center' key={num}>
+                              <label className="">{item.date}</label><br/>
+                              <img className='daily-pic' src={item.image} />
+                            </Col>)}
+                        </Row>
+                    </Col>
                 </FormGroup>
                 <RequirementRow name="providePhoto" period={this.state.requirements.providePhoto}></RequirementRow>
               </div>
@@ -930,9 +940,9 @@ class DiaryDay extends React.Component {
                   </div>)}
 
                 {this.state.trainings.map((training, num) => <FormGroup key={num}>
-                    <label className="col-lg-12">{`Trening ${num+1}:`}</label>
+                    <div className="col-lg-12 text-bold">{`Trening ${num+1}:`}</div>
                     <Col lg={2} md={1}></Col>
-                    <Col lg={2} md={2} sm={3}>
+                    <Col lg={2} md={2} sm={6}>
                       <FormControl componentClass="select" name="type" 
                         value={training.type}
                         onChange={this.handleTrainingChange.bind(this, num)}
@@ -947,7 +957,7 @@ class DiaryDay extends React.Component {
                             <option value='walk'>Spacer</option>
                         </FormControl>
                     </Col>
-                    <Col lg={1} md={1} sm={1}>
+                    <Col lg={1} md={1} sm={3}>
                       <label className="control-label">Minuty:</label>
                     </Col>
                     <Col lg={2} md={2} sm={3}>
@@ -957,7 +967,7 @@ class DiaryDay extends React.Component {
                         value={training.length || 0}
                         onChange={this.handleTrainingChange.bind(this, num)}/>
                     </Col>
-                    <Col lg={2} md={2} sm={3}>
+                    <Col lg={2} md={2} sm={6}>
                       <label className="control-label">Kalorie spalone (w przybliżeniu):</label>
                     </Col>
                     <Col lg={2} md={2} sm={3}>                        

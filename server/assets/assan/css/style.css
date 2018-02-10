@@ -4377,6 +4377,8 @@ div.navbar-right-elements{
 body .media .media-body h4,
 body .icon-box h4,
 body .pricing-features ul li,
+body .title-heading1 h3,
+body .mainSlide-Title-Centered,
 body .pricing-card .pricing-header .price-title{
   text-transform: none;
 }
@@ -4389,4 +4391,9 @@ body .pricing-card .pricing-header .price-title{
     position: absolute;
     background: rgba(0, 0, 0, 0.4);
     z-index: 1;
+}
+
+body .icon-box h4{
+      font-size: 20px;
+    font-weight: 500;
 }

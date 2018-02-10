@@ -67,7 +67,7 @@
                      data-paddingright="[35,35,35,35]"
                      data-paddingbottom="[12,12,12,12]"
                      data-paddingleft="[35,35,35,35]"
-                     href='/trainings'
+                     href="/#trainings" onclick="ScrollTo('trainings', event)"
                      style="z-index: 8; white-space: nowrap;outline:none;box-shadow:none;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;cursor:pointer;">Zaplanuj trening</a>
             </li>
             <!-- SLIDE  -->
@@ -135,7 +135,7 @@
                      data-paddingright="[35,35,35,35]"
                      data-paddingbottom="[12,12,12,12]"
                      data-paddingleft="[35,35,35,35]"
-                     href="/#feedPlans" onclick="ScrollTo('feedPlans', event)"
+                     href="/#yourGoal" onclick="ScrollTo('yourGoal', event)"
                      style="z-index: 8; white-space: nowrap;outline:none;box-shadow:none;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;cursor:pointer;">
                             Dowiedz się więcej
                      </a>
@@ -196,7 +196,7 @@
                      data-whitespace="nowrap"
 
                      data-type="button" 
-                     data-actions='[{"event":"click","action":"scrollbelow","offset":"px","delay":""}]'
+                     data-actions='[{"event":"click","offset":"px","delay":""}]'
                      data-responsive_offset="on" 
                      data-responsive="off"
                      data-frames='[{"delay":2000,"speed":1500,"frame":"0","from":"y:50px;opacity:0;","to":"o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":300,"frame":"999","to":"opacity:0;","ease":"Power3.easeInOut"}]'
@@ -323,7 +323,7 @@
                 - W panelu klienta znajdziesz nasz plan treningów,<br/>
                 - Tutaj będziemy się komunikować
                 </h4>
-                <a href="#trainingsPanel" onclick="ScrollTo('trainingsPanel', event)" class="btn btn-primary">Zobacz więcej</a>
+                <a href="#trainingsPanel" id="trainingsPrice" onclick="ScrollTo('trainingsPanel', event)" class="btn btn-outline-info">Zobacz więcej</a>
             </div>
         </div><!--/col-->
     </div>
@@ -332,7 +332,7 @@
 <% if(!locals.trainPlans || !locals.trainPlans.length) {%>
     <h3 style="color:red;">Błąd ładowania planów treningowych.</h3>
 <% } else {%>
-    <section id="pricing" class="bg-faded pb50">
+    <section class="bg-faded pb50">
         <div class="container">
             <% let cardClassWidth = (12 / locals.trainPlans.length); %>
             <% if(cardClassWidth > 6){cardClassWidth = 6;} %>
@@ -444,7 +444,7 @@
     <div class="row pb60">
         <div class="col-lg-4 mb30 wow zoomInUp" data-wow-delay="100ms" data-wow-duration=".4s">
             <div class="icon-box icon-box-center">
-                <i class="icon-hover-1 bg-primary icon-hover-default mb30" style="font-size: 40px;font-style: normal;">1</i>
+                <img src="/images/1.jpg" style="height: 100px;margin-bottom: 30px;" />
                 <p>
                     Wykupując abonament dostajesz dostep do panelu klienta. Od tego momentu tutaj będzie nasze centrum dowodzenia Twoimi postępami!
                 </p>
@@ -452,7 +452,7 @@
         </div><!--/col-->
         <div class="col-lg-4 mb30 wow zoomInDown" data-wow-delay="200ms" data-wow-duration=".6s">
             <div class="icon-box icon-box-center">
-                <i class="icon-hover-1 bg-primary icon-hover-default mb30" style="font-size: 40px;font-style: normal;">2</i>
+                <img src="/images/2.jpg" style="height: 100px;margin-bottom: 30px;" />
                 <p>
                     Na podstawie wypełnionej ankiety otrzymujesz ode mnie plan dietetyczny i treningowy, dostosowane indywidualnie do Twojego celu.
                 </p>
@@ -460,19 +460,19 @@
         </div><!--/col-->
         <div class="col-lg-4 mb30 wow zoomInRight" data-wow-delay="300ms" data-wow-duration=".8s">
             <div class="icon-box icon-box-center">
-                <i class="icon-hover-1 bg-primary icon-hover-default mb30" style="font-size: 40px;font-style: normal;">3</i>
+                <img src="/images/3.jpg" style="height: 100px;margin-bottom: 30px;" />
                 <p>
                     Jeżeli wybrałeś plan z codzeinną konsultacją,  
 uzupełniasz w panelu swoje posiłki i treningi, otrzymując ode mnie na koniec każdego dnia informację zwrotną. 
                 </p>
-                <a href="#feedPanel" onclick="ScrollTo('feedPanel', event)" class="btn btn-primary">Zobacz więcej</a>
+                <a href="#feedPanel" onclick="ScrollTo('feedPanel', event)" class="btn btn-outline-info">Zobacz więcej</a>
             </div>
         </div><!--/col-->
     </div>
 </div>
 
 <div class="" id='yourGoal'>
-    <div class="container pt60">
+    <div class="container pt60" id='feedPlansPrice'>
         <div class="title-heading1 mb40">
             <h3>Jaki jest Twój cel?</h3>
         </div>           
@@ -480,7 +480,7 @@ uzupełniasz w panelu swoje posiłki i treningi, otrzymując ode mnie na koniec 
 </div>
 <form action="/addItemToCart" method="POST">
     <div class="container">
-        <div class="row pb60">
+        <div class="row">
             <% let targetClassWidth = (12 / locals.feedPlanTarget.length); %>
             <% if(targetClassWidth < 2){targetClassWidth = 2;} %>
             <% const targetCardClass = "col-md-" + targetClassWidth; %>
@@ -501,12 +501,6 @@ uzupełniasz w panelu swoje posiłki i treningi, otrzymując ode mnie na koniec 
                 </div><!--/col-->
             <% } %>
         </div>
-    </div>
-
-    <div class="container pt60">
-        <div class="title-heading1 mb40">
-            <h3>Wybierz pakiet</h3>
-        </div>           
     </div>
 
     <div class="container feed-plans">
@@ -592,9 +586,9 @@ uzupełniasz w panelu swoje posiłki i treningi, otrzymując ode mnie na koniec 
         <div class="row">
             <div class="col-lg-12">
                 <% if(locals.user) {%>
-                    <button type="submit" class="btn btn-primary btn-lg pull-right">Do koszyka</button>
+                    <button type="submit" class="btn btn-outline-info btn-lg pull-right">Dodaj do koszyka</button>
                 <% } else {%>
-                    <a class="btn btn-primary btn-lg pull-right" href='/login?returnUrl=%2F%23yourGoal'>Do koszyka</a>
+                    <a class="btn btn-outline-info btn-lg pull-right" href='/login?returnUrl=%2F%23yourGoal'>Dodaj do koszyka</a>
                 <% }%>
             </div>
         </div>

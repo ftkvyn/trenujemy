@@ -48,6 +48,12 @@ class AddComponentSecondStep extends React.Component {
       this.setState({weight: value});
     }
 
+    handleKeyPress(event){
+      if(event.key == 'Enter'){
+        this.setGramms(this.state.weight);
+      }
+    }
+
     setGramms(value){
       if(!value || this.state.adding){
         return;
@@ -93,12 +99,13 @@ class AddComponentSecondStep extends React.Component {
                     <a style={{'cursor':'pointer'}}>
                       <em className="fa fa-plus-circle mr" onClick={this.setGramms.bind(this, this.state.weight)}></em>
                     </a>
-                    <FormControl type="number"
+                    <input type="number"
                         className="form-control short-input"
                         name='weight'
                         ref={(input) => { this.mainInput = input; }} 
                         style={{fontSize:'100%'}}
                         value={this.state.weight || ''}
+                        onKeyPress={this.handleKeyPress.bind(this)}
                         onChange={this.handleWeightChange.bind(this)}/> g
                   </Col>                     
                 </Row>

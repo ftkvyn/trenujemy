@@ -129,7 +129,7 @@ module.exports = {
 		var date = moment(req.params.date + ' +0000', 'DD-MM-YYYY Z');
 		DailyReport.find({user: userId, image: {'!': ""}, date: {'<': date.toDate()}})
 			.sort('date DESC')
-			.limit(4)
+			//.limit(4)
 			.exec(function(err, data){
 				if(err){
 					console.error(err);

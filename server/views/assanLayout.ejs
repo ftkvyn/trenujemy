@@ -19,6 +19,17 @@
     </head>
 
     <body>
+      <script type="text/javascript">
+        function ScrollTo(name, event) {
+          if($('#' + name).length){
+            event.preventDefault();
+            $(document.body).animate({
+                'scrollTop':   $('#' + name).offset().top - 50
+            }, 1000);
+            return false;
+          }
+        }
+      </script>
 
       <div id="preloader">
           <div id="preloader-inner"></div>
@@ -51,7 +62,7 @@
                           <a class="nav-link" aria-expanded="false" href="/#contact" onclick="ScrollTo('contact', event)">Kontakt</a>
                       </li>
                       <li class="nav-item active">
-                          <a class="nav-link" aria-expanded="false" href="/about#gallery">Galeria</a>
+                          <a class="nav-link" aria-expanded="false" href="/about">O mnie</a>
                       </li>
                       <% if(!locals.user) {%>
                       <li class="nav-item active">
@@ -82,18 +93,7 @@
           </div>
       </nav>
 
-      <%- body %>
-      <script type="text/javascript">
-        function ScrollTo(name, event) {
-          if($('#' + name).length){
-            event.preventDefault();
-            $(document.body).animate({
-                'scrollTop':   $('#' + name).offset().top - 50
-            }, 1000);
-            return false;
-          }
-        }
-      </script>
+      <%- body %>      
 
       <script>
           $(function() {
@@ -139,7 +139,8 @@
                         </a>
                 </div>
                 <div class="">
-                    &copy; Copyright <%- (new Date()).getFullYear() %>. All Right Reserved. Trenujemy
+                    &copy; Copyright <%- (new Date()).getFullYear() %>. All Right Reserved. Trenujemy <br/>
+                    <a href="/Regulamin - Przemysław Bulski.pdf" download>Regulamin</a>
                 </div>
             </div>
         </footer><!--/footer bottom-->

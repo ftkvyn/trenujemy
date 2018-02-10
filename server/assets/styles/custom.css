@@ -9,6 +9,7 @@
 	cursor: pointer;	
 }
 
+.form-inline .form-control.short-input,
 .form-control.short-input,
 .short-input{
 	width: 80px;
@@ -262,4 +263,7 @@ body.with-popup .wrapper > .aside
 .requirements-not-fulfilled a{
 	margin-left: 3px;
     color: darkblue;
+}
+.daily-pics-container{
+	padding: 0 13px;
 }

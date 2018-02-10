@@ -23,8 +23,20 @@ class AddComponentFirstStep extends React.Component {
 
     componentDidMount(){
         loadComponents()
-          .then((data) => this.setState({allComponents: data, filteredComponents: data, filterText: ""}));        
-        this.mainInput.focus(); 
+          .then((data) => this.setState({allComponents: data, filteredComponents: data, filterText: ""}));  
+        if(this.mainInput){     
+          console.log(this.mainInput); 
+          this.mainInput.focus(); 
+        }
+    }
+
+    handleKeyPress(event){
+      if(event.key == 'Enter'){
+        if(this.state.filteredComponents.length == 1){
+          let component = this.state.filteredComponents[0];
+          this.props.history.push(this.state.rootPath + `/${component.num}/quantity`);
+        }
+      }
     }
 
     componentWillMount(){
@@ -56,14 +68,15 @@ class AddComponentFirstStep extends React.Component {
                       <Well bsSize="large" style={{'textAlign':'center'}}>
                           <InputGroup>
                             <InputGroup.Addon><em className="fa fa-search"></em></InputGroup.Addon>
-                            <FormControl type="text" placeholder="Wyszukaj składnik" 
-                            name='search'
+                            <input type="text" placeholder="Wyszukaj składnik" 
+                            name='search' className='form-control'
                             ref={(input) => { this.mainInput = input; }} 
                             value={this.state.filterText}
+                            onKeyPress={this.handleKeyPress.bind(this)}
                             onChange={this.searchComponent.bind(this)}/>
                           </InputGroup>
                           <Row className='dish-components-list text-left mt'>
-                            {this.state.filteredComponents.slice(0,15).map((comp => <Col lg={12} md={12} sm={12} key={comp.num}>
+                            {this.state.filteredComponents.slice(0,15).map((comp => <Col lg={12} md={12} className='clearfix' sm={12} key={comp.num}>
                               <Link to={this.state.rootPath + `/${comp.num}/quantity`}>
                                   <em className="fa fa-plus-circle mr"></em>
                               </Link>   
