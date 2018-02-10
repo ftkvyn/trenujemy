@@ -33,14 +33,14 @@ exports.sendPasswordRecoveryMail = function(user) {
 	const body = passwordRecoveryEmailTemplate
 		.replace('%NAME%', user.email || user.login)
 		.replace('%URL%', `${rootHost}changePassword?code=${user.passwordRecoveryKey}`);
-	sendMail(user.email || user.login, 'Zmiana hasła', body);
+	sendMail(user.login, 'Zmiana hasła', body);
 }
 
 exports.sendActivationMail = function(user) {
 	const body = activationEmailTemplate
 		.replace('%NAME%', user.email || user.login)
 		.replace('%URL%', `${rootHost}auth/activate?activationCode=${user.activationCode}`);
-	sendMail(user.email || user.login, 'Aktywacja konta',body);
+	sendMail(user.login, 'Aktywacja konta',body);
 }
 
 exports.sendContactMail = function(model){

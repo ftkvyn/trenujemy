@@ -156,4 +156,19 @@ function saveRequirements(model){
 	return promise;
 }
 
-export {loadUser, saveUser, loadSurvey, saveSurvey, loadRequirements, saveRequirements, loadPurchases};
+function updateEmail(userEmail){
+	let promise = new Promise((resolve, reject) => {
+		let url = '/api/userEmail';
+		$.post(url, {email : userEmail})
+		.success(function(data) {
+			resolve(data);
+		})
+		.error(function(err){
+			console.error(err);
+			reject(err);
+		});
+	});
+	return promise;
+}
+
+export {loadUser, saveUser, loadSurvey, saveSurvey, loadRequirements, saveRequirements, loadPurchases, updateEmail};

@@ -267,3 +267,7 @@ body.with-popup .wrapper > .aside
 .daily-pics-container{
 	padding: 0 13px;
 }
+
+.input-correct{
+	border-color: #49da25 !important;
+}

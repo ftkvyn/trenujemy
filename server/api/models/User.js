@@ -38,7 +38,7 @@ module.exports = {
 	name:{
 		type:'string'
 	},
-	email:{
+	email:{ // only gmail address used for calendar synchronization.
 		type:'string'
 	},
 	phone:{

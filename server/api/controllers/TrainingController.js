@@ -67,7 +67,25 @@ module.exports = {
 				}
 			})
 			.then(function(data){
-				res.json(data[1]);
+				let training = data[1];
+				res.json(training);
+
+				User.findOne({id: model.user})
+				.exec(function(err, user){
+					if(err){
+						console.error(err);
+					}
+					if(user.email && user.email.indexOf('@gmail.com') != -1){
+						googleCalendarService.addEvent(training, user.login)
+						.catch(function(err){
+							console.error(err);
+						})
+						.then(function(evt){
+							Training.update({id: training.id}, {userGoogleEventId : evt.id})
+							.exec(function(err, data){});
+						});
+					}
+				})
 			});
 		});
 	},
@@ -94,7 +112,18 @@ module.exports = {
 				}
 			})
 			.then(function(data){
+				let training = data[1][0];
 				res.json(data[1][0]);
+				if(training && training.userGoogleEventId){
+					googleCalendarService.deleteEvent(training.userGoogleEventId)
+					.catch(function(err){
+						console.error(err);
+					})
+					.then(function(evt){
+						//Do nothing.
+					});
+				}
+
 			});
 		});
 	}

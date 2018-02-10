@@ -86,6 +86,8 @@ module.exports.routes = {
 
   'post /api/userData' : 'UserDataController.saveUserData',
 
+  'post /api/userEmail' : 'UserDataController.saveUserEmail',
+
   'get /api/clients': 'UserDataController.getClientsData',
 
   'post /api/uploadImage': 'FilesController.uploadImage',

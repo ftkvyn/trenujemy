@@ -33,9 +33,6 @@ module.exports = {
     userGoogleEventId:{
       type:'string'
     },
-    trainerGoogleEventId:{
-      type:'string'
-    },
 
     toJSON: function() {
         var obj = this.toObject();

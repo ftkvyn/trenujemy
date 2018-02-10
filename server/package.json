@@ -107,6 +107,7 @@
     "moment": "2.18.1",
     "morris.js.so": "0.5.1",
     "napa": "2.3.0",
+    "node-google-calendar": "^1.1.1",
     "node-sass": "4.5.2",
     "node-schedule": "^1.3.0",
     "null-loader": "0.1.1",

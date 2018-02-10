@@ -90,6 +90,9 @@ module.exports = {
 						activationCode: key,
 						role:'user'
 					};    
+					if(userData.login && userData.login.indexOf('@gmail.com') != -1){
+						userData.email = userData.login;
+					}
 					User.create(userData).exec(function (err, user) {
 						if(err){
 							console.error(err);

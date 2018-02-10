@@ -113,6 +113,20 @@ module.exports = {
 		});
 	},
 
+	saveUserEmail:function(req, res){
+		var model = {
+			email: req.body.email,
+		};
+		User.update({id: req.session.user.id}, model)
+		.exec(function(err, users){
+			if(err){
+				console.error(err);
+				return res.badRequest(err);
+			}
+			return res.json({success: true});
+		});
+	},
+
 	getClientsData: function(req, res){
 		User.find({role:'user', isActive: true})
 		.exec(function(err, users){

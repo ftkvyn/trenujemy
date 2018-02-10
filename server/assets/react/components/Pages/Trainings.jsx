@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
-import { loadUser, saveUser, loadRequirements, saveRequirements, loadSurvey, loadPurchases } from '../Common/userDataService';
+import { loadUser, saveUser, loadRequirements, saveRequirements, loadSurvey, loadPurchases, updateEmail } from '../Common/userDataService';
 import { loadUserTrainings, createUserTrainings, saveTrainingComment, removeTrainings } from '../Common/trainingsService';
 import GoodsInfo from '../Components/GoodsInfo'
 
@@ -50,6 +50,13 @@ class Trainings extends React.Component {
             .then((data) => this.setState({goods: data}));
         loadUserTrainings(this.state.userId)
             .then((data) => this.setState({trainings: data}));
+
+        if(!this.state.userId){
+            loadUser()
+                .then((userData) => {
+                    this.setState({gmail: userData.user.email});
+                });
+        }
 
         let now = new Date();
         $('#datetimepicker').datetimepicker({
@@ -112,6 +119,15 @@ class Trainings extends React.Component {
         let newState = {};
         newState[fieldName] = fieldVal
         this.setState(newState);
+    }
+
+    handleMailChange(event){
+        let fieldVal = event.target.value;
+        let isGmailCorrect = /^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$/.test(fieldVal);
+        this.setState({gmail: fieldVal, isGmailCorrect: isGmailCorrect, gmailProviding: true});
+        if(isGmailCorrect){
+            updateEmail(fieldVal);
+        }
     }
 
     handleTrainingCommentChange(id,event){
@@ -225,6 +241,7 @@ class Trainings extends React.Component {
         let addForm = '';
         let headerText = '';
         let phoneForm = '';
+        let gmailForm = '';
         if(this.state.userId){
             addForm = <form className="form-horizontal">   
                 <h3>Dodaj nowy trening</h3>                         
@@ -271,6 +288,26 @@ class Trainings extends React.Component {
                     </h3>
                 </Col>
             </Row>
+            let gmailInputClass = '';
+            if(this.state.gmailProviding){
+                if(this.state.isGmailCorrect){
+                    gmailInputClass = 'input-correct';
+                }else{
+                    gmailInputClass = 'parsley-error';
+                }
+            }
+            gmailForm = <form className="form-horizontal">   
+                <FormGroup>
+                    <label className="col-lg-4 col-md-4 col-sm-6 col-xs-6 control-label">Konto gmail do synchronizacji kalendarza treningów:</label>
+                    <Col lg={ 4 } md={4} sm={6} xs={6}>
+                        <FormControl type="email" placeholder="Gmail email address" 
+                            className={gmailInputClass}
+                            name='gmail'
+                            value={this.state.gmail || ''}
+                            onChange={this.handleMailChange.bind(this)}/>
+                    </Col>
+                </FormGroup> 
+            </form>
         }
 
         return (
@@ -281,6 +318,7 @@ class Trainings extends React.Component {
                 </Well>                
                 {addForm}
                 {phoneForm}
+                {gmailForm}
                 <form className="form-horizontal"> 
 
                     <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
