@@ -14,6 +14,8 @@ module.exports = {
 		var model = req.body;
 		var userId = req.params.userId || req.session.user.id;
 		var date = moment(req.params.date, 'DD-MM-YYYY').startOf('day');
+		console.log(date);
+		console.log(date.toDate());
 		DailyReport
 		.findOne({user: userId, date: date.toDate()})
 		.populate('bodySize')
@@ -34,7 +36,7 @@ module.exports = {
 			if(date.toDate() > today.toDate()){
 				return res.json({future: true});
 			}
-			requirementsService.checkUserRequirements(userId)
+			requirementsService.checkUserRequirements(userId, date)
 			.catch(function(err){
 				console.error(err);
 				return res.badRequest(err);

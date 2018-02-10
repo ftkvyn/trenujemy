@@ -4231,13 +4231,13 @@ Footer
 }
 
 .slotholder:before{
-  content: "";
+/*  content: "";
     width: 100%;
     height: 100%;
     left: 0;
     top: 0;
     position: absolute;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.4);*/
 }
 
 .old-price{
@@ -4373,4 +4373,20 @@ div.navbar-right-elements{
 }
 .logo-dark.logo-txt{
   color: rgb(71, 130, 211);
+}
+body .media .media-body h4,
+body .icon-box h4,
+body .pricing-features ul li,
+body .pricing-card .pricing-header .price-title{
+  text-transform: none;
+}
+
+.slider-dark-overlay{
+      width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
 }
