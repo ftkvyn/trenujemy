@@ -444,8 +444,8 @@ class DiaryDay extends React.Component {
         if(this.state.data.noData){
           return <p>Nie ma danych od użytkownika odnośnie tego dnia.</p>
         }
-        if(this.state.data.future){
-          return <p>Nie wolno wprowadzać dane w przyszłości.</p>   
+        if(this.state.data.Ok){
+          return <p>Ok</p>
         }
         if(this.state.data.requirementsNotFulfilled){
           let imageTxt = '';
@@ -453,17 +453,37 @@ class DiaryDay extends React.Component {
           let bodySizeTxt = '';
           let errors = this.state.data.errors;
           if(errors.image){
-            imageTxt = <p>Należy załadować zdjęcie sylwetki nie wcześniej niż <b>{moment(errors.image.lastDate).format('DD-MM-YYYY')}</b></p>
+            imageTxt = <p>Należy załadować zdjęcie sylwetki w dniu 
+                <Link to={`/diary/${moment(errors.image.lastDate).format('DD-MM-YYYY')}`}>
+                    <b>{moment(errors.image.lastDate).format('DD-MM-YYYY')}</b>
+                </Link>
+            </p>
           }
           if(errors.weight){
-            weightTxt = <p>Należy wprowadzić wagę nie wcześniej niż <b>{moment(errors.weight.lastDate).format('DD-MM-YYYY')}</b></p>
+            weightTxt = <p>Należy wprowadzić wagę w dniu 
+                 <Link to={`/diary/${moment(errors.weight.lastDate).format('DD-MM-YYYY')}`}>
+                    <b>{moment(errors.weight.lastDate).format('DD-MM-YYYY')}</b>
+                </Link>
+            </p>
           }
           if(errors.bodySize){
-
-            bodySizeTxt = <p>Należy wprowadzić pomiary ciała nie wcześniej niż <b>{moment(errors.bodySize.lastDate).format('DD-MM-YYYY')}</b></p>
+            if(!errors.bodySize.missingDay){
+                bodySizeTxt = <p>Należy wprowadzić pomiary ciała w dniu 
+                     <Link to={`/diary/${moment(errors.bodySize.lastDate).format('DD-MM-YYYY')}`}>
+                        <b>{moment(errors.bodySize.lastDate).format('DD-MM-YYYY')}</b>
+                    </Link>
+                </p>
+            }else{
+                bodySizeTxt = <p>Należy usupełnić wszystkie wymagane pomiary ciała w dniu 
+                     <Link to={`/diary/${moment(errors.bodySize.missingDay).format('DD-MM-YYYY')}`}>
+                        <b>{moment(errors.bodySize.missingDay).format('DD-MM-YYYY')}</b>
+                    </Link>
+                </p>
+            }
           }
           return <div className='requirements-not-fulfilled'>
-                <p className='requirements-not-fulfilled-title'>Wcześniejsze wymagania nie są spełnione.</p>
+                <p className='requirements-not-fulfilled-title'>Wcześniejsze wymagania nie są spełnione. Zeby odblokować możliwość wprowadzenia
+                danych w tym dniu należy spełnić warunki poniżej:</p>
                 {imageTxt}
                 {weightTxt}
                 {bodySizeTxt}

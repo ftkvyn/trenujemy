@@ -24,10 +24,63 @@ const bodySizes = [
 'shin',
 ];
 
-exports.checkUserRequirements = function(userId) {
+function checkRequirement(config, checkDayCb){
+	let result = {};
+	let limit = requirementDayAgo.find( item => item[0] == config.requirement);
+	// console.log('');
+	// console.log('req for weight');
+	// console.log(limit);
+	let limitDateMoment = config.momentDate.clone().subtract(limit[1][0], limit[1][1]);
+	let limitDate = limitDateMoment.toDate();
+	// console.log(limitDate);
+	let dataProvided = false;
+	let lastMissingDate = null;
+	for(let i = 0; i < config.reports.length; i++){
+		// console.log('');
+		// console.log('checking report for day:');
+		// console.log(config.reports[i].date);
+		if(config.reports[i].date >= limitDate){
+			let checkDayResult = checkDayCb(config.reports[i]);
+			if(checkDayResult.passes){
+				dataProvided = true;
+				// console.log('got weight!');
+				break;
+			}else{
+				if(checkDayResult.missingDay){
+					lastMissingDate = checkDayResult.missingDay;
+				}
+			}
+		}
+	}
+	if(!dataProvided){
+		// console.log('');
+		// console.log('no weight, checking feedPlan.createdAt');
+		// console.log(limitDate);
+		// console.log(config.feedPlan.createdAt);
+		if(limitDate >= config.feedPlan.createdAt){
+			result = {
+				notProvided: true,
+				lastDate: limitDate
+			};
+			if(lastMissingDate){
+				result.missingDay = lastMissingDate;
+			}
+		}else{
+			// console.log('feed plan is too new for weight');
+		}
+	}	
+	return result;
+}
+
+exports.checkUserRequirements = function(userId, momentDate) {
 	let deferred = Q.defer();
 
 	let initQs = [];
+	let jsDate = momentDate.toDate();
+	// console.log('checking requirements for date:');
+	// console.log(momentDate);
+	// console.log(jsDate);
+	// console.log(userId);
 
 	initQs.push(UserRequirement.find({user: userId}));
 	initQs.push(FeedPlanPurchase.find({user: userId, isActive: true}));
@@ -37,8 +90,6 @@ exports.checkUserRequirements = function(userId) {
 		deferred.reject(new Error(err));
 	})
 	.then(function(data){
-		//Not working yet
-		return deferred.resolve({});
 		let reqData = data[0];
 		let feedPlans = data[1];
 		if(!reqData || !reqData.length){
@@ -59,21 +110,24 @@ exports.checkUserRequirements = function(userId) {
 				minRequirementNum = index;
 			}
 		}
+		// console.log('fahrest requirement:');
+		// console.log(requirementDayAgo[minRequirementNum]);
 		let requirement = requirementDayAgo[minRequirementNum];
 		if(!requirement || !requirement[1]){
-			console.log('no requirements');
+			// console.log('no requirements');
 			return deferred.resolve({});
 		}
-		console.log(requirementDayAgo[minRequirementNum]);
-		let searchDate = moment().startOf('day')
-			.subtract(requirement[1][0], requirement[1][1])
-			.add(1, 'hours') //fix for some fucking stupid timezone shit
-			.toDate();
-		// if(searchDate < feedPlan.createdAt){
-		// 	console.log('feed plan is too new');
-		// 	return deferred.resolve({});
-		// }
-		DailyReport.find({user: userId, date: {'>=' : searchDate}})
+		let fahrestDateMoment = momentDate
+			.clone()
+			.subtract(requirement[1][0], requirement[1][1]);
+
+		let fahrestDateJs = fahrestDateMoment.toDate();
+
+		// console.log('fahrest date:')
+		// console.log(fahrestDateMoment);
+		// console.log(fahrestDateJs);
+
+		DailyReport.find({user: userId, date: {'>=' : fahrestDateJs}})
 		.populate('bodySize')
 		.sort('date DESC')
 		.exec(function(err, reports){
@@ -82,75 +136,56 @@ exports.checkUserRequirements = function(userId) {
 			}
 			let result = {};
 			if(userRequirement.provideWeight && userRequirement.provideWeight != 'never'){
-				let limit = requirementDayAgo.find( item => item[0] == userRequirement.provideWeight);
-				let limitDate = moment().startOf('day').subtract(limit[1][0], limit[1][1]).add(1, 'hours').toDate();
-				let weightProvided = false;
-				for(let i = 0; i < reports.length; i++){
-					if(reports[i].date <= limitDate){
-						if(reports[i].weight){
-							weightProvided = true;
-							break;
-						}
-					}
-				}
-				if(!weightProvided){
-					if(limitDate > feedPlan.createdAt){
-						result.weight = {
-							notProvided: true,
-							lastDate: limitDate
-						};
-					}
-				}
-			}
-			if(userRequirement.provideSizes && userRequirement.provideSizes != 'never'){
-				let limit = requirementDayAgo.find( item => item[0] == userRequirement.provideWeight);
-				let limitDate = moment().startOf('day').subtract(limit[1][0], limit[1][1]).add(1, 'hours').toDate();
-				let sizesProvided = [];
-				for(let i = 0; i < reports.length; i++){
-					if(reports[i].date <= limitDate){
-						if(reports[i].bodySize){
-							for(let k = 0; k < bodySizes.length; k++){
-								let sizeKey = bodySizes[k];
-								if(reports[i].bodySize[sizeKey]){
-									if(!sizesProvided.some( item => item == sizeKey)){
-										sizesProvided.push(sizeKey);
-									}
-								}
-							}
-						}
-					}
-				}
-				if(sizesProvided.length != bodySizes.length){
-					let notProvidedSizes = bodySizes.filter( bodySize => !sizesProvided.some(sizeProvided => bodySize == sizeProvided));
-					if(limitDate > feedPlan.createdAt){
-						result.bodySize = {
-							notProvided: notProvidedSizes,
-							lastDate: limitDate
-						};
-					}
+				let weightResult = checkRequirement({
+					requirement: userRequirement.provideWeight,
+					momentDate: momentDate,
+					reports: reports,
+					feedPlan: feedPlan
+				}, dayReport => { return {passes:!!dayReport.weight}} );
+				if(weightResult.notProvided){
+					result.weight = weightResult;
 				}
 			}
 			if(userRequirement.providePhoto && userRequirement.providePhoto != 'never'){
-				let limit = requirementDayAgo.find( item => item[0] == userRequirement.providePhoto);
-				let limitDate = moment().startOf('day').subtract(limit[1][0], limit[1][1]).add(1, 'hours').toDate();
-				let photoProvided = false;
-				for(let i = 0; i < reports.length; i++){
-					if(reports[i].date <= limitDate){
-						if(reports[i].image){
-							photoProvided = true;
-							break;
+				let imageResult = checkRequirement({
+					requirement: userRequirement.providePhoto,
+					momentDate: momentDate,
+					reports: reports,
+					feedPlan: feedPlan
+				}, dayReport => { return { passes: !!dayReport.image}} );
+				if(imageResult.notProvided){
+					result.image = imageResult;
+				}
+			}
+			if(userRequirement.provideSizes && userRequirement.provideSizes != 'never'){
+				let sizesResult = checkRequirement({
+					requirement: userRequirement.provideSizes,
+					momentDate: momentDate,
+					reports: reports,
+					feedPlan: feedPlan
+				}, dayReport => {
+					if(dayReport.bodySize){
+						let sizesProvided = [];
+						for(let k = 0; k < bodySizes.length; k++){
+							let sizeKey = bodySizes[k];
+							if(dayReport.bodySize[sizeKey]){
+								if(!sizesProvided.some( item => item == sizeKey)){
+									sizesProvided.push(sizeKey);
+								}
+							}
+						}
+						let notProvidedSizes = bodySizes.filter( bodySize => !sizesProvided.some(sizeProvided => bodySize == sizeProvided));
+						if(notProvidedSizes.length){
+							return { passes: false, missingDay: dayReport.date };
+						}else{
+							return { passes : true};
 						}
 					}
+				} );
+				if(sizesResult.notProvided){
+					result.bodySize = sizesResult;
 				}
-				if(!photoProvided){
-					if(limitDate > feedPlan.createdAt){
-						result.image = {
-							notProvided: true,
-							lastDate: limitDate
-						};
-					}
-				}
-			}		
+			}
 			deferred.resolve(result);	
 		})
 	})

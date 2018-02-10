@@ -259,3 +259,7 @@ body.with-popup .wrapper > .aside
 	font-size: 120%;
 	font-weight: bold;
 }
+.requirements-not-fulfilled a{
+	margin-left: 3px;
+    color: darkblue;
+}

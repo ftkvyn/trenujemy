@@ -13,9 +13,7 @@ module.exports = {
 	find:function(req, res){
 		var model = req.body;
 		var userId = req.params.userId || req.session.user.id;
-		var date = moment(req.params.date, 'DD-MM-YYYY').startOf('day');
-		console.log(date);
-		console.log(date.toDate());
+		var date = moment(req.params.date + ' +0000', 'DD-MM-YYYY Z');
 		DailyReport
 		.findOne({user: userId, date: date.toDate()})
 		.populate('bodySize')
@@ -32,21 +30,19 @@ module.exports = {
 				//Not creating new data here.
 				return res.json({noData: true});
 			}			
-			let today = moment().startOf('day');
-			if(date.toDate() > today.toDate()){
-				return res.json({future: true});
-			}
 			requirementsService.checkUserRequirements(userId, date)
 			.catch(function(err){
 				console.error(err);
 				return res.badRequest(err);
 			})
 			.then(function(requirementsResult){
-				console.log(requirementsResult);
+				// console.log('result requirements:');
+				// console.log(requirementsResult);
 				if(requirementsResult.image || requirementsResult.bodySize || requirementsResult.weight){
 					return res.json({ requirementsNotFulfilled: true, errors: requirementsResult});
-				}		
+				}	
 
+				return res.json({Ok : true});
 				BodySize.create({user: userId})
 				.exec(function(err, bodySize){
 					DailyReport.create({user: userId, date: date.toDate(), bodySize: bodySize})
@@ -126,7 +122,7 @@ module.exports = {
 
 	getPastImages:function(req, res){
 		const userId = req.params.userId || req.session.user.id;
-		const date = moment(req.params.date, 'DD-MM-YYYY').startOf('day');;
+		var date = moment(req.params.date + ' +0000', 'DD-MM-YYYY Z');
 		DailyReport.find({user: userId, image: {'!': ""}, date: {'<': date.toDate()}})
 			.sort('date DESC')
 			.limit(4)

@@ -31,7 +31,7 @@ module.exports = {
 
 	getTrainingTypes: function(req, res){
 		var userId = req.params.userId || req.session.user.id;
-		let days = req.body.days.map((day) => moment(day, 'DD-MM-YYYY').startOf('day').toDate());
+		let days = req.body.days.map((day) => moment(day + ' +0000', 'DD-MM-YYYY Z').startOf('day').toDate());
 		let qs = [];
 		for(let i = 0; i < days.length; i++){
 			qs.push(DailyReport.findOne({date: days[i], user: userId}).populate('trainings'));
