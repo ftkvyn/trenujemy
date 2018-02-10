@@ -8,12 +8,16 @@ exports.initCart = function(req, isForce){
     		trainings: []
     	};
     }
+    if(!req.session.cart.trainings){
+    	req.session.cart.trainings = [];
+    }
 }
 
 
 exports.loadCartItems = function(cart){
 	let deferred = Q.defer();
 	let qs = [];
+	console.log(cart);
     qs.push(TrainPlan.find({isActive: true, id: cart.trainings || []}));
 	if(cart.feedPlan){
 		qs.push(FeedPlan.findOne({isVisible: true, id: cart.feedPlan}));
@@ -21,23 +25,32 @@ exports.loadCartItems = function(cart){
 	}
 	Q.all(qs)
 	.catch(function(err){
+		console.log('error');
 		deferred.reject(new Error(err));
 	})
 	.then(function(data){
-		let cartItems = [];
-		const feedPlan = data[1];
-		if(feedPlan){
-			feedPlan.target = data[2];
-			feedPlan.isFeedPlan = true;
-			cartItems.push(feedPlan);
+		console.log(data);
+		try{
+			let cartItems = [];
+			const feedPlan = data[1];
+			if(feedPlan){
+				feedPlan.target = data[2];
+				feedPlan.isFeedPlan = true;
+				cartItems.push(feedPlan);
+			}
+			const trainings = [];
+			for(var i = 0; i < cart.trainings.length; i++){
+				const training = data[0].find((item) => item.id == cart.trainings[i]);
+				cartItems.push(training);
+			}
+			cartItems.push(...trainings);
+			console.log('items');
+			console.log(cartItems);
+			deferred.resolve(cartItems);
 		}
-		const trainings = [];
-		for(var i = 0; i < cart.trainings.length; i++){
-			const training = data[0].find((item) => item.id == cart.trainings[i]);
-			cartItems.push(training);
+		catch(ex){
+			deferred.reject(ex);
 		}
-		cartItems.push(...trainings);
-		deferred.resolve(cartItems);
 	});		
 	return deferred.promise;
 }

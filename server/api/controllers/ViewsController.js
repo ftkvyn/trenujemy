@@ -24,7 +24,7 @@ module.exports = {
 				feedPlanTarget: []
 			}});	
 		})
-		.done(function(data){
+		.then(function(data){
 			const rawPlans =  data[1];
 			let plans = [];
 			for(let i = 0; i < rawPlans.length; i++){
@@ -70,7 +70,7 @@ module.exports = {
 				times: []
 			}});	
 		})
-		.done(function(data){
+		.then(function(data){
 			return res.view('training', {locals: {
 				user: req.session.user,
 				places: data[0],
@@ -94,7 +94,9 @@ module.exports = {
 				cartMessage: "Błąd przy ładowaniu koszyka",
 				cart: req.session.cart}});
 		})
-		.done(function(cartItems){
+		.then(function(cartItems){
+			console.log('controller - items');
+			console.log(cartItems);
 			const cartMessage = req.session.cartMessage;
 			req.session.cartMessage = undefined;
 			return res.view('cart', {locals: {

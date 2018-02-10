@@ -27,6 +27,10 @@ module.exports = {
 	addItem: function (req, res){
 		FeedPlanPurchase.find({user: req.session.user.id, isActive: true})
 		.exec(function(err, plans){
+			if(err){
+				console.error(err);
+				return res.badRequest(err);
+			}
 			if(!plans){
 				plans = [];
 			}

@@ -23,7 +23,7 @@
         function ScrollTo(name, event) {
           if($('#' + name).length){
             event.preventDefault();
-            $(document.body).animate({
+            $('html,body').animate({
                 'scrollTop':   $('#' + name).offset().top - 50
             }, 1000);
             return false;
