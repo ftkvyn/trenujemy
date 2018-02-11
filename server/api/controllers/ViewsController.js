@@ -92,19 +92,73 @@ module.exports = {
 			return res.view('cart', {locals: {
 				user: req.session.user, 
 				cartMessage: "Błąd przy ładowaniu koszyka",
-				cart: req.session.cart}});
+				cart: req.session.cart,
+				isApprove: false,
+			}});
 		})
 		.then(function(cartItems){
-			console.log('controller - items');
-			console.log(cartItems);
+			// console.log('controller - items');
+			// console.log(cartItems);
 			const cartMessage = req.session.cartMessage;
 			req.session.cartMessage = undefined;
 			return res.view('cart', {locals: {
 				user: req.session.user, 
 				cartMessage: cartMessage,
 				cartItems: cartItems,
-				cart: req.session.cart}});
+				cart: req.session.cart,
+				isApprove: false,
+			}});
 		});		
+	},
+
+	cartApprove: function(req,res){
+		FeedPlanPurchase.find({user: req.session.user.id, isActive: true})
+		.exec(function(err, plans){
+			if(err){
+				console.error(err);
+				return res.view('cart', {locals: {
+					user: req.session.user, 
+					cartMessage: "Błąd przy ładowaniu koszyka",
+					cart: req.session.cart,
+					isApprove: true,
+				}});
+			}
+			if(!plans){
+				plans = [];
+			}
+		    cartService.initCart(req);
+		    if(req.session.cart.feedPlan){
+		    	if(plans.length){
+		    		req.session.cartMessage = 'Na tym koncie aktywna jest wybrana usługa. Nie możesz mieć równocześnie więcej niż jednej aktywnej usługi tego samego typu na jednym koncie';
+		    		delete req.session.cart.feedPlan;
+		    		delete req.session.cart.target;
+		    		req.session.cart.totalItems --;
+		    	}
+		    }
+		    cartService.loadCartItems(req.session.cart)
+			.catch(function(err){
+				console.error(err);
+				return res.view('cart', {locals: {
+					user: req.session.user, 
+					cartMessage: "Błąd przy ładowaniu koszyka",
+					cart: req.session.cart,
+					isApprove: true,
+				}});
+			})
+			.then(function(cartItems){
+				// console.log('controller - items');
+				// console.log(cartItems);
+				const cartMessage = req.session.cartMessage;
+				req.session.cartMessage = undefined;
+				return res.view('cart', {locals: {
+					user: req.session.user, 
+					cartMessage: cartMessage,
+					cartItems: cartItems,
+					cart: req.session.cart,
+					isApprove: true,
+				}});
+			});		
+	    });
 	},
 
 	paymentEnd: function(req,res){

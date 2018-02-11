@@ -44,6 +44,8 @@ module.exports.routes = {
 
   '/cart': 'ViewsController.cart',
 
+  '/cartApprove': 'ViewsController.cartApprove',
+
   '/paymentEnd': 'ViewsController.paymentEnd',  
 
   'post /addItemToCart': 'CartController.addItem',

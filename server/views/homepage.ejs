@@ -381,13 +381,8 @@
                                     <% } %>
                                 </ul>                              
                             </div><!--pricing features-->
-                            <footer class="pricing-footer text-center">
-                                    
-                                <% if(locals.user) {%>
-                                    <button type="submit" class="btn btn-outline-info">Dodaj do koszyka</button>
-                                <% } else {%>
-                                    <a href="/login?returnUrl=%2F%23trainings" class="btn btn-outline-info">Dodaj do koszyka</a>
-                                <% }%>
+                            <footer class="pricing-footer text-center">                                    
+                                <button type="submit" class="btn btn-outline-info">Dodaj do koszyka</button>
                             </footer>
                         </div><!--/pricing card-->
                     </form>
@@ -585,11 +580,7 @@ uzupełniasz w panelu swoje posiłki i treningi, otrzymując ode mnie na koniec 
     <div class="container pb30">
         <div class="row">
             <div class="col-lg-12">
-                <% if(locals.user) {%>
-                    <button type="submit" class="btn btn-outline-info btn-lg pull-right">Dodaj do koszyka</button>
-                <% } else {%>
-                    <a class="btn btn-outline-info btn-lg pull-right" href='/login?returnUrl=%2F%23yourGoal'>Dodaj do koszyka</a>
-                <% }%>
+                <button type="submit" class="btn btn-outline-info btn-lg pull-right">Dodaj do koszyka</button>
             </div>
         </div>
     </div>

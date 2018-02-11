@@ -25,36 +25,23 @@ function calculateTotalItems(cart){
 
 module.exports = {
 	addItem: function (req, res){
-		FeedPlanPurchase.find({user: req.session.user.id, isActive: true})
-		.exec(function(err, plans){
-			if(err){
-				console.error(err);
-				return res.badRequest(err);
-			}
-			if(!plans){
-				plans = [];
-			}
-		    cartService.initCart(req);
-		    //req.session.cartMessage = 'Testing error';
-		    if(req.body.feedPlan){
-		    	if(plans.length){
-		    		req.session.cartMessage = 'Na tym koncie aktywna jest wybrana usługa. Nie możesz mieć równocześnie więcej niż jednej aktywnej usługi tego samego typu na jednym koncie';
-		    		return res.redirect('/cart');
-		    	}else if(req.session.cart.feedPlan){
-		    		req.session.cartMessage = 'Nie możesz zakupić jednocześnie więcej niż jednej usługi tego samego typu dla jednego konta';
-		    	}
-		    	req.session.cart.feedPlan = req.body.feedPlan;
-		    	req.session.cart.target = req.body.target;
-		    }
-		    if(req.body.trainingPlan){
-		    	if(!req.session.cart.trainings){
-		    		req.session.cart.trainings = [];
-		    	}
-		    	req.session.cart.trainings.push(req.body.trainingPlan);
-		    }
-		    calculateTotalItems(req.session.cart);
-		    res.redirect('/cart');
-	    });
+		cartService.initCart(req);
+	    //req.session.cartMessage = 'Testing error';
+	    if(req.body.feedPlan){
+	    	if(req.session.cart.feedPlan){
+	    		req.session.cartMessage = 'Nie możesz zakupić jednocześnie więcej niż jednej usługi tego samego typu dla jednego konta';
+	    	}
+	    	req.session.cart.feedPlan = req.body.feedPlan;
+	    	req.session.cart.target = req.body.target;
+	    }
+	    if(req.body.trainingPlan){
+	    	if(!req.session.cart.trainings){
+	    		req.session.cart.trainings = [];
+	    	}
+	    	req.session.cart.trainings.push(req.body.trainingPlan);
+	    }
+	    calculateTotalItems(req.session.cart);
+	    res.redirect('/cart');
 	},
 
 	removeItem: function (req, res){
@@ -242,7 +229,7 @@ module.exports = {
 					console.error(err);
 					return res.badRequest();
 				}
-				console.log("====== Przelewy verify 24 response ======");
+				console.log("====== Przelewy 24 verify response ======");
 			    console.log(body);
 			    const bodyData = queryString.parse(body);
 			    if(!bodyData.errorMessage){
@@ -260,6 +247,31 @@ module.exports = {
 							.done(function(data){
 								console.log('=========Created items:==========');
 								console.log(data);
+								let qs = [];
+								qs.push(cartService.loadCartItems(transactions[0].cart));
+								qs.push(User.findOne(transactions[0].user));
+								Q.all(qs)
+								.catch(function(err){
+									console.error(err);
+								})
+								.then(function(data){
+									let items = data[0];
+      								let user = data[1];
+									let emailModel = {};
+									emailModel.name = user.name || user.login;
+									emailModel.email = user.login;
+									emailModel.trainPlans = [];
+									for(let i = 0; i < items.length; i++){
+										let item = items[0];
+										if(item.isFeedPlan){
+											emailModel.feedPlanName = `Plan żywieniowy na ${item.months}-miesięczny okres `;
+											emailModel.feedPlanWithConsult = item.isWithConsulting;
+										}else{
+											emailModel.trainPlans.push(item.name);
+										}
+									}
+									emailService.sendNewTransactionMail(emailModel);
+								});
 							});		
 						}
 						catch(ex){

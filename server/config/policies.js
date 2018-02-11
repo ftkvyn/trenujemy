@@ -53,6 +53,9 @@ module.exports.policies = {
   },
 
   CartController:{
+    'addItem': true,
+    'removeItem':true,
+    'payment':'sessionAuthRedirectToLogin',
     '*':'sessionAuthRedirectToLogin',
     'verify':true
   },
@@ -60,7 +63,7 @@ module.exports.policies = {
   ViewsController:{
     '*' : true,
     'dashboard' : 'sessionAuthRedirectToLogin',
-    'cart' : 'sessionAuthRedirectToLogin'
+    'cartApprove' : 'sessionAuthRedirectToLogin'
   },
 
   UserDataController:{

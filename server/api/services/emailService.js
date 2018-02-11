@@ -8,6 +8,9 @@ const fs = require('fs');
 const activationEmailTemplate = fs.readFileSync('./emails/activate.html', 'utf8');
 const passwordRecoveryEmailTemplate = fs.readFileSync('./emails/passwordRecovery.html', 'utf8');
 const contactEmailTemplate = fs.readFileSync('./emails/contact.html', 'utf8');
+const purchaseEmailTemplate = fs.readFileSync('./emails/paymentConfirm.html', 'utf8');
+const _feedItemTemplate = fs.readFileSync('./emails/_feedItemTemplate.html', 'utf8');
+const _trainItemTemplate = fs.readFileSync('./emails/_trainItemTemplate.html', 'utf8');
 
 function sendMail(toMail, subject, body){
 	const to_email = new helper.Email(toMail);
@@ -49,5 +52,26 @@ exports.sendContactMail = function(model){
 		.replace('%EMAIL%', model.email)
 		.replace('%TEXT%', model.text);
 	sendMail(contactEmail, 'Formularz kontaktowy', body);
+}
 
+exports.sendNewTransactionMail = function(model){
+	let itemsListText = '';
+	if(model.feedPlanName){
+		const feedItemText = _feedItemTemplate
+			.replace('%NAME%', model.feedPlanName)
+			.replace('%WITH_CONSULT%', model.feedPlanWithConsult ? "z codzienną konsultacją" : "");
+		itemsListText += feedItemText;
+	}
+	if(model.trainPlans && model.trainPlans.length){
+		for(let i = 0; i < model.trainPlans.length; i++){
+			const trainItemText = _trainItemTemplate
+				.replace('%NAME%', model.trainPlans[i]);
+			itemsListText += trainItemText;		
+		}
+	}
+	const body = purchaseEmailTemplate
+		.replace('%NAME%', model.name)
+		.replace('%URL%', `${rootHost}dashboard/`)
+		.replace('%PURCHASES_LIST%', itemsListText);
+	sendMail(model.email, 'Potwierdzenie transakcji', body);
 }
