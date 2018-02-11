@@ -77,7 +77,6 @@ exports.purchaseItems = function(transaction){
 		deferred.reject(new Error(err));
 	})
 	.then(function(data){
-		deferred.resolve(data);
 		let trainPlans = data[0];
 		let oldNotification = data[1];
 		let oldTrainsCount = data[2];
