@@ -142,6 +142,7 @@ module.exports.policies = {
     'addComponent':'usersDay',
     'removeComponent':'usersDay',
     'saveDish':'usersDay',
+    'loadUserPreferredComponents':'sessionAuth'
   },
 
   AdviseTemplateController:{

@@ -6,6 +6,15 @@
  */
 const Q = require('q');
 const dishTimes = [800,1000,1200,1600,1900,2130];
+const POPULAR_COMPONENTS_SQL=`
+SELECT dc.name, max(dc.weight) weight, count(d.id) count FROM 
+ user usr
+ join dailyreport dr on dr.user = usr.id
+ join dish d on d.dailyReport = dr.id
+ join dishcomponent dc on dc.dish = d.id 
+ where usr.id = ?
+ group by d.id;
+`
 
 module.exports = {
 	addComponent: function(req, res) {
@@ -98,7 +107,28 @@ module.exports = {
 	loadComponents: function(req, res){
 		let components = componentsService.getComponents();
 		return res.json(components);
-	}
+	},
 
+	loadUserPreferredComponents: function(req, res){
+		try{
+			Dish.query(POPULAR_COMPONENTS_SQL, [req.session.user.id], function(err, rawResult) {
+				if(err){
+					console.error(ex);
+					return res.badRequest();		
+				}
+				if(rawResult && rawResult.length){
+					let result = rawResult
+						.map( item => { return {name : item.name, count: item.count, weight: item.weight}})
+						.sort( (valA, valB) => valA.count - valB.count);
+					return res.json(result);
+				}else{
+					return res.json([]);
+				}
+			});
+		}catch(ex){
+			console.error(ex);
+			return res.badRequest();
+		}
+	}	
 };
 

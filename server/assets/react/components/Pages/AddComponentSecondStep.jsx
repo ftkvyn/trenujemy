@@ -30,7 +30,7 @@ class AddComponentSecondStep extends React.Component {
         loadComponents()
           .then((data) => {
               const selectedItem = data.find((item) => item.num == this.props.match.params.componentNum);
-              this.setState({allComponents: data, selectedComponent: selectedItem});  
+              this.setState({allComponents: data, selectedComponent: selectedItem, weight: selectedItem.preferredWeight || ''});  
           });
         this.mainInput.focus(); 
     }

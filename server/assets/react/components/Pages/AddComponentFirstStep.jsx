@@ -23,9 +23,11 @@ class AddComponentFirstStep extends React.Component {
 
     componentDidMount(){
         loadComponents()
-          .then((data) => this.setState({allComponents: data, filteredComponents: data, filterText: ""}));  
-        if(this.mainInput){     
-          console.log(this.mainInput); 
+          .then((data) => {
+            let sortData = data.sort( (valA, valB) => (valB.usedTimes || 0) - (valA.usedTimes || 0) );
+            this.setState({allComponents: data, filteredComponents: sortData, filterText: ""})
+        });  
+        if(this.mainInput){    
           this.mainInput.focus(); 
         }
     }
@@ -50,7 +52,9 @@ class AddComponentFirstStep extends React.Component {
     searchComponent(event){
       const newSearchText = event.target.value;
       const filterText = newSearchText.toLowerCase();
-      const filteredComponents = this.state.allComponents.filter((item) => item.name.toLowerCase().indexOf(filterText) > -1);
+      let filteredComponents = this.state.allComponents
+        .filter((item) => item.name.toLowerCase().indexOf(filterText) > -1)
+        .sort( (valA, valB) => (valB.usedTimes || 0) - (valA.usedTimes || 0) );
       this.setState({filteredComponents: filteredComponents, filterText: newSearchText});
     }
 

@@ -130,6 +130,8 @@ module.exports.routes = {
 
   'get /api/dishComponents' : 'DishController.loadComponents',
 
+  'get /api/preferredDishComponents' : 'DishController.loadUserPreferredComponents',  
+
   'get /api/hints/:userId?' : 'TrainerHintsController.userHints',
 
   'get /api/sendTrainerHints' : 'TrainerHintsController.getSendHints',

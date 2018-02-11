@@ -1,26 +1,13 @@
 let allComponents = [];
+let userComponents = [];
 let loaded = false;
 let resolveWaiters = [];
 let rejectWaiters = [];
 let updateDishHandlers = [];
 
 function __loadComponents() {
-	$.get('/api/dishComponents')
-	.success(function(data) {
-		allComponents = data;
-		loaded = true;
-		for (var i = resolveWaiters.length - 1; i >= 0; i--) {
-			try{
-				resolveWaiters[i](data);
-			}	
-			catch(ex){
-				console.error(ex);
-			}
-		}
-		resolveWaiters = [];
-		rejectWaiters = [];
-	})
-	.error(function(err){
+	$.when($.get('/api/dishComponents'), $.get('/api/preferredDishComponents'))
+	.fail(function(err){
 		loaded = true;
 		console.error(err);
 		for (var i = rejectWaiters.length - 1; i >= 0; i--) {
@@ -33,14 +20,69 @@ function __loadComponents() {
 		}
 		resolveWaiters = [];
 		rejectWaiters = [];
+	})
+	.then(function(allResponce, preferredResponce){
+		userComponents = preferredResponce[0] || [];
+		allComponents = allResponce[0].map( component => {
+			let userComponent = userComponents.find( pr => pr.name == component.name);
+			if(userComponent){
+				component.usedTimes = userComponent.count;
+				component.preferredWeight = userComponent.weight;
+
+				console.log(userComponent);
+				console.log(component);
+			}	
+			return component;		
+		});
+		loaded = true;
+		for (var i = resolveWaiters.length - 1; i >= 0; i--) {
+			try{
+				resolveWaiters[i](allComponents, userComponents);
+			}	
+			catch(ex){
+				console.error(ex);
+			}
+		}
+		resolveWaiters = [];
+		rejectWaiters = [];
 	});
+
+	// $.get('/api/dishComponents')
+	// .success(function(data) {
+	// 	allComponents = data;
+	// 	loaded = true;
+	// 	for (var i = resolveWaiters.length - 1; i >= 0; i--) {
+	// 		try{
+	// 			resolveWaiters[i](data);
+	// 		}	
+	// 		catch(ex){
+	// 			console.error(ex);
+	// 		}
+	// 	}
+	// 	resolveWaiters = [];
+	// 	rejectWaiters = [];
+	// })
+	// .error(function(err){
+	// 	loaded = true;
+	// 	console.error(err);
+	// 	for (var i = rejectWaiters.length - 1; i >= 0; i--) {
+	// 		try{
+	// 			rejectWaiters[i](err);
+	// 		}	
+	// 		catch(ex){
+	// 			console.error(ex);
+	// 		}
+	// 	}
+	// 	resolveWaiters = [];
+	// 	rejectWaiters = [];
+	// });
 }
 
 function loadComponents(){
 	__loadComponents();
 	return new Promise((resolve, reject) => {
 		if(loaded){
-			return resolve(allComponents);
+			return resolve(allComponents, userComponents);
 		}
 		resolveWaiters.push(resolve);
 		rejectWaiters.push(reject);
