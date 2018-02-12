@@ -7,13 +7,13 @@
 const Q = require('q');
 const dishTimes = [800,1000,1200,1600,1900,2130];
 const POPULAR_COMPONENTS_SQL=`
-SELECT dc.name, max(dc.weight) weight, count(d.id) count FROM 
+SELECT dc.name, avg(dc.weight) weight, count(d.id) count FROM 
  user usr
  join dailyreport dr on dr.user = usr.id
  join dish d on d.dailyReport = dr.id
  join dishcomponent dc on dc.dish = d.id 
  where usr.id = ?
- group by d.id;
+ group by dc.name;
 `
 
 module.exports = {
@@ -33,14 +33,13 @@ module.exports = {
 			if(dish.dailyReport.user != req.session.user.id){
 				return res.forbidden();		
 			}
-			//ToDo: load calories and stuff
-			let component = componentsService.getComponents()[model.num];
+			let component = componentsService.getComponents().find(item => item.num == model.num);
 			delete model.num;
 			for(var key in component){
 				if(key == 'name' || key == 'num'){
 					continue;
 				}
-				model[key] = (component[key] / 100) * model.weight;
+				model[key] = component[key] * ( model.weight / 100);
 			}
 			DishComponent.create(model)
 			.exec(function(err, data){

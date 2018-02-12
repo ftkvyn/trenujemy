@@ -918,7 +918,7 @@ class DiaryDay extends React.Component {
                         {dish.components.map((comp) => <Col lg={12} md={12} sm={12} xs={12} key={comp.id}>
                               <label className="col-lg-3 col-md-3 col-sm-3 col-xs-3">{comp.name}</label>
                               <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">{comp.weight} g</div>
-                              <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">{comp.calories}</div>
+                              <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">{comp.calories.toFixed(0)}</div>
                               <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                 <em className="fa fa-times" style={{cursor:'pointer'}} onClick={this.deleteComponent.bind(this, comp.id, num)}></em>
                               </div>
