@@ -116,7 +116,7 @@ exports.purchaseItems = function(transaction){
 				},{ createdAt: now }));
 			}
 			if(cart.feedPlan){
-				qs.push(FeedPlanPurchase.update({user: transaction.user}, {isActive: false}));
+				//qs.push(FeedPlanPurchase.update({user: transaction.user}, {isActive: false}));
 				qs.push(FeedPlanPurchase.create({
 					user: transaction.user,
 					transaction: transaction.id,
