@@ -30,23 +30,31 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-    // order: [
-    //   'startRequestTimer',
-    //   'cookieParser',
-    //   'session',
-    //   'myRequestLogger',
-    //   'bodyParser',
-    //   'handleBodyParserError',
-    //   'compress',
-    //   'methodOverride',
-    //   'poweredBy',
-    //   '$custom',
-    //   'router',
-    //   'www',
-    //   'favicon',
-    //   '404',
-    //   '500'
-    // ],
+    order: [
+      'startRequestTimer',
+      'cookieParser',
+      'session',
+      'myRequestLogger',
+      'bodyParser',
+      'handleBodyParserError',
+      'compress',
+      'methodOverride',
+      'poweredBy',
+      '$custom',
+      'globalLocals',
+      'router',
+      'www',
+      'favicon',
+      '404',
+      '500'
+    ],
+
+    globalLocals: function (req, res, next) {
+        res.locals({
+          googleAnalyticsId  : process.env.TRENUJEMY_GOOGLE_ANALYTICS_ID,
+         });
+        return next();
+    },
 
   /****************************************************************************
   *                                                                           *
