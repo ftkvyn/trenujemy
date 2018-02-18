@@ -4397,3 +4397,14 @@ body .icon-box h4{
       font-size: 20px;
     font-weight: 500;
 }
+
+#contact .container{
+  padding-right: 0;
+  padding-left: 0;
+}
+body .mainSlide-Subtitle{
+  font-family: serif;
+}
+#about-slider .mainSlide-Title-Centered{
+      font-weight: 600;
+}

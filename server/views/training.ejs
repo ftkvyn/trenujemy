@@ -60,6 +60,36 @@
     </div>
 </div>
 
+<div class="">
+    <div class="container pt60">
+        <div class="title-heading1 mb40">
+            <h3>Godziny treningów</h3>
+        </div>           
+    </div>
+</div>
+
+<div class="container pb60">
+    <% for(let i = 0; i < locals.times.length; i++) {%>
+        <% const time = locals.times[i]; %>
+        <% const dayNames = ['Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota','Niedziela']; %>
+        <div class="train-time text-center row mb10">
+            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-6">
+                <div class="train-time-box">
+                    <%= dayNames[time.dayOfWeek - 1] %>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></div>
+            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-6">
+                <div class="train-time-box">
+                    <%= time.fromTime %>:00
+                    -
+                    <%= time.toTime %>:00
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>
+
 <div>
     <div class="container pb60">
             <div class="row align-items-center">
@@ -102,37 +132,6 @@
         </div>
     </div>
 </div>
-
-<div class="">
-    <div class="container pt60">
-        <div class="title-heading1 mb40">
-            <h3>Terminy treningów</h3>
-        </div>           
-    </div>
-</div>
-
-<div class="container pb60">
-	<% for(let i = 0; i < locals.times.length; i++) {%>
-        <% const time = locals.times[i]; %>
-        <% const dayNames = ['Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota','Niedziela']; %>
-		<div class="train-time text-center row mb10">
-			<div class="col-lg-5 col-md-5 col-sm-5 col-xs-6">
-				<div class="train-time-box">
-					<%= dayNames[time.dayOfWeek - 1] %>
-				</div>
-			</div>
-			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-0"></div>
-			<div class="col-lg-5 col-md-5 col-sm-5 col-xs-6">
-				<div class="train-time-box">
-					<%= time.fromTime %>:00
-					-
-					<%= time.toTime %>:00
-				</div>
-			</div>
-        </div>
-    <% } %>
-</div>
-
 
 <div class="bg-faded">
     <div class="container pt60">
