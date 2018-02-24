@@ -115,6 +115,7 @@ module.exports = {
 	},
 
 	activate:function(req,res){
+		console.log(req.query.activationCode);
 		if(!req.query.activationCode){
 			return res.view('auth/activate', {locals : {noUser: true}});	
 		}
@@ -127,7 +128,7 @@ module.exports = {
 	        	if(!user){
 	        		return res.view('auth/activate', {locals : {noUser: true}});	
 	        	}
-	        	User.update({id: user.id}, {activationCode: null, isActive: true})
+	        	User.update({id: user.id}, {isActive: true})
 	        	.exec(function(err, users){
 	        		if(err){
 		        		console.error(err);
