@@ -116,7 +116,7 @@ module.exports = {
 
 	activate:function(req,res){
 		if(!req.query.activationCode){
-			return res.view('activate', {locals : {noUser: true}});	
+			return res.view('auth/activate', {locals : {noUser: true}});	
 		}
 		User.findOne({activationCode:req.query.activationCode}).exec(
 	        function(err,user){
@@ -125,7 +125,7 @@ module.exports = {
 	        		return res.view('error');
 	        	}
 	        	if(!user){
-	        		return res.view('activate', {locals : {noUser: true}});	
+	        		return res.view('auth/activate', {locals : {noUser: true}});	
 	        	}
 	        	User.update({id: user.id}, {activationCode: null, isActive: true})
 	        	.exec(function(err, users){
@@ -139,7 +139,7 @@ module.exports = {
 		            	req.session.returnUrl = null;
 		            	return res.redirect(url);
 		            }
-		            return res.view('activate', {locals : {activated: true}});	
+		            return res.view('auth/activate', {locals : {activated: true}});	
 	        	});
 	    	});
 	},
