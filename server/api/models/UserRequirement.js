@@ -18,70 +18,9 @@ module.exports = {
 
   		sendTips:{
   			type:'string',
-  			// enum: ['never', 'weekly', 'each_third_day', 
-  			// 'each_second_day', 'each_day', 'twice_a_day'],
         enum: hintPeriods,
   			required:true,
   			defaultsTo:'never'
-  		},
-
-  		provideWeight:{
-  			type:'string',
-  			enum: ['never', 'monthly', 'each_second_week', 'weekly', 
-  			'each_third_day', 
-  			'each_second_day', 'each_day'],
-  			required:true,
-  			defaultsTo:'never'
-  		},
-
-  		provideSizes:{
-  			type:'string',
-  			enum: ['never', 'monthly', 'each_second_week', 'weekly', 
-  			'each_third_day', 
-  			'each_second_day', 'each_day'],
-  			required:true,
-  			defaultsTo:'never'
-  		},
-
-  		providePhoto:{
-  			type:'string',
-  			enum: ['never', 'monthly', 'each_second_week', 'weekly', 
-  			'each_third_day', 
-  			'each_second_day', 'each_day'],
-  			required:true,
-  			defaultsTo:'never'
-  		},
-
-  		provideMedicalSurvey:{
-  			type:'boolean',
-  		},
-
-  		neck:{
-  			type:'boolean',
-  		},
-  		shoulder:{
-  			type:'boolean',
-  		},
-  		forearm:{
-  			type:'boolean',
-  		},
-  		wrist:{
-  			type:'boolean',
-  		},
-  		chest:{
-  			type:'boolean',
-  		},
-  		waist:{
-  			type:'boolean',
-  		},
-  		hips:{
-  			type:'boolean',
-  		},
-  		thigh:{
-  			type:'boolean',
-  		},
-  		shin:{
-  			type:'boolean',
   		}
   }
 };

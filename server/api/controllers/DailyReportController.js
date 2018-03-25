@@ -30,47 +30,30 @@ module.exports = {
 				//Not creating new data here.
 				return res.json({noData: true});
 			}			
-			requirementsService.checkUserRequirements(userId, date)
-			.catch(function(err){
-				console.error(err);
-				return res.badRequest(err);
-			})
-			.then(function(requirementsResult){
-				if(requirementsResult.image || requirementsResult.bodySize || requirementsResult.weight){
-					return res.json({ requirementsNotFulfilled: true, errors: requirementsResult});
-				}	
+			BodySize.create({user: userId})
+			.exec(function(err, bodySize){
+				let reportDate = date.clone().utcOffset(0);
 
-				BodySize.create({user: userId})
-				.exec(function(err, bodySize){
-					console.log('creating report');
-					let reportDate = date.clone().utcOffset(0);
-					console.log(reportDate);
-					console.log(reportDate.toDate());
-
-					DailyReport.create({user: userId, date: reportDate.toDate(), bodySize: bodySize})
-					.exec(function(err, entry){
-						if(err){
-							console.error(err);
-							return res.badRequest(err);
-						}
-						console.log('report created');
-						console.log(entry.date);
-						let qs = [];
-						for(let i = 0; i < dishTimes.length; i++){
-							qs.push(Dish.create({dailyReport: entry.id, hour: dishTimes[i]}));
-						}
-						Q.all(qs)
-						.catch(function(err){
-							console.error(err);
-							return res.badRequest(err);
-						})
-						.then(function(data){
-							entry.bodySize = bodySize;
-							entry.trainings = [];
-							//entry.dishes = data;
-							return res.json(entry);	
-						});					
-					});
+				DailyReport.create({user: userId, date: reportDate.toDate(), bodySize: bodySize})
+				.exec(function(err, entry){
+					if(err){
+						console.error(err);
+						return res.badRequest(err);
+					}
+					let qs = [];
+					for(let i = 0; i < dishTimes.length; i++){
+						qs.push(Dish.create({dailyReport: entry.id, hour: dishTimes[i]}));
+					}
+					Q.all(qs)
+					.catch(function(err){
+						console.error(err);
+						return res.badRequest(err);
+					})
+					.then(function(data){
+						entry.bodySize = bodySize;
+						entry.trainings = [];
+						return res.json(entry);	
+					});					
 				});
 			});
 		});

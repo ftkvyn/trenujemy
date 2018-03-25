@@ -3,7 +3,7 @@ import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
 import { BrowserRouter, withRouter, Switch, Route, Redirect, Miss, Link } from 'react-router-dom';
 import { loadDay, saveDay, saveTraining, saveBodySize, getPastImages } from '../Common/diaryService'
-import { loadSurvey, loadUser, loadRequirements } from '../Common/userDataService';
+import { loadSurvey, loadUser } from '../Common/userDataService';
 import { saveImage } from '../Common/filesService';
 import { loadDishes, saveDish, addUpdateDishHandler, removeUpdateDishHandler, removeComponent } from '../Common/dishService'
 import { updateNotifications, saveNotifications, loadNotifications } from '../Common/notificationsService';
@@ -14,7 +14,6 @@ import AddComponentFirstStep from './AddComponentFirstStep'
 import AddComponentSecondStep from './AddComponentSecondStep'
 import DishInfo from '../Components/DishInfo'
 import FoodInfoRow from '../Components/FoodInfoRow'
-import RequirementRow from '../Components/RequirementRow';
 
 function updateDish(component){
   let num = this.state.dishes.findIndex((item) => item.id == component.dish);
@@ -162,7 +161,6 @@ class DiaryDay extends React.Component {
             templates: [],
             pastImages:[],
             addingTraning: false,
-            requirements: {},
             notifications:{
                 diaryDays: []
             },
@@ -219,10 +217,6 @@ class DiaryDay extends React.Component {
             .then((data) => this.setState({templates: data})); 
         }  
         if(!this.state.userId){
-          loadRequirements(this.state.userId)
-            .then((data) => {
-                this.setState({requirements: data});
-            });
           loadNotifications()
           .then(data => {     
               let model = Object.assign({}, this.state.notifications);  
@@ -437,48 +431,6 @@ class DiaryDay extends React.Component {
         if(this.state.data.noData){
           return <p>Nie ma danych od użytkownika odnośnie tego dnia.</p>
         }
-        if(this.state.data.requirementsNotFulfilled){
-          let imageTxt = '';
-          let weightTxt = '';
-          let bodySizeTxt = '';
-          let errors = this.state.data.errors;
-          if(errors.image){
-            imageTxt = <p>Należy załadować zdjęcie sylwetki w dniu 
-                <Link to={`/diary/${moment(errors.image.lastDate).format('DD-MM-YYYY')}`}>
-                    <b>{moment(errors.image.lastDate).format('DD-MM-YYYY')}</b>
-                </Link>
-            </p>
-          }
-          if(errors.weight){
-            weightTxt = <p>Należy wprowadzić wagę w dniu 
-                 <Link to={`/diary/${moment(errors.weight.lastDate).format('DD-MM-YYYY')}`}>
-                    <b>{moment(errors.weight.lastDate).format('DD-MM-YYYY')}</b>
-                </Link>
-            </p>
-          }
-          if(errors.bodySize){
-            if(!errors.bodySize.missingDay){
-                bodySizeTxt = <p>Należy wprowadzić pomiary ciała w dniu 
-                     <Link to={`/diary/${moment(errors.bodySize.lastDate).format('DD-MM-YYYY')}`}>
-                        <b>{moment(errors.bodySize.lastDate).format('DD-MM-YYYY')}</b>
-                    </Link>
-                </p>
-            }else{
-                bodySizeTxt = <p>Należy usupełnić wszystkie wymagane pomiary ciała w dniu 
-                     <Link to={`/diary/${moment(errors.bodySize.missingDay).format('DD-MM-YYYY')}`}>
-                        <b>{moment(errors.bodySize.missingDay).format('DD-MM-YYYY')}</b>
-                    </Link>
-                </p>
-            }
-          }
-          return <div className='requirements-not-fulfilled'>
-                <p className='requirements-not-fulfilled-title'>Wcześniejsze wymagania nie są spełnione. Zeby odblokować możliwość wprowadzenia
-                danych w tym dniu należy spełnić warunki poniżej:</p>
-                {imageTxt}
-                {weightTxt}
-                {bodySizeTxt}
-            </div>   
-        }
         if(!this.state.data.id){
           return <div></div>
         }
@@ -597,7 +549,6 @@ class DiaryDay extends React.Component {
                           defaultValue={this.state.survey.weight}/> kg
                       </Col>
                   </FormGroup>
-                  <RequirementRow name="provideWeight" period={this.state.requirements.provideWeight}></RequirementRow>
                   <div className="col-lg-12 text-bold">Wymiary</div>
                   <Row>
                       <label className="col-lg-2 col-md-2 hidden-xs hidden-sm control-label label-stub"> </label>
@@ -740,7 +691,6 @@ class DiaryDay extends React.Component {
                             defaultValue={this.state.survey.bodySize.shin}/> cm
                         </Col>
                     </FormGroup>
-                  <RequirementRow name="provideSizes" period={this.state.requirements.provideSizes}></RequirementRow>
                 <FormGroup className='daily-pics-container'>
                     <Col lg={ 12 } md={ 12 }>
                         <label className="">Załaduj zdjęcie sylwetki</label>
@@ -758,7 +708,6 @@ class DiaryDay extends React.Component {
                         </Row>
                     </Col>
                 </FormGroup>
-                <RequirementRow name="providePhoto" period={this.state.requirements.providePhoto}></RequirementRow>
               </div>
           </div>
         }

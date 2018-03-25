@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
-import { loadUser, saveUser, loadRequirements, saveRequirements, loadSurvey, loadPurchases, updateEmail } from '../Common/userDataService';
+import { loadUser, saveUser,  loadPurchases, updateEmail } from '../Common/userDataService';
 import { loadUserTrainings, createUserTrainings, saveTrainingComment, removeTrainings } from '../Common/trainingsService';
 import GoodsInfo from '../Components/GoodsInfo'
 
