@@ -8,6 +8,10 @@
 module.exports = {
 
   attributes: {
+  	trainer:{
+        model:'User',
+        required: true
+    },
   	name:{
   		type:'string',
   		required:true

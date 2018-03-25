@@ -13,6 +13,11 @@ module.exports = {
   		required: true,
   	},
 
+    trainer:{
+      model:'User',
+      required: true
+    },
+
   	hint:{
   		model:'TrainerHints'
   	},

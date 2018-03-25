@@ -14,8 +14,11 @@ module.exports = {
   	user:{
   		model:'User',
   		required: true,
-  		unique: true
   	},
+    trainer:{
+      model:'User',
+      required: true
+    },
 
   	protein:{
   		type:'integer'

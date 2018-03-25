@@ -9,14 +9,14 @@ module.exports = {
 
   attributes: {
   	user:{
-		model: 'User',
-		required:true,
-		unique: true
-	},
+  		model: 'User',
+  		required:true,
+  		unique: true
+  	},
 
-	newPurchase:{
-		type:'boolean'
-	},
+  	newPurchase:{
+  		type:'boolean'
+  	},
 
   	trainingInfo:{
   		type:'boolean'

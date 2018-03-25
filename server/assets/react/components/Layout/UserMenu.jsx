@@ -2,7 +2,6 @@ import React from 'react';
 import ProfileData from './ProfileData';
 import { Router, Route, Link, History, withRouter } from 'react-router-dom';
 import { Collapse } from 'react-bootstrap';
-import { loadUser } from '../Common/userDataService';
 import { loadNewHintsCount, addNotificationsListener, removeNotificationsListener, loadNotifications } from '../Common/notificationsService';
 import Notification from '../Components/Notification'
 
@@ -17,10 +16,6 @@ class UserMenu extends React.Component {
                 advice: this.routeActive(['advice']),
                 diary: this.routeActiveStart(['diary'])                
             },
-            userData:{
-                feedPlans:[],
-                trainPlans:[]
-            },
             notifications:{
                 hints: 0,
                 survey: false,
@@ -33,10 +28,6 @@ class UserMenu extends React.Component {
     };
 
     componentDidMount(){
-        loadUser()
-        .then(userData => {              
-            this.setState({userData: userData});
-        });
         loadNewHintsCount()
         .then(data => {  
             let model = Object.assign({}, this.state.notifications);         
@@ -103,44 +94,40 @@ class UserMenu extends React.Component {
         let adviceItem = '';
         let trainingItem = '';
         let hintsItem = '';
-        if(this.state.userData.trainPlans.length){
-            trainingItem = <li className={ this.routeActive('trainings') ? 'active' : '' }>
-                <Link to="/trainings" title="Treningi">
-                    <em className="fa fa-calendar-check-o"></em>
-                    <span>Treningi</span>
+        trainingItem = <li className={ this.routeActive('trainings') ? 'active' : '' }>
+            <Link to="/trainings" title="Treningi">
+                <em className="fa fa-calendar-check-o"></em>
+                <span>Treningi</span>
+            </Link>
+        </li>
+        surveyItem = <li className={ this.routeActive('survey') ? 'active' : '' }>
+            <Link to="/survey" title="Ankieta">
+                <Notification count={this.state.notifications.survey}></Notification>
+                <em className="fa fa-edit"></em>
+                <span>Ankieta</span>
+            </Link>
+        </li>
+        adviceItem = <li className={ this.routeActive('advice') ? 'active' : '' }>
+            <Link to="/advice" title="Zalecenia">
+                <em className="fa fa-exclamation-triangle"></em>
+                <span>Zalecenia</span>
+            </Link>
+        </li>
+        hintsItem = <li className={ this.routeActive('hints') ? 'active' : '' }>
+            <Link to="/hints" title="Ciekawostki od trenera">
+                <Notification count={this.state.notifications.hints}></Notification>
+                <em className="fa fa-lightbulb-o"></em>
+                <span>Ciekawostki</span>
+            </Link>
+        </li>
+        if(this.state.userData.feedPlans.length && this.state.userData.feedPlans[0].plan.isWithConsulting){
+            diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
+                <Link to="/diary" title="Dziennik aktywności">
+                    <Notification count={this.state.notifications.diaryDays.length}></Notification>
+                    <em className="fa fa-address-book-o"></em>
+                    <span>Dziennik aktywności</span>
                 </Link>
             </li>
-        }   
-        if(this.state.userData.feedPlans.length || this.state.userData.trainPlans.length){
-            surveyItem = <li className={ this.routeActive('survey') ? 'active' : '' }>
-                <Link to="/survey" title="Ankieta">
-                    <Notification count={this.state.notifications.survey}></Notification>
-                    <em className="fa fa-edit"></em>
-                    <span>Ankieta</span>
-                </Link>
-            </li>
-            adviceItem = <li className={ this.routeActive('advice') ? 'active' : '' }>
-                <Link to="/advice" title="Zalecenia">
-                    <em className="fa fa-exclamation-triangle"></em>
-                    <span>Zalecenia</span>
-                </Link>
-            </li>
-            hintsItem = <li className={ this.routeActive('hints') ? 'active' : '' }>
-                <Link to="/hints" title="Ciekawostki od trenera">
-                    <Notification count={this.state.notifications.hints}></Notification>
-                    <em className="fa fa-lightbulb-o"></em>
-                    <span>Ciekawostki</span>
-                </Link>
-            </li>
-            if(this.state.userData.feedPlans.length && this.state.userData.feedPlans[0].plan.isWithConsulting){
-                diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
-                    <Link to="/diary" title="Dziennik aktywności">
-                        <Notification count={this.state.notifications.diaryDays.length}></Notification>
-                        <em className="fa fa-address-book-o"></em>
-                        <span>Dziennik aktywności</span>
-                    </Link>
-                </li>
-            }
         }
         return (
             <ul className="nav">

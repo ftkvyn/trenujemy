@@ -12,6 +12,10 @@ module.exports = {
   		model: 'User',
   		required:true	
   	},
+    trainer:{
+      model:'User',
+      required: true
+    },
   	purchase:{
   		model: 'TrainPlanPurchase',
   		required:true	

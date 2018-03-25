@@ -8,6 +8,10 @@
 module.exports = {
 
   attributes: {
+      trainer:{
+        model:'User',
+        required: true
+      },
   		months:{
   			type:'integer',
   			required: true

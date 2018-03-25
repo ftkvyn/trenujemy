@@ -12,9 +12,13 @@ module.exports = {
   attributes: {
   		user:{
   			model:'User',
-  			required: true,
-  			unique:true
+  			required: true
   		},
+
+      trainer:{
+        model:'User',
+        required: true
+      },
 
   		sendTips:{
   			type:'string',

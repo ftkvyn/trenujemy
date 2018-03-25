@@ -23,7 +23,7 @@ module.exports = {
 	},
 	role:{
 		type:'string',
-		enum: ['user', 'trainer']
+		enum: ['user', 'trainer', 'admin']
 	},
 	password: {
 	    type: 'string',

@@ -20,8 +20,8 @@ module.exports.models = {
   connection: 'mysqlServer',
   schema:true,
   // migrate:'alter',
-  migrate:'safe',
-  // migrate:'drop',
+  // migrate:'safe',
+  migrate:'drop',
 
   /***************************************************************************
   *                                                                          *

@@ -13,6 +13,10 @@ module.exports = {
 		model: 'User',
 		required:true	
 	},
+	trainer:{
+        model:'User',
+        required: true
+	},
 	plan:{
 		model: 'FeedPlan',
 		required:true	

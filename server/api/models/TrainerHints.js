@@ -12,6 +12,10 @@ module.exports = {
   		type:'string',
   		required:true
   	},
+  	trainer:{
+	    model:'User',
+	    required: true
+	},
   	text:{
   		type:'text',
   	}

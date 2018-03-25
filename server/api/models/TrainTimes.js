@@ -8,6 +8,10 @@
 module.exports = {
 
   attributes: {
+    trainer:{
+      model:'User',
+      required: true
+    },
   	dayOfWeek:{
   		type:'integer',
   		enum:[1,2,3,4,5,6,7],

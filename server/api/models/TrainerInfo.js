@@ -17,6 +17,12 @@ module.exports = {
 	},
 	sendHints:{
 		type:'boolean'
+	},
+	city:{
+		type:'integer',
+		enum: [0,1,2,3,4,5,6,7]
+		//0-Not set, 1-Warszawa, 2-Kraków, 3-Łódź, 4-Wrocław, 5-Poznań, 6-Gdańsk, 7-Szczecin
+		//int for faster search
 	}
   }
 };
