@@ -3,8 +3,6 @@ import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
 import { loadSurvey, saveSurvey, loadUser } from '../Common/userDataService';
 import { saveImage, saveFile, getFileLink } from '../Common/filesService';
-import { loadSurveySettngs } from '../Common/surveySettngsService';
-import SurveyItem from '../Components/SurveyItem';
 
 let hideAlertSuccess = null;
 let hideAlertError = null;
@@ -65,7 +63,6 @@ class Survey extends React.Component {
                 bodySize:{}
             },
             userData:{},
-            surveySettings:[]
         };
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
@@ -97,10 +94,6 @@ class Survey extends React.Component {
             .then((userData) => {              
                 this.setState({userData: userData});
             });     
-        loadSurveySettngs()
-            .then((data) => {
-              this.setState({surveySettings: data})
-            });
     }
 
     handleChange(event) {
@@ -292,7 +285,6 @@ class Survey extends React.Component {
                             </div>
                         </Col>
                     </FormGroup>
-                    <SurveyItem name='bodyType' settings={this.state.surveySettings} userData={this.state.userData}>
                             <legend>1) Typ sylwetki</legend>
                             <div style={{'paddingLeft':'50px','paddingBottom':'20px'}}>
                                 <img src='/images/body_types.jpg'/>
@@ -320,9 +312,7 @@ class Survey extends React.Component {
                                     </label>
                                 </div>
                             </div>
-                    </SurveyItem>
                     <legend>2) Osobiste zwyczaje</legend>
-                    <SurveyItem name='wakeUpHour' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Godzina pobudki:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -334,8 +324,6 @@ class Survey extends React.Component {
                                 onChange={this.handleChange.bind(this)}/>
                             </Col>
                         </FormGroup> 
-                    </SurveyItem>
-                    <SurveyItem name='goToBedHour' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Godzina chodzenia spać:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -347,8 +335,6 @@ class Survey extends React.Component {
                                 onChange={this.handleChange.bind(this)}/>
                             </Col>
                         </FormGroup> 
-                    </SurveyItem>
-                    <SurveyItem name='mealsNumber' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Przeciętna liczba posiłków dziennie:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -359,8 +345,6 @@ class Survey extends React.Component {
                                 onChange={this.handleChange.bind(this)}/>
                             </Col>
                         </FormGroup> 
-                    </SurveyItem>
-                    <SurveyItem name='eatingTimes' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Godziny spożywania posiłków (kolejne po przecinku):</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -371,8 +355,6 @@ class Survey extends React.Component {
                                 onChange={this.handleChange.bind(this)}/>
                             </Col>
                         </FormGroup> 
-                    </SurveyItem>
-                    <SurveyItem name='canYouChangeDailyPlan' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Czy jesteś gotowy zmienić swój dzienny plan aby dostosować sie do zaleceń trenera?</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -388,8 +370,6 @@ class Survey extends React.Component {
                                 </FormControl>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='canYouPrepareDishes' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Czy jesteś w stanie przygotowywać posiłki na cały dzień w lunch boxach?</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -404,8 +384,6 @@ class Survey extends React.Component {
                                 </FormControl>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='canYouEatSameDaily' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Czy akceptujesz, aby tego samego dnia jeść więcej niż raz ten sam posiłek?</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -420,8 +398,6 @@ class Survey extends React.Component {
                                 </FormControl>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='allergy' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup className='form-inline'>
                             <label className="col-lg-3 col-md-4 control-label">Czy masz alergię na określone produkty spożywcze?</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -443,8 +419,6 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='notEating' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup className='form-inline'>
                             <label className="col-lg-3 col-md-4 control-label">Czy chcesz wykluczyć jakieś produkty ze swojej diety?</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -466,8 +440,6 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='preserveWeightProblems' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup className='form-inline'>
                             <label className="col-lg-3 col-md-4 control-label">Czy masz problemy z utrzymaniem prawidłowej wagi?</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -482,8 +454,6 @@ class Survey extends React.Component {
                                 </FormControl>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='usedEatingPlans' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup className='form-inline'>
                             <label className="col-lg-3 col-md-4 control-label">Czy stosowałeś w przeszłości plany żywieniowe? Jeżeli tak - jakie?</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -505,8 +475,6 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='dailyCalories' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup className='form-inline'>
                             <label className="col-lg-3 col-md-4 control-label">Czy jesteś w stanie powiedzieć ile średnio dziennie spożywasz kalorii?</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -529,8 +497,6 @@ class Survey extends React.Component {
                                     <span style={this.state.data.dailyCalories === null ? {'display':'none'} : {}}>  kcal</span>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='kitchenEquipment' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Zaznacz które sprzęty kuchenne posiadasz:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -568,8 +534,6 @@ class Survey extends React.Component {
                                 </label>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='workType' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Rodzaj wykonywanej pracy:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -580,8 +544,6 @@ class Survey extends React.Component {
                                 onChange={this.handleChange.bind(this)}/>
                             </Col>
                         </FormGroup> 
-                    </SurveyItem>
-                    <SurveyItem name='hintsForTrainer' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Inne uwagi dla trenera:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -592,9 +554,7 @@ class Survey extends React.Component {
                                 onChange={this.handleChange.bind(this)}></textarea>
                             </Col>
                         </FormGroup> 
-                    </SurveyItem>                    
                     <legend>3) Ankieta treningowa</legend>
-                    <SurveyItem name='weight' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup className='form-inline'>
                             <label className="col-lg-3 col-md-4 control-label">Waga:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -605,8 +565,6 @@ class Survey extends React.Component {
                                 onChange={this.handleChange.bind(this)}/> kg
                             </Col>
                         </FormGroup> 
-                    </SurveyItem>   
-                    <SurveyItem name='height' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup className='form-inline'>
                             <label className="col-lg-3 col-md-4 control-label">Wzrost:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -617,8 +575,6 @@ class Survey extends React.Component {
                                 onChange={this.handleChange.bind(this)}/> cm
                             </Col>
                         </FormGroup>                    
-                    </SurveyItem>
-                    <SurveyItem name='activity' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Aktywność fizyczna ogółem:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -635,11 +591,8 @@ class Survey extends React.Component {
                                 </FormControl>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
 
-                    <SurveyItem name='bodySize' settings={this.state.surveySettings} userData={this.state.userData}>                    
                         <h5>Aktualne wymiary</h5>
-                        <SurveyItem name='bodySize.neck' settings={this.state.surveySettings} userData={this.state.userData}>
                             <FormGroup className='form-inline'>
                                 <label className="col-lg-3 col-md-4 control-label">Kark:</label>
                                 <Col lg={ 9 } md={ 8 }>
@@ -650,8 +603,6 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/> cm
                                 </Col>
                             </FormGroup> 
-                        </SurveyItem>
-                        <SurveyItem name='bodySize.shoulder' settings={this.state.surveySettings} userData={this.state.userData}>
                             <FormGroup className='form-inline'>
                                 <label className="col-lg-3 col-md-4 control-label">Ramię:</label>
                                 <Col lg={ 9 } md={ 8 }>
@@ -662,8 +613,6 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/> cm
                                 </Col>
                             </FormGroup> 
-                        </SurveyItem>
-                        <SurveyItem name='bodySize.forearm' settings={this.state.surveySettings} userData={this.state.userData}>
                             <FormGroup className='form-inline'>
                                 <label className="col-lg-3 col-md-4 control-label">Przedramię:</label>
                                 <Col lg={ 9 } md={ 8 }>
@@ -674,8 +623,6 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/> cm
                                 </Col>
                             </FormGroup> 
-                        </SurveyItem>
-                        <SurveyItem name='bodySize.wrist' settings={this.state.surveySettings} userData={this.state.userData}>
                             <FormGroup className='form-inline'>
                                 <label className="col-lg-3 col-md-4 control-label">Nadgarstek:</label>
                                 <Col lg={ 9 } md={ 8 }>
@@ -686,8 +633,6 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/> cm
                                 </Col>
                             </FormGroup> 
-                        </SurveyItem>
-                        <SurveyItem name='bodySize.chest' settings={this.state.surveySettings} userData={this.state.userData}>
                             <FormGroup className='form-inline'>
                                 <label className="col-lg-3 col-md-4 control-label">Klatka piersiowa:</label>
                                 <Col lg={ 9 } md={ 8 }>
@@ -698,8 +643,6 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/> cm
                                 </Col>
                             </FormGroup> 
-                        </SurveyItem>
-                        <SurveyItem name='bodySize.waist' settings={this.state.surveySettings} userData={this.state.userData}>
                             <FormGroup className='form-inline'>
                                 <label className="col-lg-3 col-md-4 control-label">Talia (brzuch):</label>
                                 <Col lg={ 9 } md={ 8 }>
@@ -710,8 +653,6 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/> cm
                                 </Col>
                             </FormGroup> 
-                        </SurveyItem>
-                        <SurveyItem name='bodySize.hips' settings={this.state.surveySettings} userData={this.state.userData}>
                             <FormGroup className='form-inline'>
                                 <label className="col-lg-3 col-md-4 control-label">Biodra:</label>
                                 <Col lg={ 9 } md={ 8 }>
@@ -722,8 +663,6 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/> cm
                                 </Col>
                             </FormGroup> 
-                        </SurveyItem>
-                        <SurveyItem name='bodySize.thigh' settings={this.state.surveySettings} userData={this.state.userData}>
                             <FormGroup className='form-inline'>
                                 <label className="col-lg-3 col-md-4 control-label">Udo:</label>
                                 <Col lg={ 9 } md={ 8 }>
@@ -734,8 +673,6 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/> cm
                                 </Col>
                             </FormGroup> 
-                        </SurveyItem>
-                        <SurveyItem name='bodySize.shin' settings={this.state.surveySettings} userData={this.state.userData}>
                             <FormGroup className='form-inline'>
                                 <label className="col-lg-3 col-md-4 control-label">Łydka:</label>
                                 <Col lg={ 9 } md={ 8 }>
@@ -746,10 +683,7 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/> cm
                                 </Col>
                             </FormGroup> 
-                        </SurveyItem>
                         <hr/>
-                    </SurveyItem>
-                    <SurveyItem name='gymExperience' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Doświadczenie na siłowni:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -765,8 +699,6 @@ class Survey extends React.Component {
                                 </FormControl>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='trainingsStatus' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Aktualny status treningów:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -782,8 +714,6 @@ class Survey extends React.Component {
                                 </FormControl>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='trainingDescription' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Rozpisz, jak trenujesz obecnie na siłowni. Wymień ćwiczenia, jak łączysz partie, jak długo trenujesz tym planem, długość przerw między seriami, ile czasu trwa twój trening:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -794,8 +724,6 @@ class Survey extends React.Component {
                                 onChange={this.handleChange.bind(this)}></textarea>
                             </Col>
                         </FormGroup> 
-                    </SurveyItem>
-                    <SurveyItem name='otherTrainings' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Czy oprócz siłowni uprawiasz inne sporty, wliczając w to intensywne spacery, rower, bieganie? Opisz je:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -806,8 +734,6 @@ class Survey extends React.Component {
                                 onChange={this.handleChange.bind(this)}></textarea>
                             </Col>
                         </FormGroup> 
-                    </SurveyItem>
-                    <SurveyItem name='currentStatus' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Jak oceniasz swój obecny stan wytrenowania:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -824,8 +750,6 @@ class Survey extends React.Component {
                                 </FormControl>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='possibleTrainings' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Ile razu w tygodniu w nowym planie treningowym możesz maksymalnie ćwiczyć na siłowni:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -844,8 +768,6 @@ class Survey extends React.Component {
                                 </FormControl>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='mostImportantBodyPart' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Na której partii mięśni zależy Ci najbardziej:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -907,8 +829,6 @@ class Survey extends React.Component {
                                 </label>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='availableEquipment' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Jaki jest Twój dostęp do sprzętów:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -935,8 +855,6 @@ class Survey extends React.Component {
                                 </label>                            
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='currentNutrition' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Czy obecnie stosujesz suplementy diety? Jeśli tak - jakie?</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -947,8 +865,6 @@ class Survey extends React.Component {
                                 onChange={this.handleChange.bind(this)}></textarea>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='supplementsCost' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup className='form-inline'>
                             <label className="col-lg-3 col-md-4 control-label">Czy chcesz stosować suplementację? Jaki jest Twój miesięczny budżet na suplementy w nowym planie treningowym?</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -971,8 +887,6 @@ class Survey extends React.Component {
                                     <span style={this.state.data.supplementsCost === null ? {'display':'none'} : {}}> PLN</span>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='contusionCheckboxes' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup className='form-inline'>
                             <label className="col-lg-3 col-md-4 control-label">Czy masz kontuzje?</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -1033,8 +947,6 @@ class Survey extends React.Component {
                                     onChange={this.handleChange.bind(this)}/>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='otherHints' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Inne uwagi dla trenera:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -1045,16 +957,12 @@ class Survey extends React.Component {
                                 onChange={this.handleChange.bind(this)}></textarea>
                             </Col>
                         </FormGroup>
-                    </SurveyItem>
-                    <SurveyItem name='bodyPicture' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Dodaj zdjęcie swojej sylwetki, aby trener mógł dokładniej ocenić potrzeby i dostosować plan treningów:</label>
                             <Col lg={ 9 } md={ 8 }>
                                 <img src={bodyPic} className='profile-pic' onClick={this.imageClick.bind(this)}/>
                             </Col>
                         </FormGroup> 
-                    </SurveyItem>
-                    <SurveyItem name='medicalReportName' settings={this.state.surveySettings} userData={this.state.userData}>
                         <FormGroup>
                             <label className="col-lg-3 col-md-4 control-label">Załaduj skan badań lekarskich:</label>
                             <Col lg={ 9 } md={ 8 }>
@@ -1063,7 +971,6 @@ class Survey extends React.Component {
                                 <a onClick={this.downloadFile.bind(this)} style={this.state.data.medicalReporKey ? {'cursor':'pointer'} : {'display':'none'}}>Pobierz</a>
                             </Col>
                         </FormGroup> 
-                    </SurveyItem>                    
                     <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
                         Dane zapisane poprawnie.
                     </div>  
@@ -1071,12 +978,8 @@ class Survey extends React.Component {
                         Nie udało się zapisać dane.
                     </div>
                 </form>
-                <SurveyItem name='bodyPicture' settings={this.state.surveySettings} userData={this.state.userData}>
                     {picForm}
-                </SurveyItem>
-                <SurveyItem name='medicalReportName' settings={this.state.surveySettings} userData={this.state.userData}>
                     {fileForm}
-                </SurveyItem>
             </Panel>
         );
     }

@@ -13,7 +13,6 @@ class TrainerMenu extends React.Component {
                 profile: this.routeActive(['profile', 'transactions']),
                 trainings: this.routeActive(['trainings/price', 'trainings/places', 'trainings/hours']),
                 plans: this.routeActive(['plans/price']),
-                surveySettngs: this.routeActive(['surveySettngs/training', 'surveySettngs/feed']),
             }
         };
     };
@@ -132,29 +131,6 @@ class TrainerMenu extends React.Component {
                     <em className="fa fa-lightbulb-o"></em>
                     <span>Wskazówki trenera</span>
                     </Link>
-                </li>
-                
-
-                <li className={ this.routeActive(['surveySettngs/training', 'surveySettngs/feed']) ? 'active' : '' }>
-                    <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'surveySettngs') }>
-                        <em className="fa fa-cogs"></em>
-                        <span>Ankiety</span>
-                    </div>
-                    <Collapse in={ this.state.collapse.surveySettngs } timeout={ 100 }>
-                        <ul id="surveySettngs" className="nav sidebar-subnav">
-                            <li className="sidebar-subnav-header">Ankiety</li>
-                            <li className={ this.routeActive('surveySettngs/training') ? 'active' : '' } >
-                                <Link to={"/surveySettngs/training"} title='Ankieta treningowa'>
-                                    <span>Ankieta treningowa</span>
-                                </Link>
-                            </li>      
-                            <li className={ this.routeActive('surveySettngs/feed') ? 'active' : '' } >
-                                <Link to={"/surveySettngs/feed"} title='Ankieta dla planów Ż/T'>
-                                    <span>Ankieta dla planów Ż/T</span>
-                                </Link>
-                            </li>             
-                        </ul>
-                    </Collapse>
                 </li>
             </ul>);
     }

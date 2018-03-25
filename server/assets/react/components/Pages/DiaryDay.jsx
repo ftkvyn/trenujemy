@@ -9,13 +9,11 @@ import { loadDishes, saveDish, addUpdateDishHandler, removeUpdateDishHandler, re
 import { updateNotifications, saveNotifications, loadNotifications } from '../Common/notificationsService';
 import { loadUserAdvice } from '../Common/adviceService';
 import { loadAnswers } from '../Common/answerTemplatesService';
-import { loadSurveySettngs } from '../Common/surveySettngsService';
 import moment from 'moment';
 import AddComponentFirstStep from './AddComponentFirstStep'
 import AddComponentSecondStep from './AddComponentSecondStep'
 import DishInfo from '../Components/DishInfo'
 import FoodInfoRow from '../Components/FoodInfoRow'
-import SurveyItem from '../Components/SurveyItem';
 import RequirementRow from '../Components/RequirementRow';
 
 function updateDish(component){
@@ -159,7 +157,6 @@ class DiaryDay extends React.Component {
             bodySize:{},
             trainings:[],
             userData:{},
-            surveySettings:[],
             advise:{},
             dishes:[],
             templates: [],
@@ -217,10 +214,6 @@ class DiaryDay extends React.Component {
             .then((userData) => {              
                 this.setState({userData: userData});
             });     
-        loadSurveySettngs()
-            .then((data) => {
-              this.setState({surveySettings: data})
-            });  
         if(this.state.userId){
           loadAnswers()
             .then((data) => this.setState({templates: data})); 
@@ -582,7 +575,6 @@ class DiaryDay extends React.Component {
                         </Col>
                       </div>
               <div className='dish-body' style={this.state.__sizeCollapsed ? {display: 'none'} : {}}>
-                <SurveyItem name='weight' settings={this.state.surveySettings} userData={this.state.userData}>                  
                   <div className="col-lg-12 text-bold">Zaktualizuj swoje wymiary</div>
                   <FormGroup className='form-inline'>
                       <Row style={{margin:0}}>
@@ -606,8 +598,6 @@ class DiaryDay extends React.Component {
                       </Col>
                   </FormGroup>
                   <RequirementRow name="provideWeight" period={this.state.requirements.provideWeight}></RequirementRow>
-                </SurveyItem>
-                <SurveyItem name='bodySize' settings={this.state.surveySettings} userData={this.state.userData}>                
                   <div className="col-lg-12 text-bold">Wymiary</div>
                   <Row>
                       <label className="col-lg-2 col-md-2 hidden-xs hidden-sm control-label label-stub"> </label>
@@ -615,7 +605,6 @@ class DiaryDay extends React.Component {
                       <label className="col-lg-3 col-md-3 col-sm-6 col-xs-6 ">W ankiecie początkowej:</label>
                       <label className="col-lg-4 col-md-4 hidden-xs hidden-sm control-label label-stub"> </label>
                   </Row>
-                  <SurveyItem name='bodySize.neck' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Kark:</label>
                         <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
@@ -631,8 +620,6 @@ class DiaryDay extends React.Component {
                             defaultValue={this.state.survey.bodySize.neck}/> cm
                         </Col>
                     </FormGroup>
-                  </SurveyItem>
-                  <SurveyItem name='bodySize.shoulder' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Ramię:</label>
                         <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
@@ -648,8 +635,6 @@ class DiaryDay extends React.Component {
                             defaultValue={this.state.survey.bodySize.shoulder}/> cm
                         </Col>
                     </FormGroup>
-                  </SurveyItem>
-                  <SurveyItem name='bodySize.forearm' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Przedramię:</label>
                         <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
@@ -665,8 +650,6 @@ class DiaryDay extends React.Component {
                             defaultValue={this.state.survey.bodySize.forearm}/> cm
                         </Col>
                     </FormGroup>
-                  </SurveyItem>
-                  <SurveyItem name='bodySize.wrist' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Nadgarstek:</label>
                         <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
@@ -682,8 +665,6 @@ class DiaryDay extends React.Component {
                             defaultValue={this.state.survey.bodySize.wrist}/> cm
                         </Col>
                     </FormGroup>
-                  </SurveyItem>
-                  <SurveyItem name='bodySize.chest' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Klatka piersiowa:</label>
                         <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
@@ -699,8 +680,6 @@ class DiaryDay extends React.Component {
                             defaultValue={this.state.survey.bodySize.chest}/> cm
                         </Col>
                     </FormGroup>
-                  </SurveyItem>
-                  <SurveyItem name='bodySize.waist' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Talia (brzuch):</label>
                         <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
@@ -716,8 +695,6 @@ class DiaryDay extends React.Component {
                             defaultValue={this.state.survey.bodySize.waist}/> cm
                         </Col>
                     </FormGroup>
-                  </SurveyItem>
-                  <SurveyItem name='bodySize.hips' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Biodra:</label>
                         <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
@@ -733,8 +710,6 @@ class DiaryDay extends React.Component {
                             defaultValue={this.state.survey.bodySize.hips}/> cm
                         </Col>
                     </FormGroup>
-                  </SurveyItem>
-                  <SurveyItem name='bodySize.thigh' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Udo:</label>
                         <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
@@ -750,8 +725,6 @@ class DiaryDay extends React.Component {
                             defaultValue={this.state.survey.bodySize.thigh}/> cm
                         </Col>
                     </FormGroup>
-                  </SurveyItem>
-                  <SurveyItem name='bodySize.shin' settings={this.state.surveySettings} userData={this.state.userData}>
                     <FormGroup className='form-inline'>                  
                         <label className="col-lg-2 col-md-2 control-label">Łydka:</label>
                         <Col lg={ 3 } md={ 3 } sm={6} xs={6}>
@@ -767,9 +740,7 @@ class DiaryDay extends React.Component {
                             defaultValue={this.state.survey.bodySize.shin}/> cm
                         </Col>
                     </FormGroup>
-                  </SurveyItem>
                   <RequirementRow name="provideSizes" period={this.state.requirements.provideSizes}></RequirementRow>
-                </SurveyItem>
                 <FormGroup className='daily-pics-container'>
                     <Col lg={ 12 } md={ 12 }>
                         <label className="">Załaduj zdjęcie sylwetki</label>
