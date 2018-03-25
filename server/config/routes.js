@@ -34,14 +34,6 @@ module.exports.routes = {
 
   '/': 'ViewsController.home',
 
-  '/history': 'ViewsController.history',
-
-  '/about': 'ViewsController.about',
-
-  '/trainings': 'ViewsController.trainings',
-
-  '/plans': 'ViewsController.plans',
-
   '/cart': 'ViewsController.cart',
 
   '/cartApprove': 'ViewsController.cartApprove',

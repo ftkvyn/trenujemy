@@ -9,79 +9,10 @@ const Q = require('q');
 
 module.exports = {
 	home: function(req,res){
-		let qs = [];
-		qs.push(TrainPlan.find({isActive: true}));
-		qs.push(FeedPlan.find({isVisible: true}));
-		qs.push(FeedPlanTarget.find({isVisible: true}));
-		Q.all(qs)
-		.catch(function(err){
-			console.error(err);
-			return res.view('homepage', {locals: {
-				user: req.session.user,
-				cart: req.session.cart, 
-				trainPlans: [],
-				feedPlans: [],
-				feedPlanTarget: []
-			}});	
-		})
-		.then(function(data){
-			const rawPlans =  data[1];
-			let plans = [];
-			for(let i = 0; i < rawPlans.length; i++){
-				let plan = plans.find( (item) => item.months == rawPlans[i].months );
-				if(!plan){
-					plan = rawPlans[i];
-					plans.push(plan);
-				}
-				if(rawPlans[i].isWithConsulting){
-					plan.consult = rawPlans[i];
-				}else{
-					plan.noConsult = rawPlans[i];
-				}
-			}
-			return res.view('homepage', {locals: {
-				user: req.session.user, 
-				cart: req.session.cart,
-				trainPlans: data[0],
-				feedPlans: plans,
-				feedPlanTarget: data[2]
-			}});	
-		});	
-	},
-
-	about: function(req,res){
-		return res.view('about', {locals: {user: req.session.user}});	
-	},
-
-	history: function(req,res){
-		return res.view('history', {locals: {user: req.session.user}});	
-	},
-
-	trainings: function(req,res){
-		let qs = [];
-		qs.push(TrainPlaces.find({}));
-		qs.push(TrainTimes.find({}));
-		Q.all(qs)
-		.catch(function(err){
-			console.error(err);
-			return res.view('training', {locals: {
-				user: req.session.user,
-				places: [],
-				times: []
-			}});	
-		})
-		.then(function(data){
-			return res.view('training', {locals: {
-				user: req.session.user,
-				places: data[0],
-				times: data[1]
-			}});	
-		});	
-			
-	},
-
-	plans: function(req,res){
-		return res.view('plans', {locals: {user: req.session.user}});	
+		return res.view('home', {locals: {
+			user: req.session.user, 
+			cart: req.session.cart,
+		}});	
 	},
 
 	cart: function(req,res){
