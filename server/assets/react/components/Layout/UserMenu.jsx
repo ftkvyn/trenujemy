@@ -93,7 +93,6 @@ class UserMenu extends React.Component {
         let diaryItem = '';
         let adviceItem = '';
         let trainingItem = '';
-        let hintsItem = '';
         trainingItem = <li className={ this.routeActive('trainings') ? 'active' : '' }>
             <Link to="/trainings" title="Treningi">
                 <em className="fa fa-calendar-check-o"></em>
@@ -112,14 +111,7 @@ class UserMenu extends React.Component {
                 <em className="fa fa-exclamation-triangle"></em>
                 <span>Zalecenia</span>
             </Link>
-        </li>
-        hintsItem = <li className={ this.routeActive('hints') ? 'active' : '' }>
-            <Link to="/hints" title="Ciekawostki od trenera">
-                <Notification count={this.state.notifications.hints}></Notification>
-                <em className="fa fa-lightbulb-o"></em>
-                <span>Ciekawostki</span>
-            </Link>
-        </li>
+        </li>        
         if(this.state.userData.feedPlans.length && this.state.userData.feedPlans[0].plan.isWithConsulting){
             diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
                 <Link to="/diary" title="Dziennik aktywności">
@@ -152,7 +144,6 @@ class UserMenu extends React.Component {
                 {adviceItem}                
                 {diaryItem}
                 {trainingItem}
-                {hintsItem}
             </ul>);
     }
 

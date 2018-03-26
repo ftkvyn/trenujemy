@@ -120,41 +120,41 @@ function saveSurvey(model){
 	return promise;
 }
 
-function loadRequirements(userId) {
-	let promise = new Promise((resolve, reject) => {
-		let url = '/api/userRequirement';
-		if(userId){
-			url += '/' + userId;
-		}
-		$.get(url)
-		.success(function(data) {
-			resolve(data);
-		})
-		.error(function(err){
-			console.error(err);
-			reject(err);
-		});
-	});
-	return promise;
-}
+// function loadRequirements(userId) {
+// 	let promise = new Promise((resolve, reject) => {
+// 		let url = '/api/userRequirement';
+// 		if(userId){
+// 			url += '/' + userId;
+// 		}
+// 		$.get(url)
+// 		.success(function(data) {
+// 			resolve(data);
+// 		})
+// 		.error(function(err){
+// 			console.error(err);
+// 			reject(err);
+// 		});
+// 	});
+// 	return promise;
+// }
 
-function saveRequirements(model){
-	let promise = new Promise((resolve, reject) => {
-		$.ajax({
-            url: '/api/userRequirement/'+model.id,
-            type: 'PUT',
-            data: model,
-            success: function (data) {
-            	resolve(data);                
-            },
-            error: function(err){
-                console.error(err);
-                reject(err);                
-            }
-        });
-	});
-	return promise;
-}
+// function saveRequirements(model){
+// 	let promise = new Promise((resolve, reject) => {
+// 		$.ajax({
+//             url: '/api/userRequirement/'+model.id,
+//             type: 'PUT',
+//             data: model,
+//             success: function (data) {
+//             	resolve(data);                
+//             },
+//             error: function(err){
+//                 console.error(err);
+//                 reject(err);                
+//             }
+//         });
+// 	});
+// 	return promise;
+// }
 
 function updateEmail(userEmail){
 	let promise = new Promise((resolve, reject) => {

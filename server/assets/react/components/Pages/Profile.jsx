@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
-import { loadUser, saveUser, loadRequirements, saveRequirements, loadSurvey, loadPurchases } from '../Common/userDataService';
+import { loadUser, saveUser, loadSurvey, loadPurchases } from '../Common/userDataService';
 import { saveImage, getFileLink } from '../Common/filesService';
 import { loadClients } from '../Common/clientsService';
 
@@ -24,35 +24,13 @@ function saveUserFn(newUser){
     });
 }
 
-function saveRequirementsFn(data){
-    saveRequirements(data)
-    .then(function(){
-        $('.saveError').hide();
-        $('.saveSuccess').show();
-        clearTimeout(hideAlertSuccess);
-        hideAlertSuccess = setTimeout(() => {$('.saveSuccess').hide()}, 6000);
-    })
-    .catch(function(){
-        $('.saveSuccess').hide();
-        $('.saveError').show();
-        clearTimeout(hideAlertError);
-        hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
-    });
-}
-
 function loadClientData(id){
     loadUser(id)
     .then((userData) => {
         setUser.call(this, userData);
     });
 
-    this.setState({requirements: {}});
     this.setState({userData: {}});
-
-    loadRequirements(id)
-    .then((data) => {
-        this.setState({requirements: data});
-    });
 
     loadSurvey(id)
     .then((data) => {
@@ -112,7 +90,6 @@ class Profile extends React.Component {
         let initialState = {
             user:{},
             userData:{},
-            requirements:{},
             feedPlans:[],
             trainPlans:[]
         };
@@ -180,31 +157,6 @@ class Profile extends React.Component {
         saveHandler();
     }
 
-    handleChangeRequirements(event){
-        let fieldName = event.target.name;
-        let fieldVal = event.target.value;
-        if(fieldName.indexOf('boolSelect:') > -1){
-            fieldName = fieldName.replace('boolSelect:','');
-            if(fieldVal == 'true'){
-                fieldVal = true;
-            }else{
-                fieldVal = false;
-            }
-        }else if(fieldName.indexOf('bool:') > -1){
-            fieldName = fieldName.replace('bool:','');
-            fieldVal = event.target.checked;
-        }
-        let newData = this.state.requirements;
-        newData[fieldName] = fieldVal
-        this.setState({requirements: newData});
-
-        if(saveHandler){
-            saveHandler.clear();
-        }
-        saveHandler = debounce(() => saveRequirementsFn(newData), 1000);        
-        saveHandler();
-    }
-
     imageClick(event){
         if(this.state.userId){
             return;
@@ -236,7 +188,7 @@ class Profile extends React.Component {
 
     render() {  
         let invoiceForm = "";
-        let requirementsForm = "";
+        let downloadContainer = "";
         if(this.state.user.role == 'trainer'){
             invoiceForm = <FormGroup>
                 <label className="col-lg-2 control-label">Dane do faktury: </label>
@@ -252,7 +204,7 @@ class Profile extends React.Component {
         let readonlyProps = {};
         if(this.state.userId){
             readonlyProps = {readOnly: true};
-            if(this.state.requirements.user && this.state.userData.id){
+            if(this.state.userData.id){
                 let downloadForm = "";
                 if(this.state.userData.medicalReportName){
                     downloadForm = <FormGroup>
@@ -265,24 +217,7 @@ class Profile extends React.Component {
                 }
                 if( (this.state.feedPlans && this.state.feedPlans.length) ||
                     (this.state.trainPlans && this.state.trainPlans.length)){
-                    requirementsForm = <div>
-                        <hr/>
-                        <FormGroup>
-                            <label className="col-lg-2 control-label">Wysyłaj ciekawostki i wskazówki:</label>
-                            <Col lg={ 10 }>
-                                <FormControl componentClass="select" name="sendTips" 
-                                value={this.state.requirements.sendTips}
-                                onChange={this.handleChangeRequirements.bind(this)}
-                                className="form-control">
-                                    <option value='twice_a_day'>Dwa razy dziennie</option>
-                                    <option value='each_day'>Raz dziennie</option>
-                                    <option value='each_second_day'>Co drugi dzień</option>
-                                    <option value='each_third_day'>Co trzeci dzień</option>
-                                    <option value='weekly'>Raz w tygodniu</option>
-                                    <option value='never'>Nie wysyłaj</option>
-                                </FormControl>
-                            </Col>
-                        </FormGroup>
+                    downloadContainer = <div>                       
                         {downloadForm}
                     </div>  
                 }
@@ -346,7 +281,7 @@ class Profile extends React.Component {
                             </Col>
                         </FormGroup>       
                         {invoiceForm} 
-                        {requirementsForm}
+                        {downloadContainer}
                         <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
                             Dane zapisane poprawnie.
                         </div>  

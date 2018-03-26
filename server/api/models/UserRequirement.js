@@ -5,27 +5,27 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
-const hintPeriods = hintsService.hintPeriods;
+// const hintPeriods = hintsService.hintPeriods;
 
-module.exports = {
+// module.exports = {
 
-  attributes: {
-  		user:{
-  			model:'User',
-  			required: true
-  		},
+//   attributes: {
+//   		user:{
+//   			model:'User',
+//   			required: true
+//   		},
 
-      trainer:{
-        model:'User',
-        required: true
-      },
+//       trainer:{
+//         model:'User',
+//         required: true
+//       },
 
-  		sendTips:{
-  			type:'string',
-        enum: hintPeriods,
-  			required:true,
-  			defaultsTo:'never'
-  		}
-  }
-};
+//   		sendTips:{
+//   			type:'string',
+//         enum: hintPeriods,
+//   			required:true,
+//   			defaultsTo:'never'
+//   		}
+//   }
+// };
 

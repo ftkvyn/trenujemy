@@ -125,13 +125,6 @@ class TrainerMenu extends React.Component {
                     <span>Szablony zaleceń</span>
                     </Link>
                 </li>
-
-                <li className={ this.routeActive('trainerHints') ? 'active' : '' }>
-                    <Link to="/trainerHints" title="Wskazówki trenera">
-                    <em className="fa fa-lightbulb-o"></em>
-                    <span>Wskazówki trenera</span>
-                    </Link>
-                </li>
             </ul>);
     }
 
