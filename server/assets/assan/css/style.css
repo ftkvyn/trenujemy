@@ -4433,3 +4433,7 @@ body .navbar.navbar-transparent.navbar-light.bg-faded .show .nav-link
   padding-bottom: 200px;
   margin-top: 50px;
 }
+
+.hidden{
+  visibility: hidden;
+}

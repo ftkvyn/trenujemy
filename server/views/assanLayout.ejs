@@ -34,7 +34,7 @@
           if($('#' + name).length){
             event.preventDefault();
             $('html,body').animate({
-                'scrollTop':   $('#' + name).offset().top - 50
+                'scrollTop':   $('#' + name).offset().top - 80
             }, 1000);
             return false;
           }
@@ -61,20 +61,20 @@
               <div  id="navbarNavDropdown" class="navbar-collapse collapse">
                   <ul class="navbar-nav ml-auto">
                       <li class="nav-item active">
-                          <a class="nav-link" aria-expanded="false" href="/#trainings" onclick="ScrollTo('trainings', event)">Treningi</a>
+                          <a class="nav-link" aria-expanded="false" href="/#trainings" onclick="ScrollTo('trainings', event)">Trenerzy</a>
                       </li>
                       <li class="nav-item active">
-                          <a class="nav-link" aria-expanded="false" href="/#feedPlans" onclick="ScrollTo('feedPlans', event)">Plany żywieniowe</a>
+                          <a class="nav-link" aria-expanded="false" href="/#howItWorks" onclick="ScrollTo('howItWorks', event)">Jak to działa</a>
                       </li>
                       <li class="nav-item active">
                           <a class="nav-link" aria-expanded="false" href="/#contact" onclick="ScrollTo('contact', event)">Kontakt</a>
                       </li>
-                      <li class="nav-item active">
-                          <a class="nav-link" aria-expanded="false" href="/about">O mnie</a>
-                      </li>
                       <% if(!locals.user) {%>
                       <li class="nav-item active">
-                          <a class="nav-link" aria-expanded="false" href="/login">Zaloguj się</a>
+                          <a class="nav-link" aria-expanded="false" href="/login">Logowanie</a>
+                      </li>
+                      <li class="nav-item active">
+                          <a class="nav-link btn btn-primary btn-sm" style="color: white !important;margin-top: 14px;"  aria-expanded="false" href="/login">Jesteś trenerem?</a>
                       </li>
                       <% } else {%>
                       <li class="nav-item active">

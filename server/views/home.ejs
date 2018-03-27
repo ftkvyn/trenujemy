@@ -1,40 +1,45 @@
 <div class="bg-parallax parallax-overlay main-page-container hero-search" data-jarallax='{"speed": 0.2}' style='background-image: url("/images/pics/2.jpg");'>
     <div class="container">
-        <h2 class="text-white h1 font700 mb10 text-center">Find best location for you</h2>
-        <p class="text-white-gray text-center lead mb30">
-            A clean real estate template
-        </p>
+        <h2 class="text-white h1 font700 mb30 pb30 text-center">Znajdź trenera i osiągnij swój cel</h2>
         <div class="searchWrap">
             <form role="form">                      
                 <div class="row">
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="form-group">
-                           
-                            <input type="text" id="location1" class="form-control" placeholder="eg. Paris">
-                        </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p class="text-white text-right bold mb30 h3">
+				            Szukam
+				        </p>
                     </div>
-                     <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="col-lg-3 col-md-4 col-sm-4">
                         <div class="form-group">
                            
-                            <select class="form-control" id="status">
-                                <option>Status</option>
-                                <option>Rent</option>
-                                <option>Sale</option>
+                            <select class="form-control" id="trainer-type">
+                                <option value="trainer">Trenera osobistego</option>
+                                <option value="consultant">Konsultanta dyjetytycznego</option>
                             </select>
                         </div>
                     </div>
-                     <div class="col-lg-3 col-md-6 col-sm-6">
-                         <div class="form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                         <button type="button" class="btn btn-primary btn-block pull-left" style="max-width: 200px;">Szukaj</button>
+                    </div>
+                </div>
+                <div class="row place-row">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p class="text-white text-right bold mb30 h3">
+				            Gdzie
+				        </p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-4">
+                        <div class="form-group">
+                           
+                            <select class="form-control">
+                                <option>Warszawa</option>
+                                <option>Poanań</option>
+                                <option>Wroclaw</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
                          
-                            <select class="form-control" id="price">
-                                <option>$5000+</option>
-                                <option>$10000+</option>
-                                <option>$15000+</option>
-                            </select>
-                        </div>
-                    </div>
-                     <div class="col-lg-3 col-md-6 col-sm-6">
-                         <button type="button" class="btn btn-primary btn-block">Search</button>
                     </div>
                 </div>
             </form>
@@ -44,23 +49,30 @@
 <div class="bg-faded pt90 pb50 ">
     <div class="container">
         <div class="row">
-            <div class="col-md-4 mb40 text-center">
+            <div class="col-md-3 mb40 text-center">
                 <i class="ti-user fa-4x text-primary"></i>
-                <h4 class="text-uppercase font500  pt30 pb10">Best Agents</h4>
+                <h4 class="text-uppercase font500  pt30 pb10">Najlepszy trener</h4>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  
                 </p>
             </div>
-            <div class="col-md-4 mb40 text-center">
+            <div class="col-md-3 mb40 text-center">
                 <i class="ti-palette fa-4x text-primary"></i>
-                <h4 class="text-uppercase font500  pt30 pb10">Modern tools</h4>
+                <h4 class="text-uppercase font500  pt30 pb10">Usługa</h4>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  
                 </p>
             </div>
-            <div class="col-md-4 mb40 text-center">
+            <div class="col-md-3 mb40 text-center">
                 <i class="ti-cup fa-4x text-primary"></i>
-                <h4 class="text-uppercase font500 pt30 pb10">Award winners</h4>
+                <h4 class="text-uppercase font500 pt30 pb10">Panel klienta</h4>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  
+                </p>
+            </div>
+            <div class="col-md-3 mb40 text-center">
+                <i class="ti-unlock fa-4x text-primary"></i>
+                <h4 class="text-uppercase font500  pt30 pb10">Swoboda wyboru</h4>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  
                 </p>
@@ -69,6 +81,336 @@
     </div>
 </div><!--Features-->
 
+<div class="container pt90 clearfix mb90">
+    <div class="title-heading1 mb60">
+        <h3 id="trainings">Nasi trenerzy</h3>
+    </div>
+    <div class="clearfix">
+        
+        <div id="js-grid-lightbox-gallery" class="cbp">
+            <div class="cbp-item web-design graphic print motion">
+                <a href="/images/pics/1.jpg" class="cbp-caption cbp-lightbox" data-title="World Clock<br>by Paul Flavius Nechita" rel="nofollow">
+                    <div class="cbp-caption-defaultWrap">
+                        <img src="/images/pics/1.jpg" alt="">
+                    </div>
+                    <div class="cbp-caption-activeWrap">
+                        <div class="cbp-l-caption-alignLeft">
+                            <div class="cbp-l-caption-body">
+                                <div class="cbp-l-caption-title">World Clock</div>
+                                <div class="cbp-l-caption-desc">by Paul Flavius Nechita</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="cbp-item web-design logos identity graphic">
+                <a href="/images/pics/2.jpg" class="cbp-caption cbp-lightbox" data-title="Bolt UI<br>by Tiberiu Neamu" rel="nofollow">
+                    <div class="cbp-caption-defaultWrap">
+                        <img src="/images/pics/2.jpg" alt="">
+                    </div>
+                    <div class="cbp-caption-activeWrap">
+                        <div class="cbp-l-caption-alignLeft">
+                            <div class="cbp-l-caption-body">
+                                <div class="cbp-l-caption-title">Bolt UI</div>
+                                <div class="cbp-l-caption-desc">by Tiberiu Neamu</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="cbp-item graphic print identity">
+                <a href="/images/pics/3.jpg" class="cbp-caption cbp-lightbox" data-title="WhereTO App<br>by Tiberiu Neamu" rel="nofollow">
+                    <div class="cbp-caption-defaultWrap">
+                        <img src="/images/pics/3.jpg" alt="">
+                    </div>
+                    <div class="cbp-caption-activeWrap">
+                        <div class="cbp-l-caption-alignLeft">
+                            <div class="cbp-l-caption-body">
+                                <div class="cbp-l-caption-title">WhereTO App</div>
+                                <div class="cbp-l-caption-desc">by Tiberiu Neamu</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="cbp-item web-design motion logos">
+                <a href="/images/pics/4.jpg" class="cbp-caption cbp-lightbox" data-title="iDevices<br>by Tiberiu Neamu" rel="nofollow">
+                    <div class="cbp-caption-defaultWrap">
+                        <img src="/images/pics/4.jpg" alt="">
+                    </div>
+                    <div class="cbp-caption-activeWrap">
+                        <div class="cbp-l-caption-alignLeft">
+                            <div class="cbp-l-caption-body">
+                                <div class="cbp-l-caption-title">iDevices</div>
+                                <div class="cbp-l-caption-desc">by Tiberiu Neamu</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="cbp-item identity graphic print">
+                <a href="/images/pics/1.jpg" class="cbp-caption cbp-lightbox" data-title="Seemple* Music<br>by Tiberiu Neamu" rel="nofollow">
+                    <div class="cbp-caption-defaultWrap">
+                        <img src="/images/pics/1.jpg" alt="">
+                    </div>
+                    <div class="cbp-caption-activeWrap">
+                        <div class="cbp-l-caption-alignLeft">
+                            <div class="cbp-l-caption-body">
+                                <div class="cbp-l-caption-title">Seemple* Music</div>
+                                <div class="cbp-l-caption-desc">by Tiberiu Neamu</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="cbp-item motion print logos web-design">
+                <a href="/images/pics/2.jpg" class="cbp-caption cbp-lightbox" data-title="Remind~Me Widget<br>by Tiberiu Neamu" rel="nofollow">
+                    <div class="cbp-caption-defaultWrap">
+                        <img src="/images/pics/2.jpg" alt="">
+                    </div>
+                    <div class="cbp-caption-activeWrap">
+                        <div class="cbp-l-caption-alignLeft">
+                            <div class="cbp-l-caption-body">
+                                <div class="cbp-l-caption-title">Remind~Me Widget</div>
+                                <div class="cbp-l-caption-desc">by Tiberiu Neamu</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="cbp-item graphic logos">
+                <a href="/images/pics/3.jpg" class="cbp-caption cbp-lightbox" data-title="Workout Buddy<br>by Tiberiu Neamu" rel="nofollow">
+                    <div class="cbp-caption-defaultWrap">
+                        <img src="/images/pics/3.jpg" alt="">
+                    </div>
+                    <div class="cbp-caption-activeWrap">
+                        <div class="cbp-l-caption-alignLeft">
+                            <div class="cbp-l-caption-body">
+                                <div class="cbp-l-caption-title">Workout Buddy</div>
+                                <div class="cbp-l-caption-desc">by Tiberiu Neamu</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="cbp-item identity print logos motion">
+                <a href="/images/pics/4.jpg" class="cbp-caption cbp-lightbox" data-title="Digital Menu<br>by Cosmin Capitanu" rel="nofollow">
+                    <div class="cbp-caption-defaultWrap">
+                        <img src="/images/pics/4.jpg" alt="">
+                    </div>
+                    <div class="cbp-caption-activeWrap">
+                        <div class="cbp-l-caption-alignLeft">
+                            <div class="cbp-l-caption-body">
+                                <div class="cbp-l-caption-title">Digital Menu</div>
+                                <div class="cbp-l-caption-desc">by Cosmin Capitanu</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="cbp-item identity motion web-design">
+                <a href="/images/pics/1.jpg" class="cbp-caption cbp-lightbox" data-title="Holiday Selector<br>by Cosmin Capitanu" rel="nofollow">
+                    <div class="cbp-caption-defaultWrap">
+                        <img src="/images/pics/1.jpg" alt="">
+                    </div>
+                    <div class="cbp-caption-activeWrap">
+                        <div class="cbp-l-caption-alignLeft">
+                            <div class="cbp-l-caption-body">
+                                <div class="cbp-l-caption-title">Holiday Selector</div>
+                                <div class="cbp-l-caption-desc">by Cosmin Capitanu</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div>
+    	<button class="btn btn-outline-warning mb5 pull-right">Zobacz więcej</button>
+    </div>
+</div>
+
+<div class="title-heading1 mb20">
+    <h2 id="howItWorks">Konsultacja dietetyczna</h2>
+    <p class="text-center">Jak to działa</p>
+</div>
+<div class="container pb20">
+    <div class="row align-items-center">
+        <div class="col-lg-6 mb30 bg-faded">
+            <div class="cbp-caption-defaultWrap" style="padding: 20px;">
+                <img src="/images/feed/1.jpg" alt="" style="max-width: 100%;">
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="clearfix">
+                <div class="media mb30 wow fadeInUp" data-wow-delay=".150ms">
+                    <div class="media-body" style="padding: 40px;">
+                    	<h3 class="text-center">Wybór trenera i usługi</h3>
+                        <h4 class="mt-0 mb10 text-center">W naszym serwisie znajdziesz profesjonalistów zajmujących się Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue, suscipit a, scelerisque sed, lacinia in, mi. Cras vel lorem</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb20">
+    <div class="row align-items-center">
+    	<div class="col-lg-6">
+            <div class="clearfix">
+                <div class="media mb30 wow fadeInUp" data-wow-delay=".150ms">
+                    <div class="media-body" style="padding: 40px;">
+                    	<h3 class="text-center">Dostęp do panelu klienta</h3>
+                        <h4 class="mt-0 mb10 text-center">W naszym serwisie znajdziesz profesjonalistów zajmujących się Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue, suscipit a, scelerisque sed, lacinia in, mi. Cras vel lorem</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb30 bg-faded">
+            <div class="cbp-caption-defaultWrap" style="padding: 20px;">
+                <img src="/images/feed/2.jpg" alt="" style="max-width: 100%;">
+            </div>
+        </div>        
+    </div>
+</div>
+
+<div class="container pb20">
+    <div class="row align-items-center">
+        <div class="col-lg-6 mb30 bg-faded">
+            <div class="cbp-caption-defaultWrap" style="padding: 20px;">
+                <img src="/images/feed/3.jpg" alt="" style="max-width: 100%;">
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="clearfix">
+                <div class="media mb30 wow fadeInUp" data-wow-delay=".150ms">
+                    <div class="media-body" style="padding: 40px;">
+                    	<h3 class="text-center">Współpraca</h3>
+                        <h4 class="mt-0 mb10 text-center">W naszym serwisie znajdziesz profesjonalistów zajmujących się Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue, suscipit a, scelerisque sed, lacinia in, mi. Cras vel lorem</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="title-heading1 mb20">
+    <h2>Wykupienie treningu osobistego</h2>
+    <p class="text-center">Jak to działa</p>
+</div>
+<div class="container pb20">
+    <div class="row align-items-center">
+        <div class="col-lg-6 mb30 bg-faded">
+            <div class="cbp-caption-defaultWrap" style="padding: 20px;">
+                <img src="/images/feed/1.jpg" alt="" style="max-width: 100%;">
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="clearfix">
+                <div class="media mb30 wow fadeInUp" data-wow-delay=".150ms">
+                    <div class="media-body" style="padding: 40px;">
+                    	<h3 class="text-center">Wybór trenera i usługi</h3>
+                        <h4 class="mt-0 mb10 text-center">W naszym serwisie znajdziesz profesjonalistów zajmujących się Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue, suscipit a, scelerisque sed, lacinia in, mi. Cras vel lorem</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb20">
+    <div class="row align-items-center">
+    	<div class="col-lg-6">
+            <div class="clearfix">
+                <div class="media mb30 wow fadeInUp" data-wow-delay=".150ms">
+                    <div class="media-body" style="padding: 40px;">
+                    	<h3 class="text-center">Dostęp do panelu klienta</h3>
+                        <h4 class="mt-0 mb10 text-center">W naszym serwisie znajdziesz profesjonalistów zajmujących się Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue, suscipit a, scelerisque sed, lacinia in, mi. Cras vel lorem</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb30 bg-faded">
+            <div class="cbp-caption-defaultWrap" style="padding: 20px;">
+                <img src="/images/feed/2.jpg" alt="" style="max-width: 100%;">
+            </div>
+        </div>        
+    </div>
+</div>
+
+<div class="container pb20">
+    <div class="row align-items-center">
+        <div class="col-lg-6 mb30 bg-faded">
+            <div class="cbp-caption-defaultWrap" style="padding: 20px;">
+                <img src="/images/feed/3.jpg" alt="" style="max-width: 100%;">
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="clearfix">
+                <div class="media mb30 wow fadeInUp" data-wow-delay=".150ms">
+                    <div class="media-body" style="padding: 40px;">
+                    	<h3 class="text-center">Współpraca</h3>
+                        <h4 class="mt-0 mb10 text-center">W naszym serwisie znajdziesz profesjonalistów zajmujących się Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue, suscipit a, scelerisque sed, lacinia in, mi. Cras vel lorem</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ./partials/contact %>
+
 <!-- jQuery first, then Tether, then Bootstrap JS. -->
 <script type="text/javascript" src="/assan/js/plugins/plugins.js"></script> 
 <script type="text/javascript" src="/assan/js/assan.custom.js"></script> 
+<!-- load cubeportfolio -->
+<script type="text/javascript" src="/assan/cubeportfolio/js/jquery.cubeportfolio.min.js"></script>
+<script>
+    //projects
+    (function ($, window, document, undefined) {
+        'use strict';
+
+        // init cubeportfolio
+        $('#js-grid-lightbox-gallery').cubeportfolio({
+            filters: '#js-filters-lightbox-gallery1, #js-filters-lightbox-gallery2',
+            layoutMode: 'grid',
+            mediaQueries: [{
+                    width: 1500,
+                    cols: 4
+                }, {
+                    width: 1100,
+                    cols: 3
+                }, {
+                    width: 800,
+                    cols: 3
+                }, {
+                    width: 480,
+                    cols: 2,
+                    options: {
+                        caption: ''
+                    }
+                }],
+            defaultFilter: '*',
+            animationType: 'flipOutDelay',
+            gapHorizontal: 15,
+            gapVertical: 15,
+            gridAdjustment: 'responsive',
+            caption: 'overlayBottomAlong',
+            displayType: 'sequentially',
+            displayTypeSpeed: 100,
+            // lightbox
+            lightboxDelegate: '.cbp-lightbox',
+            lightboxGallery: true,
+            lightboxTitleSrc: 'data-title',
+            lightboxCounter: '<div class="cbp-popup-lightbox-counter">{{current}} of {{total}}</div>'
+        });
+    })(jQuery, window, document);
+
+    $('body').on('change','#trainer-type',function(){
+    	if(this.value == 'consultant'){
+    		$('.place-row').addClass('hidden');
+    	}else{    		
+    		$('.place-row').removeClass('hidden');
+    	}
+    });
+</script>
