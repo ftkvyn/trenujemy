@@ -4408,3 +4408,28 @@ body .mainSlide-Subtitle{
 #about-slider .mainSlide-Title-Centered{
       font-weight: 600;
 }
+
+.container{
+    position: relative;
+    z-index: 10;
+}
+
+body .navbar.navbar-transparent.navbar-light.bg-faded{
+  background: white;
+}
+
+body .navbar.navbar-transparent.navbar-light.bg-faded .active .nav-link, 
+body .navbar.navbar-transparent.navbar-light.bg-faded .show .nav-link
+{
+  color:rgba(0, 0, 0, 0.7) !important;
+}
+
+.navbar-brand .logo{
+    max-height: 30px;
+    margin-top: -5px;
+}
+.main-page-container{
+  padding-top: 200px;
+  padding-bottom: 200px;
+  margin-top: 50px;
+}
