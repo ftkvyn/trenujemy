@@ -27,7 +27,8 @@ module.exports.session = {
   secret: '0aecbd9de1aaf83202f747eacb8e0ca0',
 
   cookie: {
-    maxAge: 100 * 24 * 60 * 60 * 1000
+    maxAge: 100 * 24 * 60 * 60 * 1000,
+    secure: false
   },
 
   adapter: 'mongo',
