@@ -28,7 +28,7 @@ module.exports = {
 	},
 
 	amount:{ // PLN * 100
-		type:'integer',
+		type:'number',columnType:'integer',
 		required: true
 	},
 

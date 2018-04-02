@@ -234,6 +234,7 @@ module.exports = {
 			    const bodyData = queryString.parse(body);
 			    if(!bodyData.errorMessage){
 			    	Transaction.update({id: transaction.id}, {status: 'Complete'})
+			    	.fetch()
 					.exec(function(err, transactions){
 						try{
 							cartService.purchaseItems(transactions[0])

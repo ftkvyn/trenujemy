@@ -17,19 +17,19 @@ module.exports = {
   		},
 
   		priceOld:{
-  			type: 'integer',
+  			type:'number',columnType:'integer',
   		},
 
   		price:{
-  			type:'integer',
+  			type:'number',columnType:'integer',
   		},
 
       trainsCount:{
-        type:'integer',
+        type:'number',columnType:'integer',
       },
 
   		description:{
-  			type:'text',
+  			type:'string',columnType:'text',
   		},
 
   		isActive:{

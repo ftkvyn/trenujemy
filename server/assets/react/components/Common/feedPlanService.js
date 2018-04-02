@@ -17,7 +17,7 @@ function saveTarget(newData){
 	return new Promise((resolve, reject) => {
 		$.ajax({
             url: '/api/feedPlanTarget/'+newData.id,
-            type: 'PUT',
+            type: 'PATCH',
             data: newData,
             success: function (data) {
             	resolve(data);                
@@ -55,7 +55,7 @@ function savePlan(newData){
 	return new Promise((resolve, reject) => {
 		$.ajax({
             url: '/api/feedPlan/'+newData.id,
-            type: 'PUT',
+            type: 'PATCH',
             data: newData,
             success: function (data) {
             	resolve(data);                

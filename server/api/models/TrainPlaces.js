@@ -18,7 +18,7 @@ module.exports = {
   	},
   	type:{
   		type:'string',
-  		enum:['gym', 'openair'],
+  		isIn:['gym', 'openair'],
   		required:true
   	}
   }

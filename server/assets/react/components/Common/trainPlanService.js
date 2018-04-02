@@ -34,7 +34,7 @@ function savePlan(plan){
 	return new Promise((resolve, reject) => {
 		$.ajax({
             url: '/api/trainPlan/'+plan.id,
-            type: 'PUT',
+            type: 'PATCH',
             data: plan,
             success: function (data) {
             	resolve(data);                

@@ -17,12 +17,12 @@ module.exports = {
   		via:'dish'
   	},
     hour:{
-      type:'integer',
+      type:'number',columnType:'integer',
       //required: true,
       //defaultsTo: 730, //For 7:30
     },  	
     comment:{
-      type:'text'
+      type:'string',columnType:'text'
     }
   }
 };

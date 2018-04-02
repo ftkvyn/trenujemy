@@ -166,6 +166,7 @@ module.exports = {
               }
               var code = generateRandomStr(12);
               User.update({id: user.id}, {passwordRecoveryKey: code})
+                .fetch()
 	        	.exec(function(err, users){
 	        		if(err){
 		        		console.error(err);

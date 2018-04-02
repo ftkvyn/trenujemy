@@ -69,7 +69,7 @@ function saveNotifications(newData){
 	return new Promise((resolve, reject) => {
 		$.ajax({
             url: '/api/notifications/' + newData.id,
-            type: 'PUT',
+            type: 'PATCH',
             data: newData,
             success: function (data) {
             	notifyData = data;

@@ -22,10 +22,10 @@ module.exports = {
   		required:true	
   	},
   	trainsCount:{
-          type:'integer',
+          type:'number',columnType:'integer',
     },
     trainsLeft:{
-    	type:'integer',
+    	type:'number',columnType:'integer',
     },
   	isActive:{
   		type:'boolean',
@@ -35,14 +35,6 @@ module.exports = {
   		model:'Transaction',
   		required:true
   	},
-
-  	toJSON: function() {
-          var obj = this.toObject();
-        	obj.validTo = moment(obj.createdAt).add(12, 'months').toDate();
-        	obj.validToStr = moment(obj.validTo).format('YYYY-MM-DD');
-        	obj.validFromStr = moment(obj.createdAt).format('YYYY-MM-DD');
-          return obj;
-      }
   },
 
   beforeUpdate: function (values, cb) {
@@ -50,6 +42,14 @@ module.exports = {
   		values.isActive = false;
   	}
     cb();
+  },
+
+  customToJSON: function() {
+      var obj = {...this};
+      obj.validTo = moment(obj.createdAt).add(12, 'months').toDate();
+      obj.validToStr = moment(obj.validTo).format('YYYY-MM-DD');
+      obj.validFromStr = moment(obj.createdAt).format('YYYY-MM-DD');
+      return obj;
   }
 };
 

@@ -13,17 +13,17 @@ module.exports = {
       required: true
     },
   	dayOfWeek:{
-  		type:'integer',
-  		enum:[1,2,3,4,5,6,7],
+  		type:'number',columnType:'integer',
+  		isIn:[1,2,3,4,5,6,7],
   		required: true,
       unique: true
   	},
   	fromTime:{
-  		type:'integer',
+  		type:'number',columnType:'integer',
   		required: true
   	},
   	toTime:{
-  		type:'integer',
+  		type:'number',columnType:'integer',
   		required: true
   	}
   }

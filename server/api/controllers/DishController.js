@@ -68,6 +68,7 @@ module.exports = {
 	saveDish:function(req, res){
 		let model = req.body;
 		Dish.update({id: model.id}, model)
+		.fetch()
 		.exec(function(err,data){
 			if(err){
 				console.error(err);
@@ -93,6 +94,7 @@ module.exports = {
 				return res.forbidden();		
 			}
 			DishComponent.destroy({id: model.id})
+			.fetch()
 			.exec(function(err, data){
 				if(err){
 					console.error(err);

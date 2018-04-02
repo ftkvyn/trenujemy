@@ -23,14 +23,14 @@ module.exports = {
 	},
 	role:{
 		type:'string',
-		enum: ['user', 'trainer', 'admin']
+		isIn: ['user', 'trainer', 'admin']
 	},
 	password: {
 	    type: 'string',
 	    required: true	    
 	},
 	profilePic:{
-		type:'url'
+		type:'string'
 	},
 	passwordRecoveryKey: {
 	    type: 'string'	    
@@ -45,7 +45,7 @@ module.exports = {
 		type:'string'
 	},
 	birthday:{
-		type:'datetime'
+		type: 'string', columnType: 'datetime',
 	},
   }
 };

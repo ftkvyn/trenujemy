@@ -25,25 +25,22 @@ module.exports = {
   		required:true
   	},
   	date:{
-  		type:'datetime'
+  		type: 'string', columnType: 'datetime',
   	},
   	userComment:{
-  		type:'text'
+  		type:'string',columnType:'text'
   	},
   	trainerComment:{
-  		type:'text'
+  		type:'string',columnType:'text'
   	},
 
     userGoogleEventId:{
       type:'string'
-    },
-
-    toJSON: function() {
-        var obj = this.toObject();
-        delete obj.userGoogleEventId;
-        delete obj.trainerGoogleEventId;
-        return obj;
-    }
+    },    
+  },
+  customToJSON: function() {
+      var obj = _.omit(this, ['userGoogleEventId', 'trainerGoogleEventId'])
+      return obj;
   }
 };
 

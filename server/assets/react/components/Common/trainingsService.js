@@ -51,7 +51,7 @@ function saveTrainingComment(trainingId, comment){
 	return new Promise((resolve, reject) => {
 		$.ajax({
             url: '/api/training/'+trainingId,
-            type: 'PUT',
+            type: 'PATCH',
             data: {comment: comment},
             success: function (data) {
             	resolve(data);                

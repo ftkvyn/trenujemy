@@ -17,41 +17,41 @@ module.exports = {
       required: true
     },
     weight:{
-      type:'float'
+      type:'number',columnType:'float'
     },
   	protein:{
-  		type:'float'
+  		type:'number',columnType:'float'
   	},
   	fat:{
-  		type:'float'
+  		type:'number',columnType:'float'
   	},
   	carbohydrate:{
-  		type:'float'
+  		type:'number',columnType:'float'
   	},
   	calories:{
-  		type:'float'
+  		type:'number',columnType:'float'
   	},
 
     sodium:{
-      type:'float'
+      type:'number',columnType:'float'
     },
     potassium:{
-      type:'float'
+      type:'number',columnType:'float'
     },
     calcium:{
-      type:'float'
+      type:'number',columnType:'float'
     },
     iron:{
-      type:'float'
+      type:'number',columnType:'float'
     },
     vitaminC:{
-      type:'float'
+      type:'number',columnType:'float'
     },
     vitaminA:{
-      type:'float'
+      type:'number',columnType:'float'
     },
     fiber:{
-      type:'float'
+      type:'number',columnType:'float'
     },
   }
 };

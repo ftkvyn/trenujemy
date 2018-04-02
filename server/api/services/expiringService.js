@@ -23,13 +23,13 @@ exports.expirePlans = function(){
 		for(let i = 0; i < feedPlans.length; i++){
 			let feedPlan = feedPlans[i].toJSON();
 			if(feedPlan.validTo < now){
-				updateQs.push(FeedPlanPurchase.update({id: feedPlan.id}, {isActive: false}));
+				updateQs.push(FeedPlanPurchase.update({id: feedPlan.id}, {isActive: false}).fetch());
 			}
 		}
 		for(let i = 0; i < trainPlans.length; i++){
 			let trainPlan = trainPlans[i].toJSON();
 			if(trainPlan.validTo < now){
-				updateQs.push(TrainPlanPurchase.update({id: trainPlan.id}, {isActive: false}));
+				updateQs.push(TrainPlanPurchase.update({id: trainPlan.id}, {isActive: false}).fetch());
 			}
 		}
 		Q.all(updateQs)

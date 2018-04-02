@@ -113,7 +113,7 @@ exports.purchaseItems = function(transaction){
 					user: transaction.user,
 					isActive: true,
 					trainsLeft : {'>' : 0}
-				},{ createdAt: now }));
+				},{ createdAt: now }).fetch());
 			}
 			if(cart.feedPlan){
 				//qs.push(FeedPlanPurchase.update({user: transaction.user}, {isActive: false}));
@@ -136,7 +136,7 @@ exports.purchaseItems = function(transaction){
 					notificationModel.updateSurvey = true;
 				}
 			}
-			qs.push(Notifications.update({id: oldNotification.id},notificationModel));
+			qs.push(Notifications.update({id: oldNotification.id},notificationModel).fetch());
 			Q.all(qs)
 			.catch(function(err){
 				deferred.reject(new Error(err));

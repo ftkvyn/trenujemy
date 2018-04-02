@@ -17,7 +17,7 @@ module.exports = {
 	    required: true
 	},
   	text:{
-  		type:'text',
+  		type:'string',columnType:'text',
   	}
   }
 };

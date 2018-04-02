@@ -16,7 +16,7 @@ function saveAnswer(id, text){
 	return new Promise((resolve, reject) => {
 		$.ajax({
             url: '/api/AnswerTemplate/'+id,
-            type: 'PUT',
+            type: 'PATCH',
             data: {id: id, text: text},
             success: function (data) {
             	resolve(data);                

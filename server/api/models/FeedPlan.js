@@ -13,7 +13,7 @@ module.exports = {
         required: true
       },
   		months:{
-  			type:'integer',
+  			type:'number',columnType:'integer',
   			required: true
   		},
 
@@ -26,11 +26,11 @@ module.exports = {
   		},
 
   		priceOld:{
-  			type: 'integer',
+  			type:'number',columnType:'integer',
   		},
 
   		price:{
-  			type:'integer',
+  			type:'number',columnType:'integer',
   		},
   },
 

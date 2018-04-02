@@ -32,17 +32,17 @@ module.exports = {
 	transaction:{
 		model:'Transaction',
 		required:true
-	},
+	}
+  },
 
-	toJSON: function() {
-      var obj = this.toObject();
+  customToJSON: function() {
+	  var obj = {...this};
       if(obj.plan && obj.plan.id){
       	obj.validTo = moment(obj.createdAt).add(obj.plan.months, 'months').toDate();
       	obj.validToStr = moment(obj.validTo).format('YYYY-MM-DD');
       	obj.validFromStr = moment(obj.createdAt).format('YYYY-MM-DD');
       }
       return obj;
-    }
-  }
+	}
 };
 
