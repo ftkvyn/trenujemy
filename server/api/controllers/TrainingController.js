@@ -30,6 +30,7 @@ module.exports = {
 			model.user = req.session.user.id;
 		}
 		Training.update({id: req.params.id}, model)
+		.fetch()
 		.exec(function(err, data){
 			if(err){
 				console.error(err);
@@ -57,7 +58,7 @@ module.exports = {
 			let qs = [];
 
 			qs.push(TrainPlanPurchase.update({id: plan.id},{trainsLeft: plan.trainsLeft - 1}));
-			qs.push(Training.create(model));
+			qs.push(Training.create(model).fetch());
 
 			Q.all(qs)
 			.catch(function(err){
@@ -102,7 +103,7 @@ module.exports = {
 			let qs = [];
 
 			qs.push(TrainPlanPurchase.update({id: data.purchase.id},{trainsLeft: data.purchase.trainsLeft + 1, isActive: true}));
-			qs.push(Training.destroy({id:req.params.id}));
+			qs.push(Training.destroy({id:req.params.id}).fetch());
 
 			Q.all(qs)
 			.catch(function(err){

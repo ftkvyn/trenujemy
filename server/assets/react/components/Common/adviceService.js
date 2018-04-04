@@ -33,7 +33,7 @@ function saveAdvice(data){
 	return new Promise((resolve, reject) => {
 		$.ajax({
             url: '/api/advice/'+data.id,
-            type: 'PUT',
+            type: 'PATCH',
             data: data,
             success: function (data) {
             	resolve(data);                

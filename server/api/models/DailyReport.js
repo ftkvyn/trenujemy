@@ -13,12 +13,11 @@ module.exports = {
 		required:true	
 	},
 	date:{
-		type:'datetime',
+		type: 'string', columnType: 'datetime',
 		required: true
 	},
 	weight:{
-		type:'integer',
-		required: true,
+		type:'number',columnType:'integer',
 		defaultsTo: 0
 	},
 	bodySize:{
@@ -34,13 +33,13 @@ module.exports = {
 		via:'dailyReport'
 	},
 	userNotes:{
-		type:'text'
+		type:'string',columnType:'text'
 	},
 	trainerNotes:{
-		type:'text'
+		type:'string',columnType:'text'
 	},
 	image:{
-		type:'url'
+		type:'string'
 	}
   }
 };

@@ -12,9 +12,9 @@ module.exports = {
 		let model = req.body;
 		let query;
 		if(!model.id){
-			query = DailyTraining.create(model);
+			query = DailyTraining.create(model).fetch();
 		}else{
-			query = DailyTraining.update({id: model.id}, model);
+			query = DailyTraining.update({id: model.id}, model).fetch();
 		}
 		query.exec(function(err, data){
 			if(err){

@@ -23,7 +23,7 @@ module.exports = {
   	},
 
   	text:{
-  		type:'text',
+  		type:'string',columnType:'text',
   		required:true
   	},
 

@@ -23,22 +23,19 @@ module.exports = {
 	},
 	type:{
 		type:'string',
-		enum: ['none','gym', 'bicycle', 'rollers', 'jogging','swimming','walk'],
-		required: true,
+		isIn: ['none','gym', 'bicycle', 'rollers', 'jogging','swimming','walk'],
 		defaultsTo: 'none'
 	},
 	length:{
-		type:'integer',
-		required:true,
+		type:'number',columnType:'integer',
 		defaultsTo:0
 	},
 	calories:{
-		type:'integer',
-		required:true,
+		type:'number',columnType:'integer',
 		defaultsTo:0
 	},
 	text:{
-		type:'text'
+		type:'string',columnType:'text'
 	}	
   },
   beforeValidate: function (values, cb) {

@@ -10,6 +10,8 @@
  */
 
 module.exports.http = {
+  
+  trustProxy:true,
 
   /****************************************************************************
   *                                                                           *
@@ -31,28 +33,26 @@ module.exports.http = {
   ***************************************************************************/
 
     order: [
-      'startRequestTimer',
+      // 'startRequestTimer',
       'cookieParser',
       'session',
-      'myRequestLogger',
+      //'myRequestLogger',
       'bodyParser',
-      'handleBodyParserError',
+      // 'handleBodyParserError',
       'compress',
-      'methodOverride',
+      // 'methodOverride',
       'poweredBy',
       '$custom',
       'globalLocals',
       'router',
       'www',
       'favicon',
-      '404',
-      '500'
+      // '404',
+      // '500'
     ],
 
     globalLocals: function (req, res, next) {
-        res.locals({
-          googleAnalyticsId  : process.env.TRENUJEMY_GOOGLE_ANALYTICS_ID,
-         });
+        res.locals.googleAnalyticsId  = process.env.TRENUJEMY_GOOGLE_ANALYTICS_ID;
         return next();
     },
 

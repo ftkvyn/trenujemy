@@ -142,7 +142,7 @@ function saveSurvey(model){
 // 	let promise = new Promise((resolve, reject) => {
 // 		$.ajax({
 //             url: '/api/userRequirement/'+model.id,
-//             type: 'PUT',
+//             type: 'PATCH',
 //             data: model,
 //             success: function (data) {
 //             	resolve(data);                

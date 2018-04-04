@@ -93,6 +93,7 @@ module.exports = {
 			model.birthday = req.body.birthday;
 		}
 		User.update({id: req.body.id}, model)
+		.fetch()
 		.exec(function(err, users){
 			if(err){
 				console.error(err);

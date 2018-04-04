@@ -15,56 +15,50 @@ module.exports = {
 
 	target:{
 		type:'string',
-		enum: ['weight', 'cut', 'slim', 'power'],
-		required: true,
+		isIn: ['weight', 'cut', 'slim', 'power'],
 		defaultsTo: 'weight'
 	},
 
 	bodyType:{
-		type:'integer',
-		enum: [1,2,3],
+		type:'number',columnType:'integer',
+		isIn: [1,2,3],
 		defaultsTo:1,
-		required:true
 	},
 
 	//========Personal customs==========//
 	wakeUpHour:{
-		type:'integer',
-		required: true,
+		type:'number',columnType:'integer',
 		defaultsTo: 730, //For 7:30
 	},
 
 	goToBedHour:{
-		type:'integer',
-		required: true,
+		type:'number',columnType:'integer',
 		defaultsTo: 2300
 	},
 
 	mealsNumber:{
-		type:'integer',
-		required: true,
+		type:'number',columnType:'integer',
 		defaultsTo: 5
 	},
 
 	eatingTimes:{
 		type:'string',
-		required: true,
 		defaultsTo: '8:00, 12:00, 14:30, 17:00, 20:00'
 	},
 
 	canYouChangeDailyPlan:{
 		type:'string',
-		enum: ['no', 'rather_no', 'rather_yes', 'yes']
+		isIn: ['no', 'rather_no', 'rather_yes', 'yes']
 	},
 
 	canYouPrepareDishes:{
 		type:'string',
-		enum: ['rather_no', 'maybe', 'yes']
+		isIn: ['rather_no', 'maybe', 'yes']
 	},
 
 	canYouEatSameDaily:{
 		type:'string',
-		enum: ['rather_no', 'maybe', 'yes']
+		isIn: ['rather_no', 'maybe', 'yes']
 	},
 
 	allergy:{
@@ -77,7 +71,6 @@ module.exports = {
 
 	preserveWeightProblems:{
 		type:'boolean',
-		required: true,
 		defaultsTo:false
 	},
 
@@ -86,12 +79,11 @@ module.exports = {
 	},
 
 	dailyCalories:{
-		type:'integer'
+		type:'number',columnType:'integer'
 	},
 
 	kitchenEquipment:{
-		type:'integer', //Using bit mask - 101001
-		required: true,
+		type:'number',columnType:'integer', //Using bit mask - 101001
 		defaultsTo:0
 	},
 
@@ -100,26 +92,23 @@ module.exports = {
 	},
 
 	hintsForTrainer:{
-		type:'text'
+		type:'string',columnType:'text'
 	},
 
 	//==========Training survey===========//
 	weight:{
-		type:'integer',
-		required: true,
+		type:'number',columnType:'integer',
 		defaultsTo:0
 	},
 
 	height:{
-		type:'integer',
-		required: true,
+		type:'number',columnType:'integer',
 		defaultsTo: 0
 	},
 
 	activity:{
 		type:'string',
-		enum: ['little', 'normal', 'medium','many','very_much'],
-		required: true,
+		isIn: ['little', 'normal', 'medium','many','very_much'],
 		defaultsTo:'little'
 	},
 
@@ -130,66 +119,59 @@ module.exports = {
 
 	gymExperience:{
 		type:'string',
-		enum: ['never','sometimes','long_time','expert'],
-		required: true,
+		isIn: ['never','sometimes','long_time','expert'],
 		defaultsTo:'never'
 	},
 
 	trainingsStatus:{
 		type:'string',
-		enum:['once','twice','three_four','more_than_four'],
-		required: true,
+		isIn:['once','twice','three_four','more_than_four'],
 		defaultsTo:'once'
 	},
 
 	trainingDescription:{
-		type:'text'
+		type:'string',columnType:'text'
 	},
 
 	otherTrainings:{
-		type:'text'
+		type:'string',columnType:'text'
 	},
 
 	currentStatus:{
 		type:'string',
-		enum:['bad','worse','not_so_bad','better','good'],
-		required: true,
+		isIn:['bad','worse','not_so_bad','better','good'],
 		defaultsTo:'bad'
 	},
 
 	possibleTrainings:{
-		type:'integer',
-		enum:[1,2,3,4,5,6],
-		required: true,
+		type:'number',columnType:'integer',
+		isIn:[1,2,3,4,5,6],
 		defaultsTo:1
 	},
 
 	mostImportantBodyPart:{
 		type:'string',
-		enum:['chest','legs','back','shoulders'
+		isIn:['chest','legs','back','shoulders'
 		,'biceps','triceps','belly','all'],
-		required: true,
 		defaultsTo:'belly'
 	},
 
 	availableEquipment:{
 		type:'string',
-		enum:['gym','home','none'],
-		required: true,
+		isIn:['gym','home','none'],
 		defaultsTo:'gym'
 	},
 
 	currentNutrition:{
-		type:'text'
+		type:'string',columnType:'text'
 	},
 
 	supplementsCost:{
-		type:'integer'
+		type:'number',columnType:'integer'
 	},
 
 	contusionCheckboxes:{
-		type:'integer', //Bit mask
-		required: true,
+		type:'number',columnType:'integer', //Bit mask
 		defaultsTo:0
 	},
 
@@ -198,11 +180,11 @@ module.exports = {
 	},
 
 	otherHints:{
-		type:'text'
+		type:'string',columnType:'text'
 	},
 
 	bodyPicture:{
-		type:'url'
+		type:'string'
 	},
 
 	medicalReportName:{
@@ -211,10 +193,11 @@ module.exports = {
 
 	medicalReporKey:{
 		type:'string'
-	},
+	}
+  },
 
-	toJSON: function() {
-      var obj = this.toObject();
+  	customToJSON: function() {
+      var obj = {...this};
       if(!obj.allergy){
       	obj.allergy = null;
       }
@@ -232,5 +215,4 @@ module.exports = {
       }
       return obj;
     }
-  }
 };

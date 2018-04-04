@@ -39,7 +39,7 @@ module.exports = {
   	},
 
     diaryDays:{
-      type:'array'
+      type: 'json'//, columnType: 'array' 
     }
   }
 };

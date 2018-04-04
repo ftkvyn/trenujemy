@@ -162,13 +162,6 @@ module.exports.policies = {
     'userHints':'isTrainerForOtherUser'
   },
 
-  SurveySettngsController:{
-    '*':'isTrainer',
-    'find':'sessionAuth',
-    'create':false,
-    'destroy':false,
-  },
-
   NotificationsController:{
     '*':'sessionAuth',
     'create':false,

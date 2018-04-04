@@ -72,6 +72,7 @@ module.exports = {
 			delete model.trainerNotes;
 		}
 		DailyReport.update({id: req.params.dayId}, model)
+		.fetch()
 		.exec(function(err, data){
 			if(err){
 				console.error(err);
@@ -98,6 +99,7 @@ module.exports = {
 	saveBodySize:function(req, res){
 		const model = req.body;
 		BodySize.update({id: model.id, user: req.session.user.id}, model)
+		.fetch()
 		.exec(function(err, data){
 			if(err){
 				console.error(err);

@@ -22,7 +22,7 @@
 
 //   		sendTips:{
 //   			type:'string',
-//         enum: hintPeriods,
+//         isIn: hintPeriods,
 //   			required:true,
 //   			defaultsTo:'never'
 //   		}

@@ -15,7 +15,7 @@ function saveHour(newHour){
 	return new Promise((resolve, reject) => {
 		$.ajax({
             url: '/api/trainTimes/'+newHour.id,
-            type: 'PUT',
+            type: 'PATCH',
             data: newHour,
             success: function (data) {
             	resolve(data);                

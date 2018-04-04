@@ -11,7 +11,7 @@
  */
 
 module.exports.sockets = {
-
+  onlyAllowOrigins: ["http://trenujemy-dev.herokuapp.com"]
 
   /***************************************************************************
   *                                                                          *

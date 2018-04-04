@@ -21,41 +21,41 @@ module.exports = {
     },
 
   	protein:{
-  		type:'integer'
+  		type:'number',columnType:'integer'
   	},
 
   	carbo:{
-  		type:'integer'
+  		type:'number',columnType:'integer'
   	},
 
 	  fat:{
-  		type:'integer'
+  		type:'number',columnType:'integer'
   	},
 
     calories:{
-      type:'integer'
+      type:'number',columnType:'integer'
     },
 
   	fiber:{ //g
-  		type:'integer'
+  		type:'number',columnType:'integer'
   	},
   	sodium:{ //mg
-  		type:'integer'
+  		type:'number',columnType:'integer'
   	},
   	potassium:{//mg
-  		type:'integer'
+  		type:'number',columnType:'integer'
   	},
   	calcium:{//mg
-  		type:'integer'
+  		type:'number',columnType:'integer'
   	},
   	iron:{//mg
-  		type:'integer'
+  		type:'number',columnType:'integer'
   	},
   	vitaminC:{//mg
-  		type:'integer'
+  		type:'number',columnType:'integer'
   	},
   	vitminA:{//ug
-  		type:'integer'
+  		type:'number',columnType:'integer'
   	}, 	
 
   	show_fiber:{
@@ -93,7 +93,7 @@ module.exports = {
   	},
 
   	plan:{
-  		type:'text'
+  		type:'string',columnType:'text'
   	}
   },
 
