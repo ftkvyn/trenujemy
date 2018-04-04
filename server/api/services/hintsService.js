@@ -1,3 +1,4 @@
+//Not using for now
 const Q = require('q');
 
 const _hintPeriodsConfig = [

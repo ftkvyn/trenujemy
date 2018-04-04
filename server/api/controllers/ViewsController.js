@@ -107,6 +107,10 @@ module.exports = {
 		return res.view('auth/login');	
 	},
 
+	registerTrainer: function(req,res){
+		return res.view('auth/registerTrainer');	
+	},
+
 	activate:function(req,res){
 		return res.view('auth/activate', {locals : {}});	
 	},

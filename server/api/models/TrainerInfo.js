@@ -12,10 +12,21 @@ module.exports = {
 		model: 'User',
 		required:true	
 	},
+	friendlyId:{
+		type:'text',
+		required: true,
+		unique: true
+	},
 	invoiceInfo:{
 		type:'text'
 	},
 	sendHints:{
+		type:'boolean'
+	},
+	isActivatedByTrainer:{
+		type:'boolean'
+	},
+	isApprovedByAdmin:{
 		type:'boolean'
 	},
 	city:{

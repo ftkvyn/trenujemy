@@ -1,0 +1,76 @@
+<div class="bg-parallax parallax-overlay accounts-page"  data-jarallax='{"speed": 0.2}' style='background-image: url("/images/foto/20.jpg")'>
+     <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mb30">
+                <div style="    max-width: 400px;margin:auto;">
+                    <h3 class="text-white text-center mb30">Jesteś trenerem lub dietetykiem?<br/>Zapraszamy do współpracy</h3>
+                    <h4 class="text-white text-center mb30">Załóż konto - skontaktujemy się z Tobą</h4>
+                    <div class="alert alert-danger registerError passwordNotSame text-center" role="alert" style="display: none;">
+                        Hasło musi być identyczne w obu polach.
+                    </div>
+                    <div class="alert alert-danger registerError emailUsedError text-center" role="alert" style="display: none;">
+                        Podany adres email jest już obecny w bazie serwisu.
+                    </div>
+                    <div class="alert alert-danger registerError someRegisterError text-center" role="alert" style="display: none;">
+                         Występił nieznany błąd. 
+                    </div>
+                    <form class="register-form">
+                        <div class="form-group">
+                            <input type="email" class="form-control email" placeholder="Adres Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control password" placeholder="Hasło" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control password2" placeholder="Powtórz hasło" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control phone" placeholder="Numer telefonu" required>
+                        </div>
+                        <div class="form-group" style="padding-top: 3px;">
+                            <button type="submit" class="btn btn-rounded btn-primary btn-block">Stwórz konto</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ./partials/contact %>
+
+<script type="text/javascript" src="/assan/js/plugins/plugins.js"></script> 
+<script type="text/javascript" src="/assan/js/assan.custom.js"></script> 
+
+<script type="text/javascript">
+    $(function() {        
+
+        $('body').on('submit', '.register-form',function(event){
+            event.preventDefault();
+            var model = {};
+            model.login = $('.register-form .email').val();
+            model.password = $('.register-form .password').val();
+            model.password2 = $('.register-form .password2').val();
+            model.phone = $('.register-form .phone').val();
+            $('.registerError').hide();
+            if(model.password2 !== model.password){
+                $('.passwordNotSame').show();
+                return false;
+            }
+            $.post('/auth/registerTrainer', model,
+            function(data){
+                if(data.success){
+                    window.location = '/activate';
+                    return false;
+                }                
+                if(data.emailUsed){
+                    $('.emailUsedError').show();
+                    return false;
+                }
+                console.error(data);
+                $('.someRegisterError').show();
+            });
+            return false;
+        });
+    });
+</script>

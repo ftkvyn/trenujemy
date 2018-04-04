@@ -49,7 +49,8 @@ module.exports.policies = {
 		// feed : ['isNiceToAnimals', 'hasRabbitFood']
 	// }
   AuthController:{
-    '*':true
+    '*':true,
+    'adminImpersonate': 'isAdmin'
   },
 
   CartController:{

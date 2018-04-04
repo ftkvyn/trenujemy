@@ -6,17 +6,6 @@
  */
 
 var bcrypt = require('bcrypt');
-const symbols = '1234567890qwertyuiopasdfghjklzxcvbnm';
-
-function generateRandomStr(length){
-	var str = '';
-	for (var i = length - 1; i >= 0; i--) {
-		var key = Math.random() * symbols.length;
-		key = Math.floor(key);
-		str += symbols[key];
-	}
-	return str;
-}
 
 module.exports = {
 
@@ -49,6 +38,11 @@ module.exports = {
 		            });
 	              }
 	              req.session.user = user;
+	              if(user.role == 'admin'){
+	          		req.session.admin = user;	          		
+	              }else{
+	              	req.session.admin = null;
+	              }
 	              var url = req.session.returnUrl || '/dashboard';
 	              req.session.returnUrl = null;
 	              return res.send({
@@ -60,58 +54,65 @@ module.exports = {
 	    });
 	},
 
+	adminImpersonate:function(req, res){
+	    User.findOne({login:req.body.login}).exec(
+	        function(err,user){
+	          if(err){
+	            console.error(err);
+	            return res.send({error: err});
+	          }
+	          if(!user){
+	            return res.send({
+	              success: false,
+	              notFound: true
+	            });
+	          }else{
+	            req.session.user = user;
+                var url = req.session.returnUrl || '/dashboard';
+                req.session.returnUrl = null;
+                return res.send({
+	                success: true,
+	                url: url
+	            });
+	          }
+	    });
+	},
+
 	logout: function (req, res){
 	    req.session.user = null;
 	    req.session.cart = {};
+	    req.session.admin = false;
 	    res.redirect('/');
 	},
 
 	register:function(req,res){
-		User.find({login: req.body.login})
-		.exec(function(err, users){
-			if(err){
-				console.error(err);
-				return res.send({error: err});
-			}
-			if(users && users.length){
-				return res.send({emailUsed: true});
-			}
-			bcrypt.genSalt(10, function(err, salt) {
-            bcrypt.hash(req.body.password, salt, function(err, hash) {
-	              	if (err) {
-	                	console.error(err);
-	                	return res.badRequest('Error.');
-	                }
-	                var key = generateRandomStr(10);
-	        		var userData = {
-						login: req.body.login,
-						password: hash,
-						isActive: false,
-						activationCode: key,
-						role:'user'
-					};    
-					if(userData.login && userData.login.indexOf('@gmail.com') != -1){
-						userData.email = userData.login;
-					}
-					User.create(userData).exec(function (err, user) {
-						if(err){
-							console.error(err);
-	                		return res.badRequest('Error.');		
-						}
-	                  	if (user) {            	              
-	                  		emailService.sendActivationMail(user); 
-	                  		Notifications.create({user: user.id, helloMessage: true})
-	                  		.exec(function(){});    	
-	                    	return res.send({success: true});
-          				}else{
-          					console.error('No user created');
-          					return res.badRequest('Error.');	
-          				}
-          			});
-        		});
-			});
+		registerService.registerUser(req.body, {role: 'user'})
+		.then(function(user){
+			return res.send({success: true});
+		})
+		.catch(function(errorModel){
+			console.error(errorModel);
+			return res.send(errorModel);
 		});
+	},
 
+	registerTrainer:function(req,res){
+		registerService.registerUser(req.body, {role: 'trainer'})
+		.then(function(user){
+			registerService.initTrainer(user)
+			.then(function(data){
+				return res.send({success: true});
+			})
+			.catch(function(errorModel){
+				//ToDo: remove user?
+				console.error(errorModel);
+				return res.send(errorModel);
+			});
+		})
+		.catch(function(errorModel){
+			console.error(err);
+			return res.send(errorModel);
+		});
 	},
 
 	activate:function(req,res){
@@ -164,7 +165,7 @@ module.exports = {
 	              notActive: true
 	            });
               }
-              var code = generateRandomStr(12);
+              var code = registerService.generateRandomStr(12);
               User.update({id: user.id}, {passwordRecoveryKey: code})
 	        	.exec(function(err, users){
 	        		if(err){

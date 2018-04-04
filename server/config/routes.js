@@ -50,6 +50,8 @@ module.exports.routes = {
 
   '/login': 'ViewsController.login',
 
+  '/registerTrainer': 'ViewsController.registerTrainer',  
+
   '/recoverPassword': 'ViewsController.recoverPassword',
 
   '/changePassword': 'ViewsController.changePassword',
@@ -63,6 +65,8 @@ module.exports.routes = {
   'get /auth/activate': 'AuthController.activate',
 
   'post /auth/register': 'AuthController.register',
+
+  'post /auth/registerTrainer': 'AuthController.registerTrainer',  
 
   'get /auth/logout': 'AuthController.logout',
 
