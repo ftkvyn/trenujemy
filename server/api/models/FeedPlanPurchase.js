@@ -21,10 +21,10 @@ module.exports = {
 		model: 'FeedPlan',
 		required:true	
 	},
-	target:{
-		model:'FeedPlanTarget',
-		required:true
-	},
+	// target:{
+	// 	model:'FeedPlanTarget',
+	// 	required:true
+	// },
 	isActive:{
 		type:'boolean',
 		required:true
@@ -38,7 +38,7 @@ module.exports = {
   customToJSON: function() {
 	  var obj = {...this};
       if(obj.plan && obj.plan.id){
-      	obj.validTo = moment(obj.createdAt).add(obj.plan.months, 'months').toDate();
+      	obj.validTo = moment(obj.createdAt).add(obj.plan.weeks, 'weeks').toDate();
       	obj.validToStr = moment(obj.validTo).format('YYYY-MM-DD');
       	obj.validFromStr = moment(obj.createdAt).format('YYYY-MM-DD');
       }

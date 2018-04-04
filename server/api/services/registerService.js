@@ -67,9 +67,41 @@ exports.registerUser = function(model, options){
 	return deferred.promise;
 }
 
-exports.registerUser = function(user){
+exports.initTrainer = function(user){
 	let deferred = Q.defer();
 	let createQs = [];
+
+	//ToDo: create service for generating
+	var friendlyId = user.login.substring(user.login.indexOf('@'));
+	createQs.push(TrainerInfo.create({user: user.id, friendlyId: friendlyId}));
+	//three empty plans
+	createQs.push(TrainPlan.create([{trainer:user.id},{trainer:user.id},{trainer:user.id}]));
+
+	const initPlans = [
+		{
+			weeks:1,
+			isVisible: false,
+			trainer:user.id,
+			isWithConsulting: true
+		},{
+			weeks:2,
+			isVisible: false,
+			trainer:user.id,
+			isWithConsulting: true
+		},{
+			weeks:4,
+			isVisible: false,
+			trainer:user.id,
+			isWithConsulting: true
+		},{
+			weeks:8,
+			isVisible: false,
+			trainer:user.id,
+			isWithConsulting: true
+		}
+	];
+    createQs.push(FeedPlan.create(initPlans));
+
 	Q.all(createQs)
 	.catch(function(err){
 		return deferred.reject(err);

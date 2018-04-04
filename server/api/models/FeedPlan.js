@@ -12,7 +12,7 @@ module.exports = {
         model:'User',
         required: true
       },
-  		months:{
+  		weeks:{
   			type:'number',columnType:'integer',
   			required: true
   		},

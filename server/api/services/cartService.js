@@ -21,7 +21,7 @@ exports.loadCartItems = function(cart){
     qs.push(TrainPlan.find({isActive: true, id: cart.trainings || []}));
 	if(cart.feedPlan){
 		qs.push(FeedPlan.findOne({isVisible: true, id: cart.feedPlan}));
-		qs.push(FeedPlanTarget.findOne({isVisible: true, id: cart.target}));
+		//qs.push(FeedPlanTarget.findOne({isVisible: true, id: cart.target}));
 	}
 	Q.all(qs)
 	.catch(function(err){
@@ -34,7 +34,7 @@ exports.loadCartItems = function(cart){
 			let cartItems = [];
 			const feedPlan = data[1];
 			if(feedPlan){
-				feedPlan.target = data[2];
+				//feedPlan.target = data[2];
 				feedPlan.isFeedPlan = true;
 				cartItems.push(feedPlan);
 			}
@@ -121,7 +121,7 @@ exports.purchaseItems = function(transaction){
 					user: transaction.user,
 					transaction: transaction.id,
 					plan: cart.feedPlan,
-					target: cart.target,
+					//target: cart.target,
 					isActive: true
 				}));
 				// if(typeof oldNotification.feedInfo != 'boolean'){

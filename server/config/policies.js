@@ -83,11 +83,11 @@ module.exports.policies = {
     'findOne':true,
   },
 
-  TrainTimesController:{
-    '*':'isTrainer',
-    'find':true,
-    'findOne':true,
-  },
+  // TrainTimesController:{
+  //   '*':'isTrainer',
+  //   'find':true,
+  //   'findOne':true,
+  // },
 
   TrainPlanController:{
     '*':'isTrainer',
@@ -95,11 +95,11 @@ module.exports.policies = {
     'findOne':true,
   },
 
-  FeedPlanTargetController:{
-    'find':true,
-    'create':false,
-    'destroy':false
-  },
+  // FeedPlanTargetController:{
+  //   'find':true,
+  //   'create':false,
+  //   'destroy':false
+  // },
 
   FeedPlanController:{
     'find':true,

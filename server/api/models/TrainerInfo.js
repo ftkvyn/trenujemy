@@ -13,7 +13,7 @@ module.exports = {
 		required:true	
 	},
 	friendlyId:{
-		type:'text',
+		type:'string',
 		required: true,
 		unique: true
 	},
@@ -34,7 +34,45 @@ module.exports = {
 		isIn: [0,1,2,3,4,5,6,7]
 		//0-Not set, 1-Warszawa, 2-Kraków, 3-Łódź, 4-Wrocław, 5-Poznań, 6-Gdańsk, 7-Szczecin
 		//int for faster search
-	}
+	},
+
+	mainText:{
+		type:'string',columnType:'text'
+	},
+
+	certificates:{
+      type: 'json'//, columnType: 'array' 
+    },
+    certificateImages:{
+      type: 'json'//, columnType: 'array' 
+    },
+    achivements:{
+      type: 'json'//, columnType: 'array' 
+    },
+    photos:{
+      type: 'json'//, columnType: 'array' 
+    },
+
+    trainPlaces:{
+      type: 'json'//, columnType: 'array' 
+    },
+    trainingSpecialization:{
+      type: 'json'//, columnType: 'array' 
+    },
+    trainingHelp:{
+      type: 'json'//, columnType: 'array' 
+    },
+
+    feedSpecialization:{
+      type: 'json'//, columnType: 'array' 
+    },
+    feedHelp:{
+      type: 'json'//, columnType: 'array' 
+    },
+
+    isFreeTrainingEnabled:{
+		type:'boolean'
+	},
   }
 };
 

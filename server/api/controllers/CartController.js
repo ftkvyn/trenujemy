@@ -125,9 +125,9 @@ module.exports = {
 					for(let i = 0; i < cartItems.length; i++){
 						let item = cartItems[i];
 						if(item.isFeedPlan){
-							let word = 'miesięcy';
-                        	if(item.months < 6){word = 'miesiące';}
-                        	if(item.months == 1){word = 'miesiąc';}
+							let word = 'tygodni';
+                        	if(item.weeks < 6){word = 'tygodnie';}
+                        	if(item.weeks == 1){word = 'tydzień';}
                         	paymentData['p24_name_' + (i+1)] = `Plan żywieniowy, abonament na ${item.months} ${word}`;
                         	if(item.isWithConsulting){
                         		paymentData['p24_name_' + (i+1)] += ' z codzienną konsultacją';

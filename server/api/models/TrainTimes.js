@@ -5,27 +5,27 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
-module.exports = {
+// module.exports = {
 
-  attributes: {
-    trainer:{
-      model:'User',
-      required: true
-    },
-  	dayOfWeek:{
-  		type:'number',columnType:'integer',
-  		isIn:[1,2,3,4,5,6,7],
-  		required: true,
-      unique: true
-  	},
-  	fromTime:{
-  		type:'number',columnType:'integer',
-  		required: true
-  	},
-  	toTime:{
-  		type:'number',columnType:'integer',
-  		required: true
-  	}
-  }
-};
+//   attributes: {
+//     trainer:{
+//       model:'User',
+//       required: true
+//     },
+//   	dayOfWeek:{
+//   		type:'number',columnType:'integer',
+//   		isIn:[1,2,3,4,5,6,7],
+//   		required: true,
+//       unique: true
+//   	},
+//   	fromTime:{
+//   		type:'number',columnType:'integer',
+//   		required: true
+//   	},
+//   	toTime:{
+//   		type:'number',columnType:'integer',
+//   		required: true
+//   	}
+//   }
+// };
 
