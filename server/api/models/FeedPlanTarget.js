@@ -5,20 +5,20 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
-module.exports = {
+// module.exports = {
 
-  attributes: {
-	  	trainer:{
-	        model:'User',
-	        required: true
-	    },
-  		name:{
-  			type:'string'
-  		},
+//   attributes: {
+// 	  	trainer:{
+// 	        model:'User',
+// 	        required: true
+// 	    },
+//   		name:{
+//   			type:'string'
+//   		},
 
-  		isVisible:{
-  			type:'boolean'
-  		}
-  }
-};
+//   		isVisible:{
+//   			type:'boolean'
+//   		}
+//   }
+// };
 

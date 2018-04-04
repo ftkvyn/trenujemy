@@ -15,6 +15,10 @@ module.exports = {
 		}});	
 	},
 
+	trainer: function(req, res){
+		return res.view('trainerPage');
+	},
+
 	cart: function(req,res){
 		cartService.initCart(req);
 	    cartService.loadCartItems(req.session.cart)
