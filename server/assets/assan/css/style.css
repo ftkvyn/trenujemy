@@ -4254,7 +4254,7 @@ Footer
 }
 
 .feed-plans{
-    background: #4683df;
+    background: #21bfc1;
     padding: 20px 40px;
     margin-bottom: 40px;
     border-radius: 7px;
@@ -4274,16 +4274,18 @@ Footer
 }
 
 .feed-plans .feed-item .feed-title{
-  color: #0d4e96;
+  color: #0c7a7b;
+  line-height: 1.7;
 }
 
 .feed-plans .feed-item .feed-description{
-  color: #0d4e96;
+  color: #0c7a7b;
 }
 
 .feed-plans .feed-item .custom-control-indicator{
     width: 2rem;
     height: 2rem;
+    background-color:#149b9c;
 }
 .custom-control{
   cursor: pointer;
@@ -4291,16 +4293,16 @@ Footer
 .feed-plans .feed-item .custom-control{
     min-height: 3rem;
     padding-left: 3rem;
-    margin: 1rem;
 }
 
 .feed-plans .feed-item .feed-price{
     color: black;
     font-weight: bold;
     font-size: 200%;
+    line-height: 1.3;
 }
 .feed-checkbox{
-
+  text-align: right;
 }
 .feed-prices{
 
