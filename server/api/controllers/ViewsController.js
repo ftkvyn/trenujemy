@@ -16,7 +16,7 @@ module.exports = {
 	},
 
 	trainer: function(req, res){
-		return res.view('trainerPage');
+		return res.view('trainerPage', {isTrainerPage : true});
 	},
 
 	cart: function(req,res){

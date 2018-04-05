@@ -4437,3 +4437,8 @@ body .navbar.navbar-transparent.navbar-light.bg-faded .show .nav-link
 .hidden{
   visibility: hidden;
 }
+
+.cbp-item-small{
+  max-width: 60px;
+  max-height: 60px;
+}

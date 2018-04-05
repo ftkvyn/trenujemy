@@ -16,7 +16,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Znany Trener 24 <%=typeof title == 'undefined' ? '' : ' - ' + title%></title>
         <!-- Plugins CSS -->
-        <link href="/assan/css/plugins/plugins.css" rel="stylesheet">
+        <link href="/assan/css/plugins/plugins.css" rel="stylesheet">        
         <!-- REVOLUTION STYLE SHEETS -->
         <link rel="stylesheet" type="text/css" href="/assan/revolution/css/settings.css">
         <!-- REVOLUTION LAYERS STYLES -->
@@ -25,7 +25,11 @@
         <link rel="stylesheet" type="text/css" href="/assan/revolution/css/navigation.css">
         <!-- load css for cubeportfolio -->
         <link rel="stylesheet" type="text/css" href="/assan/cubeportfolio/css/cubeportfolio.min.css"> 
-        <link href="/assan/css/style.css" rel="stylesheet">
+       
+        <link href="/assan/css/style.css" rel="stylesheet">        
+        <% if( ((typeof isTrainerPage) != 'undefined') && isTrainerPage ){ %>
+        <link href="/assan/css/style-resumeCv.css" rel="stylesheet">
+        <% }  %>
     </head>
 
     <body>
