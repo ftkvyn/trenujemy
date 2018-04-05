@@ -76,6 +76,26 @@
                                 </div>
                             </a>
                         </div>
+
+                        <div class="more-items cbp-item cbp-item-small">
+                            +2
+                        </div>
+
+                        <div class="cbp-item cbp-item-small" style="display: none;">
+                            <a href="/images/feed/4.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
+                                <div class="">
+                                    <img src="/images/feed/4.jpg" alt="">
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="cbp-item cbp-item-small" style="display: none;">
+                            <a href="/images/trainings/4.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
+                                <div class="">
+                                    <img src="/images/trainings/4.jpg" alt="">
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -103,6 +123,18 @@
                             <a href="/images/foto/3.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
                                 <div class="">
                                     <img src="/images/foto/3.jpg" alt="">
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="more-items cbp-item cbp-item-small">
+                            +1
+                        </div>
+
+                        <div class="cbp-item cbp-item-small" style="display: none;">
+                            <a href="/images/foto/4.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
+                                <div class="">
+                                    <img src="/images/foto/4.jpg" alt="">
                                 </div>
                             </a>
                         </div>
@@ -153,6 +185,15 @@
             lightboxGallery: true,
             lightboxTitleSrc: 'data-title',
             lightboxCounter: '<div class="cbp-popup-lightbox-counter">{{current}} z {{total}}</div>'
+        });
+
+        $('body').on('click','.more-items',function(){
+            var me = $(this);
+            me.siblings().show();
+            var lastItem = me.siblings().last();
+            lastItem.css('left', me.css('left'));
+            lastItem.css('top', me.css('top'));
+            me.hide();
         });
     })(jQuery, window, document);
 </script>

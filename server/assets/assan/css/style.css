@@ -4442,3 +4442,13 @@ body .navbar.navbar-transparent.navbar-light.bg-faded .show .nav-link
   max-width: 60px;
   max-height: 60px;
 }
+
+.more-items{
+  display: inline-block;width: 60px;height: 60px;
+  padding: 17px !important;text-align: center;
+  font-size: 15px;
+  background: #eaf6fc;
+  color: #438ad9;
+  border: 1px solid #438ad9;
+  cursor: pointer;
+}
