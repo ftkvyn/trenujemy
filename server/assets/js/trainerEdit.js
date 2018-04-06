@@ -32,7 +32,7 @@ $(function() {
 	//ToDo: handle adding and removing items.
 	$('[data-edit-list]').each(function(num){
 		let ulItem = $(this);
-		let listName = ulItem.attr('data-check-list');
+		let listName = ulItem.attr('data-edit-list');
 		ulItem.on('click','li',function(){
 			let liItem = $(this);
 			if(liItem.find('input').length){
