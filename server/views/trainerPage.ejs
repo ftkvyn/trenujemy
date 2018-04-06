@@ -8,10 +8,10 @@
                 <div class="clearfix">
                     <div class="media mb10 wow fadeInUp" data-wow-delay=".150ms">
                         <div class="media-body">
-                        	<h2 class="h1 mb0">Przemysław Bulski</h2>
-                            <p class="lead">Trener personalny, dietetyk</p>
+                        	<h2 class="h1 mb0" data-hint>Przemysław Bulski</h2>
+                            <p class="lead" data-hint>Trener personalny, dietetyk</p>
 
-                            <p class="mt-20 mb10 text-left">Nazywam się Przemek. Zajmuję się treningiem personalnym a także układaniem diet. Specjalizuję się szczególnie w diecie tłuszczowej, także jeżeli lubisz wpierdalać dużo tłuszczu i w chuj jajek to dobrze trafiłeś:)</p>
+                            <p class="mt-20 mb10 text-left" data-main-text>Nazywam się Przemek. Zajmuję się treningiem personalnym a także układaniem diet. Specjalizuję się szczególnie w diecie tłuszczowej, także jeżeli lubisz wpierdalać dużo tłuszczu i w chuj jajek to dobrze trafiłeś:)</p>
                         </div>
                     </div>
                     <div class="buttons media mb10 wow fadeInUp" data-wow-delay=".300ms">
@@ -28,13 +28,13 @@
         <div class="row align-items-center">
             <div class="col-lg-6">
                 <h4 class="text-left"><i class="ti-crown"></i> Specjalizacja</h4>
-                <ul>
+                <ul data-hint>
                     <li>Trener personalny</li>
                     <li>Dietetyk</li>
                 </ul>
 
                 <h4 class="text-left"><i class="ti-image"></i> Wyszktałcenie, kursy, certyfikaty</h4>
-                <ul>
+                <ul data-edit-list="certificates">
                     <li>AWF Poznań (specjalność dietetyka)</li>
                     <li>Kurs piewszy z zakresu szkolenia</li>
                     <li>Certyfikat z żywienia organicznego (ABC)</li>
@@ -44,7 +44,7 @@
             <div class="col-lg-6">
                 <div class="clearfix">
                     <h4 class="text-left"><i class="ti-wand"></i> Osiągnięcia</h4>
-                    <ul>
+                    <ul data-edit-list="achivements">
                         <li>Osiągnięcie 1</li>
                         <li>Osiągnięcie 2</li>
                     </ul>
@@ -150,7 +150,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <h3 class="font100 text-primary">Moja specjalizacja:</h3>
-                    <ul class="text-white-gray">
+                    <ul class="text-white-gray" data-check-list="trainingSpecialization">
                         <li>Kulturystyka i fitness</li>
                         <li>Podnoszenie ciężarów</li>
                         <li>Pływanie</li>
@@ -162,7 +162,7 @@
 
                 <div class="col-sm-4">
                     <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
-                    <ul class="text-white-gray">
+                    <ul class="text-white-gray" data-check-list="trainingHelp">
                         <li>Redukcja wagi</li>
                         <li>Ogólna poprawa stanu zdrowia</li>
                         <li>Rehabilitacja</li>
@@ -175,7 +175,7 @@
                 <div class="col-sm-4">
                     <h3 class="font100 text-primary">Gdzie trenuję?</h3>
                     <p class="lead text-white-gray text-left mb0"><strong>Poznań</strong></p>
-                    <ul class="text-white-gray">
+                    <ul class="text-white-gray" data-edit-list="trainingPlaces">
                         <li>Poznań Jatomi PKP</li>
                         <li>Poznań Fabryka Formy Bałtyk</li>
                         <li>Poznań Cytadela</li>
@@ -463,7 +463,7 @@
 <% include ./partials/contact %>
 
 <script type="text/javascript" src="/assan/js/plugins/plugins.js"></script> 
-<script type="text/javascript" src="/assan/js/assan.custom.js"></script> 
+<script type="text/javascript" src="/assan/js/assan.custom.js"></script>
 
 <script type="text/javascript" src="/assan/cubeportfolio/js/jquery.cubeportfolio.min.js"></script>
 <script>
@@ -514,3 +514,5 @@
         });
     })(jQuery, window, document);
 </script>
+
+<script type="text/javascript" src="/js/trainerEdit.js"></script>
