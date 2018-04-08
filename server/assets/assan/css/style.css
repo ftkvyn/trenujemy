@@ -4454,3 +4454,10 @@ body .navbar.navbar-transparent.navbar-light.bg-faded .show .nav-link
   border: 1px solid #438ad9;
   cursor: pointer;
 }
+
+.free-sample-edit{}
+
+.free-sample-edit label{
+  font-size: 120%;
+  font-weight: bold;
+}

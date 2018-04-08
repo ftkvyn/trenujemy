@@ -95,4 +95,17 @@ $(function() {
 			});
 		});
 	});
+
+	let freeSampleBlock = $('.free-sample-block');
+	let freeSapleCheck = $('<div class="free-sample-edit clearfix"><input checked="checked" type="checkbox" id="free-sample-on" /><label for="free-sample-on">Włącz darmową konsultację</label></div>');
+	freeSapleCheck.find('input').on('change', function(event){
+		//ToDo: save value
+		console.log('save(isFreeSample): ' + this.checked);				
+		if(!this.checked){
+			freeSampleBlock.hide();
+		}else{
+			freeSampleBlock.show();
+		}
+	});
+	freeSampleBlock.before(freeSapleCheck);
 })
