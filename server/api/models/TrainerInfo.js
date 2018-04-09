@@ -56,18 +56,88 @@ module.exports = {
     trainPlaces:{
       type: 'json'//, columnType: 'array' 
     },
-    trainingSpecialization:{
-      type: 'json'//, columnType: 'array' 
+
+    //====== trainingSpecialization ======//
+    isTrainFitness:{
+    	type:'boolean'
     },
-    trainingHelp:{
-      type: 'json'//, columnType: 'array' 
+    isTrainLifting:{
+    	type:'boolean'
+    },
+    isTrainSwimming:{
+    	type:'boolean'
+    },
+    isTrainFighting:{
+    	type:'boolean'
+    },
+    isTrainBike:{
+    	type:'boolean'
+    },
+    isTrainYoga:{
+    	type:'boolean'
     },
 
-    feedSpecialization:{
-      type: 'json'//, columnType: 'array' 
+    //====== trainingHelp ======//
+    
+    isTrainHelpLessWeight:{
+    	type:'boolean'
     },
-    feedHelp:{
-      type: 'json'//, columnType: 'array' 
+    isTrainHelpHealthImprove:{
+    	type:'boolean'
+    },
+    isTrainHelpRehabilitation:{
+    	type:'boolean'
+    },
+    isTrainHelpFixWeight:{
+    	type:'boolean'
+    },
+    isTrainHelpFixShape:{
+    	type:'boolean'
+    },
+    isTrainHelpSportResults:{
+    	type:'boolean'
+    },
+
+    //====== feedSpecialization ======//
+
+    isFeedBalance:{
+    	type:'boolean'
+    },
+    isFeedWege:{
+    	type:'boolean'
+    },
+    isFeedProtein:{
+    	type:'boolean'
+    },
+    isFeedFat:{
+    	type:'boolean'
+    },
+    isFeedAlkalising:{
+    	type:'boolean'
+    },
+    isFeedCleaning:{
+    	type:'boolean'
+    },
+
+    //====== feedHelp ======//
+
+    isFeedHelpLessWeight:{
+    	type:'boolean'
+    },
+    isFeedHelpHealthImprove:{
+    	type:'boolean'
+    },
+    isFeedHelpRehabilitation:{
+    	type:'boolean'
+    },
+    isFeedHelpFixWeight:{
+    	type:'boolean'
+    },
+    isFeedHelpFixShape:{
+    	type:'boolean'
+    },
+    isFeedHelpSportResults:{
+    	type:'boolean'
     },
 
     isFreeTrainingEnabled:{

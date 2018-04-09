@@ -85,13 +85,14 @@ $(function() {
 		let listName = ulItem.attr('data-check-list');
 		ulItem.find('li').each(function(liNum){
 			let liItem = $(this);
-			let name = listName + '_' + num + '_' + liNum;
+			let name = liItem.attr('data-field');
+			liItem.removeAttr('data-field');
 			let checkBox = $(`<li><input type="checkbox" id="${name}" /><label for="${name}">${liItem.text()}</label></li>`);
 			liItem.after(checkBox);
 			liItem.remove();
 			checkBox.find('input').on('change', function(event){
 				//ToDo: save value
-				console.log('save(' + listName + '): ' + this.checked);				
+				console.log('save(' + this.id + '): ' + this.checked);				
 			});
 		});
 	});
