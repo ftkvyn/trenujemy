@@ -12,7 +12,6 @@ class TrainerMenu extends React.Component {
             collapse: {
                 profile: this.routeActive(['profile', 'transactions']),
                 trainings: this.routeActive(['trainings/price', 'trainings/places', 'trainings/hours']),
-                plans: this.routeActive(['plans/price']),
             }
         };
     };
@@ -68,50 +67,7 @@ class TrainerMenu extends React.Component {
                     </Collapse>
                 </li>
                 <ClientsLinks></ClientsLinks>
-                <li className={ this.routeActive(['trainings/price', 'trainings/places', 'trainings/hours']) ? 'active' : '' }>
-                    <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'trainings') }>
-                        <em className="icon-location-pin"></em>
-                        <span>Treningi</span>
-                    </div>
-                    <Collapse in={ this.state.collapse.trainings } timeout={ 100 }>
-                        <ul id="trainings" className="nav sidebar-subnav">
-                            <li className="sidebar-subnav-header">Treningi</li>
-                            <li className={ this.routeActive('trainings/price') ? 'active' : '' } >
-                                <Link to={"/trainings/price"} title='Cennik'>
-                                    <span>Cennik</span>
-                                </Link>
-                            </li> 
-                            <li className={ this.routeActive('trainings/places') ? 'active' : '' } >
-                                <Link to={"/trainings/places"} title='Miejsca'>
-                                    <span>Miejsca</span>
-                                </Link>
-                            </li> 
-                            <li className={ this.routeActive('trainings/hours') ? 'active' : '' } >
-                                <Link to={"/trainings/hours"} title='Godziny'>
-                                    <span>Godziny</span>
-                                </Link>
-                            </li>                    
-                        </ul>
-                    </Collapse>
-                </li>
-
-                <li className={ this.routeActive(['plans/price']) ? 'active' : '' }>
-                    <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'plans') }>
-                        <em className="fa fa-cutlery"></em>
-                        <span>Plany</span>
-                    </div>
-                    <Collapse in={ this.state.collapse.plans } timeout={ 100 }>
-                        <ul id="plans" className="nav sidebar-subnav">
-                            <li className="sidebar-subnav-header">Plany</li>
-                            <li className={ this.routeActive('plans/price') ? 'active' : '' } >
-                                <Link to={"/plans/price"} title='Cennik'>
-                                    <span>Cennik</span>
-                                </Link>
-                            </li>                 
-                        </ul>
-                    </Collapse>
-                </li>
-
+                
                 <li className={ this.routeActive('answers') ? 'active' : '' }>
                     <Link to="/answers" title="Szablony odpowiedzi">
                     <em className="fa fa-comments-o"></em>

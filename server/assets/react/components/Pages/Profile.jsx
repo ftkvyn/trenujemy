@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
-import { loadUser, saveUser, loadSurvey, loadPurchases } from '../Common/userDataService';
+import { loadUser, saveUser, loadSurvey, loadPurchases, updateEmail } from '../Common/userDataService';
 import { saveImage, getFileLink } from '../Common/filesService';
 import { loadClients } from '../Common/clientsService';
 import WelcomeScreen from '../Components/WelcomeScreen';
@@ -59,7 +59,7 @@ function setUser(userData){
         loadNotifications()
             .then((data) => this.setState({notifications: data}));
     }
-    this.setState({user: user, feedPlans: userData.feedPlans, trainPlans: userData.trainPlans});
+    this.setState({user: user, gmail: user.email, feedPlans: userData.feedPlans, trainPlans: userData.trainPlans});
     $('#datetimepicker').datetimepicker({
         icons: {
             time: 'fa fa-clock-o',
@@ -165,6 +165,15 @@ class Profile extends React.Component {
         saveHandler();
     }
 
+    handleMailChange(event){
+        let fieldVal = event.target.value;
+        let isGmailCorrect = /^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$/.test(fieldVal);
+        this.setState({gmail: fieldVal, isGmailCorrect: isGmailCorrect, gmailProviding: true});
+        if(isGmailCorrect){
+            updateEmail(fieldVal);
+        }
+    }
+
     imageClick(event){
         if(this.state.userId){
             return;
@@ -198,6 +207,7 @@ class Profile extends React.Component {
         let invoiceForm = "";
         let downloadContainer = "";
         let helloPopup = "";
+        let gmailForm = "";
         if(this.state.user.role == 'trainer'){
             //User sees hello message on goods screen
             if(this.state.notifications.helloMessage){
@@ -213,6 +223,26 @@ class Profile extends React.Component {
                     onChange={this.handleChange.bind(this)}></textarea>
                 </Col>
             </FormGroup>  
+            let gmailInputClass = '';
+            if(this.state.gmailProviding){
+                if(this.state.isGmailCorrect){
+                    gmailInputClass = 'input-correct';
+                }else{
+                    gmailInputClass = 'parsley-error';
+                }
+            }
+            gmailForm = <form className="form-horizontal">   
+                <FormGroup>
+                    <label className="col-lg-2 control-label">Konto gmail do synchronizacji kalendarza treningów:</label>
+                    <Col lg={ 4 } md={4} sm={6} xs={6}>
+                        <FormControl type="email" placeholder="Gmail email address" 
+                            className={gmailInputClass}
+                            name='gmail'
+                            value={this.state.gmail || ''}
+                            onChange={this.handleMailChange.bind(this)}/>
+                    </Col>
+                </FormGroup> 
+            </form>
         }
         let readonlyProps = {};
         if(this.state.userId){
@@ -243,8 +273,6 @@ class Profile extends React.Component {
                 <input type='file' name='file' id='profilePicInput' accept="image/x-png,image/gif,image/jpeg" onChange={this.uploadImage.bind(this)}/>
             </form>
         }
-
-
         return (
               <Panel>
                     <form className="form-horizontal">     
@@ -292,7 +320,8 @@ class Profile extends React.Component {
                                 className="form-control" 
                                 value={this.state.user.login || ''}/>
                             </Col>
-                        </FormGroup>       
+                        </FormGroup>    
+                        {gmailForm}   
                         {invoiceForm} 
                         {downloadContainer}
                         <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>

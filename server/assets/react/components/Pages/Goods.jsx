@@ -37,7 +37,7 @@ class Goods extends React.Component {
 
     componentWillUnmount(){
         if(this.state.notifications.id){
-            saveNotifications({id: this.state.notifications.id, helloMessage: false, newPurchase: false});
+            saveNotifications({id: this.state.notifications.id, newPurchase: false});
         }
     }
 

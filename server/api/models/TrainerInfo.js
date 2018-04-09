@@ -36,6 +36,13 @@ module.exports = {
 		//int for faster search
 	},
 
+    isTrainer:{
+        type:'boolean'
+    },
+    isFeedCounsultant:{
+        type:'boolean'
+    },
+
 	mainText:{
 		type:'string',columnType:'text'
 	},

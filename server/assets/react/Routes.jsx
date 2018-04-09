@@ -13,19 +13,12 @@ import AdvicePage from  './components/Pages/AdvicePage'
 import ClientPage from './components/Pages/ClientPage'
 import DiaryPage from './components/Pages/DiaryPage'
 
-import TrainingsPrice from './components/Pages/TrainingsPrice'
-import TrainingsPlaces from './components/Pages/TrainingsPlaces'
-import TrainingsHours from './components/Pages/TrainingsHours'
 import TransactionsPage from './components/Pages/TransactionsPage'
 
 import AnswerTemplatesPage from './components/Pages/AnswerTemplatesPage'
 import AdviceTemplatesPage from './components/Pages/AdviceTemplatesPage'
-import TrainerHintsPage from './components/Pages/TrainerHintsPage'
-import UserHints from './components/Pages/UserHints'
 import TrainingsPage from './components/Pages/TrainingsPage'
                            
-import FeedPlansPrice from './components/Pages/FeedPlansPrice'
-
 // List of routes that uses the page layout
 // listed here to Switch between layouts
 // depending on the current pathname
@@ -75,15 +68,9 @@ const Routes = ({ location }) => {
                             <Route path="/advice" component={AdvicePage}/>
                             <Route path="/diary/:day?" component={DiaryPage}/>
                             <Route path="/clients/:id" component={ClientPage}/>
-                            <Route path="/trainings/price" component={TrainingsPrice}/>
-                            <Route path="/trainings/places" component={TrainingsPlaces}/>
-                            <Route path="/trainings/hours" component={TrainingsHours}/>
-                            <Route path="/plans/price" component={FeedPlansPrice}/>                            
                             <Route path="/answers" component={AnswerTemplatesPage}/>
                             <Route path="/adviceTemplates" component={AdviceTemplatesPage}/>
-                            <Route path="/trainerHints" component={TrainerHintsPage}/>
                             <Route path="/transactions" component={TransactionsPage}/>                            
-                            <Route path="/hints" component={UserHints}/>    
                             <Route path="/trainings" component={TrainingsPage}/>                                                     
                             <Redirect to="/goods"/>
                         </Switch>
