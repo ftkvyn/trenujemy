@@ -7,7 +7,7 @@ $(function() {
 		alert(hintText);
 	});
 
-	var mainText = $('[data-main-text]');
+	let mainText = $('[data-main-text]');
 	mainText.css('cursor','pointer');	
 	mainText.on('click', function(){		
 		let editor = $('<textarea></textarea>');
