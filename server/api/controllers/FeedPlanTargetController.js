@@ -31,7 +31,7 @@
 // 					isVisible: false
 // 				}
 // 			];
-// 	        FeedPlanTarget.create(initPlans)
+// 	        FeedPlanTarget.createEach(initPlans)
 // 	        .exec(function(err, data) {
 // 				if(err){
 // 					console.error(err);

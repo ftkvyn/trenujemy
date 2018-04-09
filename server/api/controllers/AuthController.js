@@ -93,7 +93,8 @@ module.exports = {
 		.catch(function(errorModel){
 			console.error(errorModel);
 			return res.send(errorModel);
-		});
+		})
+		.done();
 	},
 
 	registerTrainer:function(req,res){
@@ -110,13 +111,13 @@ module.exports = {
 			});
 		})
 		.catch(function(errorModel){
-			console.error(err);
+			console.error(errorModel);
 			return res.send(errorModel);
-		});
+		})
+		.done();
 	},
 
 	activate:function(req,res){
-		console.log(req.query.activationCode);
 		if(!req.query.activationCode){
 			return res.view('auth/activate', {locals : {noUser: true}});	
 		}

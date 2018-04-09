@@ -4,6 +4,9 @@ import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, Drop
 import { loadUser, saveUser, loadSurvey, loadPurchases } from '../Common/userDataService';
 import { saveImage, getFileLink } from '../Common/filesService';
 import { loadClients } from '../Common/clientsService';
+import WelcomeScreen from '../Components/WelcomeScreen';
+import { loadNotifications } from '../Common/notificationsService';
+
 
 let hideAlertSuccess = null;
 let hideAlertError = null;
@@ -52,6 +55,10 @@ function setUser(userData){
     $('.saveSuccess').hide();
     destroyDp();
     let user = userData.user;
+    if(user.role == 'trainer'){
+        loadNotifications()
+            .then((data) => this.setState({notifications: data}));
+    }
     this.setState({user: user, feedPlans: userData.feedPlans, trainPlans: userData.trainPlans});
     $('#datetimepicker').datetimepicker({
         icons: {
@@ -91,7 +98,8 @@ class Profile extends React.Component {
             user:{},
             userData:{},
             feedPlans:[],
-            trainPlans:[]
+            trainPlans:[],
+            notifications:{}
         };
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
@@ -137,7 +145,7 @@ class Profile extends React.Component {
     componentDidMount(){
         if(!this.state.userId){
             loadUser()
-            .then((data) => setUser.call(this, data));
+                .then((data) => setUser.call(this, data));            
         }else{
             loadClientData.call(this, this.state.userId);
         }
@@ -189,7 +197,12 @@ class Profile extends React.Component {
     render() {  
         let invoiceForm = "";
         let downloadContainer = "";
+        let helloPopup = "";
         if(this.state.user.role == 'trainer'){
+            //User sees hello message on goods screen
+            if(this.state.notifications.helloMessage){
+                helloPopup = <WelcomeScreen role={this.state.user.role}></WelcomeScreen>
+            }
             invoiceForm = <FormGroup>
                 <label className="col-lg-2 control-label">Dane do faktury: </label>
                 <Col lg={ 10 }>
@@ -199,8 +212,8 @@ class Profile extends React.Component {
                     value={this.state.user.invoiceInfo || ''}
                     onChange={this.handleChange.bind(this)}></textarea>
                 </Col>
-            </FormGroup>   
-        }      
+            </FormGroup>  
+        }
         let readonlyProps = {};
         if(this.state.userId){
             readonlyProps = {readOnly: true};
@@ -290,6 +303,7 @@ class Profile extends React.Component {
                         </div>
                     </form>
                     {picForm}
+                    {helloPopup}
                 </Panel>
         );
     }

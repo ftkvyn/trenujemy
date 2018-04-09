@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { loadUser, loadPurchases } from '../Common/userDataService';
 import GoodsInfo from '../Components/GoodsInfo'
 import { loadNotifications, saveNotifications  } from '../Common/notificationsService';
+import WelcomeScreen from '../Components/WelcomeScreen';
 
 class Goods extends React.Component {
     constructor(props, context) {
@@ -96,15 +97,17 @@ class Goods extends React.Component {
             return <div></div>
         }
         let infoPanel = '';
+        let helloPopup = '';
         if(this.state.notifications.id){
             let infoPanelContent = null;
             let notify = this.state.notifications;
             if(notify.helloMessage){
-                infoPanelContent = <div className='hello-message'>
-                    <p>Witaj w swoim panelu!</p>
-                    <br/>
-                    <p>Aby w pełni korzystać z jego możliwości wykup jedną z usług dostępnych <a href='/'>na stronie</a>.</p>
-                </div>
+                helloPopup = helloPopup = <WelcomeScreen role={this.state.user.role}></WelcomeScreen>
+                // infoPanelContent = <div className='hello-message'>
+                //     <p>Witaj w swoim panelu!</p>
+                //     <br/>
+                //     <p>Aby w pełni korzystać z jego możliwości wykup jedną z usług dostępnych <a href='/'>na stronie</a>.</p>
+                // </div>
             }
             let startText = <p>Witaj w swoim panelu!</p>
             if(notify.newPurchase){
@@ -188,6 +191,7 @@ class Goods extends React.Component {
 		                </Panel>
 
                         {infoPanel}
+                        {helloPopup}
 	            	</Col>
                 </Row>
             </ContentWrapper>

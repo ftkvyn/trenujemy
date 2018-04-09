@@ -28,7 +28,7 @@ module.exports = {
 				return res.json(data);
 			}
 			const items = [{},{},{},{}];
-	        TrainPlan.create(items)
+	        TrainPlan.createEach(items)
 	        .exec(function(err, data) {
 				if(err){
 					console.error(err);

@@ -27,7 +27,7 @@ exports.registerUser = function(model, options){
 			return deferred.reject({emailUsed: true});
 		}
 		bcrypt.genSalt(10, function(err, salt) {
-        bcrypt.hash(model.password, salt, function(err, hash) {
+        	bcrypt.hash(model.password, salt, function(err, hash) {
               	if (err) {
                 	console.error(err);
                 	return deferred.reject('Error.');
@@ -51,11 +51,11 @@ exports.registerUser = function(model, options){
 						console.error(err);
                 		return deferred.reject('Error.');
 					}
-                  	if (user) {            	              
+                  	if (user) {       
                   		emailService.sendActivationMail(user); 
                   		Notifications.create({user: user.id, helloMessage: true})
-                  		.exec(function(){});    	
-                    	return deferred.resolve({success: true});
+                  		.exec(function(){});    
+                    	return deferred.resolve(user);
       				}else{
       					console.error('No user created');
       					return deferred.reject('Error.');
@@ -75,33 +75,32 @@ exports.initTrainer = function(user){
 	var friendlyId = user.login.substring(user.login.indexOf('@'));
 	createQs.push(TrainerInfo.create({user: user.id, friendlyId: friendlyId}));
 	//three empty plans
-	createQs.push(TrainPlan.create([{trainer:user.id},{trainer:user.id},{trainer:user.id}]));
+	createQs.push(TrainPlan.createEach([{trainer:user.id},{trainer:user.id},{trainer:user.id}]));
 
 	const initPlans = [
 		{
 			weeks:1,
-			isVisible: false,
+			isVisible: true,
 			trainer:user.id,
 			isWithConsulting: true
 		},{
 			weeks:2,
-			isVisible: false,
+			isVisible: true,
 			trainer:user.id,
 			isWithConsulting: true
 		},{
 			weeks:4,
-			isVisible: false,
+			isVisible: true,
 			trainer:user.id,
 			isWithConsulting: true
 		},{
 			weeks:8,
-			isVisible: false,
+			isVisible: true,
 			trainer:user.id,
 			isWithConsulting: true
 		}
 	];
-    createQs.push(FeedPlan.create(initPlans));
-
+    createQs.push(FeedPlan.createEach(initPlans));
 	Q.all(createQs)
 	.catch(function(err){
 		return deferred.reject(err);

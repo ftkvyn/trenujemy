@@ -43,11 +43,11 @@ class Header extends React.Component {
                         <a href="/" className="navbar-brand">
                             <div className="brand-logo">
                                 { /*<img src="img/logo.png" alt="App Logo" className="img-responsive" />*/ }
-                                <p className='logo-txt'>Przemysław Bulski</p>
+                                <p className='logo-txt'>Znany Trener 24</p>
                             </div>
                             <div className="brand-logo-collapsed">
                                 { /*<img src="img/logo-single.png" alt="App Logo" className="img-responsive" />*/ }
-                                <p className='logo-txt'>PB</p>
+                                <p className='logo-txt'>ZT</p>
                             </div>
                         </a>
                     </div>

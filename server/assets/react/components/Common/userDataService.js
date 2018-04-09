@@ -171,4 +171,4 @@ function updateEmail(userEmail){
 	return promise;
 }
 
-export {loadUser, saveUser, loadSurvey, saveSurvey, loadRequirements, saveRequirements, loadPurchases, updateEmail};
+export {loadUser, saveUser, loadSurvey, saveSurvey,  loadPurchases, updateEmail};
