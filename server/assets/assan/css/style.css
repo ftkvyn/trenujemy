@@ -4284,9 +4284,12 @@ Footer
 
 .feed-plans .feed-item .custom-control-indicator{
     width: 2rem;
-    height: 2rem;
+    height: 2rem;    
+}
+.feed-plans .feed-item .custom-control-input:checked~.custom-control-indicator{
     background-color:#149b9c;
 }
+
 .custom-control{
   cursor: pointer;
 }
