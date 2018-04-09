@@ -18,6 +18,7 @@ import TransactionsPage from './components/Pages/TransactionsPage'
 import AnswerTemplatesPage from './components/Pages/AnswerTemplatesPage'
 import AdviceTemplatesPage from './components/Pages/AdviceTemplatesPage'
 import TrainingsPage from './components/Pages/TrainingsPage'
+import TrainerPageEdit from './components/Pages/TrainerPageEdit'
                            
 // List of routes that uses the page layout
 // listed here to Switch between layouts
@@ -71,7 +72,8 @@ const Routes = ({ location }) => {
                             <Route path="/answers" component={AnswerTemplatesPage}/>
                             <Route path="/adviceTemplates" component={AdviceTemplatesPage}/>
                             <Route path="/transactions" component={TransactionsPage}/>                            
-                            <Route path="/trainings" component={TrainingsPage}/>                                                     
+                            <Route path="/trainings" component={TrainingsPage}/>   
+                            <Route path="/trainerPageEdit" component={TrainerPageEdit}/>                                                                                 
                             <Redirect to="/goods"/>
                         </Switch>
                     </div>

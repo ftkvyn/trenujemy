@@ -16,7 +16,14 @@ module.exports = {
 	},
 
 	trainer: function(req, res){
-		return res.view('trainerPage', {isTrainerPage : true});
+		return res.view('trainerPage', 
+			{
+				isTrainerPage : true,
+				locals: {
+					user: req.session.user, 
+					cart: req.session.cart,
+				}
+			});
 	},
 
 	cart: function(req,res){

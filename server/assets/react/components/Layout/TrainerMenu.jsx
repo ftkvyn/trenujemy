@@ -10,7 +10,7 @@ class TrainerMenu extends React.Component {
 
         this.state = {
             collapse: {
-                profile: this.routeActive(['profile', 'transactions']),
+                profile: this.routeActive(['profile', 'transactions', 'trainerPageEdit']),
                 trainings: this.routeActive(['trainings/price', 'trainings/places', 'trainings/hours']),
             }
         };
@@ -45,7 +45,7 @@ class TrainerMenu extends React.Component {
                     <span>Panel Trenera</span>
                 </li>
 
-                <li className={ this.routeActive(['profile', 'transactions']) ? 'active' : '' }>
+                <li className={ this.routeActive(['profile', 'transactions', 'trainerPageEdit']) ? 'active' : '' }>
                     <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'profile') }>
                         <em className="icon-user"></em>
                         <span>Konto</span>
@@ -58,11 +58,16 @@ class TrainerMenu extends React.Component {
                                     <span>Moje dane</span>
                                 </Link>
                             </li>
+                            <li className={ this.routeActive('trainerPageEdit') ? 'active' : '' }>
+                                <Link to="/trainerPageEdit" title="Moja strona">
+                                    <span>Moja strona</span>
+                                </Link>
+                            </li>
                             <li className={ this.routeActive('transactions') ? 'active' : '' }>
                                 <Link to="/transactions" title="Rozliczenia">
                                     <span>Rozliczenia</span>
                                 </Link>
-                            </li>
+                            </li>                            
                         </ul>
                     </Collapse>
                 </li>
