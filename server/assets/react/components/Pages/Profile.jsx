@@ -6,27 +6,60 @@ import { saveImage, getFileLink } from '../Common/filesService';
 import { loadClients } from '../Common/clientsService';
 import WelcomeScreen from '../Components/WelcomeScreen';
 import { loadNotifications } from '../Common/notificationsService';
-import { saveTrainerInfo, loadTrainerInfo } from '../Common/trainerInfoService';
+import { saveTrainerInfo, loadTrainerInfo, saveTrainerRoute } from '../Common/trainerInfoService';
 
 
 
 let hideAlertSuccess = null;
 let hideAlertError = null;
+let saveHandler = null;
+let saveRouteHandler = null;
 
 function saveUserFn(newUser){
+    let nameChanged = newUser.nameChanged;
+    delete newUser.nameChanged;
     saveUser(newUser)
     .then(function(){
         $('.saveError').hide();
         $('.saveSuccess').show();
-        clearTimeout(hideAlertSuccess);
+        clearTimeout(hideAlertSuccess);        
         hideAlertSuccess = setTimeout(() => {$('.saveSuccess').hide()}, 6000);
-    })
-    .catch(function(){
+        if(nameChanged && this.state.trainerInfo){
+            saveRouteFn.bind(this)({friendlyId: newUser.name, id: this.state.trainerInfo.id});
+        }
+    }.bind(this))
+    .catch(function(err){
+        console.error(err);
         $('.saveSuccess').hide();
         $('.saveError').show();
         clearTimeout(hideAlertError);
         hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
-    });
+    }.bind(this));
+}
+
+function saveRouteFn(model){
+    saveTrainerRoute(model)
+    .then(function(data){
+        let newData = this.state.trainerInfo;
+        newData.friendlyId = data.friendlyId;
+        if(data.hasErrors){            
+            //ToDo: show warning
+            newData.friendlyIdErrors = true;            
+        }
+        this.setState({trainerInfo: newData});
+
+        $('.saveError').hide();
+        $('.saveSuccess').show();
+        clearTimeout(hideAlertSuccess);
+        hideAlertSuccess = setTimeout(() => {$('.saveSuccess').hide()}, 6000);
+    }.bind(this))
+    .catch(function(err){
+        console.error(err);
+        $('.saveSuccess').hide();
+        $('.saveError').show();
+        clearTimeout(hideAlertError);
+        hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
+    }.bind(this));
 }
 
 function loadClientData(id){
@@ -88,12 +121,10 @@ function setUser(userData){
         if(saveHandler){
             saveHandler.clear();
         }
-        saveHandler = debounce(() => saveUserFn(newUser), 1000);
+        saveHandler = debounce(() => saveUserFn.bind(this)(newUser), 1000);
         saveHandler();
     });    
 }
-
-let saveHandler = null;
 
 class Profile extends React.Component {
     constructor(props, context) {
@@ -160,13 +191,16 @@ class Profile extends React.Component {
         let fieldName = event.target.name;
         let fieldVal = event.target.value;
         let newUser = this.state.user;
+        if(fieldName == 'name'){
+            newUser.nameChanged = true;
+        }
         newUser[fieldName] = fieldVal
-        this.setState({user: newUser});
+        this.setState({user: newUser});        
 
         if(saveHandler){
             saveHandler.clear();
         }
-        saveHandler = debounce(() => saveUserFn(newUser), 1000);        
+        saveHandler = debounce(() => saveUserFn.bind(this)(newUser), 1000);        
         saveHandler();
     }
 
@@ -188,6 +222,21 @@ class Profile extends React.Component {
         saveTrainerInfo(newData);
     }
 
+    handleFriendlyIdChange(event){
+        //ToDo: validate, present changes
+        let fieldName = event.target.name;
+        let fieldVal = event.target.value;
+        let newData = this.state.trainerInfo;
+        newData[fieldName] = fieldVal;
+        this.setState({trainerInfo: newData});
+
+        if(saveRouteHandler){
+            saveRouteHandler.clear();
+        }
+        saveRouteHandler = debounce(() => saveRouteFn.bind(this)({friendlyId: fieldVal, id: newData.id}), 1000);
+        saveRouteHandler();        
+    }
+
     imageClick(event){
         if(this.state.userId){
             return;
@@ -207,7 +256,7 @@ class Profile extends React.Component {
             if(saveHandler){
                 saveHandler.clear();
             }
-            saveHandler = debounce(() => saveUserFn(newUser), 100);        
+            saveHandler = debounce(() => saveUserFn.bind(this)(newUser), 100);        
             saveHandler();
         })
         .catch(function(err){
@@ -280,6 +329,16 @@ class Profile extends React.Component {
                             name='gmail'
                             value={this.state.gmail || ''}
                             onChange={this.handleMailChange.bind(this)}/>
+                    </Col>
+                </FormGroup> 
+                <FormGroup>
+                    <label className="col-lg-2 control-label">Adres strony w serwisie:</label>
+                    <Col lg={ 10 }>
+                        <FormControl type="text" placeholder="Adres strony w serwisie" 
+                        className="form-control"
+                        name='friendlyId'
+                        value={this.state.trainerInfo.friendlyId || ""}
+                        onChange={this.handleFriendlyIdChange.bind(this)}/>
                     </Col>
                 </FormGroup> 
             </div>

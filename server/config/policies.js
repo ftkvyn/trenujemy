@@ -75,6 +75,7 @@ module.exports.policies = {
 
   TrainerInfoController:{
     '*': 'isCurrentTrainerInfo',
+    'updateRoute': 'isCurrentTrainerInfo',
     'find': 'sessionAuth',
     'findOne':'sessionAuth',
     'create':false,

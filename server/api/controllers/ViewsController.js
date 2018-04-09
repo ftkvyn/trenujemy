@@ -16,14 +16,68 @@ module.exports = {
 	},
 
 	trainer: function(req, res){
-		return res.view('trainerPage', 
-			{
-				isTrainerPage : true,
-				locals: {
-					user: req.session.user, 
-					cart: req.session.cart,
+		TrainerInfo
+			.findOne({friendlyId: req.params.friendlyId.toLocaleLowerCase()})
+			.populate('user')
+			.exec(function(err, info){
+				if(err){
+					console.error(err);
+					return res.notFound();
+				}
+				if(!info){
+					return res.notFound();
+				}
+				return res.view('trainerPage', 
+				{
+					isTrainerPage : true,
+					isEditMode : false,
+					locals: {
+						user: req.session.user, 
+						cart: req.session.cart,
+					},
+					info: info
+				});
+			});		
+	},
+
+	trainerEdit: function(req, res){
+		try{
+			TrainerInfo
+			.findOne({friendlyId: req.params.friendlyId.toLocaleLowerCase()})
+			.populate('user')
+			.exec(function(err, info){
+				try{
+					if(err){
+						console.error(err);
+						return res.notFound();
+					}
+					if(!info){
+						return res.notFound();
+					}
+					if(info.user.id != req.session.user.id){
+						return res.forbidden();
+					}
+					return res.view('trainerPage', 
+					{
+						isTrainerPage : true,
+						isEditMode : true,
+						locals: {
+							user: req.session.user, 
+							cart: req.session.cart,
+						},
+						info: info
+					});
+				}
+				catch(err){
+					console.error(err);
+					return res.notFound();
 				}
 			});
+		}
+		catch(err){
+			console.error(err);
+			return res.notFound();
+		}
 	},
 
 	cart: function(req,res){

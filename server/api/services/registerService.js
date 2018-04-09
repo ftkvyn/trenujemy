@@ -72,7 +72,7 @@ exports.initTrainer = function(user){
 	let createQs = [];
 
 	//ToDo: create service for generating
-	var friendlyId = user.login.substring(user.login.indexOf('@'));
+	var friendlyId = user.login.substring(0, user.login.indexOf('@'));
 	createQs.push(TrainerInfo.create({user: user.id, friendlyId: friendlyId}));
 	//three empty plans
 	createQs.push(TrainPlan.createEach([{trainer:user.id},{trainer:user.id},{trainer:user.id}]));
