@@ -6,6 +6,8 @@ import { saveImage, getFileLink } from '../Common/filesService';
 import { loadClients } from '../Common/clientsService';
 import WelcomeScreen from '../Components/WelcomeScreen';
 import { loadNotifications } from '../Common/notificationsService';
+import { saveTrainerInfo, loadTrainerInfo } from '../Common/trainerInfoService';
+
 
 
 let hideAlertSuccess = null;
@@ -58,6 +60,8 @@ function setUser(userData){
     if(user.role == 'trainer'){
         loadNotifications()
             .then((data) => this.setState({notifications: data}));
+        loadTrainerInfo()
+            .then((data) => this.setState({trainerInfo: data}));
     }
     this.setState({user: user, gmail: user.email, feedPlans: userData.feedPlans, trainPlans: userData.trainPlans});
     $('#datetimepicker').datetimepicker({
@@ -99,7 +103,8 @@ class Profile extends React.Component {
             userData:{},
             feedPlans:[],
             trainPlans:[],
-            notifications:{}
+            notifications:{},
+            trainerInfo: {}
         };
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
@@ -174,6 +179,15 @@ class Profile extends React.Component {
         }
     }
 
+    handleTrainerCheckbox(event){
+        let fieldName = event.target.name;
+        let fieldVal = event.target.checked;
+        let newData = this.state.trainerInfo;
+        newData[fieldName] = fieldVal;
+        this.setState({trainerInfo: newData});
+        saveTrainerInfo(newData);
+    }
+
     imageClick(event){
         if(this.state.userId){
             return;
@@ -207,7 +221,7 @@ class Profile extends React.Component {
         let invoiceForm = "";
         let downloadContainer = "";
         let helloPopup = "";
-        let gmailForm = "";
+        let specializationForm = "";
         if(this.state.user.role == 'trainer'){
             //User sees hello message on goods screen
             if(this.state.notifications.helloMessage){
@@ -231,8 +245,34 @@ class Profile extends React.Component {
                     gmailInputClass = 'parsley-error';
                 }
             }
-            gmailForm = <form className="form-horizontal">   
+            specializationForm = <div className="form-horizontal">   
                 <FormGroup>
+                    <label className="col-lg-2 control-label" htmlFor="isFeedCounsultant">Prowadzę doradztwo dietetyczne</label>
+                    <Col lg={ 4 } md={4} sm={6} xs={6}>
+                        <div className="checkbox c-checkbox">
+                          <label>
+                              <input type="checkbox" name="isFeedCounsultant" id='isFeedCounsultant'
+                              checked={this.state.trainerInfo.isFeedCounsultant || false} 
+                              onChange={this.handleTrainerCheckbox.bind(this)} />
+                              <em className="fa fa-check"></em>
+                          </label>
+                        </div>
+                    </Col>
+                </FormGroup> 
+                <FormGroup>
+                    <label className="col-lg-2 control-label" htmlFor="isTrainer">Prowadzę treningi personalne</label>
+                    <Col lg={ 4 } md={4} sm={6} xs={6}>
+                        <div className="checkbox c-checkbox">
+                          <label>
+                              <input type="checkbox" name="isTrainer" id='isTrainer'
+                              checked={this.state.trainerInfo.isTrainer || false} 
+                              onChange={this.handleTrainerCheckbox.bind(this)} />
+                              <em className="fa fa-check"></em>
+                          </label>
+                        </div>                        
+                    </Col>
+                </FormGroup> 
+                 <FormGroup>
                     <label className="col-lg-2 control-label">Konto gmail do synchronizacji kalendarza treningów:</label>
                     <Col lg={ 4 } md={4} sm={6} xs={6}>
                         <FormControl type="email" placeholder="Gmail email address" 
@@ -242,7 +282,7 @@ class Profile extends React.Component {
                             onChange={this.handleMailChange.bind(this)}/>
                     </Col>
                 </FormGroup> 
-            </form>
+            </div>
         }
         let readonlyProps = {};
         if(this.state.userId){
@@ -321,7 +361,7 @@ class Profile extends React.Component {
                                 value={this.state.user.login || ''}/>
                             </Col>
                         </FormGroup>    
-                        {gmailForm}   
+                        {specializationForm}   
                         {invoiceForm} 
                         {downloadContainer}
                         <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
