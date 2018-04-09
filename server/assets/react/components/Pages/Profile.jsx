@@ -1,27 +1,65 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
-import { loadUser, saveUser, loadSurvey, loadPurchases } from '../Common/userDataService';
+import { loadUser, saveUser, loadSurvey, loadPurchases, updateEmail } from '../Common/userDataService';
 import { saveImage, getFileLink } from '../Common/filesService';
 import { loadClients } from '../Common/clientsService';
+import WelcomeScreen from '../Components/WelcomeScreen';
+import { loadNotifications } from '../Common/notificationsService';
+import { saveTrainerInfo, loadTrainerInfo, saveTrainerRoute } from '../Common/trainerInfoService';
+
+
 
 let hideAlertSuccess = null;
 let hideAlertError = null;
+let saveHandler = null;
+let saveRouteHandler = null;
 
 function saveUserFn(newUser){
+    let nameChanged = newUser.nameChanged;
+    delete newUser.nameChanged;
     saveUser(newUser)
     .then(function(){
         $('.saveError').hide();
         $('.saveSuccess').show();
-        clearTimeout(hideAlertSuccess);
+        clearTimeout(hideAlertSuccess);        
         hideAlertSuccess = setTimeout(() => {$('.saveSuccess').hide()}, 6000);
-    })
-    .catch(function(){
+        if(nameChanged && this.state.trainerInfo){
+            saveRouteFn.bind(this)({friendlyId: newUser.name, id: this.state.trainerInfo.id});
+        }
+    }.bind(this))
+    .catch(function(err){
+        console.error(err);
         $('.saveSuccess').hide();
         $('.saveError').show();
         clearTimeout(hideAlertError);
         hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
-    });
+    }.bind(this));
+}
+
+function saveRouteFn(model){
+    saveTrainerRoute(model)
+    .then(function(data){
+        let newData = this.state.trainerInfo;
+        newData.friendlyId = data.friendlyId;
+        if(data.hasErrors){            
+            //ToDo: show warning
+            newData.friendlyIdErrors = true;            
+        }
+        this.setState({trainerInfo: newData});
+
+        $('.saveError').hide();
+        $('.saveSuccess').show();
+        clearTimeout(hideAlertSuccess);
+        hideAlertSuccess = setTimeout(() => {$('.saveSuccess').hide()}, 6000);
+    }.bind(this))
+    .catch(function(err){
+        console.error(err);
+        $('.saveSuccess').hide();
+        $('.saveError').show();
+        clearTimeout(hideAlertError);
+        hideAlertError = setTimeout(() => {$('.saveError').hide()}, 6000);
+    }.bind(this));
 }
 
 function loadClientData(id){
@@ -52,7 +90,13 @@ function setUser(userData){
     $('.saveSuccess').hide();
     destroyDp();
     let user = userData.user;
-    this.setState({user: user, feedPlans: userData.feedPlans, trainPlans: userData.trainPlans});
+    if(user.role == 'trainer'){
+        loadNotifications()
+            .then((data) => this.setState({notifications: data}));
+        loadTrainerInfo()
+            .then((data) => this.setState({trainerInfo: data}));
+    }
+    this.setState({user: user, gmail: user.email, feedPlans: userData.feedPlans, trainPlans: userData.trainPlans});
     $('#datetimepicker').datetimepicker({
         icons: {
             time: 'fa fa-clock-o',
@@ -77,12 +121,10 @@ function setUser(userData){
         if(saveHandler){
             saveHandler.clear();
         }
-        saveHandler = debounce(() => saveUserFn(newUser), 1000);
+        saveHandler = debounce(() => saveUserFn.bind(this)(newUser), 1000);
         saveHandler();
     });    
 }
-
-let saveHandler = null;
 
 class Profile extends React.Component {
     constructor(props, context) {
@@ -91,7 +133,9 @@ class Profile extends React.Component {
             user:{},
             userData:{},
             feedPlans:[],
-            trainPlans:[]
+            trainPlans:[],
+            notifications:{},
+            trainerInfo: {}
         };
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
@@ -137,7 +181,7 @@ class Profile extends React.Component {
     componentDidMount(){
         if(!this.state.userId){
             loadUser()
-            .then((data) => setUser.call(this, data));
+                .then((data) => setUser.call(this, data));            
         }else{
             loadClientData.call(this, this.state.userId);
         }
@@ -147,14 +191,50 @@ class Profile extends React.Component {
         let fieldName = event.target.name;
         let fieldVal = event.target.value;
         let newUser = this.state.user;
+        if(fieldName == 'name'){
+            newUser.nameChanged = true;
+        }
         newUser[fieldName] = fieldVal
-        this.setState({user: newUser});
+        this.setState({user: newUser});        
 
         if(saveHandler){
             saveHandler.clear();
         }
-        saveHandler = debounce(() => saveUserFn(newUser), 1000);        
+        saveHandler = debounce(() => saveUserFn.bind(this)(newUser), 1000);        
         saveHandler();
+    }
+
+    handleMailChange(event){
+        let fieldVal = event.target.value;
+        let isGmailCorrect = /^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$/.test(fieldVal);
+        this.setState({gmail: fieldVal, isGmailCorrect: isGmailCorrect, gmailProviding: true});
+        if(isGmailCorrect){
+            updateEmail(fieldVal);
+        }
+    }
+
+    handleTrainerCheckbox(event){
+        let fieldName = event.target.name;
+        let fieldVal = event.target.checked;
+        let newData = this.state.trainerInfo;
+        newData[fieldName] = fieldVal;
+        this.setState({trainerInfo: newData});
+        saveTrainerInfo(newData);
+    }
+
+    handleFriendlyIdChange(event){
+        //ToDo: validate, present changes
+        let fieldName = event.target.name;
+        let fieldVal = event.target.value;
+        let newData = this.state.trainerInfo;
+        newData[fieldName] = fieldVal;
+        this.setState({trainerInfo: newData});
+
+        if(saveRouteHandler){
+            saveRouteHandler.clear();
+        }
+        saveRouteHandler = debounce(() => saveRouteFn.bind(this)({friendlyId: fieldVal, id: newData.id}), 1000);
+        saveRouteHandler();        
     }
 
     imageClick(event){
@@ -176,7 +256,7 @@ class Profile extends React.Component {
             if(saveHandler){
                 saveHandler.clear();
             }
-            saveHandler = debounce(() => saveUserFn(newUser), 100);        
+            saveHandler = debounce(() => saveUserFn.bind(this)(newUser), 100);        
             saveHandler();
         })
         .catch(function(err){
@@ -189,7 +269,13 @@ class Profile extends React.Component {
     render() {  
         let invoiceForm = "";
         let downloadContainer = "";
+        let helloPopup = "";
+        let specializationForm = "";
         if(this.state.user.role == 'trainer'){
+            //User sees hello message on goods screen
+            if(this.state.notifications.helloMessage){
+                helloPopup = <WelcomeScreen role={this.state.user.role}></WelcomeScreen>
+            }
             invoiceForm = <FormGroup>
                 <label className="col-lg-2 control-label">Dane do faktury: </label>
                 <Col lg={ 10 }>
@@ -199,8 +285,64 @@ class Profile extends React.Component {
                     value={this.state.user.invoiceInfo || ''}
                     onChange={this.handleChange.bind(this)}></textarea>
                 </Col>
-            </FormGroup>   
-        }      
+            </FormGroup>  
+            let gmailInputClass = '';
+            if(this.state.gmailProviding){
+                if(this.state.isGmailCorrect){
+                    gmailInputClass = 'input-correct';
+                }else{
+                    gmailInputClass = 'parsley-error';
+                }
+            }
+            specializationForm = <div className="form-horizontal">   
+                <FormGroup>
+                    <label className="col-lg-2 control-label" htmlFor="isFeedCounsultant">Prowadzę doradztwo dietetyczne</label>
+                    <Col lg={ 4 } md={4} sm={6} xs={6}>
+                        <div className="checkbox c-checkbox">
+                          <label>
+                              <input type="checkbox" name="isFeedCounsultant" id='isFeedCounsultant'
+                              checked={this.state.trainerInfo.isFeedCounsultant || false} 
+                              onChange={this.handleTrainerCheckbox.bind(this)} />
+                              <em className="fa fa-check"></em>
+                          </label>
+                        </div>
+                    </Col>
+                </FormGroup> 
+                <FormGroup>
+                    <label className="col-lg-2 control-label" htmlFor="isTrainer">Prowadzę treningi personalne</label>
+                    <Col lg={ 4 } md={4} sm={6} xs={6}>
+                        <div className="checkbox c-checkbox">
+                          <label>
+                              <input type="checkbox" name="isTrainer" id='isTrainer'
+                              checked={this.state.trainerInfo.isTrainer || false} 
+                              onChange={this.handleTrainerCheckbox.bind(this)} />
+                              <em className="fa fa-check"></em>
+                          </label>
+                        </div>                        
+                    </Col>
+                </FormGroup> 
+                 <FormGroup>
+                    <label className="col-lg-2 control-label">Konto gmail do synchronizacji kalendarza treningów:</label>
+                    <Col lg={ 4 } md={4} sm={6} xs={6}>
+                        <FormControl type="email" placeholder="Gmail email address" 
+                            className={gmailInputClass}
+                            name='gmail'
+                            value={this.state.gmail || ''}
+                            onChange={this.handleMailChange.bind(this)}/>
+                    </Col>
+                </FormGroup> 
+                <FormGroup>
+                    <label className="col-lg-2 control-label">Adres strony w serwisie:</label>
+                    <Col lg={ 10 }>
+                        <FormControl type="text" placeholder="Adres strony w serwisie" 
+                        className="form-control"
+                        name='friendlyId'
+                        value={this.state.trainerInfo.friendlyId || ""}
+                        onChange={this.handleFriendlyIdChange.bind(this)}/>
+                    </Col>
+                </FormGroup> 
+            </div>
+        }
         let readonlyProps = {};
         if(this.state.userId){
             readonlyProps = {readOnly: true};
@@ -230,8 +372,6 @@ class Profile extends React.Component {
                 <input type='file' name='file' id='profilePicInput' accept="image/x-png,image/gif,image/jpeg" onChange={this.uploadImage.bind(this)}/>
             </form>
         }
-
-
         return (
               <Panel>
                     <form className="form-horizontal">     
@@ -279,7 +419,8 @@ class Profile extends React.Component {
                                 className="form-control" 
                                 value={this.state.user.login || ''}/>
                             </Col>
-                        </FormGroup>       
+                        </FormGroup>    
+                        {specializationForm}   
                         {invoiceForm} 
                         {downloadContainer}
                         <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
@@ -290,6 +431,7 @@ class Profile extends React.Component {
                         </div>
                     </form>
                     {picForm}
+                    {helloPopup}
                 </Panel>
         );
     }

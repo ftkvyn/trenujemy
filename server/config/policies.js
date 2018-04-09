@@ -73,6 +73,15 @@ module.exports.policies = {
     'getSurvey': 'isTrainerForOtherUser'
   },
 
+  TrainerInfoController:{
+    '*': 'isCurrentTrainerInfo',
+    'updateRoute': 'isCurrentTrainerInfo',
+    'find': 'sessionAuth',
+    'findOne':'sessionAuth',
+    'create':false,
+    'destroy':false
+  },
+
   FilesController:{
     '*': 'sessionAuth',
   },

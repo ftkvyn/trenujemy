@@ -144,6 +144,12 @@ module.exports.routes = {
 
   'get /api/training/:userId?': 'TrainingController.find',
 
+  'post /api/trainerInfo/route/:id' : 'TrainerInfoController.updateRoute',
+
+  'get /editTrainerPage/:friendlyId' : 'ViewsController.trainerEdit',
+
+  'get /:friendlyId' : 'ViewsController.trainer',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

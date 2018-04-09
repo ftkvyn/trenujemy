@@ -12,13 +12,10 @@ module.exports = {
 		qs.push(User.findOne({id: userId}));
 		qs.push(FeedPlanPurchase.find({user: userId, isActive: true}).populate('plan'));
 		qs.push(TrainPlanPurchase.find({user: userId, isActive: true}));
-
 		Q.all(qs)
 		.catch(function(err){
-			if(err){
-				console.error(err);
-				return res.badRequest(err);
-			}
+			console.error(err);
+			return res.badRequest(err);
 		})
 		.then(function(data){
 			const user = data[0];
@@ -39,12 +36,14 @@ module.exports = {
 			if(user.role != 'trainer'){
 				return res.json({user: user, feedPlans: feedPlans, trainPlans: trainPlans});	
 			}else{
-				TrainerInfo.findOrCreate({user: user.id}, {user: user.id, sendHints: true})
+				TrainerInfo.find({user: user.id})
 				.exec(function(err, info){
 					if(!err && info){
 						user.invoiceInfo = info.invoiceInfo;
 						return res.json({user: user});	
 					}
+					console.error(err);
+					return res.badRequest(err);
 				});
 			}			
 		});
@@ -55,7 +54,7 @@ module.exports = {
 
 		let qs = [];
 
-		qs.push(FeedPlanPurchase.find({user: userId, isActive: true}).populate('plan').populate('target'));
+		qs.push(FeedPlanPurchase.find({user: userId, isActive: true}).populate('plan'));
 		qs.push(TrainPlanPurchase.find({user: userId, isActive: true}).populate('plan'));
 
 		Q.all(qs)

@@ -151,24 +151,24 @@
                 <div class="col-sm-4">
                     <h3 class="font100 text-primary">Moja specjalizacja:</h3>
                     <ul class="text-white-gray" data-check-list="trainingSpecialization">
-                        <li>Kulturystyka i fitness</li>
-                        <li>Podnoszenie ciężarów</li>
-                        <li>Pływanie</li>
-                        <li>Sporty walki</li>
-                        <li>Kolarstwo</li>
-                        <li>Yoga</li>
+                        <li data-field='isTrainFitness'>Kulturystyka i fitness</li>
+                        <li  data-field='isTrainLifting'>Podnoszenie ciężarów</li>
+                        <li  data-field='isTrainSwimming'>Pływanie</li>
+                        <li  data-field='isTrainFighting'>Sporty walki</li>
+                        <li  data-field='isTrainBike'>Kolarstwo</li>
+                        <li  data-field='isTrainYoga'>Yoga</li>
                     </ul>
                 </div>
 
                 <div class="col-sm-4">
                     <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
                     <ul class="text-white-gray" data-check-list="trainingHelp">
-                        <li>Redukcja wagi</li>
-                        <li>Ogólna poprawa stanu zdrowia</li>
-                        <li>Rehabilitacja</li>
-                        <li>Poprawa sylwetki (masa)</li>
-                        <li>Poprawa sywetki (rzeźba)</li>
-                        <li>Poprawa wyników sportowych</li>
+                        <li  data-field='isTrainHelpLessWeight'>Redukcja wagi</li>
+                        <li  data-field='isTrainHelpHealthImprove'>Ogólna poprawa stanu zdrowia</li>
+                        <li  data-field='isTrainHelpRehabilitation'>Rehabilitacja</li>
+                        <li  data-field='isTrainHelpFixWeight'>Poprawa sylwetki (masa)</li>
+                        <li  data-field='isTrainHelpFixShape'>Poprawa sywetki (rzeźba)</li>
+                        <li  data-field='isTrainHelpSportResults'>Poprawa wyników sportowych</li>
                     </ul>
                 </div>
 
@@ -211,22 +211,23 @@
     </div>
 
     <div class="container">
-        <h4 class="mb20 mt-20 text-left">Zadzwoń, zapytaj o dostępność terminów: <a href="tel:555-37-37-37">555-37-37-37 <i class="ti-mobile"></i></a> </h4>
+        <h4 class="mb20 mt-20 text-left">Zadzwoń, zapytaj o dostępność terminów: <a data-hint href="tel:555-37-37-37">555-37-37-37 <i class="ti-mobile"></i></a> </h4>
         <div class="row">
             <div class="col-sm-4 mb40 wow fadeInUp" data-wow-delay=".200s">
                 <!-- <form action="/addItemToCart" method="POST"> -->
                     <div class="pricing-card">
+                        <input type="hidden" name="trainingPlan" value="11">
                         <header class="pricing-header clearfix">
                             <div class="price-title">Pojedynczy trening</div>
                             <div class="float-right price">
-                                <span class='old-price'><strike>99</strike> <sup>zł</sup> </span>
-                                50 <sup>zł</sup>
+                                <span class='old-price'><strike data-train-price-edit='Old'>99</strike> <sup>zł</sup></span>
+                                <span data-train-price-edit='New'>50</span><sup>zł</sup>
                             </div>                                
                         </header>
                         <div class="pricing-features">
-                            <ul class="list-unstyled">
-                                <li>
-                                   Treningów w cenie: <b>1</b>
+                            <ul class="list-unstyled" data-edit-list="train-features">
+                                <li data-omit-edit>
+                                   Treningów w cenie: <b data-train-count-edit>1</b>
                                 </li>
                                 <li>
                                     Pojedyncza przygoda
@@ -242,17 +243,18 @@
             </div>
             <div class="col-sm-4 mb40 wow fadeInUp" data-wow-delay=".400s">
                     <div class="pricing-card active">
+                        <input type="hidden" name="trainingPlan" value="22">
                         <header class="pricing-header clearfix">
                             <div class="price-title">Dwa treningi</div>
                             <div class="float-right price">
-                                <span class='old-price'><strike>149</strike> <sup>zł</sup> </span>
-                                100 <sup>zł</sup>
+                                <span class='old-price'><strike data-train-price-edit='Old'>149</strike> <sup>zł</sup> </span>
+                                <span data-train-price-edit='New'>100</span> <sup>zł</sup>
                             </div>                                
                         </header>
                         <div class="pricing-features">
-                            <ul class="list-unstyled">
-                                <li>
-                                   Treningów w cenie: <b>2</b>
+                            <ul class="list-unstyled" data-edit-list="train-features">
+                                <li data-omit-edit>
+                                   Treningów w cenie: <b data-train-count-edit>2</b>
                                 </li>
                                 <li>
                                     Nie pojedyncza przygoda
@@ -268,17 +270,18 @@
             </div>
             <div class="col-sm-4 mb40 wow fadeInUp" data-wow-delay=".600s">
                     <div class="pricing-card">
+                        <input type="hidden" name="trainingPlan" value="33">
                         <header class="pricing-header clearfix">
                             <div class="price-title">Pięć treningów</div>
                             <div class="float-right price">
-                                <span class='old-price'><strike>500</strike> <sup>zł</sup> </span>
-                                300 <sup>zł</sup>
+                                <span class='old-price'><strike data-train-price-edit='Old'>500</strike> <sup>zł</sup> </span>
+                                <span data-train-price-edit='New'>300</span> <sup>zł</sup>
                             </div>                                
                         </header>
                         <div class="pricing-features">
-                            <ul class="list-unstyled">
-                                <li>
-                                   Treningów w cenie: <b>5</b>
+                            <ul class="list-unstyled" data-edit-list="train-features">
+                                <li data-omit-edit>
+                                   Treningów w cenie: <b data-train-count-edit>5</b>
                                 </li>
                                 <li>
                                     Nie pojedyncza przygoda
@@ -303,24 +306,24 @@
                 <div class="col-sm-6">
                     <h3 class="font100 text-primary">Moja specjalizacja:</h3>
                     <ul class="text-white-gray" data-check-list="feedSpecialization">
-                        <li>Dieta  zbilansowana</li>
-                        <li>Dieta  wegańska / wegetaiańska</li>
-                        <li>Dieta białkowa</li>
-                        <li>Dieta tłuszczowa</li>
-                        <li>Dieta alkalizująca</li>
-                        <li>Dieta oczyszczająca</li>
+                        <li data-field='isFeedBalance'>Dieta  zbilansowana</li>
+                        <li data-field='isFeedWege'>Dieta  wegańska / wegetaiańska</li>
+                        <li data-field='isFeedProtein'>Dieta białkowa</li>
+                        <li data-field='isFeedFat'>Dieta tłuszczowa</li>
+                        <li data-field='isFeedAlkalising'>Dieta alkalizująca</li>
+                        <li data-field='isFeedCleaning'>Dieta oczyszczająca</li>
                     </ul>
                 </div>
 
                 <div class="col-sm-6">
                     <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
                     <ul class="text-white-gray" data-check-list="feedHelp">
-                        <li>Redukcja wagi</li>
-                        <li>Ogólna poprawa stanu zdrowia</li>
-                        <li>Rehabilitacja</li>
-                        <li>Poprawa sylwetki (masa)</li>
-                        <li>Poprawa sywetki (rzeźba)</li>
-                        <li>Poprawa wyników sportowych</li>
+                        <li data-field='isFeedHelpLessWeight'>Redukcja wagi</li>
+                        <li data-field='isFeedHelpHealthImprove'>Ogólna poprawa stanu zdrowia</li>
+                        <li data-field='isFeedHelpRehabilitation'>Rehabilitacja</li>
+                        <li data-field='isFeedHelpFixWeight'>Poprawa sylwetki (masa)</li>
+                        <li data-field='isFeedHelpFixShape'>Poprawa sywetki (rzeźba)</li>
+                        <li data-field='isFeedHelpSportResults'>Poprawa wyników sportowych</li>
                     </ul>
                 </div>
             </div>
@@ -390,7 +393,7 @@
                             <h3 class='feed-title'>1  tydzień</h3>
                         </div>
                         <div class="col-xs-4  col-sm-4 feed-cell">
-                            <div class="col-md-12 feed-price">200,00 zł</div>
+                            <div class="col-md-12 feed-price"><span data-feed-price-edit>200</span> zł</div>
                         </div>
                     </div>
                     <div class="row feed-item">
@@ -408,7 +411,7 @@
                             <h3 class='feed-title'>2  tygodnie</h3>
                         </div>
                         <div class="col-xs-4  col-sm-4 feed-cell">
-                            <div class="col-md-12 feed-price">300,00 zł</div>
+                            <div class="col-md-12 feed-price"><span data-feed-price-edit>300</span> zł</div>
                         </div>
                     </div>
                     <div class="row feed-item">
@@ -425,7 +428,7 @@
                             <h3 class='feed-title'>4  tygodnie</h3>
                         </div>
                         <div class="col-xs-4 col-sm-4 feed-cell">
-                            <div class="col-md-12 feed-price">400,00 zł</div>
+                            <div class="col-md-12 feed-price"><span data-feed-price-edit>400</span> zł</div>
                         </div>
                     </div>
                     <div class="row feed-item">
@@ -442,7 +445,7 @@
                             <h3 class='feed-title'>8  tygodni</h3>
                         </div>
                         <div class="col-xs-4 col-sm-4 feed-cell">
-                            <div class="col-md-12 feed-price">600,00 zł</div>
+                            <div class="col-md-12 feed-price"><span data-feed-price-edit>600</span> zł</div>
                         </div>
                     </div>
             </div>
@@ -513,4 +516,6 @@
     })(jQuery, window, document);
 </script>
 
+<% if(isEditMode){ %>
 <script type="text/javascript" src="/js/trainerEdit.js"></script>
+<% } %>

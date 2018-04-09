@@ -105,7 +105,8 @@ body .modal-backdrop.in{
     border-top: 1px solid #e4eaec;
 }
 
-.dish-popup{
+.dish-popup,
+.welcome-popup{
 	display: block;
 	min-width: 400px;
 	min-height: 600px;
