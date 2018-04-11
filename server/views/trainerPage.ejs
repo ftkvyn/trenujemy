@@ -209,7 +209,25 @@
 
                 <div class="col-sm-4">
                     <h3 class="font100 text-primary">Gdzie trenuję?</h3>
-                    <p class="lead text-white-gray text-left mb0"><strong>Poznań</strong></p>
+                    <p class="lead text-white-gray text-left mb0">
+                        <% if(isEditMode){ %>
+                            <input type="hidden" id="city-num" value="<%- info.city %>">
+                            <select data-city-edit>
+                                <option value="1">Warszawa</option>
+                                <option value="2">Kraków</option>
+                                <option value="3">Łódź</option>
+                                <option value="4">Wrocław</option>
+                                <option value="5">Poznań</option>
+                                <option value="6">Gdańsk</option>
+                                <option value="7">Szczecin</option>
+                            </select>
+                        <% } else { %>
+                            <strong>
+                                <% let cityName = ["", "Warszawa", "Kraków", "Łódź", "Wrocław", "Poznań", "Gdańsk", "Szczecin"][info.city]; %>
+                                <%- cityName %>
+                            </strong>
+                        <% } %>
+                    </p>
                     <ul class="text-white-gray" data-edit-list="trainPlaces">
                         <% if(typeof info.trainPlaces == 'object') for(let i = 0; i < info.trainPlaces.length; i++) {%>
                             <li><%- info.trainPlaces[i] %></li>

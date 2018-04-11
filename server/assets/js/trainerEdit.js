@@ -221,6 +221,15 @@ $(function() {
 	});
 	freeSampleBlock.before(freeSapleCheck);
 
+	let cityNum = $('#city-num').val();
+	$('[data-city-edit]').val(cityNum);
+
+	$('[data-city-edit]').change(function(){
+		let value = $(this).val();
+		let model = {id: infoId, city: value};
+		saveTrainerInfo(model);
+	});
+
 	$('[data-price-title]').each(function(num){
 		let titleItem = $(this);
 		titleItem.click(function(){
