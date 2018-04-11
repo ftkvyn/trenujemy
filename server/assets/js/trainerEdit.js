@@ -145,15 +145,20 @@ $(function() {
 	});
 
 	let freeSampleBlock = $('.free-sample-block');
-	let freeSapleCheck = $('<div class="free-sample-edit clearfix"><input checked="checked" type="checkbox" id="free-sample-on" /><label for="free-sample-on">Włącz darmową konsultację</label></div>');
+	let freeSapleCheck = $('<div class="free-sample-edit clearfix"><input type="checkbox" id="free-sample-on" /><label for="free-sample-on">Włącz darmową konsultację</label></div>');
+	if(freeSampleBlock.is(':visible')){
+		freeSapleCheck.find('input').attr('checked', 'checked');
+	}
 	freeSapleCheck.find('input').on('change', function(event){
-		//ToDo: save value
 		console.log('save(isFreeSample): ' + this.checked);				
 		if(!this.checked){
 			freeSampleBlock.hide();
 		}else{
 			freeSampleBlock.show();
 		}
+		let model = {id: infoId};
+		model.isFreeTrainingEnabled = this.checked;
+	    saveTrainerInfo(model);		
 	});
 	freeSampleBlock.before(freeSapleCheck);
 
