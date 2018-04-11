@@ -18,23 +18,60 @@ function saveTrainerInfo(model){
 	});
 }
 
-function saveList(ulItem, listName, infoId){
-	let items = [];
-    ulItem.find('li').each(function(){
-    	let text = $(this).text();
-    	if(text){
-	    	items.push(text);
-	    }
-    });
-    console.log(items);
+function saveTrainPlan(model){
+	return new Promise((resolve, reject) => {
+		$.ajax({
+            url: '/api/trainPlan/' + model.id,
+            type: 'PATCH',
+            data: model,
+            success: function (data) {
+            	resolve(data);                
+            },
+            error: function(err){
+                console.error(err);
+                reject(err);      
+                alert('Błąd przy zapisywaniu danych.');
+            }
+        });
+	});
+}
 
-    let model = {id: infoId};
-    model[listName] = items;
-	saveTrainerInfo(model);
+function saveList(ulItem, listName, infoId){
+	if(!ulItem.is('[data-train-features-list]')){
+		let items = [];
+	    ulItem.find('li').each(function(){
+	    	let text = $(this).text().trim();
+	    	if(text){
+		    	items.push(text);
+		    }
+	    });
+	    console.log(items);
+
+	    let model = {id: infoId};
+	    model[listName] = items;
+		saveTrainerInfo(model);
+	}else{
+		let description = '';
+		ulItem.find('li').not('[data-omit-edit]').each(function(){
+	    	let text = $(this).text().trim();
+	    	if(text){
+		    	description += text + '\n';
+		    }
+	    });
+	    console.log(description);
+	    let trainPlanId = ulItem.closest('form').find('input[name=trainingPlan]').val();
+	    let model = {id: trainPlanId};
+	    model.description = description;
+		saveTrainPlan(model);
+	}
 }
 
 $(function() {
 	const infoId = $('#info-id').val();
+
+	$("form").submit(function(e){
+        e.preventDefault();
+    });
 
 	const hintText = 'Możesz zmienić tą wartość w ustawieniach konta.';
 	$('[data-hint]').attr('title', hintText);
@@ -162,6 +199,39 @@ $(function() {
 	});
 	freeSampleBlock.before(freeSapleCheck);
 
+	$('[data-price-title]').each(function(num){
+		let titleItem = $(this);
+		titleItem.click(function(){
+			
+			if(titleItem.find('input').length){
+				return;
+			}
+			let spanItem = titleItem.find('span');
+			let editorInput = $('<input class="form-control" type="text"/>');
+			editorInput.val(spanItem.text());
+			editorInput.css('display','inline');
+			spanItem.hide();
+			spanItem.after(editorInput);
+			editorInput.on('keyup', function(event){
+				if ( event.which == 13 && !event.ctrlKey && !event.shiftKey) {
+				    event.preventDefault();
+				    let value = editorInput.val();
+				    let priceId = titleItem.closest('form').find('[name=trainingPlan]').val();
+				    console.log(`save(trainId=${priceId};name): ${value}`);
+				    if(value){
+					    spanItem.text(value);
+					}else{
+						spanItem.text("Nazwa");
+					}
+					spanItem.show();
+				    editorInput.remove();
+
+				    let model = {id: priceId, name: value};
+				    saveTrainPlan(model);
+				}
+			});
+		});
+	})
 
 	$('[data-train-price-edit]').each(function(num){
 		let priceEl = $(this);
@@ -179,9 +249,11 @@ $(function() {
 				if ( event.which == 13 && !event.ctrlKey && !event.shiftKey) {
 				    event.preventDefault();
 				    let value = editorInput.val() || '0';				    
-				    let priceId = priceEl.closest('[name=trainingPlan]').val();
+				    let priceId = priceEl.closest('form').find('[name=trainingPlan]').val();
 				    console.log(`save(trainId=${priceId};price${priceAttr}): ${value}`);
-				    //ToDo: save value
+				    let model = {id: priceId};
+				    model[`price${priceAttr}`] = value;
+				    saveTrainPlan(model);
 				    priceEl.text(value);
 				    priceEl.show();
 				    if(!+value && priceAttr=='Old'){
@@ -212,9 +284,12 @@ $(function() {
 				    if(!value){
 				    	return;
 				    }
-				    let priceId = countEl.closest('[name=trainingPlan]').val();
-				    console.log(`save(trainId=${priceId};trainCount): ${value}`);
+				    let priceId = countEl.closest('form').find('[name=trainingPlan]').val();
+				    console.log(`save(trainId=${priceId};trainsCount): ${value}`);
 				    //ToDo: save value
+				    let model = {id: priceId};
+				    model.trainsCount = value;
+				    saveTrainPlan(model);
 				    countEl.text(value);
 				    countEl.show();
 				    editorInput.remove();

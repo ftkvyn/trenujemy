@@ -25,7 +25,7 @@
                                 <b>Ustaw swoją specjalizację na stronie proiflu.</b>
                                 <% } %>                            
                             </p>
-                            <p class="mt-20 mb10 text-left" style="min-height: 50px;" data-main-text><%- info.mainText %></p>
+                            <p class="mt-20 mb10 text-left" style="min-height: 50px;" data-main-text><%- info.mainText || "Opis" %></p>
                         </div>
                     </div>
                     <div class="buttons media mb10 wow fadeInUp" data-wow-delay=".300ms">
@@ -245,91 +245,65 @@
 
     <div class="container">
         <h4 class="mb20 mt-20 text-left">Zadzwoń, zapytaj o dostępność terminów: <a data-hint href="tel:<%- info.user.phone %>"><%- info.user.phone %> <i class="ti-mobile"></i></a> </h4>
+        <% if(!trainPlans || !trainPlans.length) {%>
+            <h3 style="color:red;">Błąd ładowania planów treningowych.</h3>
+        <% } else {%>
         <div class="row">
-            <div class="col-sm-4 mb40 wow fadeInUp" data-wow-delay=".200s">
-                <!-- <form action="/addItemToCart" method="POST"> -->
-                    <div class="pricing-card">
-                        <input type="hidden" name="trainingPlan" value="11">
-                        <header class="pricing-header clearfix">
-                            <div class="price-title">Pojedynczy trening</div>
-                            <div class="float-right price">
-                                <span class='old-price'><strike data-train-price-edit='Old'>99</strike> <sup>zł</sup></span>
-                                <span data-train-price-edit='New'>50</span><sup>zł</sup>
-                            </div>                                
-                        </header>
-                        <div class="pricing-features">
-                            <ul class="list-unstyled" data-edit-list="train-features">
-                                <li data-omit-edit>
-                                   Treningów w cenie: <b data-train-count-edit>1</b>
-                                </li>
-                                <li>
-                                    Pojedyncza przygoda
-                                </li>
-                                <li>Pełne 60 minut treningu</li>
-                                <li>Świętna opcja</li>
-                            </ul>                              
-                        </div><!--pricing features-->
-                        <footer class="pricing-footer text-center">                                    
-                            <button class="btn btn-outline-info">Dodaj do koszyka</button>
-                        </footer>
-                    </div><!--/pricing card-->
-            </div>
-            <div class="col-sm-4 mb40 wow fadeInUp" data-wow-delay=".400s">
-                    <div class="pricing-card active">
-                        <input type="hidden" name="trainingPlan" value="22">
-                        <header class="pricing-header clearfix">
-                            <div class="price-title">Dwa treningi</div>
-                            <div class="float-right price">
-                                <span class='old-price'><strike data-train-price-edit='Old'>149</strike> <sup>zł</sup> </span>
-                                <span data-train-price-edit='New'>100</span> <sup>zł</sup>
-                            </div>                                
-                        </header>
-                        <div class="pricing-features">
-                            <ul class="list-unstyled" data-edit-list="train-features">
-                                <li data-omit-edit>
-                                   Treningów w cenie: <b data-train-count-edit>2</b>
-                                </li>
-                                <li>
-                                    Nie pojedyncza przygoda
-                                </li>
-                                <li>Pełne 60 minut treningu</li>
-                                <li>Świętna opcja</li>
-                            </ul>                              
-                        </div><!--pricing features-->
-                        <footer class="pricing-footer text-center">                                    
-                            <button class="btn btn-outline-info">Dodaj do koszyka</button>
-                        </footer>
-                    </div><!--/pricing card-->
-            </div>
-            <div class="col-sm-4 mb40 wow fadeInUp" data-wow-delay=".600s">
-                    <div class="pricing-card">
-                        <input type="hidden" name="trainingPlan" value="33">
-                        <header class="pricing-header clearfix">
-                            <div class="price-title">Pięć treningów</div>
-                            <div class="float-right price">
-                                <span class='old-price'><strike data-train-price-edit='Old'>500</strike> <sup>zł</sup> </span>
-                                <span data-train-price-edit='New'>300</span> <sup>zł</sup>
-                            </div>                                
-                        </header>
-                        <div class="pricing-features">
-                            <ul class="list-unstyled" data-edit-list="train-features">
-                                <li data-omit-edit>
-                                   Treningów w cenie: <b data-train-count-edit>5</b>
-                                </li>
-                                <li>
-                                    Nie pojedyncza przygoda
-                                </li>
-                                <li>Pełne 60 minut treningu</li>
-                                <li>Świętna opcja</li>
-                            </ul>                              
-                        </div><!--pricing features-->
-                        <footer class="pricing-footer text-center">                                    
-                            <button class="btn btn-outline-info">Dodaj do koszyka</button>
-                        </footer>
-                    </div><!--/pricing card-->
-                <!-- </form> -->
-            </div>
-        </div>              
+            <% 
+                let maxPointsCount = 0;
+                for(let i = 0; i < trainPlans.length; i++) {
+                    const pointsCount = (trainPlans[i].description || '').split(/\n/).length;
+                    if(maxPointsCount < pointsCount){
+                        maxPointsCount = pointsCount;
+                    }
+                }
+            %>
+
+            <% for(let i = 0; i < trainPlans.length; i++) {%>
+                <% let plan = trainPlans[i]; %>
+                <div class="col-sm-4 mb40 wow fadeInUp" data-wow-delay=".<%- i+1 %>s">
+                    <form action="/addItemToCart" method="POST">
+                        <input type="hidden" name="trainingPlan" value="<%- plan.id %>">
+                        <div class="pricing-card <%- plan.isRecomended ? 'active':'' %>">                            
+                            <header class="pricing-header clearfix">
+                                <div class="price-title" data-price-title><span><%- plan.name || "Nazwa" %></span></div>
+                                <div class="float-right price">
+                                    <% if(plan.priceOld || isEditMode) {%>
+                                    <span class='old-price' <% if(!plan.priceOld) {%> style="opacity:0.3;" <% } %> ><strike data-train-price-edit='Old'><%- plan.priceOld || 0 %></strike> <sup>zł</sup></span>
+                                    <% } %>
+                                    <span data-train-price-edit=''><%- plan.price %></span><sup>zł</sup>
+                                </div>                                
+                            </header>
+                            <div class="pricing-features">
+                                <ul class="list-unstyled" data-train-features-list data-edit-list>
+                                    <li data-omit-edit>
+                                       Treningów w cenie: <b data-train-count-edit><%- plan.trainsCount %></b>
+                                    </li>
+                                    <% const features = (plan.description || '').split(/\n/); %>
+                                    <% for(let k = 0; k < features.length; k++) {%>
+                                        <% if(features[k].trim()) {%>
+                                        <li>
+                                            <%- features[k] %>   
+                                        </li>
+                                        <% } %>
+                                    <% } %>
+
+                                    <% if(!isEditMode) for(let k = 0; k < maxPointsCount - features.length; k++) {%>
+                                    <li class='empty-point'>
+                                        &nbsp;
+                                    </li>
+                                    <% } %>
+                                </ul>                              
+                            </div><!--pricing features-->
+                            <footer class="pricing-footer text-center">                                    
+                                <button class="btn btn-outline-info">Dodaj do koszyka</button>
+                            </footer>
+                        </div><!--/pricing card-->
+                    </form>
+                </div>
+            <% } %>
+        </div>       
+        <% } %>       
     </div> 
     <% } %>
     <% if(info.isFeedCounsultant){ %>

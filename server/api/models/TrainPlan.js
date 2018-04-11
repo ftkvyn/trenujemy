@@ -31,7 +31,7 @@ module.exports = {
   		description:{
   			type:'string',columnType:'text',
   		},
-
+ 
   		isActive:{
   			type:'boolean'
   		},

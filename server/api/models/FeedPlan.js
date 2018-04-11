@@ -25,6 +25,10 @@ module.exports = {
   			type:'boolean'
   		},
 
+      isFreeSample:{
+        type:'boolean'
+      },
+
   		priceOld:{
   			type:'number',columnType:'integer',
   		},

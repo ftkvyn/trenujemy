@@ -75,7 +75,7 @@ exports.initTrainer = function(user){
 	var friendlyId = user.login.substring(0, user.login.indexOf('@'));
 	createQs.push(TrainerInfo.create({user: user.id, friendlyId: friendlyId}));
 	//three empty plans
-	createQs.push(TrainPlan.createEach([{trainer:user.id},{trainer:user.id},{trainer:user.id}]));
+	createQs.push(TrainPlan.createEach([{trainer:user.id, isActive:true},{trainer:user.id, isRecomended: true, isActive:true},{trainer:user.id, isActive:true}]));
 
 	const initPlans = [
 		{
@@ -98,7 +98,14 @@ exports.initTrainer = function(user){
 			isVisible: true,
 			trainer:user.id,
 			isWithConsulting: true
+		},{
+			isFreeSample:true,			
+			weeks:1,
+			isVisible: true,
+			trainer:user.id,
+			isWithConsulting: true
 		}
+
 	];
     createQs.push(FeedPlan.createEach(initPlans));
 	Q.all(createQs)

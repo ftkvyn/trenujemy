@@ -101,6 +101,7 @@ module.exports.policies = {
 
   TrainPlanController:{
     '*':'isTrainer',
+    'update':'isTrainersTrainPlan',
     'find':true,
     'findOne':true,
   },
@@ -113,6 +114,7 @@ module.exports.policies = {
 
   FeedPlanController:{
     'find':true,
+    'update':'isTrainersFeedPlan',
     'create':false,
     'destroy':false
   },
