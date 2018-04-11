@@ -1,6 +1,8 @@
 //TrainerInfoController
 
 const routeSymbols = '1234567890-_qwertyuiopasdfghjklzxcvbnm'
+//fields that cannot be updated in update function
+const readonlyFields = ['user', 'friendlyId', 'isApprovedByAdmin', 'id', 'createdAt', 'updatedAt'];
 
 module.exports = {
 	find: function(req,res){
@@ -47,7 +49,40 @@ module.exports = {
 				}	
 				let result = {friendlyId: resultRoute, hasErrors: hasErrors};
 				return res.send(result);
-			})		
-		})
+			});	
+		});
+	},
+
+	approveByAdmin:function(req, res){
+
+	},
+
+	update:function(req, res){
+		try{
+			let model = req.body;
+			for(let i = 0; i < readonlyFields.length; i++){
+				if(model[readonlyFields[i]]){
+					delete model[readonlyFields[i]];
+				}
+			}
+			TrainerInfo.update(req.params.id, model)
+			.exec(function(err, data){
+				try{
+					if(err){
+						console.error(err);
+						return res.badRequest(err);
+					}	
+					return res.send({success: true});
+				}				
+				catch(ex){
+					console.error(ex);
+					return res.badRequest(err);
+				}
+			});
+		}
+		catch(ex){
+			console.error(ex);
+			return res.badRequest(err);
+		}
 	}
 }
