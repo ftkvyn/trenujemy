@@ -1,6 +1,41 @@
 'use strict'
 
+function saveTrainerInfo(model){
+	return new Promise((resolve, reject) => {
+		$.ajax({
+            url: '/api/trainerInfo/' + model.id,
+            type: 'PATCH',
+            data: model,
+            success: function (data) {
+            	resolve(data);                
+            },
+            error: function(err){
+                console.error(err);
+                reject(err);      
+                alert('Błąd przy zapisywaniu danych.');
+            }
+        });
+	});
+}
+
+function saveList(ulItem, listName, infoId){
+	let items = [];
+    ulItem.find('li').each(function(){
+    	let text = $(this).text();
+    	if(text){
+	    	items.push(text);
+	    }
+    });
+    console.log(items);
+
+    let model = {id: infoId};
+    model[listName] = items;
+	saveTrainerInfo(model);
+}
+
 $(function() {
+	const infoId = $('#info-id').val();
+
 	const hintText = 'Możesz zmienić tą wartość w ustawieniach konta.';
 	$('[data-hint]').attr('title', hintText);
 	$('[data-hint]').click(function(){
@@ -21,7 +56,8 @@ $(function() {
 			    event.preventDefault();
 			    let value = editor.val();
 			    console.log('save: ' + value);
-			    //ToDo: save value
+			    let model = {id: infoId, mainText: value};
+			    saveTrainerInfo(model);
 			    mainText.text(value);
 			    mainText.show();
 			    editor.remove();
@@ -29,7 +65,6 @@ $(function() {
 		});
 	});
 
-	//ToDo: handle adding and removing items.
 	$('[data-edit-list]').each(function(num){
 		let ulItem = $(this);
 		let listName = ulItem.attr('data-edit-list');
@@ -53,7 +88,6 @@ $(function() {
 				    event.preventDefault();
 				    let value = editorInput.val();
 				    console.log('save(' + listName + '): ' + value);
-				    //ToDo: save value
 				    if(value){
 					    liItem.text(value);
 					    liItem.show();
@@ -61,6 +95,8 @@ $(function() {
 						liItem.remove();
 					}
 				    editor.remove();
+
+				    saveList(ulItem, listName, infoId);
 				}
 			});
 		});
@@ -79,6 +115,7 @@ $(function() {
 				    newItem.before(newLiItem);
 				    newItemEditor.val('');
 				}
+				saveList(ulItem, listName, infoId);
 			}
 		});
 		ulItem.append(newItem);
@@ -90,13 +127,19 @@ $(function() {
 		ulItem.find('li').each(function(liNum){
 			let liItem = $(this);
 			let name = liItem.attr('data-field');
+			let isChecked = !!liItem.attr('data-checked');
 			liItem.removeAttr('data-field');
 			let checkBox = $(`<li><input type="checkbox" id="${name}" /><label for="${name}">${liItem.text()}</label></li>`);
+			if(isChecked){
+				checkBox.find('input').attr('checked', 'checked');
+			}
 			liItem.after(checkBox);
 			liItem.remove();
 			checkBox.find('input').on('change', function(event){
-				//ToDo: save value
-				console.log('save(' + this.id + '): ' + this.checked);				
+				console.log('save(' + this.id + '): ' + this.checked);	
+				let model = {id: infoId};
+				model[name] = this.checked;
+			    saveTrainerInfo(model);			
 			});
 		});
 	});
