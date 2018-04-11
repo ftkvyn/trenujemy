@@ -36,6 +36,24 @@ function saveTrainPlan(model){
 	});
 }
 
+function saveFeedPlan(model){
+	return new Promise((resolve, reject) => {
+		$.ajax({
+            url: '/api/feedPlan/' + model.id,
+            type: 'PATCH',
+            data: model,
+            success: function (data) {
+            	resolve(data);                
+            },
+            error: function(err){
+                console.error(err);
+                reject(err);      
+                alert('Błąd przy zapisywaniu danych.');
+            }
+        });
+	});
+}
+
 function saveList(ulItem, listName, infoId){
 	if(!ulItem.is('[data-train-features-list]')){
 		let items = [];
@@ -70,6 +88,10 @@ $(function() {
 	const infoId = $('#info-id').val();
 
 	$("form").submit(function(e){
+        e.preventDefault();
+    });
+
+    $("a").click(function(e){
         e.preventDefault();
     });
 
@@ -286,7 +308,6 @@ $(function() {
 				    }
 				    let priceId = countEl.closest('form').find('[name=trainingPlan]').val();
 				    console.log(`save(trainId=${priceId};trainsCount): ${value}`);
-				    //ToDo: save value
 				    let model = {id: priceId};
 				    model.trainsCount = value;
 				    saveTrainPlan(model);
@@ -316,6 +337,8 @@ $(function() {
 				    let priceId = priceEl.closest('.feed-item').find('[name=feedPlan]').val();
 				    console.log(`save(feedId=${priceId};price): ${value}`);
 				    //ToDo: save value
+				    let model = {id: priceId, price: value};
+				    saveFeedPlan(model);
 				    priceEl.text(value);
 				    priceEl.show();
 				    editorInput.remove();

@@ -46,7 +46,7 @@ module.exports = {
 							cart: req.session.cart,
 						},
 						info: info,
-						feedPland: data[0],
+						feedPlans: data[0],
 						trainPlans: data[1]
 					});
 				});					
@@ -90,7 +90,7 @@ module.exports = {
 								cart: req.session.cart,
 							},
 							info: info,
-							feedPland: data[0],
+							feedPlans: data[0],
 							trainPlans: data[1]
 						});
 					});

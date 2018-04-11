@@ -396,97 +396,53 @@
         </div>
         <% } %>
         <p class="lead">Zakup diety - określ przez ile tygodni chcesz ze mną współpracować</p>
-        <div style="padding-left: 100px;padding-right: 100px;">
-
-            <div class="container feed-plans">
-                <div class="row feed-header">
-                    <div class="col-xs-4 col-sm-4"> &nbsp; </div>
-                    <div class="col-xs-4 col-sm-4">
-                        <label>Okres</label>
+        <form action="/addItemToCart" method="POST">
+            <div style="padding-left: 100px;padding-right: 100px;">
+                <div class="container feed-plans">
+                    <div class="row feed-header">
+                        <div class="col-xs-4 col-sm-4"> &nbsp; </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <label>Okres</label>
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <label>Cena</label>
+                        </div>
                     </div>
-                    <div class="col-xs-4 col-sm-4">
-                        <label>Cena</label>
+                    <% for(let i = 0; i < feedPlans.length; i++) {%>
+                        <% let plan = feedPlans[i]; let word = 'tygodni'; %>
+                        <% if(plan.weeks < 6){word = 'tygodnie';} %>
+                        <% if(plan.weeks == 1){word = 'tydzień';} %> 
+                        <div class="row feed-item">
+                            <div class="col-xs-4  col-sm-4 feed-cell">
+                                <div class="feed-checkbox">
+                                    <label class="custom-control custom-radio">
+                                        <input name="feedPlan" type="radio" value="<%- plan.id %>" 
+                                            <% if(i === 2) {%>
+                                                checked='checked'
+                                            <% } %>
+                                            class="custom-control-input"/>
+                                        <span class="custom-control-indicator"></span>
+                                    </label>
+                                </div>                            
+                            </div>
+                            <div class="col-xs-4  col-sm-4 feed-cell">
+                                <h3 class='feed-title'><%- plan.weeks %> <%- word %></h3>
+                            </div>
+                            <div class="col-xs-4  col-sm-4 feed-cell">
+                                <div class="col-md-12 feed-price"><span data-feed-price-edit><%- plan.price %></span> zł</div>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="container pb30">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button class="btn btn-outline-info btn-lg pull-right">Dodaj do koszyka</button>
+                        </div>
                     </div>
                 </div>
-                    <div class="row feed-item">
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <div class="feed-checkbox">
-                                <label class="custom-control custom-radio">
-                                    <input name="feedPlan" type="radio" value="1" 
-                                    class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                </label>
-                            </div>                            
-                        </div>
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <h3 class='feed-title'>1  tydzień</h3>
-                        </div>
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <div class="col-md-12 feed-price"><span data-feed-price-edit>200</span> zł</div>
-                        </div>
-                    </div>
-                    <div class="row feed-item">
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <div class="feed-checkbox">
-                                <label class="custom-control custom-radio">
-                                    <input name="feedPlan" type="radio" value="2" 
-                                        checked='checked'
-                                    class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                </label>
-                            </div>                            
-                        </div>
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <h3 class='feed-title'>2  tygodnie</h3>
-                        </div>
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <div class="col-md-12 feed-price"><span data-feed-price-edit>300</span> zł</div>
-                        </div>
-                    </div>
-                    <div class="row feed-item">
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <div class="feed-checkbox">
-                                <label class="custom-control custom-radio">
-                                    <input name="feedPlan" type="radio" value="3" 
-                                    class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                </label>
-                            </div>                            
-                        </div>
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <h3 class='feed-title'>4  tygodnie</h3>
-                        </div>
-                        <div class="col-xs-4 col-sm-4 feed-cell">
-                            <div class="col-md-12 feed-price"><span data-feed-price-edit>400</span> zł</div>
-                        </div>
-                    </div>
-                    <div class="row feed-item">
-                        <div class="col-xs-4 col-sm-4 feed-cell">
-                            <div class="feed-checkbox">
-                                <label class="custom-control custom-radio">
-                                    <input name="feedPlan" type="radio" value="4"
-                                    class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                </label>
-                            </div>                            
-                        </div>
-                        <div class="col-xs-4 col-sm-4 feed-cell">
-                            <h3 class='feed-title'>8  tygodni</h3>
-                        </div>
-                        <div class="col-xs-4 col-sm-4 feed-cell">
-                            <div class="col-md-12 feed-price"><span data-feed-price-edit>600</span> zł</div>
-                        </div>
-                    </div>
-            </div>
-
-            <div class="container pb30">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <button class="btn btn-outline-info btn-lg pull-right">Dodaj do koszyka</button>
-                    </div>
-                </div>
-            </div>
-        </div> 
+            </div> 
+        </form>
     </div>
     <% } %>
 </section>
