@@ -204,7 +204,7 @@ $(function() {
 	});
 
 	let freeSampleBlock = $('.free-sample-block');
-	let freeSapleCheck = $('<div class="free-sample-edit clearfix"><input type="checkbox" id="free-sample-on" /><label for="free-sample-on">Włącz darmową konsultację</label></div>');
+	let freeSapleCheck = $('<div class="free-sample-edit clearfix"><input type="checkbox" id="free-sample-on" /><label for="free-sample-on">Chcę udostępnić możliwość pierwszej konsultacji gratis</label></div>');
 	if(freeSampleBlock.is(':visible')){
 		freeSapleCheck.find('input').attr('checked', 'checked');
 	}
