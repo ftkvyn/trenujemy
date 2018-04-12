@@ -32,7 +32,6 @@ module.exports = {
 	    		req.session.cartMessage = 'Nie możesz zakupić jednocześnie więcej niż jednej usługi tego samego typu dla jednego konta';
 	    	}
 	    	req.session.cart.feedPlan = req.body.feedPlan;
-	    	req.session.cart.target = req.body.target;
 	    }
 	    if(req.body.trainingPlan){
 	    	if(!req.session.cart.trainings){
@@ -48,7 +47,6 @@ module.exports = {
 		cartService.initCart(req);
 	    if(req.body.feedPlan){
 	    	delete req.session.cart.feedPlan;
-	    	delete req.session.cart.target;
 	    }
 	    if(req.body.trainingPlan){
 	    	if(req.session.cart.trainings){
@@ -110,7 +108,7 @@ module.exports = {
 				    	p24_session_id: transaction.externalId,
 				    	p24_amount: transaction.amount,
 				    	p24_currency: 'PLN',
-				    	p24_description: 'Zakup w servisie treningowo-dyjetytycznym',
+				    	p24_description: 'Zakup w servisie Znany Trener 24',
 				    	p24_email: user.login,
 				    	p24_client: user.name,
 				    	p24_country: 'PL',
@@ -128,7 +126,7 @@ module.exports = {
 							let word = 'tygodni';
                         	if(item.weeks < 6){word = 'tygodnie';}
                         	if(item.weeks == 1){word = 'tydzień';}
-                        	paymentData['p24_name_' + (i+1)] = `Plan żywieniowy, abonament na ${item.months} ${word}`;
+                        	paymentData['p24_name_' + (i+1)] = `Plan żywieniowy, abonament na ${item.weeks} ${word}, konsultant ${item.trainer.name}`;
                         	if(item.isWithConsulting){
                         		paymentData['p24_name_' + (i+1)] += ' z codzienną konsultacją';
                         	}
@@ -265,10 +263,10 @@ module.exports = {
 									for(let i = 0; i < items.length; i++){
 										let item = items[0];
 										if(item.isFeedPlan){
-											emailModel.feedPlanName = `Plan żywieniowy na ${item.months}-miesięczny okres `;
+											emailModel.feedPlanName = `Plan żywieniowy na ${item.weeks}-tydodniowy okres, konsultant ${item.trainer.name} `;
 											emailModel.feedPlanWithConsult = item.isWithConsulting;
 										}else{
-											emailModel.trainPlans.push(item.name);
+											emailModel.trainPlans.push(item.name + " - " + item.trainer.name);
 										}
 									}
 									emailService.sendNewTransactionMail(emailModel);

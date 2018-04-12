@@ -18,10 +18,9 @@ exports.loadCartItems = function(cart){
 	let deferred = Q.defer();
 	let qs = [];
 	// console.log(cart);
-    qs.push(TrainPlan.find({isActive: true, id: cart.trainings || []}));
+    qs.push(TrainPlan.find({isActive: true, id: cart.trainings || []}).populate('trainer'));
 	if(cart.feedPlan){
-		qs.push(FeedPlan.findOne({isVisible: true, id: cart.feedPlan}));
-		//qs.push(FeedPlanTarget.findOne({isVisible: true, id: cart.target}));
+		qs.push(FeedPlan.findOne({isVisible: true, id: cart.feedPlan}).populate('trainer'));
 	}
 	Q.all(qs)
 	.catch(function(err){
@@ -44,8 +43,6 @@ exports.loadCartItems = function(cart){
 				cartItems.push(training);
 			}
 			cartItems.push(...trainings);
-			// console.log('items');
-			// console.log(cartItems);
 			deferred.resolve(cartItems);
 		}
 		catch(ex){

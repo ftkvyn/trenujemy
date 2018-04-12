@@ -54,9 +54,9 @@ module.exports.policies = {
   },
 
   CartController:{
-    'addItem': true,
+    'addItem': 'notTrainer',
     'removeItem':true,
-    'payment':'sessionAuthRedirectToLogin',
+    'payment': ['sessionAuthRedirectToLogin', 'notTrainer'],
     '*':'sessionAuthRedirectToLogin',
     'verify':true
   },
