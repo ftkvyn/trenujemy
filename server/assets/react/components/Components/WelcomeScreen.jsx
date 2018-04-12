@@ -34,7 +34,7 @@ class WelcomeScreen extends React.Component {
         let newValue = !this.state.dontRemind;
         this.setState({dontRemind: newValue});
         let model = Object.assign({}, this.state.notifications);
-        model.helloMessage = newValue;
+        model.helloMessage = !newValue;
         saveNotifications(model);
     }
 

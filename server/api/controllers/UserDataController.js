@@ -54,8 +54,8 @@ module.exports = {
 
 		let qs = [];
 
-		qs.push(FeedPlanPurchase.find({user: userId, isActive: true}).populate('plan'));
-		qs.push(TrainPlanPurchase.find({user: userId, isActive: true}).populate('plan'));
+		qs.push(FeedPlanPurchase.find({user: userId, isActive: true}).populate('plan').populate('trainer'));
+		qs.push(TrainPlanPurchase.find({user: userId, isActive: true}).populate('plan').populate('trainer'));
 
 		Q.all(qs)
 		.catch(function(err){

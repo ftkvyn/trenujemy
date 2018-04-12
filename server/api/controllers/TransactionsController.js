@@ -22,6 +22,7 @@ module.exports = {
 		}
 		condition.createdAt = { '>=': low, '<': high };
 		condition.status = 'Complete';
+		condition.trainer = req.session.user.id;
 		Transaction.find(condition)
 		.populate('user')
 		.sort('createdAt DESC')
