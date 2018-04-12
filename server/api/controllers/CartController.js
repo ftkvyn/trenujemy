@@ -86,17 +86,25 @@ module.exports = {
 			})
 			.done(function(cartItems){
 				const totalPrice = cartItems.reduce( (accumulator, currentItem) => accumulator + currentItem.price, 0);
-				const newTransactionModel = {
-					user: req.session.user.id,
-					cart: req.session.cart,
-					amount: totalPrice * 100,
-					externalId: uuidv4(),
-					status: 'created'				
-				};
-				console.log("====== CREATING TRANSACTION ======");
-				console.log(newTransactionModel);
-				Transaction.create(newTransactionModel)
-				.exec(function(err, transaction){
+				let transactionModels = [];
+				let paymentId = uuidv4();
+				for(let i = 0; i < cartItems.length; i++){
+					const newTransactionModel = {
+						user: req.session.user.id,
+						item: cartItems[i],
+						amount: cartItems[i].price * 100,
+						externalId: paymentId,
+						status: 'created',
+						trainer: cartItems[i].trainer.id			
+					};
+					transactionModels.push(newTransactionModel);
+				}
+				
+				console.log("====== CREATING TRANSACTIONS ======");
+				console.log(transactionModels);
+				Transaction.createEach(transactionModels)
+				.fetch()
+				.exec(function(err, transactions){
 					if(err){
 						console.error(err);
 						return res.badRequest(err);
@@ -105,8 +113,8 @@ module.exports = {
 					let paymentData = {
 						p24_merchant_id: merchant_id,
 				    	p24_pos_id: pos_id,
-				    	p24_session_id: transaction.externalId,
-				    	p24_amount: transaction.amount,
+				    	p24_session_id: paymentId,
+				    	p24_amount: totalPrice * 100,
 				    	p24_currency: 'PLN',
 				    	p24_description: 'Zakup w servisie Znany Trener 24',
 				    	p24_email: user.login,
@@ -162,7 +170,7 @@ module.exports = {
 					    console.log(body);
 					    const bodyData = queryString.parse(body);
 					    if(bodyData.token){
-					    	Transaction.update({id: transaction.id}, {status: 'Redirected to płatności24', title: title})
+					    	Transaction.update({externalId: paymentId}, {status: 'Redirected to płatności24', title: title})
 							.exec(function(){
 								//Do nothing.
 							});
@@ -170,7 +178,7 @@ module.exports = {
 						    return res.redirect(payment_url + '/trnRequest/' + bodyData.token);
 						}else{
 							console.error(bodyData.errorMessage);
-							Transaction.update({id: transaction.id}, {status: 'Payment error', errorMessage: bodyData.errorMessage})
+							Transaction.update({externalId: paymentId}, {status: 'Payment error', errorMessage: bodyData.errorMessage})
 							.exec(function(){
 								//Do nothing.
 							});
@@ -186,29 +194,29 @@ module.exports = {
 	verify: function(req, res){
 		console.log("====== Status info from payment system ======");
 		console.log(req.body);
-
-		Transaction.findOne({externalId: req.body.p24_session_id})
-		.exec(function(err, transaction){
+		const paymentId = req.body.p24_session_id;
+		Transaction.find({externalId: paymentId})
+		.exec(function(err, transactions){
 			if(err){
 				console.error(err);
 				return res.badRequest();
 			}
-			if(!transaction){
-				console.error('Transaction ' + req.body.p24_session_id + ' not found.');
+			if(!transactions || !transactions.length){
+				console.error('Transactions with externalId=' + paymentId + ' not found.');
 				return res.badRequest();
 			}
 
 			let verifyData = {
 				p24_merchant_id: merchant_id,
 		    	p24_pos_id: pos_id,
-		    	p24_session_id: transaction.externalId,
+		    	p24_session_id: paymentId,
 		    	p24_amount: req.body.p24_amount,
 		    	p24_currency: 'PLN',
 		    	p24_order_id: req.body.p24_order_id,
 		    	//p24_sign: md5Hash
 			};
 
-			Transaction.update({id: transaction.id}, {status: 'Verifying'})
+			Transaction.update({externalId: paymentId}, {status: 'Verifying'})
 			.exec(function(){
 				//Do nothing.
 			});
@@ -231,14 +239,14 @@ module.exports = {
 			    console.log(body);
 			    const bodyData = queryString.parse(body);
 			    if(!bodyData.errorMessage){
-			    	Transaction.update({id: transaction.id}, {status: 'Complete'})
+			    	Transaction.update({externalId: paymentId}, {status: 'Complete'})
 			    	.fetch()
 					.exec(function(err, transactions){
 						try{
-							cartService.purchaseItems(transactions[0])
+							cartService.purchaseItems(transactions)
 							.catch(function(err){
 								console.error(err);
-								Transaction.update({id: transactions[0].id}, {status: 'Error while creating purchases', errorMessage: err.toString()})
+								Transaction.update({externalId: paymentId}, {status: 'Error while creating purchases', errorMessage: err.toString()})
 								.exec(function(){
 									//Do nothing.						
 								})
@@ -247,21 +255,20 @@ module.exports = {
 								console.log('=========Created items:==========');
 								console.log(data);
 								let qs = [];
-								qs.push(cartService.loadCartItems(transactions[0].cart));
 								qs.push(User.findOne(transactions[0].user));
 								Q.all(qs)
 								.catch(function(err){
 									console.error(err);
 								})
 								.then(function(data){
-									let items = data[0];
-      								let user = data[1];
+									let items = transactions.map(transaction => transaction.item);
+      								let user = data[0];
 									let emailModel = {};
 									emailModel.name = user.name || user.login;
 									emailModel.email = user.login;
 									emailModel.trainPlans = [];
 									for(let i = 0; i < items.length; i++){
-										let item = items[0];
+										let item = items[i];
 										if(item.isFeedPlan){
 											emailModel.feedPlanName = `Plan żywieniowy na ${item.weeks}-tydodniowy okres, konsultant ${item.trainer.name} `;
 											emailModel.feedPlanWithConsult = item.isWithConsulting;
@@ -275,7 +282,7 @@ module.exports = {
 						}
 						catch(ex){
 							console.error(ex);
-							Transaction.update({id: transactions[0].id}, {status: 'Error while creating purchases', errorMessage: ex.toString()})
+							Transaction.update({externalId: paymentId}, {status: 'Error while creating purchases', errorMessage: ex.toString()})
 							.exec(function(){
 								//Do nothing.						
 							});
@@ -284,7 +291,7 @@ module.exports = {
 				    return res.send('Ok');
 				}else{
 					console.error(bodyData.errorMessage);
-					Transaction.update({id: transaction.id}, {status: 'Error while verifying', errorMessage: bodyData.errorMessage})
+					Transaction.update({externalId: paymentId}, {status: 'Error while verifying', errorMessage: bodyData.errorMessage})
 					.exec(function(){
 						//Do nothing.						
 					});

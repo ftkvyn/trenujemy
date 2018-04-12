@@ -16,9 +16,9 @@ module.exports = {
 	trainer:{
         model:'User',
         required: true
-    },
+    },	
 
-	cart:{
+	item:{
 		type:'json',
 		required: true
 	},

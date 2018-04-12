@@ -75,19 +75,20 @@
                 <% let item = locals.cartItems[i]; sum += item.price;%>            
                 <tr>
                     <% if(item.isFeedPlan){%>
-                        <% let word = 'miesięcy'; %>
-                        <% if(item.months < 6){word = 'miesiące';} %>
-                        <% if(item.months == 1){word = 'miesiąc';} %>  
+                        <% let word = 'tygodni'; %>
+                        <% if(item.weeks < 6){word = 'tygodnie';} %>
+                        <% if(item.weeks == 1){word = 'tydzień';} %>                         
                         <td class="product-name">
-                            Plan żywieniowy, abonament na <%= item.months %> <%= word %>
+                            Plan żywieniowy, abonament na <%= item.weeks %> <%= word %>
                             <% if(item.isWithConsulting){%>
                                <br/> <b>z codzienną konsultacją</b>
                             <%}%>
-                            <br/>Cel: <b> <%= item.target.name %> </b>                            
+                            <br/>Konsultant: <b> <%= item.trainer.name %> </b>                            
                         </td>
                     <% }else{%>
                         <td class="product-name">
                             <%= item.name %>
+                            <br/>Trener: <b> <%= item.trainer.name %> </b>  
                         </td>
                     <% } %>
                     <td class="product-price"><%= item.price %> zł</td>

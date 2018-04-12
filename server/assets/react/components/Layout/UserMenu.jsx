@@ -112,15 +112,13 @@ class UserMenu extends React.Component {
                 <span>Zalecenia</span>
             </Link>
         </li>        
-        if(this.state.userData.feedPlans.length && this.state.userData.feedPlans[0].plan.isWithConsulting){
-            diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
-                <Link to="/diary" title="Dziennik aktywności">
-                    <Notification count={this.state.notifications.diaryDays.length}></Notification>
-                    <em className="fa fa-address-book-o"></em>
-                    <span>Dziennik aktywności</span>
-                </Link>
-            </li>
-        }
+        diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
+            <Link to="/diary" title="Dziennik aktywności">
+                <Notification count={this.state.notifications.diaryDays.length}></Notification>
+                <em className="fa fa-address-book-o"></em>
+                <span>Dziennik aktywności</span>
+            </Link>
+        </li>
         return (
             <ul className="nav">
                 <ProfileData defaultProfilePic='img/user/13.jpg'></ProfileData>

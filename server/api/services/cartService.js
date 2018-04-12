@@ -35,11 +35,14 @@ exports.loadCartItems = function(cart){
 			if(feedPlan){
 				//feedPlan.target = data[2];
 				feedPlan.isFeedPlan = true;
+				feedPlan.trainerId = feedPlan.trainer.id;
 				cartItems.push(feedPlan);
 			}
 			const trainings = [];
 			for(var i = 0; i < cart.trainings.length; i++){
 				const training = data[0].find((item) => item.id == cart.trainings[i]);
+				training.isTraining = true;
+				training.trainerId = training.trainer.id;
 				cartItems.push(training);
 			}
 			cartItems.push(...trainings);
@@ -52,21 +55,34 @@ exports.loadCartItems = function(cart){
 	return deferred.promise;
 }
 
-exports.purchaseItems = function(transaction){
+exports.purchaseItems = function(transactions){
 	let deferred = Q.defer();
-	const cart = transaction.cart;
-	if(transaction.status != 'Complete'){
-		deferred.reject(new Error('Wrong transaction status - ' + transaction.status));
+	let user = null;
+	let feedPlanTransaction = null;
+	let trainingTransactions = [];	
+	for(let i =  0; i < transactions.length; i++){
+		const transaction = transactions[i];		
+		if(transaction.status != 'Complete'){
+			return deferred.reject(new Error('Wrong transaction status - ' + transaction.status));
+		}
+		user = transaction.user;
+		if(transaction.item.isFeedPlan){
+			feedPlanTransaction = transaction;
+		}else{
+			trainingTransactions.push(transaction);
+		}
 	}
+	
 
 	let loadQs = [];
+	let trainPlanIds = trainingTransactions.map(tt => tt.item.id);
 
-	loadQs.push(TrainPlan.find({isActive: true, id: cart.trainings || []}));
-	loadQs.push(Notifications.findOne({user: transaction.user}));
-	loadQs.push(TrainPlanPurchase.count({user: transaction.user}));
-	loadQs.push(FeedPlanPurchase.count({user: transaction.user}));
-	if(cart.feedPlan){
-		loadQs.push(FeedPlan.findOne({id: cart.feedPlan}));
+	loadQs.push(TrainPlan.find({isActive: true, id: trainPlanIds}));
+	loadQs.push(Notifications.findOne({user: user}));
+	loadQs.push(TrainPlanPurchase.count({user: user}));
+	loadQs.push(FeedPlanPurchase.count({user: user}));
+	if(feedPlanTransaction){
+		loadQs.push(FeedPlan.findOne({id: feedPlanTransaction.item.id}));
 	}
 
 	Q.all(loadQs)
@@ -82,52 +98,46 @@ exports.purchaseItems = function(transaction){
 			let feedPlan = data[4];
 			
 			let qs = [];
-			let notificationModel = {user: transaction.user};
+			let notificationModel = {user: user};
 			notificationModel.newPurchase = true;
-			for(let i = 0; i < cart.trainings.length; i++){
-				let plan = trainPlans.find( (item) => item.id == cart.trainings[i]);
+			for(let i = 0; i < trainingTransactions.length; i++){
+				let plan = trainPlans.find( (item) => item.id == trainingTransactions[i].item.id);
 				if(plan){
 					qs.push(TrainPlanPurchase.create({
-						user: transaction.user,
-						transaction: transaction.id,
-						plan: cart.trainings[i],
+						user: trainingTransactions[i].user,
+						transaction: trainingTransactions[i].id,
+						plan: plan.id,
 						trainsCount: plan.trainsCount,
 						trainsLeft: plan.trainsCount,
+						trainer: trainingTransactions[i].item.trainerId || 1,
 						isActive: true
-					}));	
-					// if(typeof oldNotification.trainingInfo != 'boolean'){
-						notificationModel.trainingInfo = true;
-					// }
+					}).fetch());	
+					notificationModel.trainingInfo = true;
 					if(!oldTrainsCount){
 						notificationModel.updateSurvey = true;
 					}
 				}	
 			}
-			if(cart.trainings.length && qs.length){
+			if(trainingTransactions.length && qs.length){
 				//Updating all user active trainings to update valid period.
 				let now = new Date();
 				qs.push(TrainPlanPurchase.update({
-					user: transaction.user,
+					user: user,
 					isActive: true,
 					trainsLeft : {'>' : 0}
 				},{ createdAt: now }).fetch());
 			}
-			if(cart.feedPlan){
-				//qs.push(FeedPlanPurchase.update({user: transaction.user}, {isActive: false}));
+			if(feedPlanTransaction){
 				qs.push(FeedPlanPurchase.create({
-					user: transaction.user,
-					transaction: transaction.id,
-					plan: cart.feedPlan,
-					//target: cart.target,
-					isActive: true
-				}));
-				// if(typeof oldNotification.feedInfo != 'boolean'){
-					notificationModel.feedInfo = true;
-				// }
+					user: user,
+					transaction: feedPlanTransaction.id,
+					plan: feedPlanTransaction.item.id,
+					isActive: true,
+					trainer: feedPlanTransaction.item.trainerId  || 1,
+				}).fetch());
+				notificationModel.feedInfo = true;
 				if(feedPlan.isWithConsulting){
-					// if(typeof oldNotification.consultInfo != 'boolean'){
-						notificationModel.consultInfo = true;
-					// }
+					notificationModel.consultInfo = true;
 				}
 				if(!oldFeedsCount){
 					notificationModel.updateSurvey = true;
