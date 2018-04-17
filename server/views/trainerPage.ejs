@@ -1,4 +1,9 @@
 <section class="site-wrapper" style="margin-top: 70px;overflow: hidden;">
+
+    <% if(isEditMode){ %>
+    <input type="hidden" name="info-id" id="info-id" value="<%- info.id %>" />
+    <% } %>
+
     <div class="container no-padding resume-header bg-dark">
         <div class="row align-items-center">
             <div class="col-lg-6 no-padding">
@@ -8,15 +13,27 @@
                 <div class="clearfix">
                     <div class="media mb10 wow fadeInUp" data-wow-delay=".150ms">
                         <div class="media-body">
-                        	<h2 class="h1 mb0" data-hint>Przemysław Bulski</h2>
-                            <p class="lead" data-hint>Trener personalny, dietetyk</p>
-
-                            <p class="mt-20 mb10 text-left" data-main-text>Nazywam się Przemek. Zajmuję się treningiem personalnym a także układaniem diet. Specjalizuję się szczególnie w diecie tłuszczowej, także jeżeli lubisz wpierdalać dużo tłuszczu i w chuj jajek to dobrze trafiłeś:)</p>
+                        	<h2 class="h1 mb0" data-hint><%- info.user.name %></h2>
+                            <p class="lead" data-hint>
+                                <% if(info.isTrainer && info.isFeedCounsultant){ %>
+                                Trener personalny, dietetyk
+                                <% } else if(info.isTrainer){ %>
+                                Trener personalny
+                                <% } else if(info.isFeedCounsultant){ %>
+                                Dietetyk
+                                <% } else { %>
+                                <b>Ustaw swoją specjalizację na stronie proiflu.</b>
+                                <% } %>                            
+                            </p>
+                            <p class="mt-20 mb10 text-left" style="min-height: 50px;" data-main-text><%- info.mainText || "Opis" %></p>
                         </div>
                     </div>
                     <div class="buttons media mb10 wow fadeInUp" data-wow-delay=".300ms">
-                        <a href="#" class="btn btn-primary btn-rounded">Zamów trening</a>
-                        <a href="#" class="btn btn-light btn-rounded">Wykup konsultację</a>
+                        <% if(info.isTrainer){ %>
+                        <a href="#trainings" onclick="ScrollTo('trainings', event)" class="btn btn-primary btn-rounded">Zamów trening</a>
+                        <% } if(info.isFeedCounsultant) { %>
+                        <a href="#feedPlans" onclick="ScrollTo('feedPlans', event)" class="btn btn-light btn-rounded">Wykup konsultację</a>
+                        <% } %>
                     </div>
                 </div>
             </div>              
@@ -35,18 +52,18 @@
 
                 <h4 class="text-left"><i class="ti-image"></i> Wyszktałcenie, kursy, certyfikaty</h4>
                 <ul data-edit-list="certificates">
-                    <li>AWF Poznań (specjalność dietetyka)</li>
-                    <li>Kurs piewszy z zakresu szkolenia</li>
-                    <li>Certyfikat z żywienia organicznego (ABC)</li>
-                    <li>Kurs gotowania Gordona Ramseya (ABC)</li>
+                    <% if(typeof info.certificates == 'object') for(let i = 0; i < info.certificates.length; i++) {%>
+                        <li><%- info.certificates[i] %></li>
+                    <% } %>
                 </ul>
             </div>  
             <div class="col-lg-6">
                 <div class="clearfix">
                     <h4 class="text-left"><i class="ti-wand"></i> Osiągnięcia</h4>
                     <ul data-edit-list="achivements">
-                        <li>Osiągnięcie 1</li>
-                        <li>Osiągnięcie 2</li>
+                        <% if(typeof info.achivements == 'object') for(let i = 0; i < info.achivements.length; i++) {%>
+                            <li><%- info.achivements[i] %></li>
+                        <% } %>
                     </ul>
                 </div>
 
@@ -143,44 +160,78 @@
             </div>              
         </div>
     </div>
-
-    <div class="container pt20 pb20 bg-dark">
+    <% if(info.isTrainer){ %>
+    <div class="container pt20 pb20 bg-dark" id='trainings'>
         <h3 class="text-primary center-title mb10 h1 text-left">Trening personalny</h3>
         <div style="padding-left: 50px;padding-right: 50px;">
             <div class="row">
                 <div class="col-sm-4">
                     <h3 class="font100 text-primary">Moja specjalizacja:</h3>
                     <ul class="text-white-gray" data-check-list="trainingSpecialization">
-                        <li data-field='isTrainFitness'>Kulturystyka i fitness</li>
-                        <li  data-field='isTrainLifting'>Podnoszenie ciężarów</li>
-                        <li  data-field='isTrainSwimming'>Pływanie</li>
-                        <li  data-field='isTrainFighting'>Sporty walki</li>
-                        <li  data-field='isTrainBike'>Kolarstwo</li>
-                        <li  data-field='isTrainYoga'>Yoga</li>
+                        <% if(isEditMode){ %>
+                            <li data-field='isTrainFitness' <% if(info.isTrainFitness) {%> data-checked="checked" <% } %> >Kulturystyka i fitness</li>
+                            <li data-field='isTrainLifting' <% if(info.isTrainLifting) {%> data-checked="checked" <% } %> >Podnoszenie ciężarów</li>
+                            <li data-field='isTrainSwimming' <% if(info.isTrainSwimming) {%> data-checked="checked" <% } %> >Pływanie</li>
+                            <li data-field='isTrainFighting' <% if(info.isTrainFighting) {%> data-checked="checked" <% } %> >Sporty walki</li>
+                            <li data-field='isTrainBike' <% if(info.isTrainBike) {%> data-checked="checked" <% } %> >Kolarstwo</li>
+                            <li data-field='isTrainYoga' <% if(info.isTrainYoga) {%> data-checked="checked" <% } %> >Yoga</li>
+                        <% } else { %>
+                            <% if(info.isTrainFitness) {%> <li>Kulturystyka i fitness</li> <% } %>
+                            <% if(info.isTrainLifting) {%> <li>Podnoszenie ciężarów</li> <% } %>
+                            <% if(info.isTrainSwimming) {%> <li>Pływanie</li> <% } %>
+                            <% if(info.isTrainFighting) {%> <li>Sporty walki</li> <% } %>
+                            <% if(info.isTrainBike) {%> <li>Kolarstwo</li> <% } %>
+                            <% if(info.isTrainYoga) {%> <li>Yoga</li> <% } %>
+                        <% } %>
                     </ul>
                 </div>
 
                 <div class="col-sm-4">
                     <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
                     <ul class="text-white-gray" data-check-list="trainingHelp">
-                        <li  data-field='isTrainHelpLessWeight'>Redukcja wagi</li>
-                        <li  data-field='isTrainHelpHealthImprove'>Ogólna poprawa stanu zdrowia</li>
-                        <li  data-field='isTrainHelpRehabilitation'>Rehabilitacja</li>
-                        <li  data-field='isTrainHelpFixWeight'>Poprawa sylwetki (masa)</li>
-                        <li  data-field='isTrainHelpFixShape'>Poprawa sywetki (rzeźba)</li>
-                        <li  data-field='isTrainHelpSportResults'>Poprawa wyników sportowych</li>
+                        <% if(isEditMode){ %>
+                            <li data-field='isTrainHelpLessWeight' <% if(info.isTrainHelpLessWeight) {%> data-checked="checked" <% } %> >Redukcja wagi</li>
+                            <li data-field='isTrainHelpHealthImprove' <% if(info.isTrainHelpHealthImprove) {%> data-checked="checked" <% } %> >Ogólna poprawa stanu zdrowia</li>
+                            <li data-field='isTrainHelpRehabilitation' <% if(info.isTrainHelpRehabilitation) {%> data-checked="checked" <% } %> >Rehabilitacja</li>
+                            <li data-field='isTrainHelpFixWeight' <% if(info.isTrainHelpFixWeight) {%> data-checked="checked" <% } %> >Poprawa sylwetki (masa)</li>
+                            <li data-field='isTrainHelpFixShape' <% if(info.isTrainHelpFixShape) {%> data-checked="checked" <% } %> >Poprawa sywetki (rzeźba)</li>
+                            <li data-field='isTrainHelpSportResults' <% if(info.isTrainHelpSportResults) {%> data-checked="checked" <% } %> >Poprawa wyników sportowych</li>
+                        <% } else { %>
+                            <% if(info.isTrainHelpLessWeight) {%> <li>Redukcja wagi</li> <% } %>
+                            <% if(info.isTrainHelpHealthImprove) {%> <li>Ogólna poprawa stanu zdrowia</li> <% } %>
+                            <% if(info.isTrainHelpRehabilitation) {%> <li>Rehabilitacja</li> <% } %>
+                            <% if(info.isTrainHelpFixWeight) {%> <li>Poprawa sylwetki (masa)</li> <% } %>
+                            <% if(info.isTrainHelpFixShape) {%> <li>Poprawa sywetki (rzeźba)</li> <% } %>
+                            <% if(info.isTrainHelpSportResults) {%> <li>Poprawa wyników sportowych</li> <% } %>
+                        <% } %>
                     </ul>
                 </div>
 
                 <div class="col-sm-4">
                     <h3 class="font100 text-primary">Gdzie trenuję?</h3>
-                    <p class="lead text-white-gray text-left mb0"><strong>Poznań</strong></p>
-                    <ul class="text-white-gray" data-edit-list="trainingPlaces">
-                        <li>Poznań Jatomi PKP</li>
-                        <li>Poznań Fabryka Formy Bałtyk</li>
-                        <li>Poznań Cytadela</li>
-                        <li>Luboń Jatomi</li>
-                        <li>Komorniki u Ździcha</li>
+                    <p class="lead text-white-gray text-left mb0">
+                        <% if(isEditMode){ %>
+                            <input type="hidden" id="city-num" value="<%- info.city %>">
+                            <select data-city-edit>
+                                <option value="1">Warszawa</option>
+                                <option value="2">Kraków</option>
+                                <option value="3">Łódź</option>
+                                <option value="4">Wrocław</option>
+                                <option value="5">Poznań</option>
+                                <option value="6">Gdańsk</option>
+                                <option value="7">Szczecin</option>
+                            </select>
+                        <% } else { %>
+                            <strong>
+                                <% let cityName = ["", "Warszawa", "Kraków", "Łódź", "Wrocław", "Poznań", "Gdańsk", "Szczecin"][info.city]; %>
+                                <%- cityName %>
+                            </strong>
+                        <% } %>
+                    </p>
+                    <ul class="text-white-gray" data-edit-list="trainPlaces">
+                        <% if(typeof info.trainPlaces == 'object') for(let i = 0; i < info.trainPlaces.length; i++) {%>
+                            <li><%- info.trainPlaces[i] %></li>
+                        <% } %>
                     </ul>
                 </div>
             </div>
@@ -211,119 +262,112 @@
     </div>
 
     <div class="container">
-        <h4 class="mb20 mt-20 text-left">Zadzwoń, zapytaj o dostępność terminów: <a data-hint href="tel:555-37-37-37">555-37-37-37 <i class="ti-mobile"></i></a> </h4>
+        <h4 class="mb20 mt-20 text-left">Zadzwoń, zapytaj o dostępność terminów: <a data-hint href="tel:<%- info.user.phone %>"><%- info.user.phone %> <i class="ti-mobile"></i></a> </h4>
+        <% if(!trainPlans || !trainPlans.length) {%>
+            <h3 style="color:red;">Błąd ładowania planów treningowych.</h3>
+        <% } else {%>
         <div class="row">
-            <div class="col-sm-4 mb40 wow fadeInUp" data-wow-delay=".200s">
-                <!-- <form action="/addItemToCart" method="POST"> -->
-                    <div class="pricing-card">
-                        <input type="hidden" name="trainingPlan" value="11">
-                        <header class="pricing-header clearfix">
-                            <div class="price-title">Pojedynczy trening</div>
-                            <div class="float-right price">
-                                <span class='old-price'><strike data-train-price-edit='Old'>99</strike> <sup>zł</sup></span>
-                                <span data-train-price-edit='New'>50</span><sup>zł</sup>
-                            </div>                                
-                        </header>
-                        <div class="pricing-features">
-                            <ul class="list-unstyled" data-edit-list="train-features">
-                                <li data-omit-edit>
-                                   Treningów w cenie: <b data-train-count-edit>1</b>
-                                </li>
-                                <li>
-                                    Pojedyncza przygoda
-                                </li>
-                                <li>Pełne 60 minut treningu</li>
-                                <li>Świętna opcja</li>
-                            </ul>                              
-                        </div><!--pricing features-->
-                        <footer class="pricing-footer text-center">                                    
-                            <button class="btn btn-outline-info">Dodaj do koszyka</button>
-                        </footer>
-                    </div><!--/pricing card-->
-            </div>
-            <div class="col-sm-4 mb40 wow fadeInUp" data-wow-delay=".400s">
-                    <div class="pricing-card active">
-                        <input type="hidden" name="trainingPlan" value="22">
-                        <header class="pricing-header clearfix">
-                            <div class="price-title">Dwa treningi</div>
-                            <div class="float-right price">
-                                <span class='old-price'><strike data-train-price-edit='Old'>149</strike> <sup>zł</sup> </span>
-                                <span data-train-price-edit='New'>100</span> <sup>zł</sup>
-                            </div>                                
-                        </header>
-                        <div class="pricing-features">
-                            <ul class="list-unstyled" data-edit-list="train-features">
-                                <li data-omit-edit>
-                                   Treningów w cenie: <b data-train-count-edit>2</b>
-                                </li>
-                                <li>
-                                    Nie pojedyncza przygoda
-                                </li>
-                                <li>Pełne 60 minut treningu</li>
-                                <li>Świętna opcja</li>
-                            </ul>                              
-                        </div><!--pricing features-->
-                        <footer class="pricing-footer text-center">                                    
-                            <button class="btn btn-outline-info">Dodaj do koszyka</button>
-                        </footer>
-                    </div><!--/pricing card-->
-            </div>
-            <div class="col-sm-4 mb40 wow fadeInUp" data-wow-delay=".600s">
-                    <div class="pricing-card">
-                        <input type="hidden" name="trainingPlan" value="33">
-                        <header class="pricing-header clearfix">
-                            <div class="price-title">Pięć treningów</div>
-                            <div class="float-right price">
-                                <span class='old-price'><strike data-train-price-edit='Old'>500</strike> <sup>zł</sup> </span>
-                                <span data-train-price-edit='New'>300</span> <sup>zł</sup>
-                            </div>                                
-                        </header>
-                        <div class="pricing-features">
-                            <ul class="list-unstyled" data-edit-list="train-features">
-                                <li data-omit-edit>
-                                   Treningów w cenie: <b data-train-count-edit>5</b>
-                                </li>
-                                <li>
-                                    Nie pojedyncza przygoda
-                                </li>
-                                <li>Pełne 60 minut treningu</li>
-                                <li>Świętna opcja</li>
-                            </ul>                              
-                        </div><!--pricing features-->
-                        <footer class="pricing-footer text-center">                                    
-                            <button class="btn btn-outline-info">Dodaj do koszyka</button>
-                        </footer>
-                    </div><!--/pricing card-->
-                <!-- </form> -->
-            </div>
-        </div>              
-    </div> 
+            <% 
+                let maxPointsCount = 0;
+                for(let i = 0; i < trainPlans.length; i++) {
+                    const pointsCount = (trainPlans[i].description || '').split(/\n/).length;
+                    if(maxPointsCount < pointsCount){
+                        maxPointsCount = pointsCount;
+                    }
+                }
+            %>
 
-    <div class="container pt20 pb20 bg-dark">
+            <% for(let i = 0; i < trainPlans.length; i++) {%>
+                <% let plan = trainPlans[i]; %>
+                <div class="col-sm-4 mb40 wow fadeInUp" data-wow-delay=".<%- i+1 %>s">
+                    <form action="/addItemToCart" method="POST">
+                        <input type="hidden" name="trainingPlan" value="<%- plan.id %>">
+                        <div class="pricing-card <%- plan.isRecomended ? 'active':'' %>">                            
+                            <header class="pricing-header clearfix">
+                                <div class="price-title" data-price-title><span><%- plan.name || "Nazwa" %></span></div>
+                                <div class="float-right price">
+                                    <% if(plan.priceOld || isEditMode) {%>
+                                    <span class='old-price' <% if(!plan.priceOld) {%> style="opacity:0.3;" <% } %> ><strike data-train-price-edit='Old'><%- plan.priceOld || 0 %></strike> <sup>zł</sup></span>
+                                    <% } %>
+                                    <span data-train-price-edit=''><%- plan.price %></span><sup>zł</sup>
+                                </div>                                
+                            </header>
+                            <div class="pricing-features">
+                                <ul class="list-unstyled" data-train-features-list data-edit-list>
+                                    <li data-omit-edit>
+                                       Treningów w cenie: <b data-train-count-edit><%- plan.trainsCount %></b>
+                                    </li>
+                                    <% const features = (plan.description || '').split(/\n/); %>
+                                    <% for(let k = 0; k < features.length; k++) {%>
+                                        <% if(features[k].trim()) {%>
+                                        <li>
+                                            <%- features[k] %>   
+                                        </li>
+                                        <% } %>
+                                    <% } %>
+
+                                    <% if(!isEditMode) for(let k = 0; k < maxPointsCount - features.length; k++) {%>
+                                    <li class='empty-point'>
+                                        &nbsp;
+                                    </li>
+                                    <% } %>
+                                </ul>                              
+                            </div><!--pricing features-->
+                            <footer class="pricing-footer text-center">                                    
+                                <button class="btn btn-outline-info">Dodaj do koszyka</button>
+                            </footer>
+                        </div><!--/pricing card-->
+                    </form>
+                </div>
+            <% } %>
+        </div>       
+        <% } %>       
+    </div> 
+    <% } %>
+    <% if(info.isFeedCounsultant){ %>
+    <div class="container pt20 pb20 bg-dark" id="feedPlans">
         <h3 class="text-primary center-title mb10 h1 text-left">Doradztwo żywieniowe</h3>
         <div style="padding-left: 50px;padding-right: 50px;">
             <div class="row">
                 <div class="col-sm-6">
                     <h3 class="font100 text-primary">Moja specjalizacja:</h3>
                     <ul class="text-white-gray" data-check-list="feedSpecialization">
-                        <li data-field='isFeedBalance'>Dieta  zbilansowana</li>
-                        <li data-field='isFeedWege'>Dieta  wegańska / wegetaiańska</li>
-                        <li data-field='isFeedProtein'>Dieta białkowa</li>
-                        <li data-field='isFeedFat'>Dieta tłuszczowa</li>
-                        <li data-field='isFeedAlkalising'>Dieta alkalizująca</li>
-                        <li data-field='isFeedCleaning'>Dieta oczyszczająca</li>
+                        <% if(isEditMode){ %>
+                            <li data-field='isFeedBalance' <% if(info.isFeedBalance) {%> data-checked="checked" <% } %> >Dieta  zbilansowana</li>
+                            <li data-field='isFeedWege' <% if(info.isFeedWege) {%> data-checked="checked" <% } %> >Dieta  wegańska / wegetaiańska</li>
+                            <li data-field='isFeedProtein' <% if(info.isFeedProtein) {%> data-checked="checked" <% } %> >Dieta białkowa</li>
+                            <li data-field='isFeedFat' <% if(info.isFeedFat) {%> data-checked="checked" <% } %> >Dieta tłuszczowa</li>
+                            <li data-field='isFeedAlkalising' <% if(info.isFeedAlkalising) {%> data-checked="checked" <% } %> >Dieta alkalizująca</li>
+                            <li data-field='isFeedCleaning' <% if(info.isFeedCleaning) {%> data-checked="checked" <% } %> >Dieta oczyszczająca</li>
+                        <% } else { %>
+                            <% if(info.isFeedBalance) {%> <li>Dieta  zbilansowana</li> <% } %>
+                            <% if(info.isFeedWege) {%> <li>Dieta  wegańska / wegetaiańska</li> <% } %>
+                            <% if(info.isFeedProtein) {%> <li>Dieta białkowa</li> <% } %>
+                            <% if(info.isFeedFat) {%> <li>Dieta tłuszczowa</li> <% } %>
+                            <% if(info.isFeedAlkalising) {%> <li>Dieta alkalizująca</li> <% } %>
+                            <% if(info.isFeedCleaning) {%> <li>Dieta oczyszczająca</li> <% } %>
+                        <% } %>
                     </ul>
                 </div>
 
                 <div class="col-sm-6">
                     <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
                     <ul class="text-white-gray" data-check-list="feedHelp">
-                        <li data-field='isFeedHelpLessWeight'>Redukcja wagi</li>
-                        <li data-field='isFeedHelpHealthImprove'>Ogólna poprawa stanu zdrowia</li>
-                        <li data-field='isFeedHelpRehabilitation'>Rehabilitacja</li>
-                        <li data-field='isFeedHelpFixWeight'>Poprawa sylwetki (masa)</li>
-                        <li data-field='isFeedHelpFixShape'>Poprawa sywetki (rzeźba)</li>
-                        <li data-field='isFeedHelpSportResults'>Poprawa wyników sportowych</li>
+                        <% if(isEditMode){ %>
+                            <li data-field='isFeedHelpLessWeight' <% if(info.isFeedHelpLessWeight) {%> data-checked="checked" <% } %> >Redukcja wagi</li>
+                            <li data-field='isFeedHelpHealthImprove' <% if(info.isFeedHelpHealthImprove) {%> data-checked="checked" <% } %> >Ogólna poprawa stanu zdrowia</li>
+                            <li data-field='isFeedHelpRehabilitation' <% if(info.isFeedHelpRehabilitation) {%> data-checked="checked" <% } %> >Rehabilitacja</li>
+                            <li data-field='isFeedHelpFixWeight' <% if(info.isFeedHelpFixWeight) {%> data-checked="checked" <% } %> >Poprawa sylwetki (masa)</li>
+                            <li data-field='isFeedHelpFixShape' <% if(info.isFeedHelpFixShape) {%> data-checked="checked" <% } %> >Poprawa sywetki (rzeźba)</li>
+                            <li data-field='isFeedHelpSportResults' <% if(info.isFeedHelpSportResults) {%> data-checked="checked" <% } %> >Poprawa wyników sportowych</li>
+                        <% } else { %>
+                            <% if(info.isFeedHelpLessWeight) {%> <li>Redukcja wagi</li> <% } %>
+                            <% if(info.isFeedHelpHealthImprove) {%> <li>Ogólna poprawa stanu zdrowia</li> <% } %>
+                            <% if(info.isFeedHelpRehabilitation) {%> <li>Rehabilitacja</li> <% } %>
+                            <% if(info.isFeedHelpFixWeight) {%> <li>Poprawa sylwetki (masa)</li> <% } %>
+                            <% if(info.isFeedHelpFixShape) {%> <li>Poprawa sywetki (rzeźba)</li> <% } %>
+                            <% if(info.isFeedHelpSportResults) {%> <li>Poprawa wyników sportowych</li> <% } %>
+                        <% } %>
                     </ul>
                 </div>
             </div>
@@ -360,105 +404,65 @@
     </div>
 
     <div class="container">
-        <h3 class="text-primary center-title mb10 h1 text-left">Doradztwo dietetyczne</h3>
-        <div class="clearfix free-sample-block" style="padding-left: 100px;padding-right: 100px;">
+        <h3 class="text-primary center-title mb10 h1 text-left">Doradztwo dietetyczne</h3>        
+        <% if(info.isFreeTrainingEnabled || isEditMode){ %>
+        <div class="clearfix free-sample-block" style="padding-left: 100px;padding-right: 100px;  
+        <% if(!info.isFreeTrainingEnabled){ %>display: none;<% } %>">
             <p class="lead">Wypróbuj pierwszą konsultację zupełnie za darmo.</p>
             <p>Otwórz konto, oznacz swoje cele, wypełnij pierwszy dzień swojego dziennika żywieniowego a ja specjalnie dla Ciebie opracuję analizę oraz zestaw wstępnych zaleceń.</p>
             <a href="#" class="btn btn-primary pull-right">Dowiedz się więcej</a>
         </div>
+        <% } %>
         <p class="lead">Zakup diety - określ przez ile tygodni chcesz ze mną współpracować</p>
-        <div style="padding-left: 100px;padding-right: 100px;">
-
-            <div class="container feed-plans">
-                <div class="row feed-header">
-                    <div class="col-xs-4 col-sm-4"> &nbsp; </div>
-                    <div class="col-xs-4 col-sm-4">
-                        <label>Okres</label>
+        <form action="/addItemToCart" method="POST">
+            <div style="padding-left: 100px;padding-right: 100px;">
+                <div class="container feed-plans">
+                    <div class="row feed-header">
+                        <div class="col-xs-4 col-sm-4"> &nbsp; </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <label>Okres</label>
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <label>Cena</label>
+                        </div>
                     </div>
-                    <div class="col-xs-4 col-sm-4">
-                        <label>Cena</label>
+                    <% for(let i = 0; i < feedPlans.length; i++) {%>
+                        <% let plan = feedPlans[i]; let word = 'tygodni'; %>
+                        <% if(plan.weeks < 6){word = 'tygodnie';} %>
+                        <% if(plan.weeks == 1){word = 'tydzień';} %> 
+                        <div class="row feed-item">
+                            <div class="col-xs-4  col-sm-4 feed-cell">
+                                <div class="feed-checkbox">
+                                    <label class="custom-control custom-radio">
+                                        <input name="feedPlan" type="radio" value="<%- plan.id %>" 
+                                            <% if(i === 2) {%>
+                                                checked='checked'
+                                            <% } %>
+                                            class="custom-control-input"/>
+                                        <span class="custom-control-indicator"></span>
+                                    </label>
+                                </div>                            
+                            </div>
+                            <div class="col-xs-4  col-sm-4 feed-cell">
+                                <h3 class='feed-title'><%- plan.weeks %> <%- word %></h3>
+                            </div>
+                            <div class="col-xs-4  col-sm-4 feed-cell">
+                                <div class="col-md-12 feed-price"><span data-feed-price-edit><%- plan.price %></span> zł</div>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="container pb30">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button class="btn btn-outline-info btn-lg pull-right">Dodaj do koszyka</button>
+                        </div>
                     </div>
                 </div>
-                    <div class="row feed-item">
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <div class="feed-checkbox">
-                                <label class="custom-control custom-radio">
-                                    <input name="feedPlan" type="radio" value="1" 
-                                    class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                </label>
-                            </div>                            
-                        </div>
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <h3 class='feed-title'>1  tydzień</h3>
-                        </div>
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <div class="col-md-12 feed-price"><span data-feed-price-edit>200</span> zł</div>
-                        </div>
-                    </div>
-                    <div class="row feed-item">
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <div class="feed-checkbox">
-                                <label class="custom-control custom-radio">
-                                    <input name="feedPlan" type="radio" value="2" 
-                                        checked='checked'
-                                    class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                </label>
-                            </div>                            
-                        </div>
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <h3 class='feed-title'>2  tygodnie</h3>
-                        </div>
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <div class="col-md-12 feed-price"><span data-feed-price-edit>300</span> zł</div>
-                        </div>
-                    </div>
-                    <div class="row feed-item">
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <div class="feed-checkbox">
-                                <label class="custom-control custom-radio">
-                                    <input name="feedPlan" type="radio" value="3" 
-                                    class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                </label>
-                            </div>                            
-                        </div>
-                        <div class="col-xs-4  col-sm-4 feed-cell">
-                            <h3 class='feed-title'>4  tygodnie</h3>
-                        </div>
-                        <div class="col-xs-4 col-sm-4 feed-cell">
-                            <div class="col-md-12 feed-price"><span data-feed-price-edit>400</span> zł</div>
-                        </div>
-                    </div>
-                    <div class="row feed-item">
-                        <div class="col-xs-4 col-sm-4 feed-cell">
-                            <div class="feed-checkbox">
-                                <label class="custom-control custom-radio">
-                                    <input name="feedPlan" type="radio" value="4"
-                                    class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                </label>
-                            </div>                            
-                        </div>
-                        <div class="col-xs-4 col-sm-4 feed-cell">
-                            <h3 class='feed-title'>8  tygodni</h3>
-                        </div>
-                        <div class="col-xs-4 col-sm-4 feed-cell">
-                            <div class="col-md-12 feed-price"><span data-feed-price-edit>600</span> zł</div>
-                        </div>
-                    </div>
-            </div>
-
-            <div class="container pb30">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <button class="btn btn-outline-info btn-lg pull-right">Dodaj do koszyka</button>
-                    </div>
-                </div>
-            </div>
-        </div> 
+            </div> 
+        </form>
     </div>
+    <% } %>
 </section>
 
 <% include ./partials/contact %>

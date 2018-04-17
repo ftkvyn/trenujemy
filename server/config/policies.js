@@ -54,9 +54,9 @@ module.exports.policies = {
   },
 
   CartController:{
-    'addItem': true,
+    'addItem': 'notTrainer',
     'removeItem':true,
-    'payment':'sessionAuthRedirectToLogin',
+    'payment': ['sessionAuthRedirectToLogin', 'notTrainer'],
     '*':'sessionAuthRedirectToLogin',
     'verify':true
   },
@@ -76,6 +76,7 @@ module.exports.policies = {
   TrainerInfoController:{
     '*': 'isCurrentTrainerInfo',
     'updateRoute': 'isCurrentTrainerInfo',
+    'approveByAdmin':'isImpersonatedAdmin',
     'find': 'sessionAuth',
     'findOne':'sessionAuth',
     'create':false,
@@ -100,6 +101,7 @@ module.exports.policies = {
 
   TrainPlanController:{
     '*':'isTrainer',
+    'update':'isTrainersTrainPlan',
     'find':true,
     'findOne':true,
   },
@@ -112,6 +114,7 @@ module.exports.policies = {
 
   FeedPlanController:{
     'find':true,
+    'update':'isTrainersFeedPlan',
     'create':false,
     'destroy':false
   },

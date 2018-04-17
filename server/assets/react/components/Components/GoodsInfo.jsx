@@ -15,10 +15,17 @@ const GoodsInfo = (props) => {
     }else {
         if(props.goods.feedPlan){
             if(props.goods.feedPlan.plan.isWithConsulting){
-                purchasedFeedPlanItem = <div className='list-group-item'><Row>
+                purchasedFeedPlanItem = <div className='list-group-item'>
+                <Row>
                     <label className="col-lg-2 col-md-4 control-label text-right">Wykupiona usługa:</label>
                     <Col lg={ 10 } md={8}>
-                        Plan dietetyczny, plan treningowy + codzienna konsultacja
+                        Plan dietetyczny + codzienna konsultacja
+                    </Col>
+                </Row>
+                <Row>
+                    <label className="col-lg-2 col-md-4 control-label text-right">Konsultant:</label>
+                    <Col lg={ 10 } md={8}>
+                        {props.goods.feedPlan.trainer.name}
                     </Col>
                 </Row>
                 <Row>
@@ -31,7 +38,13 @@ const GoodsInfo = (props) => {
                 purchasedFeedPlanItem = <div className='list-group-item'><Row>
                     <label className="col-lg-2 col-md-4 control-label text-right">Wykupiona usługa:</label>
                     <Col lg={ 10 } md={8}>
-                        Plan dietetyczny + plan treningowy
+                        Plan dietetyczny
+                    </Col>
+                </Row>
+                <Row>
+                    <label className="col-lg-2 col-md-4 control-label text-right">Konsultant:</label>
+                    <Col lg={ 10 } md={8}>
+                        {props.goods.feedPlan.trainer.name}
                     </Col>
                 </Row>
                 <Row>
@@ -79,10 +92,17 @@ const GoodsInfo = (props) => {
 
   	return <div className='list-group mb0'>
         {purchasedFeedPlanItem}
-        {trains.map( (item, num) => <div key={num} className='list-group-item'><Row>
+        {trains.map( (item, num) => <div key={num} className='list-group-item'>
+        <Row>
             <label className="col-lg-2 col-md-4 control-label text-right">Wykupiona usługa:</label>
             <Col lg={ 10 } md={8}>
                 {item.plan.name}
+            </Col>
+        </Row>
+        <Row>
+            <label className="col-lg-2 col-md-4 control-label text-right">Trener:</label>
+            <Col lg={ 10 } md={8}>
+                {item.trainer.name}
             </Col>
         </Row>
         <Row>

@@ -27,16 +27,29 @@ module.exports = {
 				if(!info){
 					return res.notFound();
 				}
-				return res.view('trainerPage', 
-				{
-					isTrainerPage : true,
-					isEditMode : false,
-					locals: {
-						user: req.session.user, 
-						cart: req.session.cart,
-					},
-					info: info
-				});
+				let qs = [];
+				qs.push(FeedPlan.find({trainer: info.user.id, isFreeSample: false, isVisible: true}));
+				qs.push(TrainPlan.find({trainer: info.user.id, isActive: true}));
+
+				Q.all(qs)
+				.catch(function(err){
+					console.error(err);
+					return res.notFound();
+				})
+				.then(function(data){
+					return res.view('trainerPage', 
+					{
+						isTrainerPage : true,
+						isEditMode : false,
+						locals: {
+							user: req.session.user, 
+							cart: req.session.cart,
+						},
+						info: info,
+						feedPlans: data[0],
+						trainPlans: data[1]
+					});
+				});					
 			});		
 	},
 
@@ -57,15 +70,29 @@ module.exports = {
 					if(info.user.id != req.session.user.id){
 						return res.forbidden();
 					}
-					return res.view('trainerPage', 
-					{
-						isTrainerPage : true,
-						isEditMode : true,
-						locals: {
-							user: req.session.user, 
-							cart: req.session.cart,
-						},
-						info: info
+
+					let qs = [];
+					qs.push(FeedPlan.find({trainer: info.user.id, isFreeSample: false, isVisible: true}));
+					qs.push(TrainPlan.find({trainer: info.user.id, isActive: true}));
+
+					Q.all(qs)
+					.catch(function(err){
+						console.error(err);
+						return res.notFound();
+					})
+					.then(function(data){
+						return res.view('trainerPage', 
+						{
+							isTrainerPage : true,
+							isEditMode : true,
+							locals: {
+								user: req.session.user, 
+								cart: req.session.cart,
+							},
+							info: info,
+							feedPlans: data[0],
+							trainPlans: data[1]
+						});
 					});
 				}
 				catch(err){

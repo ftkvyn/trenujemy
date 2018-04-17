@@ -13,6 +13,7 @@ import { saveTrainerInfo, loadTrainerInfo, saveTrainerRoute } from '../Common/tr
 let hideAlertSuccess = null;
 let hideAlertError = null;
 let saveHandler = null;
+let saveTrainerHandler = null;
 let saveRouteHandler = null;
 
 function saveUserFn(newUser){
@@ -204,6 +205,20 @@ class Profile extends React.Component {
         saveHandler();
     }
 
+    handleTrainerChange(event) {
+        let fieldName = event.target.name;
+        let fieldVal = event.target.value;
+        let newInfo = this.state.trainerInfo;        
+        newInfo[fieldName] = fieldVal
+        this.setState({trainerInfo: newInfo});        
+
+        if(saveTrainerHandler){
+            saveTrainerHandler.clear();
+        }
+        saveTrainerHandler = debounce(() => saveTrainerInfo.bind(this)(newInfo), 1000);        
+        saveTrainerHandler();
+    }
+
     handleMailChange(event){
         let fieldVal = event.target.value;
         let isGmailCorrect = /^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$/.test(fieldVal);
@@ -282,8 +297,8 @@ class Profile extends React.Component {
                     <textarea 
                     className="form-control" 
                     name='invoiceInfo'
-                    value={this.state.user.invoiceInfo || ''}
-                    onChange={this.handleChange.bind(this)}></textarea>
+                    value={this.state.trainerInfo.invoiceInfo || ''}
+                    onChange={this.handleTrainerChange.bind(this)}></textarea>
                 </Col>
             </FormGroup>  
             let gmailInputClass = '';

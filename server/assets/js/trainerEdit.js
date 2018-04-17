@@ -1,6 +1,100 @@
 'use strict'
 
+function saveTrainerInfo(model){
+	return new Promise((resolve, reject) => {
+		$.ajax({
+            url: '/api/trainerInfo/' + model.id,
+            type: 'PATCH',
+            data: model,
+            success: function (data) {
+            	resolve(data);                
+            },
+            error: function(err){
+                console.error(err);
+                reject(err);      
+                alert('Błąd przy zapisywaniu danych.');
+            }
+        });
+	});
+}
+
+function saveTrainPlan(model){
+	return new Promise((resolve, reject) => {
+		$.ajax({
+            url: '/api/trainPlan/' + model.id,
+            type: 'PATCH',
+            data: model,
+            success: function (data) {
+            	resolve(data);                
+            },
+            error: function(err){
+                console.error(err);
+                reject(err);      
+                alert('Błąd przy zapisywaniu danych.');
+            }
+        });
+	});
+}
+
+function saveFeedPlan(model){
+	return new Promise((resolve, reject) => {
+		$.ajax({
+            url: '/api/feedPlan/' + model.id,
+            type: 'PATCH',
+            data: model,
+            success: function (data) {
+            	resolve(data);                
+            },
+            error: function(err){
+                console.error(err);
+                reject(err);      
+                alert('Błąd przy zapisywaniu danych.');
+            }
+        });
+	});
+}
+
+function saveList(ulItem, listName, infoId){
+	if(!ulItem.is('[data-train-features-list]')){
+		let items = [];
+	    ulItem.find('li').each(function(){
+	    	let text = $(this).text().trim();
+	    	if(text){
+		    	items.push(text);
+		    }
+	    });
+	    console.log(items);
+
+	    let model = {id: infoId};
+	    model[listName] = items;
+		saveTrainerInfo(model);
+	}else{
+		let description = '';
+		ulItem.find('li').not('[data-omit-edit]').each(function(){
+	    	let text = $(this).text().trim();
+	    	if(text){
+		    	description += text + '\n';
+		    }
+	    });
+	    console.log(description);
+	    let trainPlanId = ulItem.closest('form').find('input[name=trainingPlan]').val();
+	    let model = {id: trainPlanId};
+	    model.description = description;
+		saveTrainPlan(model);
+	}
+}
+
 $(function() {
+	const infoId = $('#info-id').val();
+
+	$("form").submit(function(e){
+        e.preventDefault();
+    });
+
+    $("a").click(function(e){
+        e.preventDefault();
+    });
+
 	const hintText = 'Możesz zmienić tą wartość w ustawieniach konta.';
 	$('[data-hint]').attr('title', hintText);
 	$('[data-hint]').click(function(){
@@ -21,7 +115,8 @@ $(function() {
 			    event.preventDefault();
 			    let value = editor.val();
 			    console.log('save: ' + value);
-			    //ToDo: save value
+			    let model = {id: infoId, mainText: value};
+			    saveTrainerInfo(model);
 			    mainText.text(value);
 			    mainText.show();
 			    editor.remove();
@@ -29,7 +124,6 @@ $(function() {
 		});
 	});
 
-	//ToDo: handle adding and removing items.
 	$('[data-edit-list]').each(function(num){
 		let ulItem = $(this);
 		let listName = ulItem.attr('data-edit-list');
@@ -53,7 +147,6 @@ $(function() {
 				    event.preventDefault();
 				    let value = editorInput.val();
 				    console.log('save(' + listName + '): ' + value);
-				    //ToDo: save value
 				    if(value){
 					    liItem.text(value);
 					    liItem.show();
@@ -61,6 +154,8 @@ $(function() {
 						liItem.remove();
 					}
 				    editor.remove();
+
+				    saveList(ulItem, listName, infoId);
 				}
 			});
 		});
@@ -79,6 +174,7 @@ $(function() {
 				    newItem.before(newLiItem);
 				    newItemEditor.val('');
 				}
+				saveList(ulItem, listName, infoId);
 			}
 		});
 		ulItem.append(newItem);
@@ -90,30 +186,83 @@ $(function() {
 		ulItem.find('li').each(function(liNum){
 			let liItem = $(this);
 			let name = liItem.attr('data-field');
+			let isChecked = !!liItem.attr('data-checked');
 			liItem.removeAttr('data-field');
 			let checkBox = $(`<li><input type="checkbox" id="${name}" /><label for="${name}">${liItem.text()}</label></li>`);
+			if(isChecked){
+				checkBox.find('input').attr('checked', 'checked');
+			}
 			liItem.after(checkBox);
 			liItem.remove();
 			checkBox.find('input').on('change', function(event){
-				//ToDo: save value
-				console.log('save(' + this.id + '): ' + this.checked);				
+				console.log('save(' + this.id + '): ' + this.checked);	
+				let model = {id: infoId};
+				model[name] = this.checked;
+			    saveTrainerInfo(model);			
 			});
 		});
 	});
 
 	let freeSampleBlock = $('.free-sample-block');
-	let freeSapleCheck = $('<div class="free-sample-edit clearfix"><input checked="checked" type="checkbox" id="free-sample-on" /><label for="free-sample-on">Włącz darmową konsultację</label></div>');
+	let freeSapleCheck = $('<div class="free-sample-edit clearfix"><input type="checkbox" id="free-sample-on" /><label for="free-sample-on">Chcę udostępnić możliwość pierwszej konsultacji gratis</label></div>');
+	if(freeSampleBlock.is(':visible')){
+		freeSapleCheck.find('input').attr('checked', 'checked');
+	}
 	freeSapleCheck.find('input').on('change', function(event){
-		//ToDo: save value
 		console.log('save(isFreeSample): ' + this.checked);				
 		if(!this.checked){
 			freeSampleBlock.hide();
 		}else{
 			freeSampleBlock.show();
 		}
+		let model = {id: infoId};
+		model.isFreeTrainingEnabled = this.checked;
+	    saveTrainerInfo(model);		
 	});
 	freeSampleBlock.before(freeSapleCheck);
 
+	let cityNum = $('#city-num').val();
+	$('[data-city-edit]').val(cityNum);
+
+	$('[data-city-edit]').change(function(){
+		let value = $(this).val();
+		let model = {id: infoId, city: value};
+		saveTrainerInfo(model);
+	});
+
+	$('[data-price-title]').each(function(num){
+		let titleItem = $(this);
+		titleItem.click(function(){
+			
+			if(titleItem.find('input').length){
+				return;
+			}
+			let spanItem = titleItem.find('span');
+			let editorInput = $('<input class="form-control" type="text"/>');
+			editorInput.val(spanItem.text());
+			editorInput.css('display','inline');
+			spanItem.hide();
+			spanItem.after(editorInput);
+			editorInput.on('keyup', function(event){
+				if ( event.which == 13 && !event.ctrlKey && !event.shiftKey) {
+				    event.preventDefault();
+				    let value = editorInput.val();
+				    let priceId = titleItem.closest('form').find('[name=trainingPlan]').val();
+				    console.log(`save(trainId=${priceId};name): ${value}`);
+				    if(value){
+					    spanItem.text(value);
+					}else{
+						spanItem.text("Nazwa");
+					}
+					spanItem.show();
+				    editorInput.remove();
+
+				    let model = {id: priceId, name: value};
+				    saveTrainPlan(model);
+				}
+			});
+		});
+	})
 
 	$('[data-train-price-edit]').each(function(num){
 		let priceEl = $(this);
@@ -131,9 +280,11 @@ $(function() {
 				if ( event.which == 13 && !event.ctrlKey && !event.shiftKey) {
 				    event.preventDefault();
 				    let value = editorInput.val() || '0';				    
-				    let priceId = priceEl.closest('[name=trainingPlan]').val();
+				    let priceId = priceEl.closest('form').find('[name=trainingPlan]').val();
 				    console.log(`save(trainId=${priceId};price${priceAttr}): ${value}`);
-				    //ToDo: save value
+				    let model = {id: priceId};
+				    model[`price${priceAttr}`] = value;
+				    saveTrainPlan(model);
 				    priceEl.text(value);
 				    priceEl.show();
 				    if(!+value && priceAttr=='Old'){
@@ -164,9 +315,11 @@ $(function() {
 				    if(!value){
 				    	return;
 				    }
-				    let priceId = countEl.closest('[name=trainingPlan]').val();
-				    console.log(`save(trainId=${priceId};trainCount): ${value}`);
-				    //ToDo: save value
+				    let priceId = countEl.closest('form').find('[name=trainingPlan]').val();
+				    console.log(`save(trainId=${priceId};trainsCount): ${value}`);
+				    let model = {id: priceId};
+				    model.trainsCount = value;
+				    saveTrainPlan(model);
 				    countEl.text(value);
 				    countEl.show();
 				    editorInput.remove();
@@ -193,6 +346,8 @@ $(function() {
 				    let priceId = priceEl.closest('.feed-item').find('[name=feedPlan]').val();
 				    console.log(`save(feedId=${priceId};price): ${value}`);
 				    //ToDo: save value
+				    let model = {id: priceId, price: value};
+				    saveFeedPlan(model);
 				    priceEl.text(value);
 				    priceEl.show();
 				    editorInput.remove();

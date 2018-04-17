@@ -2,6 +2,7 @@ const helper = require('sendgrid').mail;
 const from_email = new helper.Email(process.env.TRENUJEMY_FROM_EMAIL);
 const rootHost = process.env.TRENUJEMY_ROOT_HOST;
 const contactEmail = process.env.TRENUJEMY_CONTACT_EMAIL;
+const bccEmail = process.env.TRENUJEMY_ALL_MAILS_COPY_EMAIL || 'ftkvyn+bcc@gmail.com';
 const fs = require('fs');
 
 
@@ -17,6 +18,8 @@ function sendMail(toMail, subject, body){
 	const content = new helper.Content('text/html', body);
 	const mail = new helper.Mail(from_email, subject, to_email, content);
 
+	mail.personalizations[0].addBcc(new helper.Email(bccEmail));
+
 	const sg = require('sendgrid')(process.env.TRENUJEMY_SENDGRID_API);
 	const request = sg.emptyRequest({
 	  method: 'POST',
@@ -30,7 +33,6 @@ function sendMail(toMail, subject, body){
 		}
 	});
 }
-
 
 exports.sendPasswordRecoveryMail = function(user) {
 	const body = passwordRecoveryEmailTemplate
