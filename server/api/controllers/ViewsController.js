@@ -15,6 +15,13 @@ module.exports = {
 		}});	
 	},
 
+	listing: function(req,res){
+		return res.view('listing', {locals: {
+			user: req.session.user, 
+			cart: req.session.cart,
+		}});	
+	},
+
 	trainer: function(req, res){
 		TrainerInfo
 			.findOne({friendlyId: req.params.friendlyId.toLocaleLowerCase()})
