@@ -6,6 +6,34 @@
  */
 
 const Q = require('q');
+const PAGE_SIZE = 10;
+const searchFields = [
+'isTrainFitness',
+'isTrainLifting',
+'isTrainSwimming',
+'isTrainFighting',
+'isTrainBike',
+'isTrainYoga',
+'isTrainHelpLessWeight',
+'isTrainHelpHealthImprove',
+'isTrainHelpRehabilitation',
+'isTrainHelpFixWeight',
+'isTrainHelpFixShape',
+'isTrainHelpSportResults',
+'isFeedBalance',
+'isFeedWege',
+'isFeedProtein',
+'isFeedFat',
+'isFeedAlkalising',
+'isFeedCleaning',
+'isFeedHelpLessWeight',
+'isFeedHelpHealthImprove',
+'isFeedHelpRehabilitation',
+'isFeedHelpFixWeight',
+'isFeedHelpFixShape',
+'isFeedHelpSportResults',
+'isFreeTrainingEnabled',
+];
 
 module.exports = {
 	home: function(req,res){
@@ -16,10 +44,53 @@ module.exports = {
 	},
 
 	listing: function(req,res){
-		return res.view('listing', {locals: {
-			user: req.session.user, 
-			cart: req.session.cart,
-		}});	
+		const page = +req.query.page || 1;
+		const city = +req.query.city || 0;
+		const type = +req.query.type || ''; // 'trainer' or 'consultant'
+
+		let where = {};
+
+		for (var i = searchFields.length - 1; i >= 0; i--) {
+			let key = searchFields[i];
+			if(req.query[key]){
+				where[key] = true;
+			}
+		}
+
+		if(type == 'trainer'){
+			where.isTrainer = true;
+			if(city){
+				where.city = city;
+			}
+		}else if(type == 'consultant'){
+			where.isFeedCounsultant = true;
+		}
+
+		//ToDo: uncomment
+		// where.isActivatedByTrainer = true;
+		// where.isApprovedByAdmin = true;
+
+		console.log(where);
+		trainersLoader.loadTrainersPage(where, {pageSize: PAGE_SIZE, page: page})
+		.then(function(data){
+			//console.log(data);
+
+			return res.view('listing', {
+				locals: {
+					user: req.session.user, 
+					cart: req.session.cart,
+				},
+				trainers: data.trainers,
+				page: page,
+				totalPages: data.totalPages
+			});
+		})
+		.catch(function (err) {
+	        console.error(err);
+	        return res.serverError();
+	    })
+	    .done();
+			
 	},
 
 	trainer: function(req, res){
