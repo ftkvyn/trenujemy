@@ -51,6 +51,20 @@ module.exports = {
 
 		let where = {};
 
+		let prefix = '';
+		if(type == 'trainer'){
+			prefix = 'isTrainHelp';
+		}else if(type == 'consultant'){
+			prefix = 'isFeedHelp';
+		}
+
+		for(let key in req.query){
+			if(key.indexOf('isHelp') === 0){
+				let newKey = key.replace('isHelp', prefix);
+				req.query[newKey] = req.query[key];
+			}
+		}
+
 		for (var i = searchFields.length - 1; i >= 0; i--) {
 			let key = searchFields[i];
 			if(req.query[key]){

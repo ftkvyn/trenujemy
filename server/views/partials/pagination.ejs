@@ -1,7 +1,7 @@
 <% if (totalPages > 1) { %>
 
 <nav aria-label="Page navigation example" class="pt30 mb0">
-    <ul class="pagination pagination justify-content-end">
+    <ul class="pagination pagination justify-content-center">
 		<% 
 		function getPageLink(page, isActive, linkClass, text){
 			var activeClass = '';
@@ -71,11 +71,12 @@
 			pageEnd = searchTemplate.length;
 		}
 		const pagePart = searchTemplate.slice(pageStart, pageEnd);
-		console.log(pagePart);
 		searchTemplate = searchTemplate.replace(pagePart, '');
+		if(searchTemplate[1] == '&'){
+			searchTemplate = '?' + searchTemplate.substr(2);
+		}
 	}
 	const linkTemplate = window.location.pathname + searchTemplate;
-	console.log(searchTemplate);
 	$('.page-link').each(function() {
 		const linkEl = $(this);
 		const pageNum = linkEl.attr('data-page-num');
