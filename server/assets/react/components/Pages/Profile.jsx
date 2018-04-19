@@ -192,7 +192,7 @@ class Profile extends React.Component {
         let fieldName = event.target.name;
         let fieldVal = event.target.value;
         let newUser = this.state.user;
-        if(fieldName == 'name'){
+        if(fieldName == 'name' && this.state.user.role == 'trainer'){
             newUser.nameChanged = true;
         }
         newUser[fieldName] = fieldVal
@@ -221,7 +221,7 @@ class Profile extends React.Component {
 
     handleMailChange(event){
         let fieldVal = event.target.value;
-        let isGmailCorrect = /^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$/.test(fieldVal);
+        let isGmailCorrect = /^[a-z0-9](\.?[a-z0-9+]){5,}@g(oogle)?mail\.com$/.test(fieldVal);
         this.setState({gmail: fieldVal, isGmailCorrect: isGmailCorrect, gmailProviding: true});
         if(isGmailCorrect){
             updateEmail(fieldVal);
@@ -339,7 +339,7 @@ class Profile extends React.Component {
                  <FormGroup>
                     <label className="col-lg-2 control-label">Konto gmail do synchronizacji kalendarza treningów:</label>
                     <Col lg={ 4 } md={4} sm={6} xs={6}>
-                        <FormControl type="email" placeholder="Gmail email address" 
+                        <FormControl type="email" placeholder="Konto Gmail" 
                             className={gmailInputClass}
                             name='gmail'
                             value={this.state.gmail || ''}

@@ -12,6 +12,7 @@ module.exports = {
 		//ToDo: load training purchases.
 		Training
 		.find({user: userId})
+		.populate('trainer')
 		.exec(function(err, data){
 			if(err){
 				console.error(err);
@@ -45,6 +46,7 @@ module.exports = {
 		model.user = req.body.user;
 		model.place = req.body.place;
 		model.date = new Date(req.body.date);
+		model.trainer = req.session.user.id;
 		TrainPlanPurchase.find({user: model.user, isActive: true})
 		.exec(function(err, data){
 			if(err || !data || !data.length){
@@ -59,6 +61,7 @@ module.exports = {
 
 			qs.push(TrainPlanPurchase.update({id: plan.id},{trainsLeft: plan.trainsLeft - 1}));
 			qs.push(Training.create(model).fetch());
+			qs.push(User.findOne({id: req.session.user.id}));
 
 			Q.all(qs)
 			.catch(function(err){
@@ -69,6 +72,7 @@ module.exports = {
 			})
 			.then(function(data){
 				let training = data[1];
+				let trainerAccount = data[2];
 				res.json(training);
 
 				User.findOne({id: model.user})
@@ -77,7 +81,7 @@ module.exports = {
 						console.error(err);
 					}
 					if(user.email && user.email.indexOf('@gmail.com') != -1){
-						googleCalendarService.addEvent(training, user.login)
+						googleCalendarService.addEvent(training, [user.email, trainerAccount.email])
 						.catch(function(err){
 							console.error(err);
 						})

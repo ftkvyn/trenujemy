@@ -224,7 +224,7 @@ module.exports = {
 					console.error(err);
 					return res.badRequest(err);
 				}
-				UserInfo.create({user: userId, bodySize: bodySize})
+				UserInfo.create({user: userId, bodySize: bodySize.id})
 				.exec(function(err, userInfo){
 					if(err){
 						console.error(err);

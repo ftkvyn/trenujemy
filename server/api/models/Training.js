@@ -25,7 +25,7 @@ module.exports = {
   		required:true
   	},
   	date:{
-  		type: 'string', columnType: 'datetime',
+  		type: 'ref', columnType: 'datetime',
   	},
   	userComment:{
   		type:'string',columnType:'text'

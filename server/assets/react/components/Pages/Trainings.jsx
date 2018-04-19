@@ -123,7 +123,7 @@ class Trainings extends React.Component {
 
     handleMailChange(event){
         let fieldVal = event.target.value;
-        let isGmailCorrect = /^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$/.test(fieldVal);
+        let isGmailCorrect = /^[a-z0-9](\.?[a-z0-9+]){5,}@g(oogle)?mail\.com$/.test(fieldVal);
         this.setState({gmail: fieldVal, isGmailCorrect: isGmailCorrect, gmailProviding: true});
         if(isGmailCorrect){
             updateEmail(fieldVal);
@@ -276,16 +276,7 @@ class Trainings extends React.Component {
         }else{
             phoneForm = <Row className='text-center'>
                 <Col lg={12} md={12} sm={12} xs={12}>
-                    <h3>Umów telefonicznie kolejny trening</h3>
-                </Col>
-                <Col lg={12} md={12} sm={12} xs={12}>
-                    <h3>
-                        <a href="tel:+48-796-756-558">
-                            <i className="fa fa-phone" aria-hidden="true"></i>
-                            <span>796 756 558</span>
-                            <i className="fa fa-phone" aria-hidden="true"></i>
-                        </a>
-                    </h3>
+                    <h3>Umów się z trenerem telefonicznie kolejny trening</h3>
                 </Col>
             </Row>
             let gmailInputClass = '';
@@ -349,7 +340,8 @@ class Trainings extends React.Component {
                                   {moment(training.date).format('dddd DD-MM-YYYY HH:mm')}
                               </Col>
                               <Col lg={ 6 } md={ 6 } sm={6} xs={6}>
-                                  {training.place}
+                                  <p>{training.place}</p>
+                                  <p>Trener: <b>{training.trainer.name}</b></p>
                               </Col>
                           </FormGroup>
                         </Col>

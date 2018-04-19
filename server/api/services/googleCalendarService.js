@@ -20,12 +20,16 @@ calendarConfig.timezone = TIMEZONE;
 
 const CalendarAPI = require('node-google-calendar');
 
-function addEvent(training, userEmail){
+function addEvent(training, userEmails){
 
 	let deferred = Q.defer();
 	try{
 	    let cal = new CalendarAPI(calendarConfig);
 	    let calendarId = 'primary';
+	    let attendees = [];
+	    for (var i = userEmails.length - 1; i >= 0; i--) {
+	    	attendees.push( {email: userEmails[i]} );
+	    }
 
 	    let params = {
 	        'summary': 'Trening',
@@ -34,9 +38,7 @@ function addEvent(training, userEmail){
 	        'start': { 'dateTime': moment(training.date).format() },
 	        'end': { 'dateTime': moment(training.date).add(1,'hours').format() },
 	        'status': 'confirmed',
-	        'attendees': [
-		        {'email': userEmail},
-	        ],          
+	        'attendees': attendees,          
 	    };
 	       
 	    cal.Events.insert(calendarId, params)

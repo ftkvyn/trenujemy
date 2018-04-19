@@ -106,6 +106,16 @@ const GoodsInfo = (props) => {
             </Col>
         </Row>
         <Row>
+            <label className="col-lg-2 col-md-4 control-label text-right">Telefon trenera:</label>
+            <Col lg={ 10 } md={8}>                
+                <a href={"tel:" + item.trainer.phone }>
+                    <i className="fa fa-phone" aria-hidden="true"></i>
+                    <span> {item.trainer.phone} </span>
+                    <i className="fa fa-phone" aria-hidden="true"></i>
+                </a>
+            </Col>
+        </Row>
+        <Row>
             <label className="col-lg-2 col-md-4 control-label text-right">Termin ważności:</label>
             <Col lg={ 10 } md={8}>
                 {item.validToStr}
