@@ -1,3 +1,6 @@
+<script type="text/javascript" src="/assan/js/plugins/plugins.js"></script> 
+<script type="text/javascript" src="/assan/js/assan.custom.js"></script> 
+
 <div class="bg-parallax parallax-overlay listing-page-container hero-search" data-jarallax='{"speed": 0.2}' style='background-image: url("/images/pics/4.jpg");'>
     <div class="container">
         <h2 class="text-white h1 font700 mb30 pb30 text-center">Znajdź trenera i osiągnij swój cel</h2>
@@ -9,7 +12,7 @@
         <div class="col-md-3 col-sm-3 col-xs-3 mb40">
             <div class="pb30">
                 <h4 class="sidebar-title">Szukam:</h4>
-                <select class="form-control" id="trainer-type">
+                <select class="form-control" id="type" name="type">
                     <option value="trainer">Trenera osobistego</option>
                     <option value="consultant">Konsultanta dyjetytycznego</option>
                 </select>
@@ -17,7 +20,7 @@
 
             <div class="pb30">
                 <h4 class="sidebar-title">Miasto:</h4>
-                <select class="form-control" id="city">
+                <select class="form-control" id="city" name="city">
                     <option value="0">Nie wybrane</option>
                     <option value="1">Warszawa</option>
                     <option value="2">Kraków</option>
@@ -48,6 +51,10 @@
             </div>
         </div>
         <div class="col-md-9 col-sm-9 col-xs-9 mb40">
+            <% if(!trainers.length) { %>
+                <p class="not-found text-center">Brak wyników</p>
+            <% } %>
+
             <% for(var i = 0; i < trainers.length; i++){
                 var trainer = trainers[i]; %>
 
@@ -83,6 +90,3 @@
         
     </div>
 </div>
-
-<script type="text/javascript" src="/assan/js/plugins/plugins.js"></script> 
-<script type="text/javascript" src="/assan/js/assan.custom.js"></script> 

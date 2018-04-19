@@ -3,13 +3,7 @@
 <nav aria-label="Page navigation example" class="pt30 mb0">
     <ul class="pagination pagination justify-content-end">
 		<% 
-		function getPageLink(page, isActive, linkClass){
-			var link = '/';
-			if(base){
-				link += base.url;
-			}
-
-			link += '?page=' + page;
+		function getPageLink(page, isActive, linkClass, text){
 			var activeClass = '';
 			if(isActive){
 				activeClass = 'active';
@@ -17,7 +11,7 @@
 
 			linkClass = linkClass || '';
 
-			var aTag = '<a class="page-link" href="' + link + '">' + page + '</a>';
+			var aTag = '<a class="page-link" data-page-num="' + page + '">' + (text ||page) + '</a>';
 			var liTag = '<li class="page-item ' + activeClass + ' ' + linkClass + '">' + aTag + '</li>';
 
 			return liTag;
@@ -34,11 +28,11 @@
 		}
 		%>
 		<% if (page>showPages) { %>
-			<%- getPageLink(1, false, 'first-page') %>
+			<%- getPageLink(1, false, 'first-page', '<<') %>
 		<% } %>
 		
 		<% if (page != 1) { %>
-			<%- getPageLink(page-1, false, 'prev-page') %>		
+			<%- getPageLink(page-1, false, 'prev-page', '<') %>		
 		<% } %>
 
 		<% if (page>showPages) { %>
@@ -54,13 +48,37 @@
 		<% } %>
 
 		<% if (page != totalPages) { %>
-			<%- getPageLink(page+1, false, 'next-page') %>		
+			<%- getPageLink(page+1, false, 'next-page', '>') %>		
 		<% } %>
 
 		<% if (totalPages-page>showPages) { %>
-			<%- getPageLink(totalPages, false, 'last-page') %>		
+			<%- getPageLink(totalPages, false, 'last-page', '>>') %>		
 		<% } %>
 	</ul>
 </nav>
 <% } %>
 
+<script type="text/javascript">
+	const search = window.location.search.toString();
+	let searchTemplate = search;
+	if(searchTemplate.indexOf('page=') > -1){
+		let pageStart = searchTemplate.indexOf('page=');
+		if(searchTemplate[pageStart - 1] == '&'){
+			pageStart --;
+		}
+		let pageEnd = searchTemplate.indexOf('&', pageStart + 1);
+		if(pageEnd == -1){
+			pageEnd = searchTemplate.length;
+		}
+		const pagePart = searchTemplate.slice(pageStart, pageEnd);
+		console.log(pagePart);
+		searchTemplate = searchTemplate.replace(pagePart, '');
+	}
+	const linkTemplate = window.location.pathname + searchTemplate;
+	console.log(searchTemplate);
+	$('.page-link').each(function() {
+		const linkEl = $(this);
+		const pageNum = linkEl.attr('data-page-num');
+		linkEl.attr('href', linkTemplate + '&page=' + pageNum);
+	})
+</script>

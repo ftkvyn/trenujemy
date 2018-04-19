@@ -46,7 +46,8 @@ module.exports = {
 	listing: function(req,res){
 		const page = +req.query.page || 1;
 		const city = +req.query.city || 0;
-		const type = +req.query.type || ''; // 'trainer' or 'consultant'
+		const type = req.query.type || ''; // 'trainer' or 'consultant'
+		// console.log(req.query);
 
 		let where = {};
 
@@ -70,7 +71,7 @@ module.exports = {
 		// where.isActivatedByTrainer = true;
 		// where.isApprovedByAdmin = true;
 
-		console.log(where);
+		// console.log(where);
 		trainersLoader.loadTrainersPage(where, {pageSize: PAGE_SIZE, page: page})
 		.then(function(data){
 			//console.log(data);

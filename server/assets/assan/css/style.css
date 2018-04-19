@@ -4249,7 +4249,7 @@ Images overlay hover styles
   position: relative;
   overflow: hidden;
   display: block; }
-  .listing-thumb:before, .thumb-hover-icon:before, .agent-hover:before, .cbp-caption:before, .news-thumb:before, .parallax-overlay:before {
+  /*.listing-thumb:before, .thumb-hover-icon:before, .agent-hover:before, .cbp-caption:before, .news-thumb:before, .parallax-overlay:before {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -4262,9 +4262,9 @@ Images overlay hover styles
     background: linear-gradient(to bottom, transparent 20%, #000);
     background: -webkit-linear-gradient(to bottom, transparent 20%, #000);
     transition: opacity 0.4s;
-    -webkit-transition: opacity 0.4s; }
-  .listing-thumb:hover:before, .thumb-hover-icon:hover:before, .agent-hover:hover:before, .cbp-caption:hover:before, .news-thumb:hover:before, .parallax-overlay:hover:before {
-    opacity: .9; }
+    -webkit-transition: opacity 0.4s; }*/
+  /*.listing-thumb:hover:before, .thumb-hover-icon:hover:before, .agent-hover:hover:before, .cbp-caption:hover:before, .news-thumb:hover:before, .parallax-overlay:hover:before {
+    opacity: .9; }*/
   .listing-thumb .container, .thumb-hover-icon .container, .agent-hover .container, .cbp-caption .container, .news-thumb .container, .parallax-overlay .container {
     z-index: 10;
     position: relative; }

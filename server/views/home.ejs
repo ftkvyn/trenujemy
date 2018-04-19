@@ -2,7 +2,7 @@
     <div class="container">
         <h2 class="text-white h1 font700 mb30 pb30 text-center">Znajdź trenera i osiągnij swój cel</h2>
         <div class="searchWrap">
-            <form role="form">                      
+            <form role="form" action="/trainers">                      
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-4">
                         <p class="text-white text-right bold mb30 h3">
@@ -12,19 +12,19 @@
                     <div class="col-lg-3 col-md-4 col-sm-4">
                         <div class="form-group">
                            
-                            <select class="form-control" id="trainer-type">
+                            <select class="form-control" id="type" name="type">
                                 <option value="trainer">Trenera osobistego</option>
                                 <option value="consultant">Konsultanta dyjetytycznego</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4">
-                         <a class="btn btn-primary btn-block pull-left" 
-                         href="/trainers" 
+                         <button class="btn btn-primary btn-block pull-left" 
+                         type="submit" 
                          style="max-width: 200px;height: 38px;
     border-radius: 4px;
     padding-top: 9px !important;
-    font-size: 15px !important;">Szukaj</a>
+    font-size: 15px !important;">Szukaj</button>
                     </div>
                 </div>
                 <div class="row place-row">
@@ -34,9 +34,8 @@
 				        </p>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-4">
-                        <div class="form-group">
-                           
-                            <select class="form-control" id="city">
+                        <div class="form-group">                           
+                            <select class="form-control" id="city" name="city">
                                 <option value="1">Warszawa</option>
                                 <option value="2">Kraków</option>
                                 <option value="3">Łódź</option>
@@ -418,7 +417,9 @@
     $('body').on('change','#trainer-type',function(){
     	if(this.value == 'consultant'){
     		$('.place-row').addClass('hidden');
+            $('.place-row select').hide();
     	}else{    		
+            $('.place-row select').show();
     		$('.place-row').removeClass('hidden');
     	}
     });
