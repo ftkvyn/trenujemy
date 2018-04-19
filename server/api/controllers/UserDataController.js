@@ -128,21 +128,52 @@ module.exports = {
 	},
 
 	getClientsData: function(req, res){
-		User.find({role:'user', isActive: true})
-		.exec(function(err, users){
-			if(err){
-				console.error(err);
-				return res.badRequest(err);
-			}
-			var models = users.map(function(user){
-				var model = user;
-				delete user.password;
-				delete user.activationCode;
-				delete user.passwordRecoveryKey;
-				return model; 
-			});	
-			return res.json(models);
+		let qs = [];
+
+		qs.push(FeedPlanPurchase.find({trainer: req.session.user.id}));
+		qs.push(TrainPlanPurchase.find({trainer: req.session.user.id}));
+
+		Q.all(qs)
+		.catch(function(err){
+			console.error(err);
+			return res.badRequest(err);
+		})
+		.then(function(data){
+			let limitDate = new Date();
+			limitDate.setDate(limitDate.getDate() - 14);
+			let allUserIds = [...data[0],...data[1]]
+				.map(item => item.toJSON())
+				.filter(item => {
+					if(item.isActive){ return true; }
+					let itemDate = item.validTo
+					if(item.trainsCount){
+						if(item.trainsLeft === 0){
+							itemDate = item.updatedAt;
+						}
+					}
+					return itemDate <= limitDate;
+				})
+				.map(item => item.user);
+			const userIds = [...new Set( allUserIds )];
+
+			User.find({role:'user', isActive: true, id: userIds})
+			.exec(function(err, users){
+				if(err){
+					console.error(err);
+					return res.badRequest(err);
+				}
+				var models = users.map(function(user){
+					var model = user;
+					delete user.password;
+					delete user.activationCode;
+					delete user.passwordRecoveryKey;
+					return model; 
+				});	
+				return res.json(models);
+			});
 		});
+
+		
 	},
  
 	saveSurvey:function(req, res){
