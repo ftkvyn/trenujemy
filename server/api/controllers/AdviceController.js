@@ -20,20 +20,27 @@ module.exports = {
 		res.json(defaultVals);
 	},
 
-	find:function(req, res){
-		var model = req.body;
-		var userId = req.params.userId || req.session.user.id;
+	findUserTrainers: function(req, res){
 		Advice
-		.findOne({user: userId})
-		.exec(function(err, advice){
+		.find({user: req.session.user.id})
+		.populate('trainer')
+		.exec(function(err, advices){
 			if(err){
 				console.error(err);
 				return res.badRequest(err);
 			}
-			if(advice){
-				return res.json(advice);
-			}
-			Advice.create({user: userId})
+			let trainers = advices.map(item => {return {name: item.trainer.name, id: item.trainer.id}});
+			return res.json(trainers);
+		});
+	},
+
+	find:function(req, res){
+		var model = req.body;
+		var userId = req.params.userId;
+
+		if(req.session.user.role == 'user'){
+			Advice
+			.findOne({user: req.session.userId, trainer: userId})
 			.exec(function(err, advice){
 				if(err){
 					console.error(err);
@@ -41,7 +48,30 @@ module.exports = {
 				}
 				return res.json(advice);
 			});
-		});
+		}else if(req.session.user.role == 'trainer'){
+			Advice
+			.findOne({user: userId, trainer:req.session.user.id})
+			.exec(function(err, advice){
+				if(err){
+					console.error(err);
+					return res.badRequest(err);
+				}
+				if(advice){
+					return res.json(advice);
+				}
+
+				Advice.create({user: userId, trainer:req.session.user.id})
+				.exec(function(err, advice){
+					if(err){
+						console.error(err);
+						return res.badRequest(err);
+					}
+					return res.json(advice);
+				});
+			});
+		}else{
+			return res.forbidden();
+		}
 	},	
 };
 

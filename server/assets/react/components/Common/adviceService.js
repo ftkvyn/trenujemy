@@ -46,5 +46,18 @@ function saveAdvice(data){
 	  });
 }
 
+function loadAdvisors(){
+	return new Promise((resolve, reject) => {
+		let url = '/api/adviceTrainers';
+		$.get(url)
+		.success(function(data) {
+			resolve(data);
+		})
+		.error(function(err){
+			console.error(err);
+			reject(err);
+		});
+	  });
+}
 
-export {loadUserAdvice, loadDefaultAdvice, saveAdvice};
+export {loadUserAdvice, loadDefaultAdvice, saveAdvice, loadAdvisors};

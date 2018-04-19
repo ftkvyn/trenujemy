@@ -66,7 +66,7 @@ const Routes = ({ location }) => {
                             <Route path="/profile" component={ProfilePage}/>
                             <Route path="/goods" component={Goods}/>
                             <Route path="/survey" component={SurveyPage}/>
-                            <Route path="/advice" component={AdvicePage}/>
+                            <Route path="/advice/:trainerId" component={AdvicePage}/>
                             <Route path="/diary/:day?" component={DiaryPage}/>
                             <Route path="/clients/:id" component={ClientPage}/>
                             <Route path="/answers" component={AnswerTemplatesPage}/>

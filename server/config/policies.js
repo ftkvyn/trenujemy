@@ -120,7 +120,8 @@ module.exports.policies = {
   },
 
   AdviceController:{
-    'find':'isTrainerForOtherUser',
+    'find':'sessionAuth',
+    'findUserTrainers':'isUser',
     'create':false,
     'destroy':false,
     'update':'isTrainer',

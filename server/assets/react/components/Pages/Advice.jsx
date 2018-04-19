@@ -35,8 +35,10 @@ let saveHandler = null;
 class Advice extends React.Component {
     constructor(props, context) {
         super(props, context);
+        console.log('adv :' + this.props.trainerId);
         let initialState = {
             data:{},
+            trainerId: this.props.trainerId,
             defaultAdvice:{},
             templates:[]
         };
@@ -47,16 +49,20 @@ class Advice extends React.Component {
     };
 
     componentWillReceiveProps(nextProps) {
-        var nextId = undefined;
+        var nextUserId = undefined;
+        var nextTrainerId = undefined;
         if(nextProps.match && nextProps.match.params){
-            nextId = nextProps.match.params.id;
+            nextUserId = nextProps.match.params.id;
         }
-        if(this.state.userId === nextId){
+        if(nextProps.trainerId){
+            nextTrainerId = nextProps.trainerId;
+        }
+        if( (this.state.userId === nextUserId) && (nextTrainerId === this.state.trainerId) ){
             return;
         }
         let me = this;
-        this.setState({userId: nextId});
-        loadUserAdvice(nextId)
+        this.setState({userId: nextUserId, trainerId: nextTrainerId});
+        loadUserAdvice(nextUserId || nextTrainerId)
             .then((data) => setData(data, me));
         loadAdviceTemplates()
                 .then((data) => this.setState({templates: data})); 
@@ -64,7 +70,7 @@ class Advice extends React.Component {
 
     componentDidMount(){
         let me = this;
-        loadUserAdvice(this.state.userId)
+        loadUserAdvice(this.state.userId || this.state.trainerId)
             .then((data) => setData(data, me));
         if(this.state.userId){
             //in that case we are in trainer mode;

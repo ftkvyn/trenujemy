@@ -4,6 +4,7 @@ import { Router, Route, Link, History, withRouter } from 'react-router-dom';
 import { Collapse } from 'react-bootstrap';
 import { loadNewHintsCount, addNotificationsListener, removeNotificationsListener, loadNotifications } from '../Common/notificationsService';
 import Notification from '../Components/Notification'
+import AdvisorsList from './AdvisorsList'
 
 class UserMenu extends React.Component {
     constructor(props, context) {
@@ -13,7 +14,6 @@ class UserMenu extends React.Component {
             collapse: {
                 profile: this.routeActive(['profile']),
                 survey: this.routeActive(['survey']),
-                advice: this.routeActive(['advice']),
                 diary: this.routeActiveStart(['diary'])                
             },
             notifications:{
@@ -106,12 +106,7 @@ class UserMenu extends React.Component {
                 <span>Ankieta</span>
             </Link>
         </li>
-        adviceItem = <li className={ this.routeActive('advice') ? 'active' : '' }>
-            <Link to="/advice" title="Zalecenia">
-                <em className="fa fa-exclamation-triangle"></em>
-                <span>Zalecenia</span>
-            </Link>
-        </li>        
+        adviceItem = <AdvisorsList></AdvisorsList>      
         diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
             <Link to="/diary" title="Dziennik aktywności">
                 <Notification count={this.state.notifications.diaryDays.length}></Notification>
