@@ -61,7 +61,7 @@ function setDay(dayData){
             if($.fn.inputmask){
                 $('[data-masked]').inputmask();
                 $('[data-masked]').off('change');
-                $('[data-masked]').change(this.handleDishHourChange.bind(this));
+                $('[data-masked]').change(this.handleDishChange.bind(this));
             }
         });
     });
@@ -202,6 +202,9 @@ class DiaryDay extends React.Component {
           .then((data) => setDay.call(this, data)); 
         loadSurvey(this.state.userId)
             .then((data) => {
+                if(!data.bodySize){
+                    data.bodySize = {};
+                }
               this.setState({survey: data});
             });    
         loadUserAdvice(this.state.userId)
@@ -236,6 +239,9 @@ class DiaryDay extends React.Component {
     handleChange(event) {
         let fieldName = event.target.name;
         let fieldVal = event.target.value;
+        if(fieldName == 'isSimpleDishMode'){
+            fieldVal = event.target.checked;
+        }
         let newData = this.state.data;
         newData[fieldName] = fieldVal
         this.setState({data: newData});
@@ -287,7 +293,7 @@ class DiaryDay extends React.Component {
         });
     }
 
-    handleDishHourChange(num, event) {
+    handleDishChange(num, event) {
         if(typeof event == 'undefined'){
           event = num;
           num = +$(event.target).attr('data-num');
@@ -790,6 +796,21 @@ class DiaryDay extends React.Component {
                     <Col lg={2} md={1}></Col>                    
                 </FormGroup>   
 
+                <FormGroup>
+                    <Col lg={2} md={1}></Col>
+                    <Col lg={ 8 } md={10}>
+                        <label className="checkbox-inline c-checkbox">
+                            <input type="checkbox" name="isSimpleDishMode" 
+                            value="1" {...readonlyForTrainer}
+                            className='needsclick'
+                            checked={!!this.state.data.isSimpleDishMode} 
+                            onChange={this.handleChange.bind(this)} />
+                            <em className="fa fa-check"></em>Uproszczony opis posiłków
+                        </label>
+                    </Col>
+                    <Col lg={2} md={1}></Col>                    
+                </FormGroup> 
+
 
                 {dishesProcessed.map((dish, num) => <div key={num} className='dish-item'>                      
                       <div className='dish-header'>
@@ -814,7 +835,7 @@ class DiaryDay extends React.Component {
                                   data-num={num}
                                   data-masked="" data-inputmask="'mask': '99:99'" 
                                   value={dish.hour || 0}
-                                  onChange={this.handleDishHourChange.bind(this, num)}/>
+                                  onChange={this.handleDishChange.bind(this, num)}/>
                               </Col>
                               <label className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <DishInfo {...dish} />
@@ -853,7 +874,7 @@ class DiaryDay extends React.Component {
                             className="form-control" 
                             name='comment' {...readonlyForTrainer}
                             value={dish.comment || ''}
-                            onChange={this.handleDishHourChange.bind(this, num)}></textarea>
+                            onChange={this.handleDishChange.bind(this, num)}></textarea>
                             <label className="col-lg-12 control-label">Maks. 400 znaków</label>
                         </Col>
                       </div>

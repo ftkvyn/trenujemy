@@ -34,15 +34,14 @@ module.exports = {
 		let days = req.body.days.map((day) => moment(day + ' +0000', 'DD-MM-YYYY Z').startOf('day').toDate());
 		let qs = [];
 		for(let i = 0; i < days.length; i++){
-			qs.push(DailyReport.findOne({date: days[i], user: userId}).populate('trainings'));
+			qs.push(DailyReport.find({date: days[i].toString(), user: userId}).limit(1).populate('trainings'));
 		}
 		Q.all(qs)
-		.catch(function(err){
-			console.error(err);
-			return res.badRequest(err);
-		})
-		.done(function(data){
-			data = data.sort((a,b) => a.date - b.date);
+		.then(function(data){
+			if(!data){
+				return res.json([]);
+			}
+			data = data.filter(items => !!items && items[0]).map(items => items[0]).sort((a,b) => a.date - b.date);
 			let result = [];
 			let num = 0;
 			for(let i = 0; i < days.length; i++){
@@ -62,7 +61,12 @@ module.exports = {
 				result.push(item);
 			}
 			return res.json(result);
-		});
+		})
+		.catch(function(err){
+			console.error(err);
+			return res.badRequest(err);
+		})
+		.done();
 	}
 
 };

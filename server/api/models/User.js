@@ -45,7 +45,7 @@ module.exports = {
 		type:'string'
 	},
 	birthday:{
-		type: 'string', columnType: 'datetime',
+		type: 'ref', columnType: 'datetime',
 	},
   }
 };

@@ -14,19 +14,23 @@ module.exports = {
 		var model = req.body;
 		var userId = req.params.userId || req.session.user.id;
 		var date = moment(req.params.date + ' +0000', 'DD-MM-YYYY Z');
+		console.log(userId);
 		DailyReport
-		.findOne({user: userId, date: date.toDate()})
+		.find({user: userId, date: date.toDate()})
+		.limit(1)
 		.populate('bodySize')
 		.populate('trainings')		
-		.exec(function(err, entry){
+		.exec(function(err, entries){	
+			console.log(entries);		
 			if(err){
 				console.error(err);
 				return res.badRequest(err);
 			}
-			if(entry){
-				return res.json(entry);
+			if(entries && entries[0]){
+				return res.json(entries[0]);
 			}
-			if(req.session.user.role == 'trainer'){
+			//if(req.session.user.role == 'trainer')
+			{
 				//Not creating new data here.
 				return res.json({noData: true});
 			}			
@@ -34,7 +38,7 @@ module.exports = {
 			.exec(function(err, bodySize){
 				let reportDate = date.clone().utcOffset(0);
 
-				DailyReport.create({user: userId, date: reportDate.toDate(), bodySize: bodySize})
+				DailyReport.create({user: userId, date: reportDate.toDate(), bodySize: bodySize.id})
 				.exec(function(err, entry){
 					if(err){
 						console.error(err);
@@ -112,7 +116,7 @@ module.exports = {
 	getPastImages:function(req, res){
 		const userId = req.params.userId || req.session.user.id;
 		var date = moment(req.params.date + ' +0000', 'DD-MM-YYYY Z');
-		DailyReport.find({user: userId, image: {'!': ""}, date: {'<': date.toDate()}})
+		DailyReport.find({user: userId, image: {'!=': ""}, date: {'<': date.toDate()}})
 			.sort('date DESC')
 			//.limit(4)
 			.exec(function(err, data){

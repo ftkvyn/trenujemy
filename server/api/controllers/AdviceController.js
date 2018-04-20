@@ -40,7 +40,7 @@ module.exports = {
 
 		if(req.session.user.role == 'user'){
 			Advice
-			.findOne({user: req.session.userId, trainer: userId})
+			.findOne({user: req.session.user.id, trainer: userId})
 			.exec(function(err, advice){
 				if(err){
 					console.error(err);

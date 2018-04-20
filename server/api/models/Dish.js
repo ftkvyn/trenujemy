@@ -23,7 +23,10 @@ module.exports = {
     },  	
     comment:{
       type:'string',columnType:'text'
-    }
+    },
+    description:{
+      type:'string',columnType:'text'
+    },    
   }
 };
 

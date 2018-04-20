@@ -12,8 +12,9 @@ module.exports = {
 		model: 'User',
 		required:true	
 	},
+	//ToDo: just use string DD-MM-YYYY
 	date:{
-		type: 'string', columnType: 'datetime',
+		type: 'ref', columnType: 'datetime',
 		required: true
 	},
 	weight:{
@@ -32,6 +33,9 @@ module.exports = {
 		collection:'Dish',
 		via:'dailyReport'
 	},
+	isSimpleDishMode:{
+      type:'boolean'
+    },
 	userNotes:{
 		type:'string',columnType:'text'
 	},
