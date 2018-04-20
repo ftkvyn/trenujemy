@@ -9,9 +9,16 @@ module.exports = {
 		var userId = req.params.userId || req.session.user.id;
 		let qs = [];
 
+		let feedWhere = {user: userId, isActive: true};
+		let trainWhere = {user: userId, isActive: true};
+		if(req.session.user.role == 'trainer'){
+			feedWhere.trainer = req.session.user.id;
+			trainWhere.trainer = req.session.user.id;
+		}
+
 		qs.push(User.findOne({id: userId}));
-		qs.push(FeedPlanPurchase.find({user: userId, isActive: true}).populate('plan'));
-		qs.push(TrainPlanPurchase.find({user: userId, isActive: true}));
+		qs.push(FeedPlanPurchase.find(feedWhere).populate('plan'));
+		qs.push(TrainPlanPurchase.find(trainWhere));
 		Q.all(qs)
 		.catch(function(err){
 			console.error(err);
@@ -53,9 +60,15 @@ module.exports = {
 		var userId = req.params.userId || req.session.user.id;
 
 		let qs = [];
+		let feedWhere = {user: userId, isActive: true};
+		let trainWhere = {user: userId, isActive: true};
+		if(req.session.user.role == 'trainer'){
+			feedWhere.trainer = req.session.user.id;
+			trainWhere.trainer = req.session.user.id;
+		}
 
-		qs.push(FeedPlanPurchase.find({user: userId, isActive: true}).populate('plan').populate('trainer'));
-		qs.push(TrainPlanPurchase.find({user: userId, isActive: true}).populate('plan').populate('trainer'));
+		qs.push(FeedPlanPurchase.find(feedWhere).populate('plan').populate('trainer'));
+		qs.push(TrainPlanPurchase.find(trainWhere).populate('plan').populate('trainer'));
 
 		Q.all(qs)
 		.catch(function(err){

@@ -3,7 +3,6 @@ import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, Drop
 
 const GoodsInfo = (props) => {
 	let purchasedFeedPlanItem = '';
-    let additionalGoods = '';
     let trains = [];
     if(!props.goods.feedPlan && !props.goods.trainPlans){
         purchasedFeedPlanItem = <Row className='list-group-item'>
@@ -65,25 +64,10 @@ const GoodsInfo = (props) => {
                     trains.push(Object.assign({}, train));
                 }
             }
-            additionalGoods = <div>
-                <hr/>
-                <h3 className='text-center'>Proponowane pozostałe usługi w panelu:</h3>
-                <Row className='text-center'>
-                    <Col lg={ 6 } md={6} sm={6} xs={12}>
-                        <h4>Plany dietetyczne i treningowe</h4>
-                        <a type="button" href='/#feedPlans' className="btn btn-primary">Zamów</a>
-                    </Col>
-                    <Col lg={ 6 } md={6} sm={6} xs={12}>
-                        <h4>Codzienna konsultacja</h4>
-                        <a type="button" href='/#feedPlans' className="btn btn-primary">Zamów</a>
-                    </Col>
-                </Row>
-            </div>
         }
     }
     if(props.onlyTrainings){
     	purchasedFeedPlanItem = '';
-    	additionalGoods = '';
     }
     let purchaseButton = '';
     if(!props.noPurchaseButton){
@@ -126,8 +110,7 @@ const GoodsInfo = (props) => {
             <Col lg={ 10 } md={8}>
                 Treinigów: <b>{item.trainsLeft}</b>&nbsp;&nbsp;{purchaseButton}
             </Col>
-        </Row></div>)}
-        {additionalGoods}
+        </Row></div>)}        
     </div>
 }
 

@@ -91,7 +91,6 @@ class Goods extends React.Component {
 
     render() {  
         let purchasedFeedPlanItem = '';
-        let additionalGoods = '';
         let trains = [];
         if(!this.state.goodsLoaded){
             return <div></div>
