@@ -176,7 +176,7 @@ class AdviceTemplatesPage extends React.Component {
                                         </div>
                                     </Col>
                                     <Col lg={12} md={12} sm={12} xs={12} style={{'marginTop':'20px'}}>
-                                        <div className='template-textarea'>
+                                        <div className='template-textarea' style={ this.state.selectedItemId ? {} : {'display':'none'}}>
                                             <TextEditor text={this.state.templateText} label="Plan dietetyczny i treningowy" onBlur={this.saveTemplate.bind(this)}></TextEditor>
                                             <div type="button" onClick={this.saveTemplate.bind(this)} className="btn btn-primary pull-right">Zapisz</div>
                                         </div>

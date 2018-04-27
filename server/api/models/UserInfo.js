@@ -16,34 +16,34 @@ module.exports = {
 	target:{
 		type:'string',
 		isIn: ['weight', 'cut', 'slim', 'power'],
-		defaultsTo: 'weight'
+		// defaultsTo: 'weight'
 	},
 
 	bodyType:{
 		type:'number',columnType:'integer',
 		isIn: [1,2,3],
-		defaultsTo:1,
+		// defaultsTo:1,
 	},
 
 	//========Personal customs==========//
 	wakeUpHour:{
 		type:'number',columnType:'integer',
-		defaultsTo: 730, //For 7:30
+		// defaultsTo: 730, //For 7:30
 	},
 
 	goToBedHour:{
 		type:'number',columnType:'integer',
-		defaultsTo: 2300
+		// defaultsTo: 2300
 	},
 
 	mealsNumber:{
 		type:'number',columnType:'integer',
-		defaultsTo: 5
+		// defaultsTo: 5
 	},
 
 	eatingTimes:{
 		type:'string',
-		defaultsTo: '8:00, 12:00, 14:30, 17:00, 20:00'
+		// defaultsTo: '8:00, 12:00, 14:30, 17:00, 20:00'
 	},
 
 	canYouChangeDailyPlan:{
@@ -109,7 +109,7 @@ module.exports = {
 	activity:{
 		type:'string',
 		isIn: ['little', 'normal', 'medium','many','very_much'],
-		defaultsTo:'little'
+		// defaultsTo:'little'
 	},
 
 	bodySize:{
@@ -120,13 +120,13 @@ module.exports = {
 	gymExperience:{
 		type:'string',
 		isIn: ['never','sometimes','long_time','expert'],
-		defaultsTo:'never'
+		// defaultsTo:'never'
 	},
 
 	trainingsStatus:{
 		type:'string',
 		isIn:['once','twice','three_four','more_than_four'],
-		defaultsTo:'once'
+		// defaultsTo:'once'
 	},
 
 	trainingDescription:{
@@ -140,26 +140,26 @@ module.exports = {
 	currentStatus:{
 		type:'string',
 		isIn:['bad','worse','not_so_bad','better','good'],
-		defaultsTo:'bad'
+		// defaultsTo:'bad'
 	},
 
 	possibleTrainings:{
 		type:'number',columnType:'integer',
 		isIn:[1,2,3,4,5,6],
-		defaultsTo:1
+		// defaultsTo:1
 	},
 
 	mostImportantBodyPart:{
 		type:'string',
 		isIn:['chest','legs','back','shoulders'
 		,'biceps','triceps','belly','all'],
-		defaultsTo:'belly'
+		// defaultsTo:'belly'
 	},
 
 	availableEquipment:{
 		type:'string',
 		isIn:['gym','home','none'],
-		defaultsTo:'gym'
+		// defaultsTo:'gym'
 	},
 
 	currentNutrition:{

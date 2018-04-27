@@ -39,7 +39,7 @@ class TrainerMenu extends React.Component {
     render() {      
         return (
             <ul className="nav">
-                <ProfileData defaultProfilePic='img/user/02.jpg'></ProfileData>
+                <ProfileData defaultProfilePic='/images/no_image_user.png'></ProfileData>
                 { /* Iterates over all sidebar items */ }
                 <li className="nav-heading ">
                     <span>Panel Trenera</span>

@@ -116,7 +116,7 @@ class UserMenu extends React.Component {
         </li>
         return (
             <ul className="nav">
-                <ProfileData defaultProfilePic='img/user/13.jpg'></ProfileData>
+                <ProfileData defaultProfilePic='/images/no_image_user.png'></ProfileData>
                 { /* Iterates over all sidebar items */ }
                 <li className="nav-heading ">
                     <span>Panel Klienta</span>

@@ -163,11 +163,15 @@ module.exports.policies = {
   },
 
   AdviseTemplateController:{
-    '*':'isTrainer'
+    '*':'isTrainer',
+    'update': 'isTrainerAdviceTemplate',
+    'destroy': 'isTrainerAdviceTemplate'
   },
 
   AnswerTemplateController:{
-    '*':'isTrainer'
+    '*':'isTrainer',
+    'update': 'isTrainerAnswerTemplate',
+    'destroy': 'isTrainerAnswerTemplate'
   },
 
   TrainerHintsController:{
