@@ -12,7 +12,11 @@ module.exports = {
 		model: 'User',
 		required:true	
 	},
-	//ToDo: just use string DD-MM-YYYY
+	//string formatted as YYYY-MM-DD. used because can't load day by exact match by day
+	dateStr:{
+		type: 'string',
+		required: true
+	},
 	date:{
 		type: 'ref', columnType: 'datetime',
 		required: true

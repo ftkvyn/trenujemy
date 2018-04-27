@@ -14,14 +14,12 @@ module.exports = {
 		var model = req.body;
 		var userId = req.params.userId || req.session.user.id;
 		var date = moment(req.params.date + ' +0000', 'DD-MM-YYYY Z');
-		console.log(userId);
 		DailyReport
-		.find({user: userId, date: date.toDate()})
+		.find({user: userId, dateStr: date.format('YYYY-MM-DD')})
 		.limit(1)
 		.populate('bodySize')
 		.populate('trainings')		
 		.exec(function(err, entries){	
-			console.log(entries);		
 			if(err){
 				console.error(err);
 				return res.badRequest(err);
@@ -29,7 +27,7 @@ module.exports = {
 			if(entries && entries[0]){
 				return res.json(entries[0]);
 			}
-			//if(req.session.user.role == 'trainer')
+			if(req.session.user.role == 'trainer')
 			{
 				//Not creating new data here.
 				return res.json({noData: true});
@@ -38,7 +36,7 @@ module.exports = {
 			.exec(function(err, bodySize){
 				let reportDate = date.clone().utcOffset(0);
 
-				DailyReport.create({user: userId, date: reportDate.toDate(), bodySize: bodySize.id})
+				DailyReport.create({user: userId, date: reportDate.toDate(), dateStr: reportDate.format('YYYY-MM-DD') , bodySize: bodySize.id})
 				.exec(function(err, entry){
 					if(err){
 						console.error(err);
