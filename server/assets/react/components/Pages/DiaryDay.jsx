@@ -458,10 +458,25 @@ class DiaryDay extends React.Component {
         if(!this.state.data.id){
           return <div></div>
         }
+        let simpleModeCheckbox = '';
         let readonlyForUser = {};
         let readonlyForTrainer = {};
         if(this.state.userId){
           readonlyForTrainer = {readOnly: true};
+          simpleModeCheckbox = <FormGroup>
+                <Col lg={2} md={1}></Col>
+                <Col lg={ 8 } md={10}>
+                    <label className="checkbox-inline c-checkbox">
+                        <input type="checkbox" name="isSimpleDishMode" 
+                        value="1" {...readonlyForTrainer}
+                        className='needsclick'
+                        checked={!!this.state.data.isSimpleDishMode} 
+                        onChange={this.handleChange.bind(this)} />
+                        <em className="fa fa-check"></em>Uproszczony opis posiłków
+                    </label>
+                </Col>
+                <Col lg={2} md={1}></Col>                    
+            </FormGroup> 
         }else{
           readonlyForUser = {readOnly: true};
         }
@@ -820,20 +835,7 @@ class DiaryDay extends React.Component {
                     <Col lg={2} md={1}></Col>                    
                 </FormGroup>   
 
-                <FormGroup>
-                    <Col lg={2} md={1}></Col>
-                    <Col lg={ 8 } md={10}>
-                        <label className="checkbox-inline c-checkbox">
-                            <input type="checkbox" name="isSimpleDishMode" 
-                            value="1" {...readonlyForTrainer}
-                            className='needsclick'
-                            checked={!!this.state.data.isSimpleDishMode} 
-                            onChange={this.handleChange.bind(this)} />
-                            <em className="fa fa-check"></em>Uproszczony opis posiłków
-                        </label>
-                    </Col>
-                    <Col lg={2} md={1}></Col>                    
-                </FormGroup> 
+                {simpleModeCheckbox}
 
 
                 {dishesProcessed.map((dish, num) => {
