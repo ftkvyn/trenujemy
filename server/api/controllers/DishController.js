@@ -12,7 +12,7 @@ SELECT dc.name, avg(dc.weight) weight, count(d.id) count FROM
  join dailyreport dr on dr.user = usr.id
  join dish d on d.dailyReport = dr.id
  join dishcomponent dc on dc.dish = d.id 
- where usr.id = ?
+ where usr.id = $1
  group by dc.name;
 `
 
@@ -112,9 +112,9 @@ module.exports = {
 
 	loadUserPreferredComponents: function(req, res){
 		try{
-			Dish.query(POPULAR_COMPONENTS_SQL, [req.session.user.id], function(err, rawResult) {
+			Dish.getDatastore().sendNativeQuery(POPULAR_COMPONENTS_SQL, [req.session.user.id], function(err, rawResult) {
 				if(err){
-					console.error(ex);
+					console.error(err);
 					return res.badRequest();		
 				}
 				if(rawResult && rawResult.length){

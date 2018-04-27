@@ -74,7 +74,9 @@ function loadDishes(dayId){
 
 function saveDish(dish){
 	return new Promise((resolve, reject) => {
-		$.post(`/api/dishes/${dish.dailyReport}`, dish)
+		let model = Object.assign({}, dish);
+		delete model.components;
+		$.post(`/api/dishes/${dish.dailyReport}`, model)
 		.success(function(data) {
 			resolve(data);
 		})

@@ -236,11 +236,29 @@ class DiaryDay extends React.Component {
       clearDayNotifications.call(this);
     }
 
+    createDishesDescription(){
+        let dishes = [...this.state.dishes];
+        for(let i = 0; i < dishes.length; i++){
+            let dish = dishes[i];
+            if(!dish.description && dish.components && dish.components.length){
+                let description = '';
+                for(let k = 0; k < dish.components.length; k++){
+                    let component = dish.components[k];
+                    description += `${component.name} - ${component.weight} g \n`;
+                }
+                this.handleDishChange(i, {target: {name: 'description', value: description}});
+            }
+        }
+    }
+
     handleChange(event) {
         let fieldName = event.target.name;
         let fieldVal = event.target.value;
         if(fieldName == 'isSimpleDishMode'){
             fieldVal = event.target.checked;
+            if(fieldVal){
+                this.createDishesDescription();
+            }
         }
         let newData = this.state.data;
         newData[fieldName] = fieldVal
@@ -717,11 +735,9 @@ class DiaryDay extends React.Component {
               </div>
           </div>
         }
-        return (
-            <div>
-              <div className="popup-overlay"></div>
-              <Route path={this.state.rootRoute  + `/dish/:dishId/:dishNum/addComponent`} component={AddComponentFirstStep}/>
-              <Route path={this.state.rootRoute  + `/dish/:dishId/:dishNum/addComponent/:componentNum/quantity`} component={AddComponentSecondStep}/>
+        let foodInfo = "";
+        if(!this.state.data.isSimpleDishMode){
+            foodInfo = <div>
               <Row>
                 <Col lg={2} md={2} sm={3} xs={4}></Col>
                 <Col lg={1} md={1} sm={2} xs={2}><label>Dziś:</label></Col>
@@ -764,7 +780,15 @@ class DiaryDay extends React.Component {
                   <FoodInfoRow title="Witamina A" today={totalComponents.vitaminA} advise={this.state.advise.vitaminA} hide={!this.state.advise.show_vitaminA}></FoodInfoRow>
                 </div>
               </div>
+            </div>
+        }
 
+        return (
+            <div>
+              <div className="popup-overlay"></div>
+              <Route path={this.state.rootRoute  + `/dish/:dishId/:dishNum/addComponent`} component={AddComponentFirstStep}/>
+              <Route path={this.state.rootRoute  + `/dish/:dishId/:dishNum/addComponent/:componentNum/quantity`} component={AddComponentSecondStep}/>
+              {foodInfo}
               <form className="form-horizontal">
                 <FormGroup>
                     <label className="col-lg-12 text-center">Twoje uwagi dotyczące tego dnia (pytania do trenera, komentarze):</label>
@@ -812,7 +836,53 @@ class DiaryDay extends React.Component {
                 </FormGroup> 
 
 
-                {dishesProcessed.map((dish, num) => <div key={num} className='dish-item'>                      
+                {dishesProcessed.map((dish, num) => {
+                    let dishComponentsInfo = '';
+                    let addComponentLink = '';
+                    let dishHeaderInfo = '';
+                    if(!this.state.data.isSimpleDishMode){
+                        dishComponentsInfo = <div>
+                            <Col lg={12} md={12} sm={12} xs={12}>
+                                <label className="col-lg-3 col-md-3 col-sm-3 col-xs-3">Składniki:</label>
+                                <label className="col-lg-1 col-md-1 col-sm-1 col-xs-1">Ilość</label>
+                                <label className="col-lg-1 col-md-1 col-sm-1 col-xs-1">Kalorie</label>
+                            </Col>
+                        {dish.components.map((comp) => <Col lg={12} md={12} sm={12} xs={12} key={comp.id}>
+                              <label className="col-lg-3 col-md-3 col-sm-3 col-xs-3">{comp.name}</label>
+                              <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">{comp.weight} g</div>
+                              <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">{comp.calories.toFixed(0)}</div>
+                              <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                <em className="fa fa-times" style={{cursor:'pointer'}} onClick={this.deleteComponent.bind(this, comp.id, num)}></em>
+                              </div>
+                          </Col> )}
+                        </div>
+                        addComponentLink = <div>
+                            {this.state.userId ? "" : <Link to={this.state.rootPath  + `/dish/${dish.id}/${num+1}/addComponent`}>
+                                <em className="fa fa-plus-square"></em>
+                            </Link>}
+                          </div>
+                        dishHeaderInfo = <label className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <DishInfo {...dish} />
+                          </label>
+                    }else{
+                        dishComponentsInfo = <div>
+                            <Col lg={3} md={3} sm={4} xs={4}>
+                              <label className="control-label">Opis posiłku:</label>
+                            </Col>
+                            <Col  lg={9} md={9} sm={8} xs={8}>
+                                <textarea 
+                                maxLength='400'
+                                className="form-control" 
+                                name='description' {...readonlyForTrainer}
+                                value={dish.description || ''}
+                                onChange={this.handleDishChange.bind(this, num)}></textarea>
+                                <label className="col-lg-12 control-label">Maks. 400 znaków</label>
+                            </Col>
+                        </div>
+                    }
+                    
+
+                    return <div key={num} className='dish-item'>                      
                       <div className='dish-header'>
                         <Col lg={1} md={1} sm={2} xs={2}>
                           <div>
@@ -837,33 +907,15 @@ class DiaryDay extends React.Component {
                                   value={dish.hour || 0}
                                   onChange={this.handleDishChange.bind(this, num)}/>
                               </Col>
-                              <label className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <DishInfo {...dish} />
-                              </label>
+                              {dishHeaderInfo}                              
                           </FormGroup>
                         </Col>
                         <Col lg={1} md={1} sm={2} xs={2}>
-                          <div>
-                            {this.state.userId ? "" : <Link to={this.state.rootPath  + `/dish/${dish.id}/${num+1}/addComponent`}>
-                                <em className="fa fa-plus-square"></em>
-                            </Link>}
-                          </div>
+                          {addComponentLink}
                         </Col>
                       </div>
                       <div className='dish-body' style={dish.__collapsed ? {display: 'none'} : {}}>
-                        <Col lg={12} md={12} sm={12} xs={12}>
-                            <label className="col-lg-3 col-md-3 col-sm-3 col-xs-3">Składniki:</label>
-                            <label className="col-lg-1 col-md-1 col-sm-1 col-xs-1">Ilość</label>
-                            <label className="col-lg-1 col-md-1 col-sm-1 col-xs-1">Kalorie</label>
-                        </Col>
-                        {dish.components.map((comp) => <Col lg={12} md={12} sm={12} xs={12} key={comp.id}>
-                              <label className="col-lg-3 col-md-3 col-sm-3 col-xs-3">{comp.name}</label>
-                              <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">{comp.weight} g</div>
-                              <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">{comp.calories.toFixed(0)}</div>
-                              <div className="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                                <em className="fa fa-times" style={{cursor:'pointer'}} onClick={this.deleteComponent.bind(this, comp.id, num)}></em>
-                              </div>
-                          </Col> )}
+                        {dishComponentsInfo}
                           
                         <Col lg={3} md={3} sm={4} xs={4}>
                           <label className="control-label">Uwagi i pytania do trenera:</label>
@@ -878,7 +930,8 @@ class DiaryDay extends React.Component {
                             <label className="col-lg-12 control-label">Maks. 400 znaków</label>
                         </Col>
                       </div>
-                  </div>)}
+                  </div>})
+                }
 
                 {this.state.trainings.map((training, num) => <FormGroup key={num}>
                     <div className="col-lg-12 text-bold">{`Trening ${num+1}:`}</div>
