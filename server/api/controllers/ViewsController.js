@@ -37,10 +37,25 @@ const searchFields = [
 
 module.exports = {
 	home: function(req,res){
-		return res.view('home', {locals: {
-			user: req.session.user, 
-			cart: req.session.cart,
-		}});	
+		TrainerInfo.find({
+			// isActivatedByTrainer:true,
+			// isApprovedByAdmin: true,
+		})
+		.sort('updatedAt DESC')
+		.populate('user')
+		.exec(function(err, trainers){
+			if(err){
+				console.error(err);
+				trainers = [];
+			}
+			return res.view('home', {locals: {
+				user: req.session.user, 
+				cart: req.session.cart,
+			},
+			trainers: trainers});	
+		});
+
+		
 	},
 
 	listing: function(req,res){

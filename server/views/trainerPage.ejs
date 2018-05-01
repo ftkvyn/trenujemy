@@ -52,7 +52,7 @@
 
                 <h4 class="text-left"><i class="ti-image"></i> Wyszktałcenie, kursy, certyfikaty</h4>
                 <ul data-edit-list="certificates">
-                    <% if(typeof info.certificates == 'object') for(let i = 0; i < info.certificates.length; i++) {%>
+                    <% if(info.certificates && (typeof info.certificates == 'object') ) for(let i = 0; i < info.certificates.length; i++) {%>
                         <li><%- info.certificates[i] %></li>
                     <% } %>
                 </ul>
@@ -61,7 +61,7 @@
                 <div class="clearfix">
                     <h4 class="text-left"><i class="ti-wand"></i> Osiągnięcia</h4>
                     <ul data-edit-list="achivements">
-                        <% if(typeof info.achivements == 'object') for(let i = 0; i < info.achivements.length; i++) {%>
+                        <% if(info.achivements && (typeof info.achivements == 'object') ) for(let i = 0; i < info.achivements.length; i++) {%>
                             <li><%- info.achivements[i] %></li>
                         <% } %>
                     </ul>

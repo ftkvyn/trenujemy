@@ -43,6 +43,9 @@ function setUser(userData){
     $('.saveSuccess').hide();
     userData.wakeUpHour = formatHour(userData.wakeUpHour);
     userData.goToBedHour = formatHour(userData.goToBedHour);
+    if(!userData.bodySize){
+        userData.bodySize = {};
+    }
     this.setState({data: userData},
         () =>{
             if($.fn.inputmask){
@@ -82,7 +85,10 @@ class Survey extends React.Component {
         loadSurvey(nextId)
             .then((data) => setUser.call(this, data));
         loadUser(nextId)
-            .then((userData) => {              
+            .then((userData) => {
+                if(!userData.bodySize){
+                    userData.bodySize = {};
+                }              
                 this.setState({userData: userData});
             });
     }
@@ -92,6 +98,9 @@ class Survey extends React.Component {
             .then((data) => setUser.call(this, data));   
         loadUser(this.state.userId)
             .then((userData) => {              
+                if(!userData.bodySize){
+                    userData.bodySize = {};
+                }
                 this.setState({userData: userData});
             });     
     }

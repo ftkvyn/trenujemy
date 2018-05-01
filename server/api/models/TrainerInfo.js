@@ -29,6 +29,10 @@ module.exports = {
 	isApprovedByAdmin:{
 		type:'boolean'
 	},
+    // activatedAt:{
+    //     type: 'ref', columnType: 'datetime',
+    //     required: true
+    // },
 	city:{
 		type:'number',columnType:'integer',
 		isIn: [0,1,2,3,4,5,6,7]
