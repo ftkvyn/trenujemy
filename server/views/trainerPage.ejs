@@ -40,17 +40,17 @@
         </div>
     </div>
 
-    <div class="container pb20" style="padding: 40px;">
+    <div class="container pb20 trainer-experience" style="padding: 40px;">
         <h3 class="text-primary center-title mb20 h2">Doświadczenie i kwalifikacje</h3>
         <div class="row align-items-center">
             <div class="col-lg-6">
-                <h4 class="text-left"><i class="ti-crown"></i> Specjalizacja</h4>
+                <h4 class="text-left"><i class="fas fa-user"></i> Specjalizacja</h4>
                 <ul data-hint>
                     <li>Trener personalny</li>
                     <li>Dietetyk</li>
                 </ul>
 
-                <h4 class="text-left"><i class="ti-image"></i> Wyszktałcenie, kursy, certyfikaty</h4>
+                <h4 class="text-left"><i class="fas fa-graduation-cap"></i> Wyszktałcenie, kursy, certyfikaty</h4>
                 <ul data-edit-list="certificates">
                     <% if(info.certificates && (typeof info.certificates == 'object') ) for(let i = 0; i < info.certificates.length; i++) {%>
                         <li><%- info.certificates[i] %></li>
@@ -59,7 +59,7 @@
             </div>  
             <div class="col-lg-6">
                 <div class="clearfix">
-                    <h4 class="text-left"><i class="ti-wand"></i> Osiągnięcia</h4>
+                    <h4 class="text-left"><i class="fas fa-trophy"></i> Osiągnięcia</h4>
                     <ul data-edit-list="achivements">
                         <% if(info.achivements && (typeof info.achivements == 'object') ) for(let i = 0; i < info.achivements.length; i++) {%>
                             <li><%- info.achivements[i] %></li>
@@ -68,8 +68,9 @@
                 </div>
 
                 <div class="clearfix">
-                    <h4 class="text-left"><i class="ti-medall"></i> Certyfikaty</h4>
+                    <h4 class="text-left"><i class="fas fa-certificate"></i> Certyfikaty</h4>
                     <div id="js-grid-lightbox-gallery" class="cbp">
+
                         <div class="cbp-item cbp-item-small">
                             <a href="/images/feed/1.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
                                 <div class="">
@@ -117,7 +118,7 @@
                 </div>
 
                 <div class="clearfix">
-                    <h4 class="text-left"><i class="ti-camera"></i> Zdjęcia</h4>                  
+                    <h4 class="text-left"><i class="fas fa-camera-retro"></i> Zdjęcia</h4>                  
 
                      <div id="js-grid-lightbox-gallery2" class="cbp">
                         <div class="cbp-item cbp-item-small">
@@ -161,7 +162,7 @@
         </div>
     </div>
     <% if(info.isTrainer){ %>
-    <div class="container pt20 pb20 bg-dark" id='trainings'>
+    <div class="container lists-container pt20 pb20 bg-dark" id='trainings'>
         <h3 class="text-primary center-title mb10 h1 text-left">Trening personalny</h3>
         <div style="padding-left: 50px;padding-right: 50px;">
             <div class="row">
@@ -222,10 +223,10 @@
                                 <option value="7">Szczecin</option>
                             </select>
                         <% } else { %>
-                            <strong>
+                            <span>
                                 <% let cityName = ["", "Warszawa", "Kraków", "Łódź", "Wrocław", "Poznań", "Gdańsk", "Szczecin"][info.city]; %>
                                 <%- cityName %>
-                            </strong>
+                            </span>
                         <% } %>
                     </p>
                     <ul class="text-white-gray" data-edit-list="trainPlaces">
@@ -238,31 +239,31 @@
         </div>
     </div>
 
-    <div class="container pt20 pb20 clearfix">
-        <h3 class="text-primary center-title mb10 h1 text-left">Jak to działa?</h3>
+    <div class="container pt40 pb20 clearfix">
+        <h3 class="text-primary center-title mb40 h1 text-left">Jak to działa?</h3>
         <div style="padding-left: 100px;padding-right: 100px;">
             <div class="row text-center">
                 <div class="col-sm-4">
-                    <p class="lead">Wykupujesz pakiet treningów</p>
+                    <p class="lead text-bold">Wykupujesz pakiet treningów</p>
                     <p>Zadzwoń, porozmawiajmy. Powiesz mi czego szukasz, wspólnie zastanowimy się czy potrafię Ci pomóc.</p>
                 </div>
 
                 <div class="col-sm-4">
-                    <p class="lead">Otrzymujesz dostęp do panelu klienta</p>
+                    <p class="lead text-bold">Otrzymujesz dostęp do panelu klienta</p>
                     <p>W panelu wypełniasz szczegółową ankietę, zarządzasz kalendarzem treningów a także komunikujesz się ze mną.</p>
                 </div>
 
                 <div class="col-sm-4">
-                    <p class="lead">Wspólnie ćwiczymy w wybranym miejscu</p>
+                    <p class="lead text-bold">Wspólnie ćwiczymy w wybranym miejscu</p>
                     <p>Umawiamy się na konkretną godzinę i dajemy z siebie wszystko!</p>
                 </div>
             </div>
-            <a href="#" class="btn btn-primary pull-right">Dowiedz się więcej</a>
+            <a href="/#trainings-info" class="btn btn-primary pull-right">Dowiedz się więcej</a>
         </div>
     </div>
 
-    <div class="container">
-        <h4 class="mb20 mt-20 text-left">Zadzwoń, zapytaj o dostępność terminów: <a data-hint href="tel:<%- info.user.phone %>"><%- info.user.phone %> <i class="ti-mobile"></i></a> </h4>
+    <div class="container pt40">
+        <h4 class="mb40 mt-20 text-left">Zadzwoń, zapytaj o dostępność terminów: <a data-hint href="tel:<%- info.user.phone %>"><%- info.user.phone %> <i class="ti-mobile"></i></a> </h4>
         <% if(!trainPlans || !trainPlans.length) {%>
             <h3 style="color:red;">Błąd ładowania planów treningowych.</h3>
         <% } else {%>
@@ -325,7 +326,7 @@
     </div> 
     <% } %>
     <% if(info.isFeedCounsultant){ %>
-    <div class="container pt20 pb20 bg-dark" id="feedPlans">
+    <div class="container lists-container pt20 pb20 bg-dark" id="feedPlans">
         <h3 class="text-primary center-title mb10 h1 text-left">Doradztwo żywieniowe</h3>
         <div style="padding-left: 50px;padding-right: 50px;">
             <div class="row">
@@ -374,46 +375,46 @@
         </div>
     </div>
        
-    <div class="container pt20 pb20 clearfix">
-        <h3 class="text-primary center-title mb10 h1 text-left">Jak to działa?</h3>
+    <div class="container pt40 pb20 clearfix">
+        <h3 class="text-primary center-title mb40 h1 text-left">Jak to działa?</h3>
         <div style="padding-left: 100px;padding-right: 100px;">
             <div class="row text-center pb20">
                 <div class="col-sm-6">
-                    <p class="lead">Wybierasz odpowiedni pakiet konsultacji</p>
+                    <p class="lead text-bold">Wybierasz odpowiedni pakiet konsultacji</p>
                     <p>Wybierasz okres jaki Ciebie najbardziej interesuje. Zauważ, że im dłuższy okres tym większa szansa na zrealizowanie wyznaczonych celów. </p>
                 </div>
 
                 <div class="col-sm-6">
-                    <p class="lead">Otrzymujesz dostęp do panelu klienta</p>
+                    <p class="lead text-bold">Otrzymujesz dostęp do panelu klienta</p>
                     <p>W panelu wypełniasz szczegółową ankietę, gdzie określasz swój aktualny stan a także definiujesz cele jakie masz zamiar ze mną osiągnąć.</p>
                 </div>
             </div>
             <div class="row text-center pb20">
                 <div class="col-sm-6">
-                    <p class="lead">Codziennie dostarczasz mi informacji</p>
+                    <p class="lead text-bold">Codziennie dostarczasz mi informacji</p>
                     <p>W panelu uzupełniasz dane na temat Twojej aktywności oraz szczegółowo przekazujesz informacje na temat każdego posiłku tego dnia.</p>
                 </div>
 
                 <div class="col-sm-6">
-                    <p class="lead">Wspólnie prowadzimy Cię do wytyczonego celu</p>
+                    <p class="lead text-bold">Wspólnie prowadzimy Cię do wytyczonego celu</p>
                     <p>Codziennie otrzymujesz ode mnie informację zwrotną na temat Twojej aktywności oraz odżywiania.Dzięki dogłębnej analizie Twoich danych będę w stanie pomóc Ci osiągnąć Twój cel.</p>
                 </div>
             </div>
-            <a href="#" class="btn btn-primary pull-right">Dowiedz się więcej</a>
+            <a href="/#howItWorks" class="btn btn-primary pull-right">Dowiedz się więcej</a>
         </div>
     </div>
 
     <div class="container">
-        <h3 class="text-primary center-title mb10 h1 text-left">Doradztwo dietetyczne</h3>        
+        <h3 class="text-primary center-title mb40 h1 text-left">Doradztwo dietetyczne</h3>        
         <% if(info.isFreeTrainingEnabled || isEditMode){ %>
-        <div class="clearfix free-sample-block" style="padding-left: 100px;padding-right: 100px;  
+        <div class="clearfix free-sample-block mb40" style="padding-left: 100px;padding-right: 100px;  
         <% if(!info.isFreeTrainingEnabled){ %>display: none;<% } %>">
             <p class="lead">Wypróbuj pierwszą konsultację zupełnie za darmo.</p>
             <p>Otwórz konto, oznacz swoje cele, wypełnij pierwszy dzień swojego dziennika żywieniowego a ja specjalnie dla Ciebie opracuję analizę oraz zestaw wstępnych zaleceń.</p>
             <a href="#" class="btn btn-primary pull-right">Dowiedz się więcej</a>
         </div>
         <% } %>
-        <p class="lead">Zakup diety - określ przez ile tygodni chcesz ze mną współpracować</p>
+        <p class="lead mb40">Zakup diety - określ przez ile tygodni chcesz ze mną współpracować</p>
         <form action="/addItemToCart" method="POST">
             <div style="padding-left: 100px;padding-right: 100px;">
                 <div class="container feed-plans">
