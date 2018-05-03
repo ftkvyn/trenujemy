@@ -462,7 +462,9 @@ class DiaryDay extends React.Component {
         let readonlyForUser = {};
         let readonlyForTrainer = {};
         if(this.state.userId){
-          readonlyForTrainer = {readOnly: true};
+          readonlyForTrainer = {readOnly: true};          
+        }else{
+          readonlyForUser = {readOnly: true};
           simpleModeCheckbox = <FormGroup>
                 <Col lg={2} md={1}></Col>
                 <Col lg={ 8 } md={10}>
@@ -477,8 +479,6 @@ class DiaryDay extends React.Component {
                 </Col>
                 <Col lg={2} md={1}></Col>                    
             </FormGroup> 
-        }else{
-          readonlyForUser = {readOnly: true};
         }
         let addTrainingBtn = "";
         if(this.state.trainings.length < 3 && !this.state.addingTraning && this.state.data.id && !this.state.userId){

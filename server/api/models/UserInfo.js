@@ -21,7 +21,7 @@ module.exports = {
 
 	bodyType:{
 		type:'number',columnType:'integer',
-		isIn: [1,2,3],
+		isIn: [0,1,2,3],
 		// defaultsTo:1,
 	},
 
@@ -145,7 +145,7 @@ module.exports = {
 
 	possibleTrainings:{
 		type:'number',columnType:'integer',
-		isIn:[1,2,3,4,5,6],
+		isIn:[0,1,2,3,4,5,6],
 		// defaultsTo:1
 	},
 
