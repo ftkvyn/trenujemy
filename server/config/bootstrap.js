@@ -35,7 +35,6 @@ module.exports.bootstrap = function(cb) {
 
   //running every 15 minutes
   scheduler.scheduleJob('*/15 * * * *', function(){
-  // scheduler.scheduleJob('*/15 * * * * *', function(){
     notificationService.notifyUsers();
   });  
 

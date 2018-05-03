@@ -11,8 +11,13 @@ const passwordRecoveryEmailTemplate = fs.readFileSync('./emails/passwordRecovery
 const contactEmailTemplate = fs.readFileSync('./emails/contact.html', 'utf8');
 const purchaseEmailTemplate = fs.readFileSync('./emails/paymentConfirm.html', 'utf8');
 const trainerNewTransactionTemplate = fs.readFileSync('./emails/trainerNewTransaction.html', 'utf8');
+
 const _feedItemTemplate = fs.readFileSync('./emails/_feedItemTemplate.html', 'utf8');
 const _trainItemTemplate = fs.readFileSync('./emails/_trainItemTemplate.html', 'utf8');
+
+const editedAdviceTemplate = fs.readFileSync('./emails/editedAdvice.html', 'utf8');
+const editedTrainingTemplate = fs.readFileSync('./emails/editedTraining.html', 'utf8');
+const editedDailyReportTemplate = fs.readFileSync('./emails/editedDailyReport.html', 'utf8');
 
 function sendMail(toMail, subject, body){
 	const to_email = new helper.Email(toMail);
@@ -53,6 +58,33 @@ exports.sendActivationMail = function(user) {
 		.replace('%NAME%', user.email || user.login)
 		.replace('%URL%', `${rootHost}auth/activate?activationCode=${user.activationCode}`);
 	sendMail(user.login, 'Aktywacja konta',body);
+}
+
+exports.sendAdviceMail = function(model) {
+	const body = editedAdviceTemplate
+		.replace('%USER_NAME%', model.userName)
+		.replace('%TRAINER_NAME%', model.trainerName)
+		.replace('%URL%', `${rootHost}dashboard/advice/${model.trainerId}`);
+	sendMail(model.email, 'Zalecenia trenera',body);
+}
+
+exports.sendTrainingMail = function(model) {
+	const body = editedTrainingTemplate
+		.replace('%USER_NAME%', model.userName)
+		.replace('%TRAINER_NAME%', model.trainerName)
+		.replace('%DATE%', model.date)
+		.replace('%PLACE%', model.place)
+		.replace('%URL%', `${rootHost}dashboard/trainings`);
+	sendMail(model.email, 'Komentarz do treningu',body);
+}
+
+exports.sendDiaryMail = function(model) {
+	const body = editedDailyReportTemplate
+		.replace('%USER_NAME%', model.userName)
+		.replace('%TRAINER_NAME%', model.trainerName)
+		.replace('%DATE%', model.date)
+		.replace('%URL%', `${rootHost}dashboard/diary/${model.dateStr}`);
+	sendMail(model.email, 'Komentarz do dzenniku aktywności',body);
 }
 
 exports.sendContactMail = function(model){

@@ -50,7 +50,8 @@ module.exports = {
       model:'User',
     },
 	shouldSendEmail:{
-      type:'boolean'
+      type:'boolean',
+      allowNull: true
     },
 	image:{
 		type:'string'
