@@ -54,7 +54,19 @@ module.exports = {
 	},
 
 	approveByAdmin:function(req, res){
-
+		let model = {};
+		model.isApprovedByAdmin = req.body.isApprovedByAdmin;
+		if(model.isApprovedByAdmin){
+			model.activatedAt = new Date();
+		}
+		TrainerInfo.update(req.params.id, model)
+		.exec(function(err, data){
+			if(err){
+				console.error(err);
+				return res.badRequest(err);
+			}	
+			return res.send('ok');
+		});	
 	},
 
 	update:function(req, res){

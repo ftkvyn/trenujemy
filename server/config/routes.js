@@ -52,6 +52,8 @@ module.exports.routes = {
 
   '/login': 'ViewsController.login',
 
+  '/adminLogin': 'ViewsController.adminLogin',
+
   '/registerTrainer': 'ViewsController.registerTrainer',  
 
   '/recoverPassword': 'ViewsController.recoverPassword',
@@ -147,6 +149,8 @@ module.exports.routes = {
   'get /api/training/:userId?': 'TrainingController.find',
 
   'post /api/trainerInfo/route/:id' : 'TrainerInfoController.updateRoute',
+
+  'post /api/trainerInfo/adminApprovement/:id' : 'TrainerInfoController.approveByAdmin',
 
   'get /editTrainerPage/:friendlyId' : 'ViewsController.trainerEdit',
 

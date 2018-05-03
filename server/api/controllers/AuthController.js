@@ -6,6 +6,33 @@
  */
 
 var bcrypt = require('bcrypt');
+const Q = require('q');
+
+function adminImpersonate(login, req){
+	let deferred = Q.defer();
+	User.findOne({login:login}).exec(
+        function(err,user){
+          if(err){
+            console.error(err);
+            return deferred.reject(err);
+          }
+          if(!user){
+            return deferred.reject({
+              success: false,
+              notFound: true
+            });
+          }else{
+            req.session.user = user;
+            var url = req.session.returnUrl || '/dashboard';
+            req.session.returnUrl = null;
+            return deferred.resolve({
+                success: true,
+                url: url
+            });
+          }
+    });
+    return deferred.promise;
+}
 
 module.exports = {
 
@@ -39,7 +66,18 @@ module.exports = {
 	              }
 	              req.session.user = user;
 	              if(user.role == 'admin'){
-	          		req.session.admin = user;	          		
+	          		req.session.admin = user;	
+	          		if(req.body.userLogin){
+	          			adminImpersonate(req.body.userLogin, req)
+	          			.then(function(data){
+	          				res.send(data);
+	          			})
+	          			.catch(function(err){
+	          				res.send(err);
+	          			})
+	          			.done();
+	          			return;
+	          		}          		
 	              }else{
 	              	req.session.admin = null;
 	              }
@@ -55,27 +93,7 @@ module.exports = {
 	},
 
 	adminImpersonate:function(req, res){
-	    User.findOne({login:req.body.login}).exec(
-	        function(err,user){
-	          if(err){
-	            console.error(err);
-	            return res.send({error: err});
-	          }
-	          if(!user){
-	            return res.send({
-	              success: false,
-	              notFound: true
-	            });
-	          }else{
-	            req.session.user = user;
-                var url = req.session.returnUrl || '/dashboard';
-                req.session.returnUrl = null;
-                return res.send({
-	                success: true,
-	                url: url
-	            });
-	          }
-	    });
+	    
 	},
 
 	logout: function (req, res){

@@ -38,8 +38,8 @@ const searchFields = [
 module.exports = {
 	home: function(req,res){
 		TrainerInfo.find({
-			// isActivatedByTrainer:true,
-			// isApprovedByAdmin: true,
+			isActivatedByTrainer:true,
+			isApprovedByAdmin: true,
 		})
 		.sort('updatedAt DESC')
 		.populate('user')
@@ -96,9 +96,8 @@ module.exports = {
 			where.isFeedCounsultant = true;
 		}
 
-		//ToDo: uncomment
-		// where.isActivatedByTrainer = true;
-		// where.isApprovedByAdmin = true;
+		where.isActivatedByTrainer = true;
+		where.isApprovedByAdmin = true;
 
 		// console.log(where);
 		trainersLoader.loadTrainersPage(where, {pageSize: PAGE_SIZE, page: page})
@@ -133,6 +132,9 @@ module.exports = {
 					return res.notFound();
 				}
 				if(!info){
+					return res.notFound();
+				}
+				if(!info.isActivatedByTrainer || !info.isApprovedByAdmin){
 					return res.notFound();
 				}
 				let qs = [];
@@ -305,6 +307,10 @@ module.exports = {
 			req.session.returnUrl = decodeURIComponent(req.query.returnUrl);
 		}
 		return res.view('auth/login');	
+	},
+
+	adminLogin: function(req,res){
+		return res.view('auth/adminLogin');	
 	},
 
 	registerTrainer: function(req,res){

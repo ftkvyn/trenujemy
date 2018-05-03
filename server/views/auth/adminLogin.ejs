@@ -1,0 +1,68 @@
+<div class="bg-parallax parallax-overlay accounts-page"  data-jarallax='{"speed": 0.2}' style='background-image: url("/images/foto/20.jpg")'>
+     <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mb30">
+                <div style="    max-width: 400px;margin:auto;">
+                    <h3 class="text-white text-center mb30">Zaloguj się jako admin</h3>
+                    <div class="alert alert-danger loginError notFoundError text-center" role="alert" style="display: none;">
+                        Nie ma użytkownika z podanym emailem i hasłem.
+                    </div>
+                    <div class="alert alert-danger loginError notActiveError text-center" role="alert" style="display: none;">
+                        Proszimy aktywować konto poprzez link, który został wysłany na podany email.
+                    </div>
+                    <div class="alert alert-danger loginError someLoginError text-center" role="alert" style="display: none;">
+                        Występił nieznany błąd. 
+                    </div>
+                    <form class="login-form">
+                        <div class="form-group">
+                            <input type="email" class="form-control email" placeholder="Adres Email Administrarora" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control password" placeholder="Hasło Administrarora" required>
+                        </div>  
+
+                        <div class="form-group">
+                            <input type="email" class="form-control user-email" placeholder="Adres Email Użytkownika" required>
+                        </div>          
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-rounded btn-primary btn-block">Zaloguj</button>
+                        </div>                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assan/js/plugins/plugins.js"></script> 
+<script type="text/javascript" src="/assan/js/assan.custom.js"></script> 
+
+<script type="text/javascript">
+    $(function() {
+        $('body').on('submit', '.login-form',function(event){
+            event.preventDefault();
+            var model = {};
+            model.login = $('.login-form .email').val();
+            model.password = $('.login-form .password').val();
+            model.userLogin = $('.login-form .user-email').val();
+            $('.loginError').hide();
+            $.post('/auth/login', model, function(data){
+                if(data.success){
+                    window.location = data.url;
+                    return false;
+                }
+                if(data.notFound){
+                    $('.notFoundError').show();
+                    return false;
+                }
+                if(data.notActive){
+                    $('.notActiveError').show();
+                    return false;
+                }
+                console.error(data);
+                $('.someLoginError').show();
+            });
+            return false;
+        });
+    });
+</script>

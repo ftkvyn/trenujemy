@@ -272,3 +272,16 @@ body.with-popup .wrapper > .aside
 .input-correct{
 	border-color: #49da25 !important;
 }
+
+.inactive-page{
+	color: red;
+}
+
+.wait-for-admin-page{
+	color: orange;
+}
+
+.active-page{
+	color: green;
+	font-weight: bold;
+}

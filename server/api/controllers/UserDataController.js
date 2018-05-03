@@ -39,6 +39,9 @@ module.exports = {
 			catch(ex){
 				//Do nothing.
 			}
+			if(req.session.admin){
+				user._isAdmin = true;
+			}
 
 			if(user.role != 'trainer'){
 				return res.json({user: user, feedPlans: feedPlans, trainPlans: trainPlans});	

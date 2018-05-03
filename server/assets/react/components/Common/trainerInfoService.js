@@ -14,6 +14,23 @@ function loadTrainerInfo(){
 	  });
 }
 
+function adminActivate(model){
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: '/api/trainerInfo/adminApprovement/'+model.id,
+            type: 'POST',
+            data: model,
+            success: function (data) {
+                resolve(data);                
+            },
+            error: function(err){
+                console.error(err);
+                reject(err);                
+            }
+        });
+      });
+}
+
 function saveTrainerInfo(model){
 	return new Promise((resolve, reject) => {
 		$.ajax({
@@ -48,4 +65,4 @@ function saveTrainerRoute(model){
 	  });
 }
 
-export{saveTrainerInfo, saveTrainerRoute, loadTrainerInfo}
+export{saveTrainerInfo, saveTrainerRoute, loadTrainerInfo, adminActivate}
