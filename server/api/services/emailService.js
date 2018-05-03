@@ -10,6 +10,7 @@ const activationEmailTemplate = fs.readFileSync('./emails/activate.html', 'utf8'
 const passwordRecoveryEmailTemplate = fs.readFileSync('./emails/passwordRecovery.html', 'utf8');
 const contactEmailTemplate = fs.readFileSync('./emails/contact.html', 'utf8');
 const purchaseEmailTemplate = fs.readFileSync('./emails/paymentConfirm.html', 'utf8');
+const trainerNewTransactionTemplate = fs.readFileSync('./emails/trainerNewTransaction.html', 'utf8');
 const _feedItemTemplate = fs.readFileSync('./emails/_feedItemTemplate.html', 'utf8');
 const _trainItemTemplate = fs.readFileSync('./emails/_trainItemTemplate.html', 'utf8');
 
@@ -33,6 +34,9 @@ function sendMail(toMail, subject, body){
 	sg.API(request, function(error, response) {
 	  	if(error){
 			console.error(error);
+			if(error.response && error.response.body && error.response.body.errors){
+				console.error(error.response.body.errors);
+			}
 		}
 	});
 }
@@ -59,7 +63,7 @@ exports.sendContactMail = function(model){
 	sendMail(contactEmail, 'Formularz kontaktowy', body);
 }
 
-exports.sendNewTransactionMail = function(model){
+function getItemsText(model){
 	let itemsListText = '';
 	if(model.feedPlanName){
 		const feedItemText = _feedItemTemplate
@@ -74,9 +78,24 @@ exports.sendNewTransactionMail = function(model){
 			itemsListText += trainItemText;		
 		}
 	}
+	return itemsListText;
+}
+
+exports.sendNewTransactionMail = function(model){
+	const itemsListText = getItemsText(model);
 	const body = purchaseEmailTemplate
 		.replace('%NAME%', model.name)
 		.replace('%URL%', `${rootHost}dashboard/`)
 		.replace('%PURCHASES_LIST%', itemsListText);
 	sendMail(model.email, 'Potwierdzenie transakcji', body);
+}
+
+exports.sendTrainerNewTransactionMail = function(model){
+	const itemsListText = getItemsText(model);
+	const body = trainerNewTransactionTemplate
+		.replace('%NAME%', model.trainerName)
+		.replace('%USER_NAME%', model.userName)
+		.replace('%URL%', `${rootHost}dashboard/`)
+		.replace('%PURCHASES_LIST%', itemsListText);
+	sendMail(model.email, 'Nowy zakup w serwisie Znany Trener 24', body);
 }

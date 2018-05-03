@@ -254,7 +254,7 @@ module.exports = {
 							.done(function(data){
 								console.log('=========Created items:==========');
 								console.log(data);
-								let qs = [];
+								let qs = [];								
 								qs.push(User.findOne(transactions[0].user));
 								Q.all(qs)
 								.catch(function(err){
@@ -270,13 +270,43 @@ module.exports = {
 									for(let i = 0; i < items.length; i++){
 										let item = items[i];
 										if(item.isFeedPlan){
-											emailModel.feedPlanName = `Plan żywieniowy na ${item.weeks}-tydodniowy okres, konsultant ${item.trainer.name} `;
+											if(item.isFreeSample){
+												emailModel.feedPlanName = `Plan żywieniowy na okres próbny, konsultant ${item.trainer.name} `;	
+											}else{
+												emailModel.feedPlanName = `Plan żywieniowy na ${item.weeks}-tydodniowy okres, konsultant ${item.trainer.name} `;
+											}
 											emailModel.feedPlanWithConsult = item.isWithConsulting;
 										}else{
 											emailModel.trainPlans.push(item.name + " - " + item.trainer.name);
 										}
 									}
 									emailService.sendNewTransactionMail(emailModel);
+
+									let trainerIds = transactions.map(transaction => transaction.trainer);
+						            for (var t = trainerIds.length - 1; t >= 0; t--) {
+						              let trainerId = trainerIds[t];
+						              let trainerTransactions = transactions.filter(transaction => transaction.trainer == trainerId);
+
+						              let trainerEmailModel = {};
+						              trainerEmailModel.userName = user.name || user.login;              
+						              trainerEmailModel.trainPlans = [];
+						              for(let i = 0; i < trainerTransactions.length; i++){
+						                let item = trainerTransactions[i].item;
+						                trainerEmailModel.email = item.trainer.login;
+						                trainerEmailModel.trainerName = item.trainer.name;
+						                if(item.isFeedPlan){
+						                  if(item.isFreeSample){
+						                    trainerEmailModel.feedPlanName = `Plan żywieniowy na okres próbny`;
+						                  }else{
+						                    trainerEmailModel.feedPlanName = `Plan żywieniowy na ${item.weeks}-tydodniowy okres`; 
+						                  }                       
+						                  trainerEmailModel.feedPlanWithConsult = item.isWithConsulting;
+						                }else{
+						                  trainerEmailModel.trainPlans.push(item.name);
+						                }
+						              }
+						              emailService.sendTrainerNewTransactionMail(trainerEmailModel);
+						            }
 								});
 							});		
 						}

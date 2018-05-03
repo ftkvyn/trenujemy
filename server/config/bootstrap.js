@@ -10,6 +10,7 @@
  */
 
 //const scheduler = require('node-schedule');
+const Q = require('q');
 
 module.exports.bootstrap = function(cb) {
   process.env.TZ = 'Europe/Warsaw';
