@@ -34,6 +34,10 @@ module.exports = {
   		type:'string',columnType:'text'
   	},
 
+    shouldSendEmail:{
+      type:'boolean'
+    },
+
     userGoogleEventId:{
       type:'string'
     },    

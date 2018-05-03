@@ -26,6 +26,7 @@ module.exports = {
 		let model = {};
 		if(req.session.user.role == 'trainer'){
 			model.trainerComment = req.body.comment;
+			model.shouldSendEmail = true;
 		}else{
 			model.userComment = req.body.comment;
 			model.user = req.session.user.id;

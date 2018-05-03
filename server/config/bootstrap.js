@@ -9,7 +9,7 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
-//const scheduler = require('node-schedule');
+const scheduler = require('node-schedule');
 const Q = require('q');
 
 module.exports.bootstrap = function(cb) {
@@ -27,8 +27,17 @@ module.exports.bootstrap = function(cb) {
 		//   });
   // 	}
   // }
-  // scheduler.scheduleJob('10 0 * * *', function(){
-  //   expiringService.expirePlans();
-  // });  
+
+  //running once a day at 0:10
+  scheduler.scheduleJob('10 0 * * *', function(){
+    expiringService.expirePlans();
+  });  
+
+  //running every 15 minutes
+  scheduler.scheduleJob('*/15 * * * *', function(){
+  // scheduler.scheduleJob('*/15 * * * * *', function(){
+    notificationService.notifyUsers();
+  });  
+
   cb();
 };

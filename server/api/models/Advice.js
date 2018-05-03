@@ -36,65 +36,69 @@ module.exports = {
       type:'number',columnType:'integer'
     },
 
-  	fiber:{ //g
-  		type:'number',columnType:'integer'
-  	},
-  	sodium:{ //mg
-  		type:'number',columnType:'integer'
-  	},
-  	potassium:{//mg
-  		type:'number',columnType:'integer'
-  	},
-  	calcium:{//mg
-  		type:'number',columnType:'integer'
-  	},
-  	iron:{//mg
-  		type:'number',columnType:'integer'
-  	},
-  	vitaminC:{//mg
-  		type:'number',columnType:'integer'
-  	},
-  	vitminA:{//ug
-  		type:'number',columnType:'integer'
-  	}, 	
+  	// fiber:{ //g
+  	// 	type:'number',columnType:'integer'
+  	// },
+  	// sodium:{ //mg
+  	// 	type:'number',columnType:'integer'
+  	// },
+  	// potassium:{//mg
+  	// 	type:'number',columnType:'integer'
+  	// },
+  	// calcium:{//mg
+  	// 	type:'number',columnType:'integer'
+  	// },
+  	// iron:{//mg
+  	// 	type:'number',columnType:'integer'
+  	// },
+  	// vitaminC:{//mg
+  	// 	type:'number',columnType:'integer'
+  	// },
+  	// vitminA:{//ug
+  	// 	type:'number',columnType:'integer'
+  	// }, 	
 
-  	show_fiber:{
-  		type:'boolean',
-  		defaultsTo: false
-  	},
-  	show_sodium:{
-  		type:'boolean',
-  		defaultsTo: false
-  	},
-  	show_potassium:{
-  		type:'boolean',
-  		defaultsTo: false
-  	},
-  	show_calcium:{
-  		type:'boolean',
-  		defaultsTo: false
-  	},
-  	show_iron:{
-  		type:'boolean',
-  		defaultsTo: false
-  	},
-  	show_vitaminC:{
-  		type:'boolean',
-  		defaultsTo: false
-  	},
-  	show_vitminA:{
-  		type:'boolean',
-  		defaultsTo: false
-  	},
+  	// show_fiber:{
+  	// 	type:'boolean',
+  	// 	defaultsTo: false
+  	// },
+  	// show_sodium:{
+  	// 	type:'boolean',
+  	// 	defaultsTo: false
+  	// },
+  	// show_potassium:{
+  	// 	type:'boolean',
+  	// 	defaultsTo: false
+  	// },
+  	// show_calcium:{
+  	// 	type:'boolean',
+  	// 	defaultsTo: false
+  	// },
+  	// show_iron:{
+  	// 	type:'boolean',
+  	// 	defaultsTo: false
+  	// },
+  	// show_vitaminC:{
+  	// 	type:'boolean',
+  	// 	defaultsTo: false
+  	// },
+  	// show_vitminA:{
+  	// 	type:'boolean',
+  	// 	defaultsTo: false
+  	// },
 
-  	sameInTrainingDays:{
-  		type:'boolean',
-  		defaultsTo: true
-  	},
+  	// sameInTrainingDays:{
+  	// 	type:'boolean',
+  	// 	defaultsTo: true
+  	// },
 
   	plan:{
   		type:'string',columnType:'text'
-  	}
+  	},
+
+    shouldSendEmail:{
+      type:'boolean'
+    },
   },
 
   beforeValidate: function (values, cb) {
@@ -105,6 +109,6 @@ module.exports = {
       }
     }
     cb();
-  }
+  },
 };
 

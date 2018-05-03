@@ -69,6 +69,7 @@ module.exports = {
 		let model = req.body;
 		delete model.date;
 		if(req.session.user.role == 'trainer'){
+			model.shouldSendEmail = true;
 			delete model.userNotes;
 		}else{
 			delete model.trainerNotes;

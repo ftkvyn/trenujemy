@@ -46,6 +46,12 @@ module.exports = {
 	trainerNotes:{
 		type:'string',columnType:'text'
 	},
+	lastEditedTrainer:{
+      model:'User',
+    },
+	shouldSendEmail:{
+      type:'boolean'
+    },
 	image:{
 		type:'string'
 	}

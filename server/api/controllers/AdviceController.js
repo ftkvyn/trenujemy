@@ -72,6 +72,22 @@ module.exports = {
 		}else{
 			return res.forbidden();
 		}
+	},
+
+	update:function(req, res){
+		let model = {};
+		if(req.session.user.role == 'trainer'){
+			model.shouldSendEmail = true;
+		}
+		Advice.update({id: req.params.id}, model)
+		.fetch()
+		.exec(function(err, data){
+			if(err){
+				console.error(err);
+				return res.badRequest(err);
+			}
+			return res.json(data);
+		});
 	},	
 };
 
