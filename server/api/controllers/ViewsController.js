@@ -190,7 +190,7 @@ module.exports = {
 					}
 
 					let qs = [];
-					qs.push(FeedPlan.find({trainer: info.user.id, isFreeSample: false, isVisible: true}));
+					qs.push(FeedPlan.find({trainer: info.user.id, isVisible: true}));
 					qs.push(TrainPlan.find({trainer: info.user.id, isActive: true}));
 
 					Q.all(qs)
@@ -209,7 +209,8 @@ module.exports = {
 							},
 							info: info,
 							feedPlans: data[0],
-							trainPlans: data[1]
+							trainPlans: data[1],
+							isUsedFreeSample: false
 						});
 					});
 				}

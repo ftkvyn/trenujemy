@@ -36,6 +36,64 @@ function saveTrainPlan(model){
 	});
 }
 
+function addImage(url, parent){
+	let imageTag = $(`<div class="cbp-item cbp-item-small">
+                            <a href="${url}" class="cbp-caption cbp-lightbox" rel="nofollow">
+                                <div class="">
+                                    <img src="${url}" alt="">
+                                </div>
+                            </a>
+                        </div>`);
+	parent.cubeportfolio('destroy', function(){
+		parent.append(imageTag);
+		if(parent.hasClass('certificates-gallery')){
+			saveCertificates();
+			initCertificates();
+		}
+		if(parent.hasClass('photos-gallery')){
+			savePhotos();
+			initPhotos();
+		}	
+	});	
+}
+
+function removeImage(){
+	let parent = $(this).closest('.cbp');
+	let imgContainer = $(this).closest('.cbp-item');
+
+	parent.cubeportfolio('destroy', function(){
+		imgContainer.remove();
+		if(parent.hasClass('certificates-gallery')){
+			saveCertificates();
+			initCertificates();
+		}	
+		if(parent.hasClass('photos-gallery')){
+			savePhotos();
+			initPhotos();
+		}	
+	});	
+}
+
+function saveCertificates(){
+	let certificates = [];
+	$('.certificates-gallery').find('img').each(function(num, item){
+		certificates.push($(item).attr('src'));
+	});
+	let model = {id: $('#info-id').val()};
+	model.certificateImages = certificates;
+	saveTrainerInfo(model);
+}
+
+function savePhotos(){
+	let photos = [];
+	$('.photos-gallery').find('img').each(function(num,item){
+		photos.push($(item).attr('src'));
+	});
+	let model = {id: $('#info-id').val()};
+	model.photos = photos;
+	saveTrainerInfo(model);
+}
+
 function saveFeedPlan(model){
 	return new Promise((resolve, reject) => {
 		$.ajax({
@@ -122,6 +180,45 @@ $(function() {
 			    editor.remove();
 			}
 		});
+	});
+
+	$('.add-image').click(function(){
+		$(this).siblings('form').find('input').click();
+	});
+
+	$('body').on('click','.remove-cbp', removeImage);
+
+	$('.image-input').change(function(){
+		let imageInput = $(this);
+		let gallery = imageInput.parent().siblings('.cbp');
+		var formData = new FormData();
+        var fileData = imageInput[0].files[0];
+        formData.append('file', fileData);
+
+        $.ajax({
+            url: '/api/uploadImage',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: 'multipart/form-data',
+            xhr: function() {
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) {
+                    myXhr.upload.addEventListener('progress', function(e) {
+                    } , false);
+                }
+                return myXhr;
+            },
+            success: function (data) {
+            	addImage(data.url, gallery);  
+            	//ToDo: save list.            
+            },
+            error: function(err){
+                console.error(err);        
+            }
+        });
 	});
 
 	$('[data-edit-list]').each(function(num){

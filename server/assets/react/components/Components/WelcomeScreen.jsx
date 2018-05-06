@@ -85,7 +85,7 @@ class WelcomeScreen extends React.Component {
                   <p>Wypełnij dziennik aktywności przynajmniej przez jeden pełny dzień. Uzupełniasz tam informacje o spożywanych posiłkach a także wykonanych treningach tego dnia.</p>,
                   <p>Trener przygotuje dla Ciebie darmową poradę. Znajdziesz ją w zakładce "Zalecenia trenera". Jeżeli uznasz, że warto rozpocząć dłuższą współpracę, wykup na stronie trenera usługę konsultacji dietetycznej na dłuższy okres.</p>];
               }else if(this.props.notify.feedInfo){
-                  headerText = <p>Witaj, wykupiłeś pakiet:<br/>żywieniowy plan do <b>{this.props.goods.feedPlan.validToStr}</b><br/>u trenera:<br/><b>{this.props.goods.feedPlan.trainer.name}</b></p>;
+                  headerText = <p>Witaj, wykupiłeś pakiet:<br/>żywieniowy plan ważny do <b>{this.props.goods.feedPlan.validToStr}</b><br/>u trenera:<br/><b>{this.props.goods.feedPlan.trainer.name}</b></p>;
                   headers = [<p><b>1</b><br/>Zalecenia trenera</p>, 
                   <p><b>2</b><br/>Dziennik aktywności</p>, 
                   <p><b>3</b><br/>Wskazówki od trenera</p>];

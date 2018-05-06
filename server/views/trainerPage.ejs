@@ -69,93 +69,98 @@
 
                 <div class="clearfix">
                     <h4 class="text-left"><i class="fas fa-certificate"></i> Certyfikaty</h4>
-                    <div id="js-grid-lightbox-gallery" class="cbp">
-
+                    <% if(isEditMode){ %>
+                        <button class="btn btn-primary btn-sm add-image">Dodaj</button>
+                        <form id='cert-image-form' style='display:none;'>
+                            <input type='file' name='file' id='newCertificate' 
+                            accept="image/x-png,image/gif,image/jpeg" 
+                            class="cert-image image-input" />
+                        </form>
+                    <% } %>
+                    <div id="js-grid-lightbox-gallery" class="cbp certificates-gallery">
+                        <%  let limitCert = info.certificateImages.length;
+                            if(!isEditMode){
+                                limitCert = 4;
+                            }
+                            let certLeft = info.certificateImages.length - limitCert;
+                            for(let i = 0; i < limitCert; i++){
+                         %>
                         <div class="cbp-item cbp-item-small">
-                            <a href="/images/feed/1.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
+                            <a href="<%- info.certificateImages[i] %>" class="cbp-caption cbp-lightbox" rel="nofollow">
                                 <div class="">
-                                    <img src="/images/feed/1.jpg" alt="">
+                                    <img src="<%- info.certificateImages[i] %>" alt="">
                                 </div>
                             </a>
                         </div>
+                         <% } %>
 
-                        <div class="cbp-item cbp-item-small">
-                            <a href="/images/feed/2.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
-                                <div class="">
-                                    <img src="/images/feed/2.jpg" alt="">
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="cbp-item cbp-item-small">
-                            <a href="/images/feed/3.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
-                                <div class="">
-                                    <img src="/images/feed/3.jpg" alt="">
-                                </div>
-                            </a>
-                        </div>
-
+                        <% if(certLeft > 0){ %>                     
                         <div class="more-items cbp-item cbp-item-small">
-                            +2
+                            +<%- certLeft %>      
                         </div>
+                        <% } %>
 
+                        <%  
+                            for(let i = limitCert; i < info.certificateImages.length; i++){
+                         %>
                         <div class="cbp-item cbp-item-small" style="display: none;">
-                            <a href="/images/feed/4.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
+                            <a href="<%- info.certificateImages[i] %>" class="cbp-caption cbp-lightbox" rel="nofollow">
                                 <div class="">
-                                    <img src="/images/feed/4.jpg" alt="">
+                                    <img src="<%- info.certificateImages[i] %>" alt="">
                                 </div>
                             </a>
                         </div>
-
-                        <div class="cbp-item cbp-item-small" style="display: none;">
-                            <a href="/images/trainings/4.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
-                                <div class="">
-                                    <img src="/images/trainings/4.jpg" alt="">
-                                </div>
-                            </a>
-                        </div>
+                         <% } %>
                     </div>
                 </div>
 
                 <div class="clearfix">
                     <h4 class="text-left"><i class="fas fa-camera-retro"></i> Zdjęcia</h4>                  
+                    
+                    <% if(isEditMode){ %>
+                        <button class="btn btn-primary btn-sm add-image">Dodaj</button>
+                        <form id='cert-image-form' style='display:none;'>
+                            <input type='file' name='file' id='newCertificate' 
+                            accept="image/x-png,image/gif,image/jpeg" 
+                            class="cert-image image-input" />
+                        </form>
+                    <% } %>
 
-                     <div id="js-grid-lightbox-gallery2" class="cbp">
+                     <div id="js-grid-lightbox-gallery2" class="cbp photos-gallery">
+
+                     <%  let limitPhotos = info.photos.length;
+                            if(!isEditMode){
+                                limitPhotos = 4;
+                            }
+                            let photosLeft = info.photos.length - limitPhotos;
+                            for(let i = 0; i < limitPhotos; i++){
+                         %>
                         <div class="cbp-item cbp-item-small">
-                            <a href="/images/foto/4_1.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
+                            <a href="<%- info.photos[i] %>" class="cbp-caption cbp-lightbox" rel="nofollow">
                                 <div class="">
-                                    <img src="/images/foto/4_1.jpg" alt="">
+                                    <img src="<%- info.photos[i] %>" alt="">
                                 </div>
                             </a>
                         </div>
+                         <% } %>
 
-                        <div class="cbp-item cbp-item-small">
-                            <a href="/images/foto/6.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
-                                <div class="">
-                                    <img src="/images/foto/6.jpg" alt="">
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="cbp-item cbp-item-small">
-                            <a href="/images/foto/11.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
-                                <div class="">
-                                    <img src="/images/foto/11.jpg" alt="">
-                                </div>
-                            </a>
-                        </div>
-
+                        <% if(photosLeft > 0){ %>                     
                         <div class="more-items cbp-item cbp-item-small">
-                            +1
+                            +<%- photosLeft %>      
                         </div>
+                        <% } %>
 
+                        <%  
+                            for(let i = limitPhotos; i < info.photos.length; i++){
+                         %>
                         <div class="cbp-item cbp-item-small" style="display: none;">
-                            <a href="/images/foto/13.jpg" class="cbp-caption cbp-lightbox" rel="nofollow">
+                            <a href="<%- info.photos[i] %>" class="cbp-caption cbp-lightbox" rel="nofollow">
                                 <div class="">
-                                    <img src="/images/foto/13.jpg" alt="">
+                                    <img src="<%- info.photos[i] %>" alt="">
                                 </div>
                             </a>
                         </div>
+                         <% } %>
                     </div>
                 </div>
             </div>              
@@ -482,9 +487,34 @@
 
 <script type="text/javascript" src="/assan/cubeportfolio/js/jquery.cubeportfolio.min.js"></script>
 <script>
-    //projects
-    (function ($, window, document, undefined) {
-        'use strict';
+    function initPhotos(){
+        <% if(isEditMode){ %>
+        $('.cbp-item button').remove();
+        $('.cbp-item').append('<button class="remove-cbp">X</button>');
+        <% } %>
+
+        $('#js-grid-lightbox-gallery2').cubeportfolio({
+            layoutMode: 'grid',
+            defaultFilter: '*',
+            animationType: 'flipOutDelay',
+            gapHorizontal: 15,
+            gapVertical: 15,
+            gridAdjustment: 'responsive',
+            displayType: 'sequentially',
+            displayTypeSpeed: 100,
+            // lightbox
+            lightboxDelegate: '.cbp-lightbox',
+            lightboxGallery: true,
+            lightboxTitleSrc: 'data-title',
+            lightboxCounter: '<div class="cbp-popup-lightbox-counter">{{current}} z {{total}}</div>'
+        });
+    }
+
+    function initCertificates(){
+        <% if(isEditMode){ %>
+        $('.cbp-item button').remove();
+        $('.cbp-item').append('<button class="remove-cbp">X</button>');
+        <% } %>
 
         // init cubeportfolio
         $('#js-grid-lightbox-gallery').cubeportfolio({
@@ -502,22 +532,14 @@
             lightboxTitleSrc: 'data-title',
             lightboxCounter: '<div class="cbp-popup-lightbox-counter">{{current}} z {{total}}</div>'
         });
+    }
 
-        $('#js-grid-lightbox-gallery2').cubeportfolio({
-            layoutMode: 'grid',
-            defaultFilter: '*',
-            animationType: 'flipOutDelay',
-            gapHorizontal: 15,
-            gapVertical: 15,
-            gridAdjustment: 'responsive',
-            displayType: 'sequentially',
-            displayTypeSpeed: 100,
-            // lightbox
-            lightboxDelegate: '.cbp-lightbox',
-            lightboxGallery: true,
-            lightboxTitleSrc: 'data-title',
-            lightboxCounter: '<div class="cbp-popup-lightbox-counter">{{current}} z {{total}}</div>'
-        });
+    //projects
+    (function ($, window, document, undefined) {
+        'use strict';
+
+        initCertificates();
+        initPhotos();
 
         $('body').on('click','.more-items',function(){
             var me = $(this);
