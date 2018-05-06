@@ -100,8 +100,8 @@ class Goods extends React.Component {
         if(this.state.notifications.id){
             let infoPanelContent = null;
             let notify = this.state.notifications;
-            if(notify.helloMessage){
-                helloPopup = helloPopup = <WelcomeScreen role={this.state.user.role}></WelcomeScreen>
+            if(notify.helloMessage || notify.newPurchase){
+                helloPopup = helloPopup = <WelcomeScreen role={this.state.user.role} notify={this.state.notifications} goods={this.state.goods}></WelcomeScreen>
                 // infoPanelContent = <div className='hello-message'>
                 //     <p>Witaj w swoim panelu!</p>
                 //     <br/>
