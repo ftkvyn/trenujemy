@@ -25,6 +25,9 @@ module.exports = {
 		type:'boolean',
 		required:true
 	},	
+	isFreeSample:{
+		type:'boolean'
+	},
 	transaction:{
 		model:'Transaction',
 		required:true

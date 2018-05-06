@@ -62,6 +62,7 @@ module.exports = {
 		let qs = [];
 		qs.push(User.findOne(req.session.user.id));
 		qs.push(FeedPlanPurchase.find({ user: req.session.user.id, isActive: true}));
+		qs.push(FeedPlanPurchase.find({ user: req.session.user.id, isFreeSample: true}));
 		
 		Q.all(qs)
 		.catch(function(err){
@@ -70,13 +71,14 @@ module.exports = {
 				return res.badRequest(err);
 			}
 		})
-		.done(function(data){
+		.then(function(data){
 			const user = data[0];
 			const plans = data[1];
+			const planSamples = data[2];
 			if(req.session.cart.feedPlan && plans.length){
 	    		req.session.cartMessage = 'Na tym koncie aktywna jest wybrana usługa. Nie możesz mieć równocześnie więcej niż jednej aktywnej usługi tego samego typu na jednym koncie';
 	    		return res.redirect('/cart');
-	    	}
+	    	}    	
 
 			cartService.loadCartItems(req.session.cart)
 			.catch(function(err){
@@ -85,6 +87,27 @@ module.exports = {
 				return res.redirect('/cart');
 			})
 			.done(function(cartItems){
+				let sampleItem = null;
+				for(let i = 0; i < cartItems.length; i++){
+					if(cartItems[i].isFeedPlan && cartItems[i].isFreeSample){
+						sampleItem = cartItems[i];
+						break;
+					}
+				}
+				if(sampleItem){
+					const now = new Date();
+					const weekMiliseconds = 7 * 24 * 60 * 60 * 1000;
+			    	for (var i = planSamples.length - 1; i >= 0; i--) {
+			    		if(sampleItem.trainer.id == planSamples[i].trainer){
+			    			req.session.cartMessage = 'Nie możesz kupić jeszcze jednej darmowej konsulacji od tego trenera.';
+	    					return res.redirect('/cart');
+			    		}
+			    		if(now - new Date(sampleItem.createdAt) < weekMiliseconds){
+			    			req.session.cartMessage = 'Możesz skorzytać z pierwszej darmowej konsultacji nie częściej niż raz na 7 dni';
+	    					return res.redirect('/cart');
+			    		}
+			    	}
+			    }
 				const totalPrice = cartItems.reduce( (accumulator, currentItem) => accumulator + currentItem.price, 0);
 				let transactionModels = [];
 				let paymentId = uuidv4();
@@ -109,7 +132,10 @@ module.exports = {
 						console.error(err);
 						return res.badRequest(err);
 					}
-
+					if(totalPrice === 0){
+						//redirect to end.
+						return res.redirect('/finalizeFreeTransaction/' + paymentId);
+					}
 					let paymentData = {
 						p24_merchant_id: merchant_id,
 				    	p24_pos_id: pos_id,
@@ -131,13 +157,17 @@ module.exports = {
 					for(let i = 0; i < cartItems.length; i++){
 						let item = cartItems[i];
 						if(item.isFeedPlan){
-							let word = 'tygodni';
-                        	if(item.weeks < 6){word = 'tygodnie';}
-                        	if(item.weeks == 1){word = 'tydzień';}
-                        	paymentData['p24_name_' + (i+1)] = `Plan żywieniowy, abonament na ${item.weeks} ${word}, konsultant ${item.trainer.name}`;
-                        	if(item.isWithConsulting){
-                        		paymentData['p24_name_' + (i+1)] += ' z codzienną konsultacją';
-                        	}
+							if(item.isFreeSample){
+								paymentData['p24_name_' + (i+1)] =  `Piersza darmowa konsultacja, konsultant ${item.trainer.name}`;
+							}else{
+								let word = 'tygodni';
+	                        	if(item.weeks < 6){word = 'tygodnie';}
+	                        	if(item.weeks == 1){word = 'tydzień';}
+	                        	paymentData['p24_name_' + (i+1)] = `Plan żywieniowy, abonament na ${item.weeks} ${word}, konsultant ${item.trainer.name}`;
+	                        	if(item.isWithConsulting){
+	                        		paymentData['p24_name_' + (i+1)] += ' z codzienną konsultacją';
+	                        	}
+	                        }
 						}else{
 							paymentData['p24_name_' + (i+1)] = item.name;
 						}	
@@ -191,6 +221,33 @@ module.exports = {
 		});
 	},
 
+	finalizeFreeTransaction: function(req, res){
+		const paymentId = req.params.paymentId;
+		Transaction.find({externalId: paymentId})
+		.exec(function(err, data){
+			if(err || !data || !data.length){
+				console.error(err);
+				return res.badRequest();
+			}
+			for (var i = data.length - 1; i >= 0; i--) {
+				if(data[i].amount > 0){
+					console.error(`Transaction ${paymentId} is not free`);
+					return res.badRequest();	
+				}
+			}			
+			transactionsService.finalizeTransaction(paymentId)
+			.then(function(data){
+				return res.redirect('/paymentEnd')
+			})
+			.catch(function(err){
+				console.error(err);
+				return res.badRequest();
+			})
+			.done();
+		});
+		
+	},
+
 	verify: function(req, res){
 		console.log("====== Status info from payment system ======");
 		console.log(req.body);
@@ -239,87 +296,11 @@ module.exports = {
 			    console.log(body);
 			    const bodyData = queryString.parse(body);
 			    if(!bodyData.errorMessage){
-			    	Transaction.update({externalId: paymentId}, {status: 'Complete'})
-			    	.fetch()
-					.exec(function(err, transactions){
-						try{
-							cartService.purchaseItems(transactions)
-							.catch(function(err){
-								console.error(err);
-								Transaction.update({externalId: paymentId}, {status: 'Error while creating purchases', errorMessage: err.toString()})
-								.exec(function(){
-									//Do nothing.						
-								})
-							})
-							.done(function(data){
-								console.log('=========Created items:==========');
-								console.log(data);
-								let qs = [];								
-								qs.push(User.findOne(transactions[0].user));
-								Q.all(qs)
-								.catch(function(err){
-									console.error(err);
-								})
-								.then(function(data){
-									let items = transactions.map(transaction => transaction.item);
-      								let user = data[0];
-									let emailModel = {};
-									emailModel.name = user.name || user.login;
-									emailModel.email = user.login;
-									emailModel.trainPlans = [];
-									for(let i = 0; i < items.length; i++){
-										let item = items[i];
-										if(item.isFeedPlan){
-											if(item.isFreeSample){
-												emailModel.feedPlanName = `Plan żywieniowy na okres próbny, konsultant ${item.trainer.name} `;	
-											}else{
-												emailModel.feedPlanName = `Plan żywieniowy na ${item.weeks}-tydodniowy okres, konsultant ${item.trainer.name} `;
-											}
-											emailModel.feedPlanWithConsult = item.isWithConsulting;
-										}else{
-											emailModel.trainPlans.push(item.name + " - " + item.trainer.name);
-										}
-									}
-									emailService.sendNewTransactionMail(emailModel);
-
-									let trainerIds = transactions.map(transaction => transaction.trainer);
-						            for (var t = trainerIds.length - 1; t >= 0; t--) {
-						              let trainerId = trainerIds[t];
-						              let trainerTransactions = transactions.filter(transaction => transaction.trainer == trainerId);
-
-						              let trainerEmailModel = {};
-						              trainerEmailModel.userName = user.name || user.login;              
-						              trainerEmailModel.trainPlans = [];
-						              for(let i = 0; i < trainerTransactions.length; i++){
-						                let item = trainerTransactions[i].item;
-						                trainerEmailModel.email = item.trainer.login;
-						                trainerEmailModel.trainerName = item.trainer.name;
-						                if(item.isFeedPlan){
-						                  if(item.isFreeSample){
-						                    trainerEmailModel.feedPlanName = `Plan żywieniowy na okres próbny`;
-						                  }else{
-						                    trainerEmailModel.feedPlanName = `Plan żywieniowy na ${item.weeks}-tydodniowy okres`; 
-						                  }                       
-						                  trainerEmailModel.feedPlanWithConsult = item.isWithConsulting;
-						                }else{
-						                  trainerEmailModel.trainPlans.push(item.name);
-						                }
-						              }
-						              emailService.sendTrainerNewTransactionMail(trainerEmailModel);
-						            }
-								});
-							});		
-						}
-						catch(ex){
-							console.error(ex);
-							Transaction.update({externalId: paymentId}, {status: 'Error while creating purchases', errorMessage: ex.toString()})
-							.exec(function(){
-								//Do nothing.						
-							});
-						}
-					});
+			    	transactionsService.finalizeTransaction(paymentId);
 				    return res.send('Ok');
-				}else{
+				}
+				//Transaction processing end
+				else{
 					console.error(bodyData.errorMessage);
 					Transaction.update({externalId: paymentId}, {status: 'Error while verifying', errorMessage: bodyData.errorMessage})
 					.exec(function(){

@@ -132,12 +132,16 @@ exports.purchaseItems = function(transactions){
 					user: user,
 					transaction: feedPlanTransaction.id,
 					plan: feedPlanTransaction.item.id,
+					isFreeSample: feedPlanTransaction.item.isFreeSample,
 					isActive: true,
 					trainer: feedPlanTransaction.item.trainerId  || 1,
 				}).fetch());
 				notificationModel.feedInfo = true;
 				if(feedPlan.isWithConsulting){
 					notificationModel.consultInfo = true;
+				}
+				if(feedPlan.isFreeSample){
+					notificationModel.freeSample = true;
 				}
 				if(!oldFeedsCount){
 					notificationModel.updateSurvey = true;

@@ -101,11 +101,11 @@ exports.initTrainer = function(user){
 		},{
 			isFreeSample:true,			
 			weeks:1,
+			price:0,
 			isVisible: true,
 			trainer:user.id,
 			isWithConsulting: true
 		}
-
 	];
     createQs.push(FeedPlan.createEach(initPlans));
 	Q.all(createQs)

@@ -409,9 +409,18 @@
         <% if(info.isFreeTrainingEnabled || isEditMode){ %>
         <div class="clearfix free-sample-block mb40" style="padding-left: 100px;padding-right: 100px;  
         <% if(!info.isFreeTrainingEnabled){ %>display: none;<% } %>">
-            <p class="lead">Wypróbuj pierwszą konsultację zupełnie za darmo.</p>
-            <p>Otwórz konto, oznacz swoje cele, wypełnij pierwszy dzień swojego dziennika żywieniowego a ja specjalnie dla Ciebie opracuję analizę oraz zestaw wstępnych zaleceń.</p>
-            <a href="#" class="btn btn-primary pull-right">Dowiedz się więcej</a>
+            <form action="/addItemToCart" method="POST">
+                <% if(!isUsedFreeSample){ %>
+                    <input type="hidden" name="feedPlan" value="<%- feedPlans.filter(fp => fp.isFreeSample)[0].id %>">
+                <% } %>
+                <p class="lead">Wypróbuj pierwszą konsultację zupełnie za darmo.</p>
+                <p>Otwórz konto, oznacz swoje cele, wypełnij pierwszy dzień swojego dziennika żywieniowego a ja specjalnie dla Ciebie opracuję analizę oraz zestaw wstępnych zaleceń.</p>
+                <button type="submit" 
+                <% if(info.isUsedFreeSample){ %> disabled="disabled" <% } %>
+                class="btn 
+                <% if(info.isUsedFreeSample){ %> btn-disabled <% } else { %> btn-primary <% } %>
+                pull-right">Chcę wypróbować</button>
+            </form>
         </div>
         <% } %>
         <p class="lead mb40">Zakup diety - określ przez ile tygodni chcesz ze mną współpracować</p>

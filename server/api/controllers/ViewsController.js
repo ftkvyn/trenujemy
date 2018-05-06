@@ -138,8 +138,11 @@ module.exports = {
 					return res.notFound();
 				}
 				let qs = [];
-				qs.push(FeedPlan.find({trainer: info.user.id, isFreeSample: false, isVisible: true}));
+				qs.push(FeedPlan.find({trainer: info.user.id, isVisible: true}));
 				qs.push(TrainPlan.find({trainer: info.user.id, isActive: true}));
+				if(req.session.user){
+					FeedPlanPurchase.find({ user: req.session.user.id, trainer: info.user.id, isFreeSample: true})
+				}
 
 				Q.all(qs)
 				.catch(function(err){
@@ -147,6 +150,10 @@ module.exports = {
 					return res.notFound();
 				})
 				.then(function(data){
+					let isUsedFreeSample = false;
+					if(data[2] && data[2].length){
+						isUsedFreeSample = true;
+					}
 					return res.view('trainerPage', 
 					{
 						isTrainerPage : true,
@@ -157,7 +164,8 @@ module.exports = {
 						},
 						info: info,
 						feedPlans: data[0],
-						trainPlans: data[1]
+						trainPlans: data[1],
+						isUsedFreeSample: isUsedFreeSample
 					});
 				});					
 			});		
@@ -245,17 +253,13 @@ module.exports = {
 	},
 
 	cartApprove: function(req,res){
-		FeedPlanPurchase.find({user: req.session.user.id, isActive: true})
-		.exec(function(err, plans){
-			if(err){
-				console.error(err);
-				return res.view('cart', {locals: {
-					user: req.session.user, 
-					cartMessage: "Błąd przy ładowaniu koszyka",
-					cart: req.session.cart,
-					isApprove: true,
-				}});
-			}
+		let qs = [];
+		qs.push(FeedPlanPurchase.find({ user: req.session.user.id, isActive: true}));
+		qs.push(FeedPlanPurchase.find({ user: req.session.user.id, isFreeSample: true}));
+		Q.all(qs)
+		.then(function(data){
+			let plans = data[0];
+			let planSamples = data[1];
 			if(!plans){
 				plans = [];
 			}
@@ -269,18 +273,35 @@ module.exports = {
 		    	}
 		    }
 		    cartService.loadCartItems(req.session.cart)
-			.catch(function(err){
-				console.error(err);
-				return res.view('cart', {locals: {
-					user: req.session.user, 
-					cartMessage: "Błąd przy ładowaniu koszyka",
-					cart: req.session.cart,
-					isApprove: true,
-				}});
-			})
 			.then(function(cartItems){
-				// console.log('controller - items');
-				// console.log(cartItems);
+				try{
+					let sampleItem = null;
+					for(let i = 0; i < cartItems.length; i++){
+						if(cartItems[i].isFeedPlan && cartItems[i].isFreeSample){
+							sampleItem = cartItems[i];
+							break;
+						}
+					}
+					if(sampleItem){
+						const now = new Date();
+						const weekMiliseconds = 7 * 24 * 60 * 60 * 1000;
+				    	for (var i = planSamples.length - 1; i >= 0; i--) {
+				    		if(sampleItem.trainer.id == planSamples[i].trainer){
+				    			req.session.cartMessage = 'Nie możesz kupić jeszcze jednej darmowej konsulacji od tego trenera.';
+		    					return res.redirect('/cart');
+				    		}
+				    		if( (now - new Date(sampleItem.createdAt) ) < weekMiliseconds){
+				    			req.session.cartMessage = 'Możesz skorzytać z pierwszej darmowej konsultacji nie częściej niż raz na 7 dni';
+		    					return res.redirect('/cart');
+				    		}
+				    	}
+				    }
+				}
+				catch(err){
+					console.error(err);
+					return res.badRequest();
+				}
+
 				const cartMessage = req.session.cartMessage;
 				req.session.cartMessage = undefined;
 				return res.view('cart', {locals: {
@@ -290,8 +311,28 @@ module.exports = {
 					cart: req.session.cart,
 					isApprove: true,
 				}});
-			});		
-	    });
+			})
+			.catch(function(err){
+				console.error(err);
+				return res.view('cart', {locals: {
+					user: req.session.user, 
+					cartMessage: "Błąd przy ładowaniu koszyka",
+					cart: req.session.cart,
+					isApprove: true,
+				}});
+			})
+			.done();		
+	    })
+	    .catch(function(err){
+			console.error(err);
+			return res.view('cart', {locals: {
+				user: req.session.user, 
+				cartMessage: "Błąd przy ładowaniu koszyka",
+				cart: req.session.cart,
+				isApprove: true,
+			}});
+		})
+		.done();
 	},
 
 	paymentEnd: function(req,res){

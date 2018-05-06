@@ -42,6 +42,8 @@ module.exports.routes = {
 
   '/paymentEnd': 'ViewsController.paymentEnd',  
 
+  '/finalizeFreeTransaction/:paymentId' : 'CartController.finalizeFreeTransaction',
+
   'post /addItemToCart': 'CartController.addItem',
 
   'post /removeItemFromCart': 'CartController.removeItem',

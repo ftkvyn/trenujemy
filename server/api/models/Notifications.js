@@ -30,6 +30,10 @@ module.exports = {
   		type:'boolean'
   	},
 
+    freeSample:{
+      type:'boolean'
+    },
+
   	helloMessage:{
   		type:'boolean'
   	},

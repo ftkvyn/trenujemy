@@ -81,9 +81,13 @@
                         <% if(item.weeks < 6){word = 'tygodnie';} %>
                         <% if(item.weeks == 1){word = 'tydzień';} %>                         
                         <td class="product-name">
-                            Plan żywieniowy, abonament na <%= item.weeks %> <%= word %>
-                            <% if(item.isWithConsulting){%>
-                               <br/> <b>z codzienną konsultacją</b>
+                            <% if(item.isFreeSample){%>
+                                Piersza darmowa konsultacja
+                            <% }else{%>
+                                Plan żywieniowy, abonament na <%= item.weeks %> <%= word %>
+                                <% if(item.isWithConsulting){%>
+                                   <br/> <b>z codzienną konsultacją</b>
+                                <%}%>
                             <%}%>
                             <br/>Konsultant: <b> <%= item.trainer.name %> </b>                            
                         </td>
