@@ -57,4 +57,12 @@ try {
 
 
 // Start server
-sails.lift(rc('sails'));
+//sails.lift(rc('sails'));
+
+var config = rc('sails');
+if (process.env.NODE_ENV === 'production') {
+  config.hooks = config.hooks || {};
+  config.hooks.grunt = false;
+}
+// Start server
+sails.lift(config);

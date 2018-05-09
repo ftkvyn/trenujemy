@@ -75,7 +75,7 @@ module.exports = {
 	},
 
 	update:function(req, res){
-		let model = {};
+		let model = req.body;
 		if(req.session.user.role == 'trainer'){
 			model.shouldSendEmail = true;
 		}

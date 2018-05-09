@@ -9,7 +9,7 @@ import '../../node_modules/jquery.easing/jquery.easing.min.js';
 // Whirl
 import './styles/whirl.css';
 // Animo
-import '../../node_modules/animo/animo.js';
+import '../../node_modules/animo-core/dist/index.js';
 // Font Awesome
 import '../../node_modules/font-awesome/css/font-awesome.min.css';
 // Animate.CSS
