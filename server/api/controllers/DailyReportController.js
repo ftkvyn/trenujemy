@@ -76,6 +76,8 @@ module.exports = {
 			delete model.userNotes;
 		}else{
 			delete model.trainerNotes;
+			delete model.shouldSendEmail;
+			delete model.lastEditedTrainer;
 		}
 		DailyReport.update({id: req.params.dayId}, model)
 		.fetch()
