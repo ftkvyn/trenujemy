@@ -274,11 +274,13 @@ class Trainings extends React.Component {
             </form>
             headerText = <h2>Tutaj zarządzasz treningami z klientem</h2>
         }else{
-            phoneForm = <Row className='text-center'>
-                <Col lg={12} md={12} sm={12} xs={12}>
-                    <h3>Umów się z trenerem telefonicznie kolejny trening</h3>
-                </Col>
-            </Row>
+            if(trainingsLeft){
+                phoneForm = <Row className='text-center'>
+                    <Col lg={12} md={12} sm={12} xs={12}>
+                        <h3>Umów się z trenerem telefonicznie kolejny trening</h3>
+                    </Col>
+                </Row>
+            }
             let gmailInputClass = '';
             if(this.state.gmailProviding){
                 if(this.state.isGmailCorrect){

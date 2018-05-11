@@ -38,7 +38,7 @@ module.exports = {
 		type:'string',columnType:'text'
 	}	
   },
-  beforeValidate: function (values, cb) {
+  beforeUpdate: function (values, cb) {
   	values.calories = 0;
   	values.length = values.length || 0;
   	if(!values.length){
@@ -57,7 +57,7 @@ module.exports = {
 	  			console.error(err);
 	  			cb();
 	  		}
-  			const weight =  info.weight || 0;
+  			const weight = report.weight || info.weight || 0;
   			const modifier = modifiers[values.type] || 0;
   			values.calories = Math.round(values.length * weight * modifier);
   			cb();

@@ -39,7 +39,7 @@ exports.finalizeTransaction = function(paymentId) {
 							if(item.isFreeSample){
 								emailModel.feedPlanName = `Piersza darmowa konsultacja, konsultant ${item.trainer.name} `;	
 							}else{
-								emailModel.feedPlanName = `Plan żywieniowy na ${item.weeks}-tydodniowy okres, konsultant ${item.trainer.name} `;
+								emailModel.feedPlanName = `Konsultacja dietetyczna na ${item.weeks}-tydodniowy okres, konsultant ${item.trainer.name} `;
 								emailModel.feedPlanWithConsult = item.isWithConsulting;
 							}							
 						}else{
@@ -64,7 +64,7 @@ exports.finalizeTransaction = function(paymentId) {
 		                  if(item.isFreeSample){
 		                    trainerEmailModel.feedPlanName = `Piersza darmowa konsultacja`;
 		                  }else{
-		                    trainerEmailModel.feedPlanName = `Plan żywieniowy na ${item.weeks}-tydodniowy okres`; 
+		                    trainerEmailModel.feedPlanName = `Konsultacja dietetyczna na ${item.weeks}-tydodniowy okres`; 
 		                    trainerEmailModel.feedPlanWithConsult = item.isWithConsulting;
 		                  }                      		                  
 		                }else{

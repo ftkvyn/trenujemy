@@ -485,7 +485,7 @@ class DiaryDay extends React.Component {
         if(this.state.trainings.length < 3 && !this.state.addingTraning && this.state.data.id && !this.state.userId){
           addTrainingBtn = <FormGroup>
               <div className="col-lg-12 text-center">
-                <div onClick={this.addTraining.bind(this)} className='btn btn-outline btn-primary'>Dodaj kolejny trening</div>
+                <div onClick={this.addTraining.bind(this)} className='btn btn-outline btn-primary'>Dodaj trening</div>
               </div>
           </FormGroup>  
         }
@@ -901,7 +901,7 @@ class DiaryDay extends React.Component {
                           <FormGroup className='form-inline'>                  
                               <label className="col-lg-6 col-md-6 col-sm-6 col-xs-6">{"Posiłek " + (num + 1)}</label>
                               <Col lg={ 6 } md={ 6 } sm={6} xs={6}>
-                                  Godzina:
+                                  Godzina:&nbsp;&nbsp;
                                   <FormControl type="text"
                                   className="form-control short-input" {...readonlyForTrainer}
                                   name='hour'
@@ -961,7 +961,7 @@ class DiaryDay extends React.Component {
                         <FormControl type="number"
                         className="form-control" {...readonlyForTrainer}
                         name='length'
-                        value={training.length || 0}
+                        value={training.length || ''}
                         onChange={this.handleTrainingChange.bind(this, num)}/>
                     </Col>
                     <Col lg={2} md={2} sm={6}>

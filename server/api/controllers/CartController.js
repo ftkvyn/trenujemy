@@ -163,7 +163,7 @@ module.exports = {
 								let word = 'tygodni';
 	                        	if(item.weeks < 6){word = 'tygodnie';}
 	                        	if(item.weeks == 1){word = 'tydzień';}
-	                        	paymentData['p24_name_' + (i+1)] = `Plan żywieniowy, abonament na ${item.weeks} ${word}, konsultant ${item.trainer.name}`;
+	                        	paymentData['p24_name_' + (i+1)] = `Konsultacja dietetyczna, abonament na ${item.weeks} ${word}, konsultant ${item.trainer.name}`;
 	                        	if(item.isWithConsulting){
 	                        		paymentData['p24_name_' + (i+1)] += ' z codzienną konsultacją';
 	                        	}
