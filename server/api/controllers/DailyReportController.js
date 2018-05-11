@@ -86,15 +86,19 @@ module.exports = {
 				console.error(err);
 				return res.badRequest();
 			}
-			if(req.session.user.role == 'trainer' && model.trainerNotes){
+			if(req.session.user.role == 'trainer' && model.trainerNotes && model.trainerNotes.length){
 				Notifications.findOne( {user: data[0].user} )
 				.exec(function(err, notification){
 					let days = notification.diaryDays || [];
 					let dayStr =  moment(data[0].date).format('DD-MM-YYYY');
 					if(!days.some( day => day == dayStr)){
 						days = [...days, dayStr];
+						// console.log('updating days to:');
+						// console.log(days);
 						Notifications.update({id: notification.id},{diaryDays : days})
 						.exec(function(err, data){
+							// console.log('updated');
+							// console.log(data);
 							//Do nothing
 						});
 					}

@@ -441,7 +441,7 @@
                             <label>Cena</label>
                         </div>
                     </div>
-                    <% for(let i = 0; i < feedPlans.length; i++) {%>
+                    <% for(let i = 0; i < feedPlans.filter(fp => !fp.isFreeSample).length; i++) {%>
                         <% let plan = feedPlans[i]; let word = 'tygodni'; %>
                         <% if(plan.weeks < 6){word = 'tygodnie';} %>
                         <% if(plan.weeks == 1){word = 'tydzień';} %> 

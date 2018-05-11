@@ -137,7 +137,8 @@ function clearDayNotifications(){
 
           if(days.some( day => day == this.state.day )){
             let newDays = days.filter( day => day != this.state.day);
-            saveNotifications({id: this.state.notifications.id, diaryDays: newDays});
+            let model = {id: this.state.notifications.id, diaryDays: newDays};
+            saveNotifications(model);
             updateNotifications({diaryDays: newDays});
             let notifications = this.state.notifications;
             notifications.diaryDays = newDays;
