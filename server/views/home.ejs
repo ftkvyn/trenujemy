@@ -30,12 +30,13 @@
                 <div class="row place-row">
                     <div class="col-lg-4 col-md-4 col-sm-4">
                         <p class="text-white text-right bold mb30 h3">
-				            Gdzie
+				            Miasto
 				        </p>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-4">
                         <div class="form-group">                           
                             <select class="form-control" id="city" name="city">
+                                <option value="1">Dowolne</option>
                                 <option value="1">Warszawa</option>
                                 <option value="2">Kraków</option>
                                 <option value="3">Łódź</option>
@@ -358,7 +359,7 @@
         });
     })(jQuery, window, document);
 
-    $('body').on('change','#trainer-type',function(){
+    $('body').on('change','#type',function(){
     	if(this.value == 'consultant'){
     		$('.place-row').addClass('hidden');
             $('.place-row select').hide();

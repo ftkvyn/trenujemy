@@ -86,6 +86,25 @@ module.exports = {
     isTrainYoga:{
     	type:'boolean'
     },
+    //New:
+    isTrainPilates:{
+        type:'boolean'
+    },
+    isTrainCrossFit:{
+        type:'boolean'
+    },
+    isTrainRunning:{
+        type:'boolean'
+    },
+    isTrainAthletics:{
+        type:'boolean'
+    },
+    isTrainCalisthenics:{
+        type:'boolean'
+    },
+    isTrainClimbing:{
+        type:'boolean'
+    },
 
     //====== trainingHelp ======//
     
@@ -106,6 +125,25 @@ module.exports = {
     },
     isTrainHelpSportResults:{
     	type:'boolean'
+    },
+    //New:
+    isTrainHelpStretch:{
+        type:'boolean'
+    },
+    isTrainHelpStress:{
+        type:'boolean'
+    },
+    isTrainHelpMentalHealth:{
+        type:'boolean'
+    },
+    isTrainHelpAerobic:{
+        type:'boolean'
+    },
+    isTrainHelpCoordination:{
+        type:'boolean'
+    },
+    isTrainHelPosture:{
+        type:'boolean'
     },
 
     //====== feedSpecialization ======//
@@ -128,6 +166,31 @@ module.exports = {
     isFeedCleaning:{
     	type:'boolean'
     },
+    //New:
+    isFeedKeton:{
+        type:'boolean'
+    },
+    isFeedReductionFoto:{
+        type:'boolean'
+    },
+    isFeedVariable:{
+        type:'boolean'
+    },
+    isFeedSeasonal:{
+        type:'boolean'
+    },
+    isFeedIntermittentFasting:{
+        type:'boolean'
+    },
+    isFeedFasting:{
+        type:'boolean'
+    },
+    isFeedJuice:{
+        type:'boolean'
+    },
+    isFeedRaw:{
+        type:'boolean'
+    },
 
     //====== feedHelp ======//
 
@@ -149,6 +212,34 @@ module.exports = {
     isFeedHelpSportResults:{
     	type:'boolean'
     },
+    //New:
+    isFeedHelpAllergy:{
+        type:'boolean'
+    },
+    isFeedHelpSkin:{
+        type:'boolean'
+    },
+    isFeedHelpMetabolism:{
+        type:'boolean'
+    },
+    isFeedHelpDetox:{
+        type:'boolean'
+    },
+    isFeedHelpIntestinesClean:{
+        type:'boolean'
+    },
+    isFeedHelpJointsState:{
+        type:'boolean'
+    },
+    isFeedHelpInflammatory:{
+        type:'boolean'
+    },
+    isFeedHelpImproveAfterDiseases:{
+        type:'boolean'
+    },
+
+
+
 
     isFreeTrainingEnabled:{
 		type:'boolean'

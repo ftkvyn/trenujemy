@@ -1,3 +1,23 @@
+<% include ./partials/trainerFields %>
+
+<% function checkingItemsHelper(keys, names){
+    if(keys.length != names.length){
+        throw new Error('Names and keys collections must match!');
+    }
+    for(let i = 0; i < keys.length; i++){ 
+        let key = keys[i];
+        let val = names[i]; 
+         %>
+        <li class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" value="1" name="<%- key %>" />
+                <%- val %>
+            </label>
+        </li>
+    <%
+    } 
+} %>
+
 <script type="text/javascript" src="/assan/js/plugins/plugins.js"></script> 
 <script type="text/javascript" src="/assan/js/assan.custom.js"></script> 
 
@@ -23,7 +43,7 @@
                     <div class="pb30 city-select">
                         <h4 class="sidebar-title">Miasto:</h4>
                         <select class="form-control" id="city" name="city">
-                            <option value="0">Nie wybrane</option>
+                            <option value="0">Dowolne</option>
                             <option value="1">Warszawa</option>
                             <option value="2">Kraków</option>
                             <option value="3">Łódź</option>
@@ -34,130 +54,31 @@
                         </select>
                     </div>
 
-                    <div class="mb40">
+                    <div class="mb40 sport-fields">
                         <h4 class="sidebar-title">Jaki masz cel:</h4>
                         <ul class="list-unstyled categories">
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isHelpLessWeight" />
-                                    Chcę schudnąć
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isHelpHealthImprove" />
-                                    Chcę poprawić stan zdrowia
-                                </label>
-                            </li>
+                            <% checkingItemsHelper(trainHelpFields, trainHelpSearchNames); %>
+                        </ul>
+                    </div>
 
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isHelpRehabilitation" />
-                                    Rehabilitacja
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isHelpFixWeight" />
-                                    Chcę poprawić sylwetkę - masa
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isHelpFixShape" />
-                                    Chcę poprawić sylwetkę - rzeźba
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isHelpSportResults" />
-                                    Chcę poprawić wyniki sportowe
-                                </label>
-                            </li>
+                    <div class="mb40 feed-fields">
+                        <h4 class="sidebar-title">Jaki masz cel:</h4>
+                        <ul class="list-unstyled categories">
+                            <% checkingItemsHelper(feedHelpFields, feedHelpSearchNames); %>
                         </ul>
                     </div>
 
                     <div class="mb40 sport-fields">
                         <h4 class="sidebar-title">Dyscyplina sportowa:</h4>
                         <ul class="list-unstyled categories">
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isTrainFitness" />
-                                    Kulturystyka i fitness
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isTrainLifting" />
-                                    Podnoszenie ciężarów
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isTrainSwimming" />
-                                    Pływanie
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isTrainFighting" />
-                                    Sporty walki
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isTrainBike" />
-                                    Kolarstwo
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isTrainYoga" />
-                                    Yoga
-                                </label>
-                            </li>
+                            <% checkingItemsHelper(trainFields, trainNames); %>
                         </ul>
                     </div>
 
                     <div class="mb40 feed-fields">
                         <h4 class="sidebar-title">Specjalizacja dyjetytyczna:</h4>
                         <ul class="list-unstyled categories">
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isFeedBalance" />
-                                    Dieta  zbilansowana
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isFeedWege" />
-                                    Dieta  wegańska / wegetaiańska
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isFeedProtein" />
-                                    Dieta białkowa
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isFeedFat" />
-                                    Dieta tłuszczowa
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isFeedAlkalising" />
-                                    Dieta alkalizująca
-                                </label>
-                            </li>
-                            <li class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" value="1" name="isFeedCleaning" />
-                                    Dieta oczyszczająca
-                                </label>
-                            </li>
+                             <% checkingItemsHelper(feedFields, feedNames); %>
                         </ul>
                     </div>
                 </form>
@@ -215,14 +136,32 @@
         sendTimer = setTimeout(sendForm, 1000);
     }
 
-    let setFieldsType = function(type) {
+    let setCorrestpondingCheckboxes = function(isSelectedTrainer){
+        let trainerFields = [];
+        let feedFields = [];
+        $('.sport-fields input').each(function(i, el){trainerFields.push($(el).attr('name'))});
+        $('.feed-fields input').each(function(i, el){feedFields.push($(el).attr('name'))});
+
+        for(let i = 0; i < trainerFields.length; i++){
+            let feedFieldName = trainerFields[i].replace('isTrain','isFeed');
+            if(feedFields.find(f => f == feedFieldName)){
+                if(isSelectedTrainer){
+                    $(`input[name=${trainerFields[i]}]`).prop('checked', $(`input[name=${feedFieldName}]`).prop('checked'));
+                }else{
+                    $(`input[name=${feedFieldName}]`).prop('checked', $(`input[name=${trainerFields[i]}]`).prop('checked'));
+                }
+            }
+        }
+    }
+
+    let setFieldsType = function(type, isInitial) {
         if(type == 'consultant'){
             $('.city-select, .sport-fields').hide();
-            $('.city-select input, sport-fields input').attr('disabled', 'disabled');
+            $('.city-select input, .sport-fields input').attr('disabled', 'disabled');
 
             $('.feed-fields input').removeAttr('disabled');
             $('.feed-fields').show();
-
+            if(!isInitial) setCorrestpondingCheckboxes(false);
         }else if(type == 'trainer'){
             $('.city-select input').removeAttr('disabled');
             $('.city-select').show();
@@ -232,7 +171,10 @@
 
             $('.sport-fields input').removeAttr('disabled');
             $('.sport-fields').show();
+            if(!isInitial) setCorrestpondingCheckboxes(true);
         }
+
+        //
     }
 
     let parseQueryString = function() {
@@ -255,6 +197,7 @@
         if(element.attr('type') == 'checkbox'){
             if(params[key]){
                 element.attr('checked','checked');
+                element.prop('checked', true);
             }
         }else{
 
@@ -262,7 +205,7 @@
         element.val(params[key]);
     }
 
-    setFieldsType(params['type']);
+    setFieldsType(params['type'], true);
 
     $('select').change(function(event){
         if($(this).attr('name') == 'type'){

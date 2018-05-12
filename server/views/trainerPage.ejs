@@ -1,3 +1,20 @@
+<% include ./partials/trainerFields %>
+
+<% function checkingItemsHelper(keys, names){
+    if(keys.length != names.length){
+        throw new Error('Names and keys collections must match!');
+    }
+    for(let i = 0; i < keys.length; i++){ 
+        let key = keys[i];
+        let val = names[i]; 
+        if(isEditMode){ %>
+        <li data-field='<%- key %>' <% if(info[key]) {%> data-checked="checked" <% } %> ><%- val %></li>
+    <%  }else{ %>
+        <% if(info[key]) {%> <li><%- val %></li> <% } %>
+    <%} 
+    } 
+} %>
+
 <section class="site-wrapper" style="margin-top: 70px;overflow: hidden;">
 
     <% if(isEditMode){ %>
@@ -174,42 +191,14 @@
                 <div class="col-sm-4">
                     <h3 class="font100 text-primary">Moja specjalizacja:</h3>
                     <ul class="text-white-gray" data-check-list="trainingSpecialization">
-                        <% if(isEditMode){ %>
-                            <li data-field='isTrainFitness' <% if(info.isTrainFitness) {%> data-checked="checked" <% } %> >Kulturystyka i fitness</li>
-                            <li data-field='isTrainLifting' <% if(info.isTrainLifting) {%> data-checked="checked" <% } %> >Podnoszenie ciężarów</li>
-                            <li data-field='isTrainSwimming' <% if(info.isTrainSwimming) {%> data-checked="checked" <% } %> >Pływanie</li>
-                            <li data-field='isTrainFighting' <% if(info.isTrainFighting) {%> data-checked="checked" <% } %> >Sporty walki</li>
-                            <li data-field='isTrainBike' <% if(info.isTrainBike) {%> data-checked="checked" <% } %> >Kolarstwo</li>
-                            <li data-field='isTrainYoga' <% if(info.isTrainYoga) {%> data-checked="checked" <% } %> >Yoga</li>
-                        <% } else { %>
-                            <% if(info.isTrainFitness) {%> <li>Kulturystyka i fitness</li> <% } %>
-                            <% if(info.isTrainLifting) {%> <li>Podnoszenie ciężarów</li> <% } %>
-                            <% if(info.isTrainSwimming) {%> <li>Pływanie</li> <% } %>
-                            <% if(info.isTrainFighting) {%> <li>Sporty walki</li> <% } %>
-                            <% if(info.isTrainBike) {%> <li>Kolarstwo</li> <% } %>
-                            <% if(info.isTrainYoga) {%> <li>Yoga</li> <% } %>
-                        <% } %>
+                        <% checkingItemsHelper(trainFields, trainNames); %>
                     </ul>
                 </div>
 
                 <div class="col-sm-4">
                     <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
                     <ul class="text-white-gray" data-check-list="trainingHelp">
-                        <% if(isEditMode){ %>
-                            <li data-field='isTrainHelpLessWeight' <% if(info.isTrainHelpLessWeight) {%> data-checked="checked" <% } %> >Redukcja wagi</li>
-                            <li data-field='isTrainHelpHealthImprove' <% if(info.isTrainHelpHealthImprove) {%> data-checked="checked" <% } %> >Ogólna poprawa stanu zdrowia</li>
-                            <li data-field='isTrainHelpRehabilitation' <% if(info.isTrainHelpRehabilitation) {%> data-checked="checked" <% } %> >Rehabilitacja</li>
-                            <li data-field='isTrainHelpFixWeight' <% if(info.isTrainHelpFixWeight) {%> data-checked="checked" <% } %> >Poprawa sylwetki (masa)</li>
-                            <li data-field='isTrainHelpFixShape' <% if(info.isTrainHelpFixShape) {%> data-checked="checked" <% } %> >Poprawa sywetki (rzeźba)</li>
-                            <li data-field='isTrainHelpSportResults' <% if(info.isTrainHelpSportResults) {%> data-checked="checked" <% } %> >Poprawa wyników sportowych</li>
-                        <% } else { %>
-                            <% if(info.isTrainHelpLessWeight) {%> <li>Redukcja wagi</li> <% } %>
-                            <% if(info.isTrainHelpHealthImprove) {%> <li>Ogólna poprawa stanu zdrowia</li> <% } %>
-                            <% if(info.isTrainHelpRehabilitation) {%> <li>Rehabilitacja</li> <% } %>
-                            <% if(info.isTrainHelpFixWeight) {%> <li>Poprawa sylwetki (masa)</li> <% } %>
-                            <% if(info.isTrainHelpFixShape) {%> <li>Poprawa sywetki (rzeźba)</li> <% } %>
-                            <% if(info.isTrainHelpSportResults) {%> <li>Poprawa wyników sportowych</li> <% } %>
-                        <% } %>
+                        <% checkingItemsHelper(trainHelpFields, trainHelpNames); %>
                     </ul>
                 </div>
 
@@ -338,42 +327,14 @@
                 <div class="col-sm-6">
                     <h3 class="font100 text-primary">Moja specjalizacja:</h3>
                     <ul class="text-white-gray" data-check-list="feedSpecialization">
-                        <% if(isEditMode){ %>
-                            <li data-field='isFeedBalance' <% if(info.isFeedBalance) {%> data-checked="checked" <% } %> >Dieta  zbilansowana</li>
-                            <li data-field='isFeedWege' <% if(info.isFeedWege) {%> data-checked="checked" <% } %> >Dieta  wegańska / wegetaiańska</li>
-                            <li data-field='isFeedProtein' <% if(info.isFeedProtein) {%> data-checked="checked" <% } %> >Dieta białkowa</li>
-                            <li data-field='isFeedFat' <% if(info.isFeedFat) {%> data-checked="checked" <% } %> >Dieta tłuszczowa</li>
-                            <li data-field='isFeedAlkalising' <% if(info.isFeedAlkalising) {%> data-checked="checked" <% } %> >Dieta alkalizująca</li>
-                            <li data-field='isFeedCleaning' <% if(info.isFeedCleaning) {%> data-checked="checked" <% } %> >Dieta oczyszczająca</li>
-                        <% } else { %>
-                            <% if(info.isFeedBalance) {%> <li>Dieta  zbilansowana</li> <% } %>
-                            <% if(info.isFeedWege) {%> <li>Dieta  wegańska / wegetaiańska</li> <% } %>
-                            <% if(info.isFeedProtein) {%> <li>Dieta białkowa</li> <% } %>
-                            <% if(info.isFeedFat) {%> <li>Dieta tłuszczowa</li> <% } %>
-                            <% if(info.isFeedAlkalising) {%> <li>Dieta alkalizująca</li> <% } %>
-                            <% if(info.isFeedCleaning) {%> <li>Dieta oczyszczająca</li> <% } %>
-                        <% } %>
+                        <% checkingItemsHelper(feedFields, feedNames); %>
                     </ul>
                 </div>
 
                 <div class="col-sm-6">
                     <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
                     <ul class="text-white-gray" data-check-list="feedHelp">
-                        <% if(isEditMode){ %>
-                            <li data-field='isFeedHelpLessWeight' <% if(info.isFeedHelpLessWeight) {%> data-checked="checked" <% } %> >Redukcja wagi</li>
-                            <li data-field='isFeedHelpHealthImprove' <% if(info.isFeedHelpHealthImprove) {%> data-checked="checked" <% } %> >Ogólna poprawa stanu zdrowia</li>
-                            <li data-field='isFeedHelpRehabilitation' <% if(info.isFeedHelpRehabilitation) {%> data-checked="checked" <% } %> >Rehabilitacja</li>
-                            <li data-field='isFeedHelpFixWeight' <% if(info.isFeedHelpFixWeight) {%> data-checked="checked" <% } %> >Poprawa sylwetki (masa)</li>
-                            <li data-field='isFeedHelpFixShape' <% if(info.isFeedHelpFixShape) {%> data-checked="checked" <% } %> >Poprawa sywetki (rzeźba)</li>
-                            <li data-field='isFeedHelpSportResults' <% if(info.isFeedHelpSportResults) {%> data-checked="checked" <% } %> >Poprawa wyników sportowych</li>
-                        <% } else { %>
-                            <% if(info.isFeedHelpLessWeight) {%> <li>Redukcja wagi</li> <% } %>
-                            <% if(info.isFeedHelpHealthImprove) {%> <li>Ogólna poprawa stanu zdrowia</li> <% } %>
-                            <% if(info.isFeedHelpRehabilitation) {%> <li>Rehabilitacja</li> <% } %>
-                            <% if(info.isFeedHelpFixWeight) {%> <li>Poprawa sylwetki (masa)</li> <% } %>
-                            <% if(info.isFeedHelpFixShape) {%> <li>Poprawa sywetki (rzeźba)</li> <% } %>
-                            <% if(info.isFeedHelpSportResults) {%> <li>Poprawa wyników sportowych</li> <% } %>
-                        <% } %>
+                        <% checkingItemsHelper(feedHelpFields, feedHelpNames); %>
                     </ul>
                 </div>
             </div>
