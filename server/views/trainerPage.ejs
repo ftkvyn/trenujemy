@@ -21,39 +21,41 @@
     <input type="hidden" name="info-id" id="info-id" value="<%- info.id %>" />
     <% } %>
 
-    <div class="container no-padding resume-header bg-dark">
-        <div class="row align-items-center">
-            <div class="col-lg-6 no-padding">
-                <img src="<%- info.user.profilePic || '/images/no_image_user.png' %>" alt="" class="img-fluid" data-hint />
-            </div>  
-        	<div class="col-lg-6 resume-header-text">
-                <div class="clearfix">
-                    <div class="media mb10 wow fadeInUp" data-wow-delay=".150ms">
-                        <div class="media-body">
-                        	<h2 class="h1 mb0" data-hint><%- info.user.name %></h2>
-                            <p class="lead" data-hint>
-                                <% if(info.isTrainer && info.isFeedCounsultant){ %>
-                                Trener personalny, dietetyk
-                                <% } else if(info.isTrainer){ %>
-                                Trener personalny
-                                <% } else if(info.isFeedCounsultant){ %>
-                                Dietetyk
-                                <% } else { %>
-                                <b>Ustaw swoją specjalizację na stronie proiflu.</b>
-                                <% } %>                            
-                            </p>
-                            <p class="mt-20 mb10 text-left trainer-about" style="min-height: 50px;" data-main-text><%- info.mainText || "Opis" %></p>
+    <div class="no-padding resume-header bg-dark">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 no-padding">
+                    <img src="<%- info.user.profilePic || '/images/no_image_user.png' %>" alt="" class="img-fluid" data-hint />
+                </div>  
+            	<div class="col-lg-6 resume-header-text">
+                    <div class="clearfix">
+                        <div class="media mb10 wow fadeInUp" data-wow-delay=".150ms">
+                            <div class="media-body">
+                            	<h2 class="h1 mb0" data-hint><%- info.user.name %></h2>
+                                <p class="lead" data-hint>
+                                    <% if(info.isTrainer && info.isFeedCounsultant){ %>
+                                    Trener personalny, dietetyk
+                                    <% } else if(info.isTrainer){ %>
+                                    Trener personalny
+                                    <% } else if(info.isFeedCounsultant){ %>
+                                    Dietetyk
+                                    <% } else { %>
+                                    <b>Ustaw swoją specjalizację na stronie proiflu.</b>
+                                    <% } %>                            
+                                </p>
+                                <p class="mt-20 mb10 text-left trainer-about" style="min-height: 50px;" data-main-text><%- info.mainText || "Opis" %></p>
+                            </div>
+                        </div>
+                        <div class="buttons media mb10 wow fadeInUp" data-wow-delay=".300ms">
+                            <% if(info.isTrainer){ %>
+                            <a href="#trainings" onclick="ScrollTo('trainings', event)" class="btn btn-primary btn-rounded">Zamów trening</a>
+                            <% } if(info.isFeedCounsultant) { %>
+                            <a href="#feedPlans" onclick="ScrollTo('feedPlans', event)" class="btn btn-light btn-rounded">Wykup konsultację</a>
+                            <% } %>
                         </div>
                     </div>
-                    <div class="buttons media mb10 wow fadeInUp" data-wow-delay=".300ms">
-                        <% if(info.isTrainer){ %>
-                        <a href="#trainings" onclick="ScrollTo('trainings', event)" class="btn btn-primary btn-rounded">Zamów trening</a>
-                        <% } if(info.isFeedCounsultant) { %>
-                        <a href="#feedPlans" onclick="ScrollTo('feedPlans', event)" class="btn btn-light btn-rounded">Wykup konsultację</a>
-                        <% } %>
-                    </div>
-                </div>
-            </div>              
+                </div>              
+            </div>
         </div>
     </div>
 
@@ -184,50 +186,52 @@
         </div>
     </div>
     <% if(info.isTrainer){ %>
-    <div class="container lists-container pt20 pb20 bg-dark" id='trainings'>
-        <h3 class="text-primary center-title mb10 h1 text-left">Trening personalny</h3>
-        <div style="padding-left: 50px;padding-right: 50px;">
-            <div class="row">
-                <div class="col-sm-4">
-                    <h3 class="font100 text-primary">Moja specjalizacja:</h3>
-                    <ul class="text-white-gray" data-check-list="trainingSpecialization">
-                        <% checkingItemsHelper(trainFields, trainNames); %>
-                    </ul>
-                </div>
+    <div class="lists-container pt40 pb20 bg-dark" id='trainings'>
+        <div class="container">
+            <h3 class="text-primary center-title mb10 h1 text-left">Trening personalny</h3>
+            <div style="padding-left: 50px;padding-right: 50px;">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h3 class="font100 text-primary">Moja specjalizacja:</h3>
+                        <ul class="text-white-gray" data-check-list="trainingSpecialization">
+                            <% checkingItemsHelper(trainFields, trainNames); %>
+                        </ul>
+                    </div>
 
-                <div class="col-sm-4">
-                    <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
-                    <ul class="text-white-gray" data-check-list="trainingHelp">
-                        <% checkingItemsHelper(trainHelpFields, trainHelpNames); %>
-                    </ul>
-                </div>
+                    <div class="col-sm-4">
+                        <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
+                        <ul class="text-white-gray" data-check-list="trainingHelp">
+                            <% checkingItemsHelper(trainHelpFields, trainHelpNames); %>
+                        </ul>
+                    </div>
 
-                <div class="col-sm-4">
-                    <h3 class="font100 text-primary">Gdzie trenuję?</h3>
-                    <p class="lead text-white-gray text-left mb0">
-                        <% if(isEditMode){ %>
-                            <input type="hidden" id="city-num" value="<%- info.city %>">
-                            <select data-city-edit>
-                                <option value="1">Warszawa</option>
-                                <option value="2">Kraków</option>
-                                <option value="3">Łódź</option>
-                                <option value="4">Wrocław</option>
-                                <option value="5">Poznań</option>
-                                <option value="6">Gdańsk</option>
-                                <option value="7">Szczecin</option>
-                            </select>
-                        <% } else { %>
-                            <span>
-                                <% let cityName = ["", "Warszawa", "Kraków", "Łódź", "Wrocław", "Poznań", "Gdańsk", "Szczecin"][info.city]; %>
-                                <%- cityName %>
-                            </span>
-                        <% } %>
-                    </p>
-                    <ul class="text-white-gray" data-edit-list="trainPlaces">
-                        <% if(typeof info.trainPlaces == 'object') for(let i = 0; i < info.trainPlaces.length; i++) {%>
-                            <li><%- info.trainPlaces[i] %></li>
-                        <% } %>
-                    </ul>
+                    <div class="col-sm-4">
+                        <h3 class="font100 text-primary">Gdzie trenuję?</h3>
+                        <p class="lead text-white-gray text-left mb0">
+                            <% if(isEditMode){ %>
+                                <input type="hidden" id="city-num" value="<%- info.city %>">
+                                <select data-city-edit>
+                                    <option value="1">Warszawa</option>
+                                    <option value="2">Kraków</option>
+                                    <option value="3">Łódź</option>
+                                    <option value="4">Wrocław</option>
+                                    <option value="5">Poznań</option>
+                                    <option value="6">Gdańsk</option>
+                                    <option value="7">Szczecin</option>
+                                </select>
+                            <% } else { %>
+                                <span>
+                                    <% let cityName = ["", "Warszawa", "Kraków", "Łódź", "Wrocław", "Poznań", "Gdańsk", "Szczecin"][info.city]; %>
+                                    <%- cityName %>
+                                </span>
+                            <% } %>
+                        </p>
+                        <ul class="text-white-gray" data-edit-list="trainPlaces">
+                            <% if(typeof info.trainPlaces == 'object') for(let i = 0; i < info.trainPlaces.length; i++) {%>
+                                <li><%- info.trainPlaces[i] %></li>
+                            <% } %>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -320,22 +324,24 @@
     </div> 
     <% } %>
     <% if(info.isFeedCounsultant){ %>
-    <div class="container lists-container pt20 pb20 bg-dark" id="feedPlans">
-        <h3 class="text-primary center-title mb10 h1 text-left">Doradztwo żywieniowe</h3>
-        <div style="padding-left: 50px;padding-right: 50px;">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h3 class="font100 text-primary">Moja specjalizacja:</h3>
-                    <ul class="text-white-gray" data-check-list="feedSpecialization">
-                        <% checkingItemsHelper(feedFields, feedNames); %>
-                    </ul>
-                </div>
+    <div class="lists-container pt20 pb20 bg-dark" id="feedPlans">
+        <div class="container">
+            <h3 class="text-primary center-title mb10 h1 text-left">Doradztwo żywieniowe</h3>
+            <div style="padding-left: 50px;padding-right: 50px;">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3 class="font100 text-primary">Moja specjalizacja:</h3>
+                        <ul class="text-white-gray" data-check-list="feedSpecialization">
+                            <% checkingItemsHelper(feedFields, feedNames); %>
+                        </ul>
+                    </div>
 
-                <div class="col-sm-6">
-                    <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
-                    <ul class="text-white-gray" data-check-list="feedHelp">
-                        <% checkingItemsHelper(feedHelpFields, feedHelpNames); %>
-                    </ul>
+                    <div class="col-sm-6">
+                        <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
+                        <ul class="text-white-gray" data-check-list="feedHelp">
+                            <% checkingItemsHelper(feedHelpFields, feedHelpNames); %>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -370,26 +376,11 @@
         </div>
     </div>
 
-    <div class="container">
-        <h3 class="text-primary center-title mb40 h1 text-left">Doradztwo dietetyczne</h3>        
-        <% if(info.isFreeTrainingEnabled || isEditMode){ %>
-        <div class="clearfix free-sample-block mb40" style="padding-left: 100px;padding-right: 100px;  
-        <% if(!info.isFreeTrainingEnabled){ %>display: none;<% } %>">
-            <form action="/addItemToCart" method="POST">
-                <% if(!isUsedFreeSample){ %>
-                    <input type="hidden" name="feedPlan" value="<%- feedPlans.filter(fp => fp.isFreeSample)[0].id %>">
-                <% } %>
-                <p class="lead">Wypróbuj pierwszą konsultację zupełnie za darmo.</p>
-                <p>Otwórz konto, oznacz swoje cele, wypełnij pierwszy dzień swojego dziennika żywieniowego a ja specjalnie dla Ciebie opracuję analizę oraz zestaw wstępnych zaleceń.</p>
-                <button type="submit" 
-                <% if(info.isUsedFreeSample){ %> disabled="disabled" <% } %>
-                class="btn 
-                <% if(info.isUsedFreeSample){ %> btn-disabled <% } else { %> btn-primary <% } %>
-                pull-right">Chcę wypróbować</button>
-            </form>
-        </div>
-        <% } %>
-        <p class="lead mb40">Zakup diety - określ przez ile tygodni chcesz ze mną współpracować</p>
+    <div class="">
+        <div class="container">
+            <h3 class="text-primary center-title mb40 h1 text-left">Doradztwo dietetyczne</h3>        
+            <p class="lead mb40">Zakup diety - określ przez ile tygodni chcesz ze mną współpracować</p>
+        </div>        
         <form action="/addItemToCart" method="POST">
             <div style="padding-left: 100px;padding-right: 100px;">
                 <div class="container feed-plans">
@@ -437,6 +428,28 @@
                 </div>
             </div> 
         </form>
+
+        <% if(info.isFreeTrainingEnabled || isEditMode){ %>
+        <div class="bg-faded pt20 pb20">
+            <div class="container">
+                <div class="clearfix free-sample-block mb40" style="padding-left: 100px;padding-right: 100px;  
+                <% if(!info.isFreeTrainingEnabled){ %>display: none;<% } %>">
+                    <form action="/addItemToCart" method="POST">
+                        <% if(!isUsedFreeSample){ %>
+                            <input type="hidden" name="feedPlan" value="<%- feedPlans.filter(fp => fp.isFreeSample)[0].id %>">
+                        <% } %>
+                        <p class="lead">Wypróbuj pierwszą konsultację zupełnie za darmo.</p>
+                        <p>Otwórz konto, oznacz swoje cele, wypełnij pierwszy dzień swojego dziennika żywieniowego a ja specjalnie dla Ciebie opracuję analizę oraz zestaw wstępnych zaleceń.</p>
+                        <button type="submit" 
+                        <% if(info.isUsedFreeSample){ %> disabled="disabled" <% } %>
+                        class="btn 
+                        <% if(info.isUsedFreeSample){ %> btn-disabled <% } else { %> btn-primary <% } %>
+                        pull-right">Chcę wypróbować</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <% } %>
     </div>
     <% } %>
 </section>

@@ -4768,3 +4768,7 @@ body .navbar.navbar-transparent.navbar-light.bg-faded .show .nav-link
     max-width: 430px;
     word-wrap: break-word;
 }
+
+section.site-wrapper{
+  max-width: none;
+}
