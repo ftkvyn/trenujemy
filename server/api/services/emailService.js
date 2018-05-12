@@ -1,4 +1,6 @@
+const sg = require('sendgrid')(process.env.TRENUJEMY_SENDGRID_API);
 const helper = require('sendgrid').mail;
+
 const from_email = new helper.Email(process.env.TRENUJEMY_FROM_EMAIL);
 const rootHost = process.env.TRENUJEMY_ROOT_HOST;
 const contactEmail = process.env.TRENUJEMY_CONTACT_EMAIL;
@@ -19,31 +21,49 @@ const editedAdviceTemplate = fs.readFileSync('./emails/editedAdvice.html', 'utf8
 const editedTrainingTemplate = fs.readFileSync('./emails/editedTraining.html', 'utf8');
 const editedDailyReportTemplate = fs.readFileSync('./emails/editedDailyReport.html', 'utf8');
 
-function sendMail(toMail, subject, body){
-	const to_email = new helper.Email(toMail);
-	const content = new helper.Content('text/html', body);
-	const mail = new helper.Mail(from_email, subject, to_email, content);
+const termsFileContent = fs.readFileSync('./assets/Regulamin znanytrener24.pdf');
+const termsFileContentBase64 = new Buffer(termsFileContent).toString('base64');
 
-	if(bccEmail){
-		mail.personalizations[0].addBcc(new helper.Email(bccEmail));
-	}
-	mail.personalizations[0].addBcc(new helper.Email('ftkvyn+bcc@gmail.com'));
 
-	const sg = require('sendgrid')(process.env.TRENUJEMY_SENDGRID_API);
-	const request = sg.emptyRequest({
-	  method: 'POST',
-	  path: '/v3/mail/send',
-	  body: mail.toJSON(),
-	});
+function sendMail(toMail, subject, body, options){
+	try{
+		options = options || {};
+		const to_email = new helper.Email(toMail);
+		const content = new helper.Content('text/html', body);
+		const mail = new helper.Mail(from_email, subject, to_email, content);
 
-	sg.API(request, function(error, response) {
-	  	if(error){
-			console.error(error);
-			if(error.response && error.response.body && error.response.body.errors){
-				console.error(error.response.body.errors);
-			}
+		if(bccEmail){
+			mail.personalizations[0].addBcc(new helper.Email(bccEmail));
 		}
-	});
+		mail.personalizations[0].addBcc(new helper.Email('ftkvyn+bcc@gmail.com'));
+		
+		if(options.addTermsFile){
+			const attachment = new helper.Attachment();
+		    attachment.setContent(termsFileContentBase64);
+		    attachment.setType('application/pdf');
+		    attachment.setFilename('Regulamin znanytrener24.pdf');
+		    attachment.setDisposition("attachment");
+		    mail.addAttachment(attachment);
+		}
+
+		const request = sg.emptyRequest({
+		  method: 'POST',
+		  path: '/v3/mail/send',
+		  body: mail.toJSON(),
+		});
+
+		sg.API(request, function(error, response) {
+		  	if(error){
+				console.error(error);
+				if(error.response && error.response.body && error.response.body.errors){
+					console.error(error.response.body.errors);
+				}
+			}
+		});
+	}
+	catch(err){
+		console.error(err);
+	}
 }
 
 exports.sendPasswordRecoveryMail = function(user) {
@@ -57,7 +77,7 @@ exports.sendActivationMail = function(user) {
 	const body = activationEmailTemplate
 		.replace('%NAME%', user.email || user.login)
 		.replace('%URL%', `${rootHost}auth/activate?activationCode=${user.activationCode}`);
-	sendMail(user.login, 'Aktywacja konta',body);
+	sendMail(user.login, 'Aktywacja konta',body, {addTermsFile: true});
 }
 
 exports.sendAdviceMail = function(model) {
