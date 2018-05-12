@@ -233,7 +233,7 @@ class DiaryDay extends React.Component {
         }
     }
 
-     componentWillUnmount(){
+    componentWillUnmount(){
       clearDayNotifications.call(this);
     }
 
@@ -276,9 +276,9 @@ class DiaryDay extends React.Component {
       let fieldVal = event.target.value;
       let template = this.state.templates.find((i) => i.id == fieldVal);
       if(template){
-        let oldData = this.state.data;
-        oldData.trainerNotes = template.text;
-        this.setState({data: oldData});
+        let newData = this.state.data;
+        newData.trainerNotes = template.text;
+        this.setState({data: newData});
 
         if(saveHandler){
             saveHandler.clear();

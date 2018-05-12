@@ -61,7 +61,7 @@ const Routes = ({ location }) => {
             <Base>
               <TransitionGroup>
                 <CSSTransition key={currentKey} timeout={timeout} classNames={animationName}>
-                    <div>
+                    <div className='dashboard-container'>
                         <Switch location={location}>
                             <Route path="/profile" component={ProfilePage}/>
                             <Route path="/goods" component={Goods}/>

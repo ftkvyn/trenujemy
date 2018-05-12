@@ -285,3 +285,11 @@ body.with-popup .wrapper > .aside
 	color: green;
 	font-weight: bold;
 }
+
+.dashboard-container{
+	max-width: 1400px;
+}
+
+.topnavbar-wrapper .navbar.topnavbar{
+	background: #34495E;
+}

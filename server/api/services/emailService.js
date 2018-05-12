@@ -65,7 +65,7 @@ exports.sendAdviceMail = function(model) {
 		.replace('%USER_NAME%', model.userName)
 		.replace('%TRAINER_NAME%', model.trainerName)
 		.replace('%URL%', `${rootHost}dashboard/advice/${model.trainerId}`);
-	sendMail(model.email, 'Zalecenia trenera',body);
+	sendMail(model.email, 'Sprawdź nowe zalecenia Twojego trenera',body);
 }
 
 exports.sendTrainingMail = function(model) {
@@ -75,7 +75,7 @@ exports.sendTrainingMail = function(model) {
 		.replace('%DATE%', model.date)
 		.replace('%PLACE%', model.place)
 		.replace('%URL%', `${rootHost}dashboard/trainings`);
-	sendMail(model.email, 'Komentarz do treningu',body);
+	sendMail(model.email, 'W Twoich treningach pojawił się nowy komentarz',body);
 }
 
 exports.sendDiaryMail = function(model) {
@@ -84,7 +84,7 @@ exports.sendDiaryMail = function(model) {
 		.replace('%TRAINER_NAME%', model.trainerName)
 		.replace('%DATE%', model.date)
 		.replace('%URL%', `${rootHost}dashboard/diary/${model.dateStr}`);
-	sendMail(model.email, 'Komentarz do dzenniku aktywności',body);
+	sendMail(model.email, 'W Twoim dzienniku aktywności pojawił się nowy komentarz',body);
 }
 
 exports.sendContactMail = function(model){
@@ -129,5 +129,5 @@ exports.sendTrainerNewTransactionMail = function(model){
 		.replace('%USER_NAME%', model.userName)
 		.replace('%URL%', `${rootHost}dashboard/`)
 		.replace('%PURCHASES_LIST%', itemsListText);
-	sendMail(model.email, 'Nowy zakup w serwisie Znany Trener 24', body);
+	sendMail(model.email, 'Ktoś właśnie dokonał transakcji na Twojej stronie', body);
 }

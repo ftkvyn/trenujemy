@@ -4763,3 +4763,8 @@ body .navbar.navbar-transparent.navbar-light.bg-faded .show .nav-link
     cursor: pointer;
     line-height: 13px;
 }
+
+.trainer-about{
+    max-width: 430px;
+    word-wrap: break-word;
+}

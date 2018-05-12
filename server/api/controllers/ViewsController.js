@@ -135,7 +135,11 @@ module.exports = {
 					return res.notFound();
 				}
 				if(!info.isActivatedByTrainer || !info.isApprovedByAdmin){
-					return res.notFound();
+					if(req.session.user && info.user.id == req.session.user.id){
+						//do nothing
+					}else{
+						return res.notFound();
+					}
 				}
 				let qs = [];
 				qs.push(FeedPlan.find({trainer: info.user.id, isVisible: true}));

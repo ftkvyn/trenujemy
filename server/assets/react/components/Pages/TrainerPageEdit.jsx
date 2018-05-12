@@ -54,11 +54,11 @@ class TrainerPageEdit extends React.Component {
         }
         return (
         	<ContentWrapper>
-                <h3>Panel klienta</h3>
+                <h3>Moja strona</h3>
                 <Row>
                    <Col lg={12} md={12} sm={12}>
                    		<Well bsSize="large" style={{'textAlign':'center'}}>
-                          	<h1>Moja strona</h1>
+                          	<h1>Status mojej strony</h1>
                             {statusInfo}
                             <FormGroup>
                                 <label className="checkbox-inline c-checkbox">

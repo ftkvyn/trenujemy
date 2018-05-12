@@ -77,7 +77,7 @@ class TransactionsPage extends React.Component {
         const income = totalSum - provision;
         return (
             <ContentWrapper>
-                <h3>Ciekawostki od trenera</h3>
+                <h3>Rozliczenia</h3>
                 <Row>
                    <Col lg={12} md={12} sm={12}>
                         <Well bsSize="large" style={{'textAlign':'center'}}>

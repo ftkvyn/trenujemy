@@ -7,16 +7,19 @@ import TextEditor from '../Components/TextEditor'
 
 let hideAlertSuccess = null;
 let hideAlertError = null;
+let unmounting = false;
 
 function saveDataFn(newData){
     saveAdvice(newData)
     .then(function(){
+        if(unmounting) return;
         $('.saveError').hide();
         $('.saveSuccess').show();
         clearTimeout(hideAlertSuccess);
         hideAlertSuccess = setTimeout(() => {$('.saveSuccess').hide()}, 6000);
     })
     .catch(function(){
+        if(unmounting) return;
         $('.saveSuccess').hide();
         $('.saveError').show();
         clearTimeout(hideAlertError);
@@ -35,7 +38,7 @@ let saveHandler = null;
 class Advice extends React.Component {
     constructor(props, context) {
         super(props, context);
-        console.log('adv :' + this.props.trainerId);
+        unmounting = false;
         let initialState = {
             data:{},
             trainerId: this.props.trainerId,
@@ -66,6 +69,10 @@ class Advice extends React.Component {
             .then((data) => setData(data, me));
         loadAdviceTemplates()
                 .then((data) => this.setState({templates: data})); 
+    }
+
+    componentWillUnmount(){
+        unmounting = true;
     }
 
     componentDidMount(){

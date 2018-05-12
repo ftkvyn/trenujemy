@@ -25,7 +25,7 @@
                                 <b>Ustaw swoją specjalizację na stronie proiflu.</b>
                                 <% } %>                            
                             </p>
-                            <p class="mt-20 mb10 text-left" style="min-height: 50px;" data-main-text><%- info.mainText || "Opis" %></p>
+                            <p class="mt-20 mb10 text-left trainer-about" style="min-height: 50px;" data-main-text><%- info.mainText || "Opis" %></p>
                         </div>
                     </div>
                     <div class="buttons media mb10 wow fadeInUp" data-wow-delay=".300ms">
@@ -290,7 +290,7 @@
                         <input type="hidden" name="trainingPlan" value="<%- plan.id %>">
                         <div class="pricing-card <%- plan.isRecomended ? 'active':'' %>">                            
                             <header class="pricing-header clearfix">
-                                <div class="price-title" data-price-title><span><%- plan.name || "Nazwa" %></span></div>
+                                <div class="price-title" data-price-title><span><%- plan.name || "--podaj nazwę--" %></span></div>
                                 <div class="float-right price">
                                     <% if(plan.priceOld || isEditMode) {%>
                                     <span class='old-price' <% if(!plan.priceOld) {%> style="opacity:0.3;" <% } %> ><strike data-train-price-edit='Old'><%- plan.priceOld || 0 %></strike> <sup>zł</sup></span>

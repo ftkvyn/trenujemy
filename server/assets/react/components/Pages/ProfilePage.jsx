@@ -8,7 +8,7 @@ class ProfilePage extends React.Component {
     render() {  
         return (
             <ContentWrapper>
-                <h3>Twoje dane</h3>
+                <h3>Moje dane</h3>
                 <Row>
                    <Col lg={12} md={12} sm={12}>
                       <Profile></Profile>

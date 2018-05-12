@@ -2,20 +2,23 @@ import React from 'react';
 import moment from 'moment';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
-import { loadUser, saveUser,  loadPurchases, updateEmail } from '../Common/userDataService';
+import { loadUser, loadPurchases, updateEmail } from '../Common/userDataService';
 import { loadUserTrainings, createUserTrainings, saveTrainingComment, removeTrainings } from '../Common/trainingsService';
 import GoodsInfo from '../Components/GoodsInfo'
 
 
 let hideAlertSuccess = null;
 let hideAlertError = null;
+let saveHandler = null;
 moment.locale('pl',{
     weekdays: ['Niedziela', 'Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota']
 });
 let saveHandlers = [];
 
-function saveUserFn(newUser){
-    saveUser(newUser)
+function updateEmailFn(mail){
+    $('.saveError').hide();
+    $('.saveSuccess').hide();
+    updateEmail(mail)
     .then(function(){
         $('.saveError').hide();
         $('.saveSuccess').show();
@@ -125,9 +128,14 @@ class Trainings extends React.Component {
         let fieldVal = event.target.value;
         let isGmailCorrect = /^[a-z0-9](\.?[a-z0-9+]){5,}@g(oogle)?mail\.com$/.test(fieldVal);
         this.setState({gmail: fieldVal, isGmailCorrect: isGmailCorrect, gmailProviding: true});
-        if(isGmailCorrect){
-            updateEmail(fieldVal);
+        if(saveHandler){
+            saveHandler.clear();
         }
+        if(isGmailCorrect){
+            saveHandler = debounce(() => updateEmailFn.bind(this)(fieldVal), 1000);
+            saveHandler();
+        }
+        event.preventDefault();
     }
 
     handleTrainingCommentChange(id,event){
@@ -277,7 +285,7 @@ class Trainings extends React.Component {
             if(trainingsLeft){
                 phoneForm = <Row className='text-center'>
                     <Col lg={12} md={12} sm={12} xs={12}>
-                        <h3>Umów się z trenerem telefonicznie kolejny trening</h3>
+                        <h3>Umów się z trenerem telefonicznie na trening</h3>
                     </Col>
                 </Row>
             }

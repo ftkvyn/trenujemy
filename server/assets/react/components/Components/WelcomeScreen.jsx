@@ -75,7 +75,7 @@ class WelcomeScreen extends React.Component {
                   <p><b>3</b><br/>Wskazówki od trenera</p>];
                   texts = [<p>Skontaktuj się z trenerem telefonicznie aby ustalić godziny treningów.</p>,
                   <p>Spotkajcie się w ustalonym miejscu i preprowadźcie wspólny trening</p>,
-                  <p>Po trzeningu otrzymasz wskazówki od trenera, które zawsze będą dla Ciebie dostępne w panelu serwisu. </p>];
+                  <p>Po treningu otrzymasz wskazówki od trenera, które zawsze będą dla Ciebie dostępne w panelu serwisu. </p>];
               }else if(this.props.notify.freeSample){
                   headerText = <p>Witaj, wybrałeś opcję darmowej konsultacji u trenera<br/>{this.props.goods.feedPlan.trainer.name}</p>;
                   headers = [<p><b>1</b><br/>Ankieta</p>, 
