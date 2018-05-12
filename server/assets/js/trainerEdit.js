@@ -183,7 +183,7 @@ $(function() {
 	});
 
 	$('.add-image').click(function(){
-		$(this).siblings('form').find('input').click();
+		$(this).parent().siblings('form').find('input').click();
 	});
 
 	$('body').on('click','.remove-cbp', removeImage);
@@ -267,7 +267,7 @@ $(function() {
 			    console.log('save(' + listName + '): ' + value);
 			    //ToDo: save value
 			    if(value){
-				    let newLiItem = $(`<li>${value}</li>`);
+				    let newLiItem = $(`<li><i class="far fa-check-circle"></i>${value}</li>`);
 				    newItem.before(newLiItem);
 				    newItemEditor.val('');
 				}

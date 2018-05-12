@@ -4772,3 +4772,7 @@ body .navbar.navbar-transparent.navbar-light.bg-faded .show .nav-link
 section.site-wrapper{
   max-width: none;
 }
+
+.bg-faded-gray{
+  background: #eaeaea;
+}

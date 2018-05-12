@@ -52,101 +52,113 @@
             <%= locals.cartSuccessMessage %>
         </div>
     <%}%>
-    
-    <h4 class="font300 mb30">
-        
-        <% if(locals.isApprove){%>                 
-            Podsumowanie koszyka:
-        <% }else{%>
-            Produkty w koszyku:
-        <% } %>
-    </h4>
-    <table class="table table-condensed table-responsive cart-table mb40">
-        <thead>
-            <tr>
-                <th>Produkt</th>
-                <th>Cena</th>
-                <th>Ilość</th>
-                <th>Razem</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <% let sum = 0; %>            
-            <% for(let i = 0; i < locals.cartItems.length; i++) {%>
-                <% let item = locals.cartItems[i]; sum += item.price;%>            
-                <tr>
-                    <% if(item.isFeedPlan){%>
-                        <% let word = 'tygodni'; %>
-                        <% if(item.weeks < 6){word = 'tygodnie';} %>
-                        <% if(item.weeks == 1){word = 'tydzień';} %>                         
-                        <td class="product-name">
-                            <% if(item.isFreeSample){%>
-                                Piersza darmowa konsultacja
-                            <% }else{%>
-                                Plan żywieniowy, abonament na <%= item.weeks %> <%= word %>
-                                <% if(item.isWithConsulting){%>
-                                   <br/> <b>z codzienną konsultacją</b>
-                                <%}%>
-                            <%}%>
-                            <br/>Konsultant: <b> <%= item.trainer.name %> </b>                            
-                        </td>
-                    <% }else{%>
-                        <td class="product-name">
-                            <%= item.name %>
-                            <br/>Trener: <b> <%= item.trainer.name %> </b>  
-                        </td>
-                    <% } %>
-                    <td class="product-price"><%= item.price %> zł</td>
-                    <td class="product-quantity">
-                        1
-                    </td>
-                    <td class="product-total">
-                        <%= item.price %> zł
-                    </td>
-                    <td class="product-delete">
-                         <% if(!locals.isApprove){%>                 
-                            <form action="/removeItemFromCart" method="POST">
-                                <% if(item.isFeedPlan){%>
-                                    <input type="hidden" name="feedPlan" value="<%- item.id %>">
-                                <% }else{%>
-                                    <input type="hidden" name="trainingPlan" value="<%- item.id %>">
-                                <% } %>
-                                <a onclick="submitForm(event)" 
-                                href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Usuń produkt z koszyku"><i class="fa fa-times"></i></a>
-                            </form>
-                        <% } %>
-                    </td>
-                </tr>
-            <% } %>
-        </tbody>
-    </table>
-    <hr class="mb40" />
-    <div class="row">
-        <div class="col-sm-6">
-             <% if(!locals.isApprove){%>                 
-                <a href="/" class="btn btn-outline-secondary">Kontynuj zakupy</a>
-            <% } %>            
-        </div>
-         <div class="col-sm-6 text-right">
-             <div class="pb20">
-                 <h3><small>Razem w koszyku - </small> <%= sum %> zł</h3>
-             </div>
+     
+    <% if(locals.cartItems.length) {%>
+        <h4 class="font300 mb30">
+            
             <% if(locals.isApprove){%>                 
-                <% if(locals.cartItems && locals.cartItems.length) {%>
-                    <a href="/payment" class="btn btn-primary">Płacę</a>
-                <% }else{%>
-                    <a class="btn btn-seconary disabled">Płacę</a>
-                <% }%>
+                Podsumowanie koszyka:
             <% }else{%>
-                <% if(locals.cartItems && locals.cartItems.length) {%>
-                    <a href="/cartApprove" class="btn btn-primary">Dalej</a>
-                <% }else{%>
-                    <a class="btn btn-seconary disabled">Dalej</a>
-                <% }%>
+                Produkty w koszyku:
             <% } %>
+        </h4>
+        <table class="table table-condensed table-responsive cart-table mb40">
+            <thead>
+                <tr>
+                    <th>Produkt</th>
+                    <th>Cena</th>
+                    <th>Ilość</th>
+                    <th>Razem</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>        
+                <% let sum = 0; %>                   
+                <% for(let i = 0; i < locals.cartItems.length; i++) {%>
+                    <% let item = locals.cartItems[i]; sum += item.price;%>            
+                    <tr>
+                        <% if(item.isFeedPlan){%>
+                            <% let word = 'tygodni'; %>
+                            <% if(item.weeks < 6){word = 'tygodnie';} %>
+                            <% if(item.weeks == 1){word = 'tydzień';} %>                         
+                            <td class="product-name">
+                                <% if(item.isFreeSample){%>
+                                    Piersza darmowa konsultacja
+                                <% }else{%>
+                                    Plan dietetyczny, abonament na <%= item.weeks %> <%= word %>
+                                    <% if(item.isWithConsulting){%>
+                                       <br/> <b>z codzienną konsultacją</b>
+                                    <%}%>
+                                <%}%>
+                                <br/>Konsultant: <b> <%= item.trainer.name %> </b>                            
+                            </td>
+                        <% }else{%>
+                            <td class="product-name">
+                                <%= item.name %>
+                                <br/>Trener: <b> <%= item.trainer.name %> </b>  
+                            </td>
+                        <% } %>
+                        <td class="product-price"><%= item.price %> zł</td>
+                        <td class="product-quantity">
+                            1
+                        </td>
+                        <td class="product-total">
+                            <%= item.price %> zł
+                        </td>
+                        <td class="product-delete">
+                             <% if(!locals.isApprove){%>                 
+                                <form action="/removeItemFromCart" method="POST">
+                                    <% if(item.isFeedPlan){%>
+                                        <input type="hidden" name="feedPlan" value="<%- item.id %>">
+                                    <% }else{%>
+                                        <input type="hidden" name="trainingPlan" value="<%- item.id %>">
+                                    <% } %>
+                                    <a onclick="submitForm(event)" 
+                                    href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Usuń produkt z koszyku"><i class="fa fa-times"></i></a>
+                                </form>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+        <hr class="mb40" />
+        <div class="row">
+            <div class="col-sm-6">
+                 <% if(!locals.isApprove){%>                 
+                    <a href="/" class="btn btn-outline-secondary">Kontynuj zakupy</a>
+                <% } %>            
+            </div>
+             <div class="col-sm-6 text-right">
+                 <div class="pb20">
+                     <h3><small>Razem w koszyku - </small> <%= sum %> zł</h3>
+                 </div>
+                <% if(locals.isApprove){%>                 
+                    <% if(locals.cartItems && locals.cartItems.length) {%>
+                        <a href="/payment" class="btn btn-primary">Płacę</a>
+                    <% }else{%>
+                        <a class="btn btn-seconary disabled">Płacę</a>
+                    <% }%>
+                <% }else{%>
+                    <% if(locals.cartItems && locals.cartItems.length) {%>
+                        <a href="/cartApprove" class="btn btn-primary">Dalej</a>
+                    <% }else{%>
+                        <a class="btn btn-seconary disabled">Dalej</a>
+                    <% }%>
+                <% } %>
+            </div>
         </div>
-    </div>
+    <% } else {%>
+        <h2 style="    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 70px;">Koszyk jest pusty</h2>
+        <div class="row">
+            <div class="col-sm-6">
+                <a href="/" class="btn btn-outline-secondary">Kontynuj zakupy</a>          
+            </div>
+        </div>
+    <% } %>
+    
 </div>
 
 

@@ -87,9 +87,8 @@
                 </div>
 
                 <div class="clearfix">
-                    <h4 class="text-left"><i class="fas fa-certificate"></i> Certyfikaty</h4>
-                    <% if(isEditMode){ %>
-                        <button class="btn btn-primary btn-sm add-image">Dodaj</button>
+                    <h4 class="text-left"><i class="fas fa-certificate"></i> Certyfikaty <% if(isEditMode){ %><button class="btn btn-primary btn-sm add-image">Dodaj</button> <% } %> </h4>
+                    <% if(isEditMode){ %>                        
                         <form id='cert-image-form' style='display:none;'>
                             <input type='file' name='file' id='newCertificate' 
                             accept="image/x-png,image/gif,image/jpeg" 
@@ -134,10 +133,10 @@
                 </div>
 
                 <div class="clearfix">
-                    <h4 class="text-left"><i class="fas fa-camera-retro"></i> Zdjęcia</h4>                  
+                    <h4 class="text-left"><i class="fas fa-camera-retro"></i> Zdjęcia <% if(isEditMode){ %><button class="btn btn-primary btn-sm add-image">Dodaj</button> <% } %></h4>                  
                     
                     <% if(isEditMode){ %>
-                        <button class="btn btn-primary btn-sm add-image">Dodaj</button>
+                        
                         <form id='cert-image-form' style='display:none;'>
                             <input type='file' name='file' id='newCertificate' 
                             accept="image/x-png,image/gif,image/jpeg" 
@@ -186,28 +185,32 @@
         </div>
     </div>
     <% if(info.isTrainer){ %>
-    <div class="lists-container pt40 pb20 bg-dark" id='trainings'>
+    <div class="pt20 pb20 bg-dark" id='trainings'>
         <div class="container">
-            <h3 class="text-primary center-title mb10 h1 text-left">Trening personalny</h3>
+            <h3 class="text-primary center-title mb0 h1 text-left">Trening personalny</h3>
+        </div>
+    </div>
+    <div class="lists-container pb20 pt20" id='trainings'>
+        <div class="container">
             <div style="padding-left: 50px;padding-right: 50px;">
                 <div class="row">
                     <div class="col-sm-4">
-                        <h3 class="font100 text-primary">Moja specjalizacja:</h3>
-                        <ul class="text-white-gray" data-check-list="trainingSpecialization">
+                        <h3 class="font200">Moja specjalizacja:</h3>
+                        <ul class="" data-check-list="trainingSpecialization">
                             <% checkingItemsHelper(trainFields, trainNames); %>
                         </ul>
                     </div>
 
                     <div class="col-sm-4">
-                        <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
-                        <ul class="text-white-gray" data-check-list="trainingHelp">
+                        <h3 class="font200">W czym mogę Ci pomóc:</h3>
+                        <ul class="" data-check-list="trainingHelp">
                             <% checkingItemsHelper(trainHelpFields, trainHelpNames); %>
                         </ul>
                     </div>
 
                     <div class="col-sm-4">
-                        <h3 class="font100 text-primary">Gdzie trenuję?</h3>
-                        <p class="lead text-white-gray text-left mb0">
+                        <h3 class="font200">Gdzie trenuję?</h3>
+                        <p class="lead text-left mb0">
                             <% if(isEditMode){ %>
                                 <input type="hidden" id="city-num" value="<%- info.city %>">
                                 <select data-city-edit>
@@ -226,7 +229,7 @@
                                 </span>
                             <% } %>
                         </p>
-                        <ul class="text-white-gray" data-edit-list="trainPlaces">
+                        <ul class="" data-edit-list="trainPlaces">
                             <% if(typeof info.trainPlaces == 'object') for(let i = 0; i < info.trainPlaces.length; i++) {%>
                                 <li><%- info.trainPlaces[i] %></li>
                             <% } %>
@@ -237,22 +240,27 @@
         </div>
     </div>
 
-    <div class="container pt40 pb20 clearfix">
-        <h3 class="text-primary center-title mb40 h1 text-left">Jak to działa?</h3>
+    <div class="pt20 pb20 bg-dark">
+        <div class="container">
+            <h3 class="text-primary center-title mb0 h1 text-left">Jak to działa?</h3>
+        </div>
+    </div>
+
+    <div class="container pt20 pb20 clearfix">
         <div style="padding-left: 100px;padding-right: 100px;">
             <div class="row text-center">
                 <div class="col-sm-4">
-                    <p class="lead text-bold">Wykupujesz pakiet treningów</p>
+                    <p class="lead text-bold">Wykupujesz pakiet<br/>treningów</p>
                     <p>Zadzwoń, porozmawiajmy. Powiesz mi czego szukasz, wspólnie zastanowimy się czy potrafię Ci pomóc.</p>
                 </div>
 
                 <div class="col-sm-4">
-                    <p class="lead text-bold">Otrzymujesz dostęp do panelu klienta</p>
+                    <p class="lead text-bold">Otrzymujesz dostęp<br/>do panelu klienta</p>
                     <p>W panelu wypełniasz szczegółową ankietę, zarządzasz kalendarzem treningów a także komunikujesz się ze mną.</p>
                 </div>
 
                 <div class="col-sm-4">
-                    <p class="lead text-bold">Wspólnie ćwiczymy w wybranym miejscu</p>
+                    <p class="lead text-bold">Wspólnie ćwiczymy<br/>w wybranym miejscu</p>
                     <p>Umawiamy się na konkretną godzinę i dajemy z siebie wszystko!</p>
                 </div>
             </div>
@@ -260,12 +268,13 @@
         </div>
     </div>
 
-    <div class="container pt40">
-        <h4 class="mb40 mt-20 text-left">Zadzwoń, zapytaj o dostępność terminów: <a data-hint href="tel:<%- info.user.phone %>"><%- info.user.phone %> <i class="ti-mobile"></i></a> </h4>
-        <% if(!trainPlans || !trainPlans.length) {%>
-            <h3 style="color:red;">Błąd ładowania planów treningowych.</h3>
-        <% } else {%>
-        <div class="row">
+    <div class="pt40 bg-faded-gray">
+        <div class="container">
+            <h4 class="mb40 mt-20 text-left">Zadzwoń, zapytaj o dostępność terminów: <a data-hint href="tel:<%- info.user.phone %>"><%- info.user.phone %> <i class="ti-mobile"></i></a> </h4>
+        
+            <% if(!trainPlans || !trainPlans.length) {%>
+                <h3 style="color:red;">Błąd ładowania planów treningowych.</h3>
+            <% } else {%>
             <% 
                 let maxPointsCount = 0;
                 for(let i = 0; i < trainPlans.length; i++) {
@@ -275,70 +284,68 @@
                     }
                 }
             %>
+            <div class="pricing-table  align-items-center">
+                <% for(let i = 0; i < trainPlans.length; i++) {%>
+                    <% let plan = trainPlans[i]; %>
+                    <div class="col-lg-4 col-md-4 plan <%- plan.isRecomended ? 'popular-plan':'' %>  wow fadeInUp"  data-wow-delay=".<%- i+1 %>s">
+                        <form action="/addItemToCart" method="POST">
+                            <input type="hidden" name="trainingPlan" value="<%- plan.id %>">
+                            <div class="plan-header">
+                                <% if(plan.isRecomended) {%>
+                                    <div class="mb30"><span class="badge badge-primary">Best Value</span></div>
+                                <% } %>
+                                <h4 data-price-title><span><%- plan.name || "--podaj nazwę--" %></span></h4>
+                                <h1 class="<%- plan.isRecomended ? 'text-primary':'text-info' %>"><span data-train-price-edit=''><%- plan.price %></span><sup>zł</sup></h1>
+                            </div>
+                            <a href="#" class="btn <%- plan.isRecomended ? 'btn-primary':'btn-secondary' %> btn-lg btn-block">Dodaj do koszyka</a>
+                            <ul class="list-unstyled" data-train-features-list data-edit-list>
+                                <li data-omit-edit>
+                                   <i class="far fa-check-circle"></i> Treningów w cenie: <strong data-train-count-edit><%- plan.trainsCount %></strong>
+                                </li>
+                                <% const features = (plan.description || '').split(/\n/); %>
+                                <% for(let k = 0; k < features.length; k++) {%>
+                                    <% if(features[k].trim()) {%>
+                                    <li><i class="far fa-check-circle"></i> <%- features[k] %> </li>
+                                    <% } %>
+                                <% } %>
 
-            <% for(let i = 0; i < trainPlans.length; i++) {%>
-                <% let plan = trainPlans[i]; %>
-                <div class="col-sm-4 mb40 wow fadeInUp" data-wow-delay=".<%- i+1 %>s">
-                    <form action="/addItemToCart" method="POST">
-                        <input type="hidden" name="trainingPlan" value="<%- plan.id %>">
-                        <div class="pricing-card <%- plan.isRecomended ? 'active':'' %>">                            
-                            <header class="pricing-header clearfix">
-                                <div class="price-title" data-price-title><span><%- plan.name || "--podaj nazwę--" %></span></div>
-                                <div class="float-right price">
-                                    <% if(plan.priceOld || isEditMode) {%>
-                                    <span class='old-price' <% if(!plan.priceOld) {%> style="opacity:0.3;" <% } %> ><strike data-train-price-edit='Old'><%- plan.priceOld || 0 %></strike> <sup>zł</sup></span>
-                                    <% } %>
-                                    <span data-train-price-edit=''><%- plan.price %></span><sup>zł</sup>
-                                </div>                                
-                            </header>
-                            <div class="pricing-features">
-                                <ul class="list-unstyled" data-train-features-list data-edit-list>
-                                    <li data-omit-edit>
-                                       Treningów w cenie: <b data-train-count-edit><%- plan.trainsCount %></b>
-                                    </li>
-                                    <% const features = (plan.description || '').split(/\n/); %>
-                                    <% for(let k = 0; k < features.length; k++) {%>
-                                        <% if(features[k].trim()) {%>
-                                        <li>
-                                            <%- features[k] %>   
-                                        </li>
-                                        <% } %>
-                                    <% } %>
-
-                                    <% if(!isEditMode) for(let k = 0; k < maxPointsCount - features.length; k++) {%>
-                                    <li class='empty-point'>
-                                        &nbsp;
-                                    </li>
-                                    <% } %>
-                                </ul>                              
-                            </div><!--pricing features-->
-                            <footer class="pricing-footer text-center">                                    
-                                <button class="btn btn-outline-info">Dodaj do koszyka</button>
-                            </footer>
-                        </div><!--/pricing card-->
-                    </form>
-                </div>
-            <% } %>
-        </div>       
+                                <% if(!isEditMode) for(let k = 0; k < maxPointsCount - features.length; k++) {%>
+                                <li class='empty-point'>
+                                    &nbsp;
+                                </li>
+                                <% } %>
+                            </ul>
+                        </form>
+                    </div>
+                <% } %>
+            </div> 
+        </div>     
         <% } %>       
     </div> 
     <% } %>
     <% if(info.isFeedCounsultant){ %>
-    <div class="lists-container pt20 pb20 bg-dark" id="feedPlans">
+
+    <div class="pt20 pb20 bg-dark" id="feedPlans">
         <div class="container">
-            <h3 class="text-primary center-title mb10 h1 text-left">Doradztwo żywieniowe</h3>
+            <h3 class="text-primary center-title mb0 h1 text-left">Doradztwo dietetyczne</h3>
+        </div>
+    </div>
+
+    <div class="lists-container pt20 pb20">
+        <div class="container">
+            <h3 class="center-title mb10 h1 text-left"></h3>
             <div style="padding-left: 50px;padding-right: 50px;">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h3 class="font100 text-primary">Moja specjalizacja:</h3>
-                        <ul class="text-white-gray" data-check-list="feedSpecialization">
+                        <h3 class="font200">Moja specjalizacja:</h3>
+                        <ul class="" data-check-list="feedSpecialization">
                             <% checkingItemsHelper(feedFields, feedNames); %>
                         </ul>
                     </div>
 
                     <div class="col-sm-6">
-                        <h3 class="font100 text-primary">W czym mogę Ci pomóc:</h3>
-                        <ul class="text-white-gray" data-check-list="feedHelp">
+                        <h3 class="font200">W czym mogę Ci pomóc:</h3>
+                        <ul class="" data-check-list="feedHelp">
                             <% checkingItemsHelper(feedHelpFields, feedHelpNames); %>
                         </ul>
                     </div>
@@ -346,29 +353,35 @@
             </div>
         </div>
     </div>
+
+    <div class="pt20 pb20 bg-dark">
+        <div class="container">
+            <h3 class="text-primary center-title mb0 h1 text-left">Jak to działa?</h3>
+        </div>
+    </div>
+
        
     <div class="container pt40 pb20 clearfix">
-        <h3 class="text-primary center-title mb40 h1 text-left">Jak to działa?</h3>
         <div style="padding-left: 100px;padding-right: 100px;">
             <div class="row text-center pb20">
                 <div class="col-sm-6">
-                    <p class="lead text-bold">Wybierasz odpowiedni pakiet konsultacji</p>
+                    <p class="lead text-bold">Wybierasz odpowiedni<br/>pakiet konsultacji</p>
                     <p>Wybierasz okres jaki Ciebie najbardziej interesuje. Zauważ, że im dłuższy okres tym większa szansa na zrealizowanie wyznaczonych celów. </p>
                 </div>
 
                 <div class="col-sm-6">
-                    <p class="lead text-bold">Otrzymujesz dostęp do panelu klienta</p>
+                    <p class="lead text-bold">Otrzymujesz dostęp<br/>do panelu klienta</p>
                     <p>W panelu wypełniasz szczegółową ankietę, gdzie określasz swój aktualny stan a także definiujesz cele jakie masz zamiar ze mną osiągnąć.</p>
                 </div>
             </div>
             <div class="row text-center pb20">
                 <div class="col-sm-6">
-                    <p class="lead text-bold">Codziennie dostarczasz mi informacji</p>
+                    <p class="lead text-bold">Codziennie dostarczasz<br/>mi informacji</p>
                     <p>W panelu uzupełniasz dane na temat Twojej aktywności oraz szczegółowo przekazujesz informacje na temat każdego posiłku tego dnia.</p>
                 </div>
 
                 <div class="col-sm-6">
-                    <p class="lead text-bold">Wspólnie prowadzimy Cię do wytyczonego celu</p>
+                    <p class="lead text-bold">Wspólnie prowadzimy Cię<br/>do wytyczonego celu</p>
                     <p>Codziennie otrzymujesz ode mnie informację zwrotną na temat Twojej aktywności oraz odżywiania.Dzięki dogłębnej analizie Twoich danych będę w stanie pomóc Ci osiągnąć Twój cel.</p>
                 </div>
             </div>
@@ -376,10 +389,16 @@
         </div>
     </div>
 
-    <div class="">
+    <div class="pt20 pb20 mb40 bg-dark">
         <div class="container">
-            <h3 class="text-primary center-title mb40 h1 text-left">Doradztwo dietetyczne</h3>        
-            <p class="lead mb40">Zakup diety - określ przez ile tygodni chcesz ze mną współpracować</p>
+            <h3 class="text-primary center-title mb0 h1 text-left">Wybierz swój pakiet</h3>
+            <p class="lead mb0 text-white-gray">Określ przez ile tygodni będziemy razem współpracować.</p>
+        </div>
+    </div>
+
+    <div class="">
+        <div class="container">     
+            
         </div>        
         <form action="/addItemToCart" method="POST">
             <div style="padding-left: 100px;padding-right: 100px;">
@@ -430,7 +449,7 @@
         </form>
 
         <% if(info.isFreeTrainingEnabled || isEditMode){ %>
-        <div class="bg-faded pt20 pb20">
+        <div class="bg-faded-gray pt20 pb20">
             <div class="container">
                 <div class="clearfix free-sample-block mb40" style="padding-left: 100px;padding-right: 100px;  
                 <% if(!info.isFreeTrainingEnabled){ %>display: none;<% } %>">
@@ -439,7 +458,7 @@
                             <input type="hidden" name="feedPlan" value="<%- feedPlans.filter(fp => fp.isFreeSample)[0].id %>">
                         <% } %>
                         <p class="lead">Wypróbuj pierwszą konsultację zupełnie za darmo.</p>
-                        <p>Otwórz konto, oznacz swoje cele, wypełnij pierwszy dzień swojego dziennika żywieniowego a ja specjalnie dla Ciebie opracuję analizę oraz zestaw wstępnych zaleceń.</p>
+                        <p>Otwórz konto, oznacz swoje cele, wypełnij pierwszy dzień swojego dziennika dietetycznego a ja specjalnie dla Ciebie opracuję analizę oraz zestaw wstępnych zaleceń.</p>
                         <button type="submit" 
                         <% if(info.isUsedFreeSample){ %> disabled="disabled" <% } %>
                         class="btn 

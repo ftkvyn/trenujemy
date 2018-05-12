@@ -375,7 +375,7 @@ module.exports = {
 	paymentEnd: function(req,res){
 		return res.view('cart', {locals: {
 				user: req.session.user, 
-				cartSuccessMessage: "Dziękujemy za dokonanie zakupu. Zaraz po zaksięgowaniu Twojej wpłaty otrzymasz dostęp do panelu klienta",
+				cartSuccessMessage: "Dziękujemy za dokonanie zakupu. Zaraz po zaksięgowaniu wpłaty otrzymasz dostęp do wykupionych usług w panelu klienta",
 				cartItems: [],
 				cart: req.session.cart}});
 	},
