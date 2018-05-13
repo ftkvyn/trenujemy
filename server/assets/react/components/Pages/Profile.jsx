@@ -18,6 +18,7 @@ let saveRouteHandler = null;
 
 function saveUserFn(newUser){
     let nameChanged = newUser.nameChanged;
+    console.log(`1 nameChanged=${nameChanged}`);
     delete newUser.nameChanged;
     saveUser(newUser)
     .then(function(){
@@ -25,6 +26,7 @@ function saveUserFn(newUser){
         $('.saveSuccess').show();
         clearTimeout(hideAlertSuccess);        
         hideAlertSuccess = setTimeout(() => {$('.saveSuccess').hide()}, 6000);
+        console.log(`2 nameChanged=${nameChanged}`);
         if(nameChanged && this.state.trainerInfo){
             saveRouteFn.bind(this)({friendlyId: newUser.name, id: this.state.trainerInfo.id});
         }
@@ -138,6 +140,7 @@ class Profile extends React.Component {
             notifications:{},
             trainerInfo: {}
         };
+        initialState.rootHost = $('#rootHost').val();
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
         }
@@ -192,7 +195,9 @@ class Profile extends React.Component {
         let fieldName = event.target.name;
         let fieldVal = event.target.value;
         let newUser = this.state.user;
+        console.log(`fieldName=${fieldName}`);
         if(fieldName == 'name' && this.state.user.role == 'trainer'){
+            console.log(`0 nameChanged=${newUser.nameChanged}`);
             newUser.nameChanged = true;
         }
         newUser[fieldName] = fieldVal
@@ -354,6 +359,13 @@ class Profile extends React.Component {
                         name='friendlyId'
                         value={this.state.trainerInfo.friendlyId || ""}
                         onChange={this.handleFriendlyIdChange.bind(this)}/>
+                    </Col>
+                </FormGroup> 
+
+                <FormGroup>
+                    <label className="col-lg-2 control-label">Pełny adres strony:</label>
+                    <Col lg={ 10 }>
+                        <a target='blank' style={{'line-height':'36px'}} href={this.state.rootHost + this.state.trainerInfo.friendlyId}>{this.state.rootHost + this.state.trainerInfo.friendlyId}</a>
                     </Col>
                 </FormGroup> 
             </div>

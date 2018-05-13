@@ -72,48 +72,53 @@ exports.initTrainer = function(user){
 	let createQs = [];
 
 	//ToDo: create service for generating
-	var friendlyId = user.login.substring(0, user.login.indexOf('@'));
-	createQs.push(TrainerInfo.create({user: user.id, friendlyId: friendlyId}));
-	//three empty plans
-	createQs.push(TrainPlan.createEach([{trainer:user.id, isActive:true},{trainer:user.id, isRecomended: true, isActive:true},{trainer:user.id, isActive:true}]));
-
-	const initPlans = [
-		{
-			weeks:1,
-			isVisible: true,
-			trainer:user.id,
-			isWithConsulting: true
-		},{
-			weeks:2,
-			isVisible: true,
-			trainer:user.id,
-			isWithConsulting: true
-		},{
-			weeks:4,
-			isVisible: true,
-			trainer:user.id,
-			isWithConsulting: true
-		},{
-			weeks:8,
-			isVisible: true,
-			trainer:user.id,
-			isWithConsulting: true
-		},{
-			isFreeSample:true,			
-			weeks:1,
-			price:0,
-			isVisible: true,
-			trainer:user.id,
-			isWithConsulting: true
+	var friendlyIdSrc = user.login.substring(0, user.login.indexOf('@'));
+	friendlyIdService.findFriendlyId(TrainerInfo, friendlyIdSrc, null, function(err, friendlyId){
+		if(err){
+			return deferred.reject(err);
 		}
-	];
-    createQs.push(FeedPlan.createEach(initPlans));
-	Q.all(createQs)
-	.catch(function(err){
-		return deferred.reject(err);
-	})
-	.then(function(data){
-		return deferred.resolve(data);
+		createQs.push(TrainerInfo.create({user: user.id, friendlyId: friendlyId}));
+		//three empty plans
+		createQs.push(TrainPlan.createEach([{trainer:user.id, isActive:true},{trainer:user.id, isRecomended: true, isActive:true},{trainer:user.id, isActive:true}]));
+
+		const initPlans = [
+			{
+				weeks:1,
+				isVisible: true,
+				trainer:user.id,
+				isWithConsulting: true
+			},{
+				weeks:2,
+				isVisible: true,
+				trainer:user.id,
+				isWithConsulting: true
+			},{
+				weeks:4,
+				isVisible: true,
+				trainer:user.id,
+				isWithConsulting: true
+			},{
+				weeks:8,
+				isVisible: true,
+				trainer:user.id,
+				isWithConsulting: true
+			},{
+				isFreeSample:true,			
+				weeks:1,
+				price:0,
+				isVisible: true,
+				trainer:user.id,
+				isWithConsulting: true
+			}
+		];
+	    createQs.push(FeedPlan.createEach(initPlans));
+		Q.all(createQs)
+		.catch(function(err){
+			return deferred.reject(err);
+		})
+		.then(function(data){
+			return deferred.resolve(data);
+		});
 	});
 	return deferred.promise;	
 }
