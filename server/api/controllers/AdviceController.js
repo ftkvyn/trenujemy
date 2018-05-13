@@ -86,6 +86,22 @@ module.exports = {
 				console.error(err);
 				return res.badRequest(err);
 			}
+			let userId = data[0].user;
+			if(req.session.user.role == 'trainer'){
+				Notifications.findOne({user: userId})
+				.exec(function(err, notification){
+					if(err){
+						console.error(err);
+						return;
+					}
+					if(!notification.advices){
+						notification.advices = [];
+					}
+					notification.advices.push(req.session.user.id);
+					Notifications.update({id: notification.id}, {advices: notification.advices})
+					.exec(function(){});
+				});
+			}
 			return res.json(data);
 		});
 	},	

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
 import { loadUserAdvice, loadDefaultAdvice, saveAdvice } from '../Common/adviceService';
+import { updateNotifications, saveNotifications, loadNotifications } from '../Common/notificationsService';
 import { loadAdviceTemplates } from '../Common/adviceTemplateService';
 
 import TextEditor from '../Components/TextEditor'
@@ -33,6 +34,24 @@ function setData(userData, me){
     me.setState({data: userData});
 }
 
+function clearTrainerAdviceNotification(){
+    if(!this.state.userId){
+        if(this.state.notifications.id && this.state.notifications.advices.length){
+          let advices = this.state.notifications.advices;
+
+          if(advices.some( adv => adv == this.state.trainerId )){
+            let newAdvices = advices.filter( adv => adv != this.state.trainerId);
+            let model = {id: this.state.notifications.id, advices: newAdvices};
+            saveNotifications(model);
+            updateNotifications({advices: newAdvices});
+            let notifications = this.state.notifications;
+            notifications.advices = newAdvices;
+            this.setState({notifications: notifications});
+          }              
+        }        
+    }
+}
+
 let saveHandler = null;
 
 class Advice extends React.Component {
@@ -43,7 +62,10 @@ class Advice extends React.Component {
             data:{},
             trainerId: this.props.trainerId,
             defaultAdvice:{},
-            templates:[]
+            templates:[],
+            notifications:{
+                advices: []
+            }
         };
         if(this.props.match && this.props.match.params){
             initialState.userId = this.props.match.params.id;
@@ -69,10 +91,12 @@ class Advice extends React.Component {
             .then((data) => setData(data, me));
         loadAdviceTemplates()
                 .then((data) => this.setState({templates: data})); 
+        clearTrainerAdviceNotification.call(this);
     }
 
     componentWillUnmount(){
         unmounting = true;
+        clearTrainerAdviceNotification.call(this);
     }
 
     componentDidMount(){
@@ -87,6 +111,16 @@ class Advice extends React.Component {
                 });
             loadAdviceTemplates()
                 .then((data) => this.setState({templates: data})); 
+        }else{
+          loadNotifications()
+          .then(data => {     
+              let model = Object.assign({}, this.state.notifications);  
+              if(data.advices){
+                model.advices = data.advices;
+              }      
+              model.id = data.id; 
+              this.setState({notifications: model});
+          });
         }
     }
 

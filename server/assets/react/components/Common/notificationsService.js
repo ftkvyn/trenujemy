@@ -69,6 +69,9 @@ function saveNotifications(newData){
 	if(newData && newData.diaryDays && (newData.diaryDays.length === 0)){
 		newData.diaryDays = null;
 	}
+	if(newData && newData.advices && (newData.advices.length === 0)){
+		newData.advices = null;
+	}
 	return new Promise((resolve, reject) => {
 		$.ajax({
             url: '/api/notifications/' + newData.id,

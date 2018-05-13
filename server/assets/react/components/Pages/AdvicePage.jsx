@@ -7,7 +7,6 @@ import Advice from './Advice'
 class AdvicePage extends React.Component {
     
     render() {  
-        console.log('adv page :' + this.props.match.params.trainerId);
         return (
             <ContentWrapper>
                 <h3>Zalecenia trenera</h3>

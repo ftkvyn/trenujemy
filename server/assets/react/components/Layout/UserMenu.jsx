@@ -19,7 +19,8 @@ class UserMenu extends React.Component {
             notifications:{
                 hints: 0,
                 survey: false,
-                diaryDays: []
+                diaryDays: [],
+                advices: []
             },
             listenerKey: null
         };
@@ -42,6 +43,9 @@ class UserMenu extends React.Component {
             }
             if(data.diaryDays){
                 model.diaryDays = data.diaryDays;
+            }
+            if(data.advices){
+                model.advices = data.advices;
             }
             this.setState({notifications: model});
         });
@@ -106,7 +110,7 @@ class UserMenu extends React.Component {
                 <span>Ankieta</span>
             </Link>
         </li>
-        adviceItem = <AdvisorsList></AdvisorsList>      
+        adviceItem = <AdvisorsList notifications={this.state.notifications.advices}></AdvisorsList>      
         diaryItem = <li className={ this.routeActiveStart('diary') ? 'active' : '' }>
             <Link to="/diary" title="Dziennik aktywności">
                 <Notification count={this.state.notifications.diaryDays.length}></Notification>

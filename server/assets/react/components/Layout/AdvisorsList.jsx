@@ -2,6 +2,17 @@ import React from 'react';
 import { Router, Route, Link, History, withRouter } from 'react-router-dom';
 import { Collapse } from 'react-bootstrap';
 import { loadAdvisors } from '../Common/adviceService';
+import Notification from '../Components/Notification'
+
+function setNotifications(trainers, advices){
+    let adviceNotifications = [];
+    for(let i = 0; i < trainers.length; i++){
+        if(advices.indexOf(trainers[i].id) > -1){
+            adviceNotifications.push(trainers[i].id);
+        }
+    }
+    this.setState({trainers, adviceNotifications});
+}
 
 class AdvisorsList extends React.Component {
     constructor(props, context) {
@@ -11,14 +22,16 @@ class AdvisorsList extends React.Component {
             collapse: {
                 advice: this.routeActive(['advice']),
             },
-            trainers: []
+            trainers: [],
+            adviceNotifications: []
         };
-        let me = this;
         loadAdvisors()
-        .then(function(trainers) {              
-            me.setState({trainers: trainers});
-        });
-    };
+        .then(trainers => setNotifications.call(this, trainers, this.props.notifications));
+    }
+
+    componentWillReceiveProps(nextProps) {
+        setNotifications.call(this, this.state.trainers, nextProps.notifications);
+    }
 
     routeActive(paths) {
         paths = Array.isArray(paths) ? paths : [paths];
@@ -47,14 +60,20 @@ class AdvisorsList extends React.Component {
     render() {    
         const linkItems = this.state.trainers.map((trainer) => {
             const trainerName = trainer.name;
+            let newItems = 0;
+            if(this.state.adviceNotifications.indexOf(trainer.id) > -1){
+                newItems = 1;
+            }
             return <li className={ this.routeActive('/advice/' + trainer.id) ? 'active' : '' } key={trainer.id} >
                 <Link to={"/advice/" + trainer.id} title={trainerName}>
-                <span>{trainerName}</span>
+                    <Notification count={newItems}></Notification>
+                    <span>{trainerName}</span>
                 </Link>
             </li>});
         return (
             <li className={ this.routeActive(['advice']) ? 'active' : '' }>
             <div className="nav-item" onClick={ this.toggleItemCollapse.bind(this, 'advice') }>
+                <Notification count={this.state.adviceNotifications.length}></Notification>
                 <em className="fa fa-exclamation-triangle"></em>
                 <span>Zalecenia</span>
             </div>

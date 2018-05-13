@@ -43,8 +43,28 @@ module.exports = {
   	},
 
     diaryDays:{
-      type: 'json'//, columnType: 'array' 
-    }
+      type: 'json' //, columnType: 'array' 
+    },
+
+    //works only for user
+    advices:{
+      type:'json' // List of ids of trainers that have edited advices.
+    },
+
+    //works only for trainer
+    // clients:{
+    //   type:'json' 
+    //   // dictionary, key - userId, value - things that changed
+    //   // example:
+    //   // {
+    //   //   '11': {
+    //   //     'acccount': true,
+    //   //     'survey': false,
+    //   //     'trainings': [121, 171, 191], // - ids of trainings
+    //   //     'diary': [...] //array of days, ad diaryDays
+    //   //   }
+    //   }
+    // }
   }
 };
 
