@@ -297,7 +297,7 @@
                                 <h4 data-price-title><span><%- plan.name || "--podaj nazwę--" %></span></h4>
                                 <h1 class="<%- plan.isRecomended ? 'text-primary':'text-info' %>"><span data-train-price-edit=''><%- plan.price %></span><sup>zł</sup></h1>
                             </div>
-                            <a href="#" class="btn <%- plan.isRecomended ? 'btn-primary':'btn-secondary' %> btn-lg btn-block">Dodaj do koszyka</a>
+                            <button type="submit" class="btn <%- plan.isRecomended ? 'btn-primary':'btn-secondary' %> btn-lg btn-block">Dodaj do koszyka</button>
                             <ul class="list-unstyled" data-train-features-list data-edit-list>
                                 <li data-omit-edit>
                                    <i class="far fa-check-circle"></i> Treningów w cenie: <strong data-train-count-edit><%- plan.trainsCount %></strong>
