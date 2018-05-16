@@ -2,36 +2,93 @@
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DataCrawler
 {
     class Program
     {
+        static ChromeDriver pipListDriver = new ChromeDriver();
         static ChromeDriver pipDriver = new ChromeDriver();
-        //static ChromeDriver tableDriver = new ChromeDriver();
+        static ChromeDriver tableDriver = new ChromeDriver();
+
+        const string resultFolder = @"C:\Temp\Data\";
+        const string removeModalScript = "$('.modal-open').removeClass('modal-open');$('.modal-backdrop').remove();$('.modal').remove();";
 
         static void Main(string[] args)
         {
-            // var tmpProduct = GetPipProduct("https://www.e-piotripawel.pl/towar/kukurydza-bonduelle-zlocista/13816");
-            // Console.WriteLine(tmpProduct);
-            // https://www.e-piotripawel.pl/towar/musztarda-kamis-sarepska/231997
-            // https://www.e-piotripawel.pl/towar/kukurydza-bonduelle-zlocista/13816
-            // https://www.e-piotripawel.pl/towar/napoj-hoop-cola/29477 
-            // https://www.e-piotripawel.pl/towar/sok-fortuna-pomaranczowy/226542
-            //
-            var tmpProduct = GetPipProduct("https://www.e-piotripawel.pl/towar/napoj-hoop-cola/29477");
-            Console.WriteLine(tmpProduct);
-            tmpProduct = GetPipProduct("https://www.e-piotripawel.pl/towar/sok-fortuna-pomaranczowy/226542");
-            Console.WriteLine(tmpProduct);
+            List<string> baseCats = new List<string> {
+                //"https://www.e-piotripawel.pl/kategoria/artykuly-spozywcze/1106 ",
+                //"https://www.e-piotripawel.pl/kategoria/garmazerka-i-gastronomia/955/sort/relevancy.desc",
+                //"https://www.e-piotripawel.pl/kategoria/kuchnie-swiata/776/sort/relevancy.desc",
+                //"https://www.e-piotripawel.pl/kategoria/mrozonki/20/sort/relevancy.desc",
+                //"https://www.e-piotripawel.pl/kategoria/pieczywo-i-wyroby-cukiernicze/26/sort/relevancy.desc",
+                "https://www.e-piotripawel.pl/kategoria/ryby-i-przetwory-rybne/32/sort/relevancy.desc",
+                //"https://www.e-piotripawel.pl/kategoria/silownia-i-fitness/1108/sort/relevancy.desc",
+                //"https://www.e-piotripawel.pl/kategoria/warzywa-i-owoce/41/sort/relevancy.desc",
+                //"https://www.e-piotripawel.pl/kategoria/woda-i-napoje/22/sort/relevancy.desc",
+                //"https://www.e-piotripawel.pl/kategoria/wedliny-i-mieso/951/sort/relevancy.desc",
+                //"https://www.e-piotripawel.pl/kategoria/swieze/1105/sort/relevancy.desc",
+            };
+            int num = 1;
+            foreach(var cat in baseCats)
+            {
+                var data = ProcessCategory(cat);
+                SaveData(data, num++);
+            }
+
             Console.ReadLine();
         }
 
-        static List<string> GetPipCategoryLinks(string baseName)
+        static List<ProductModel> ProcessCategory(string baseUrl)
         {
-            return null;
+            List<ProductModel> data = new List<ProductModel>();
+            //List<string> totalLinks = new List<string>();
+            pipListDriver.Navigate().GoToUrl(baseUrl);
+            pipListDriver.ExecuteScript(removeModalScript);
+            do
+            {
+                var links = GetPageLinks();
+                //  totalLinks.AddRange(links);
+                foreach (var link in links)
+                {
+                    var model = GetPipProduct(link);
+                    if (!model.InfoFound)
+                    {
+                        model = FillData(model);
+                    }
+                    data.Add(model);
+                }
+                Console.WriteLine($"Page processed, {DateTime.Now}");
+            } while (PipListNextPage());
+            Console.WriteLine($"Category {baseUrl} processed, {DateTime.Now}");
+            return data;
+        }
+
+        static bool PipListNextPage()
+        {
+            var nextLis = pipListDriver.FindElements(By.CssSelector("li.next"));
+            if (!nextLis.Any())
+            {
+                return false;
+            }
+            else
+            {
+                var nextPageLink = nextLis.First().FindElement(By.TagName("a")).GetAttribute("href");
+                pipListDriver.Navigate().GoToUrl(nextPageLink);
+                pipListDriver.ExecuteScript(removeModalScript);
+                return true;
+            }
+        }
+
+        static List<string> GetPageLinks()
+        {
+            var links = pipListDriver.FindElements(By.CssSelector(".items .product-box .product-box-container h3 a")).Select(el => el.GetAttribute("href"));
+            return links.ToList();
         }
 
         static ProductModel GetPipProduct(string url)
@@ -41,6 +98,7 @@ namespace DataCrawler
             try
             {
                 pipDriver.Navigate().GoToUrl(url);
+                pipDriver.ExecuteScript(removeModalScript);
 
                 result.Title = pipDriver.FindElements(By.CssSelector("[itemprop=name]")).FirstOrDefault()?.Text?.ToLower() ?? "";
                 result.PureProductName = result.Title ?? "";
@@ -89,27 +147,29 @@ namespace DataCrawler
                                         var valueText = trs[i].FindElements(By.TagName("td"))[neededIndex]?.Text?.ToLower()?.Trim();
                                         if (rowType.Contains("wartość energetyczna"))
                                         {
-                                            result.Calories = ExtractSecondNumber(valueText);
-                                        }
-                                        else
-                                        {
-                                            switch (rowType)
+                                            if (valueText.Contains("kj") && valueText.IndexOf("kj") < valueText.IndexOf("kcal"))
                                             {
-                                                case "tłuszcz":
-                                                    result.Fat = ExtractNumber(valueText);
-                                                    break;
-                                                case "węglowodany":
-                                                    result.Carbo = ExtractNumber(valueText);
-                                                    break;
-                                                case "białko":
-                                                    result.Protein = ExtractNumber(valueText);
-                                                    break;
-                                                default:
-                                                    //Do nothing
-                                                    break;
+                                                result.Calories = ExtractSecondNumber(valueText);
+                                            }
+                                            else
+                                            {
+                                                result.Calories = ExtractNumber(valueText);
                                             }
                                         }
+                                        else if (rowType.StartsWith("tłuszcz"))
+                                        {
+                                            result.Fat = ExtractNumber(valueText);
+                                        }
+                                        else if (rowType.StartsWith("węglowodany"))
+                                        {
+                                            result.Carbo = ExtractNumber(valueText);
+                                        }
+                                        else if (rowType.StartsWith("białko"))
+                                        {
+                                            result.Protein = ExtractNumber(valueText);
+                                        }
                                     }
+                                    result.InfoFound = true;
                                 }
 
                             }
@@ -144,6 +204,117 @@ namespace DataCrawler
                 Console.WriteLine(ex);
             }
             return result;
+        }
+
+        static ProductModel FillData(ProductModel model)
+        {
+            try
+            {
+                Console.WriteLine($"Looking for values for {model.Title}");
+                tableDriver.Navigate().GoToUrl("https://www.tabele-kalorii.pl/");
+                tableDriver.FindElementById("wyszukiwarka_produktow").Clear();
+                tableDriver.FindElementById("wyszukiwarka_produktow").SendKeys(model.PureProductName);
+                tableDriver.FindElement(By.CssSelector("[name=wyszukiwarka_submit]")).Click();
+
+                if (tableDriver.FindElements(By.CssSelector("#komunikat-nie-znaleziono")).Any())
+                {
+                    tableDriver.FindElementById("wyszukiwarka_produktow").Clear();
+                    tableDriver.FindElementById("wyszukiwarka_produktow").SendKeys(model.Title);
+                    tableDriver.FindElement(By.CssSelector("[name=wyszukiwarka_submit]")).Click();
+                }
+
+                var title = tableDriver.FindElements(By.CssSelector(".tk-nazwa a"))?.FirstOrDefault()?.Text?.ToLower();
+                if (!String.IsNullOrEmpty(title))
+                {
+                    //ToDo: check on .Contains(...)
+                    if (title == model.Title || title == model.PureProductName)
+                    {
+                        Console.WriteLine($"Looking for values for {model.PureProductName}, found {title}");
+                        tableDriver.FindElements(By.CssSelector(".tk-nazwa a")).FirstOrDefault().Click();
+
+                        var infoTable = tableDriver.FindElement(By.ClassName("tabela-wo"));
+                        var valueType = infoTable.FindElements(By.TagName("tr"))[1]?.FindElements(By.TagName("td"))?[1]?.Text?.ToLower() ?? "";
+                        if(valueType.Contains("w 100 g"))
+                        {
+                            model.BaseQuantity = "100 g";
+                        }else if (valueType.Contains("w 100 ml"))
+                        {
+                            model.BaseQuantity = "100 ml";
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Unknown quantity - {valueType}");
+                            return model;
+                        }
+
+                        var trs = infoTable.FindElements(By.TagName("tr")).ToList();
+                        //skipping first two rows
+                        for (var i = 2; i < trs.Count; i++)
+                        {
+                            var rowType = trs[i].FindElements(By.TagName("td"))?.FirstOrDefault()?.Text?.ToLower()?.Trim();
+                            var valueText = trs[i].FindElements(By.TagName("td"))?[1]?.Text?.ToLower()?.Trim();                            
+                            if (rowType.Contains("wartość energetyczna"))
+                            {
+                                if(valueText.Contains("kj") && valueText.IndexOf("kj") < valueText.IndexOf("kcal"))
+                                {
+                                    model.Calories = ExtractSecondNumber(valueText);
+                                }
+                                else
+                                {
+                                    model.Calories = ExtractNumber(valueText);
+                                }
+                                
+                            }
+                            else
+                            {
+                                switch (rowType)
+                                {
+                                    case "tłuszcz":
+                                        model.Fat = ExtractNumber(valueText);
+                                        break;
+                                    case "węglowodany":
+                                        model.Carbo = ExtractNumber(valueText);
+                                        break;
+                                    case "białko":
+                                        model.Protein = ExtractNumber(valueText);
+                                        break;
+                                    default:
+                                        //Do nothing
+                                        break;
+                                }
+                            }
+                        }
+                        model.InfoFound = true;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            return model;
+        }
+
+        static void SaveData(List<ProductModel> data, int num)
+        {
+            if (!Directory.Exists(resultFolder))
+            {
+                Directory.CreateDirectory(resultFolder);
+            }
+            string resultFileName = $"result_{num}_{DateTime.Now.ToString()}.csv";
+            string path = Path.Combine(resultFolder, resultFileName);
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            using (System.IO.StreamWriter output =
+            new System.IO.StreamWriter(path))
+            {
+                foreach(var model in data)
+                {
+                    output.WriteLine(model.ToString());
+                }
+            }
         }
 
         const string numberChars = "1234567890.";
@@ -185,9 +356,11 @@ namespace DataCrawler
         public double Carbo;
         public double Protein;
 
+        public bool InfoFound;
+
         public override string ToString()
         {
-            return $"{Title}\t{PureProductName}\t{Manufacturer}\t{Brand}\t{BaseQuantity}\t{Category}\t{SubCategory}\t{Calories}\t{Fat}\t{Carbo}\t{Protein}";
+            return $"{Title}\t{PureProductName}\t{Manufacturer}\t{Brand}\t{BaseQuantity}\t{Category}\t{SubCategory}\t{Calories}\t{Fat}\t{Carbo}\t{Protein}\t{InfoFound}";
         }
     }
 }
