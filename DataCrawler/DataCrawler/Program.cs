@@ -337,9 +337,11 @@ namespace DataCrawler
             src = src.Replace(',', '.').Trim();
             var tmp = "";
             var i = 0;
-            while (!numberChars.Contains(src[i])) { i++; }
-            while (numberChars.Contains(src[i])) { tmp += src[i]; i++; }
-            return double.Parse(tmp);
+            while (i < src.Length && !numberChars.Contains(src[i])) { i++; }
+            while (i < src.Length && numberChars.Contains(src[i])) { tmp += src[i]; i++; }
+            double result = 0;
+            double.TryParse(tmp, out result);
+            return result;
         }
 
         static double ExtractSecondNumber(string src)
@@ -347,11 +349,13 @@ namespace DataCrawler
             src = src.Replace(',', '.').Trim();
             var tmp = "";
             var i = 0;
-            while (!numberChars.Contains(src[i])) { i++; }
-            while (numberChars.Contains(src[i])) { i++; }
-            while (!numberChars.Contains(src[i])) { i++; }
-            while (numberChars.Contains(src[i])) { tmp += src[i]; i++; }
-            return double.Parse(tmp);
+            while (i < src.Length && !numberChars.Contains(src[i])) { i++; }
+            while (i < src.Length && numberChars.Contains(src[i])) { i++; }
+            while (i < src.Length && !numberChars.Contains(src[i])) { i++; }
+            while (i < src.Length && numberChars.Contains(src[i])) { tmp += src[i]; i++; }
+            double result = 0;
+            double.TryParse(tmp, out result);
+            return result;
         }
     }
 
