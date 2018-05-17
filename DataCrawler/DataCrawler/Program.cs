@@ -14,7 +14,7 @@ namespace DataCrawler
     {
         static ChromeDriver pipListDriver = new ChromeDriver();
         static ChromeDriver pipDriver = new ChromeDriver();
-        static ChromeDriver tableDriver = new ChromeDriver();
+        static ChromeDriver tableDriver;// = new ChromeDriver();
 
         const string resultFolder = @"C:\Temp\Data\";
         const string removeModalScript = "$('.modal-open').removeClass('modal-open');$('.modal-backdrop').remove();$('.modal').remove();";
@@ -22,25 +22,30 @@ namespace DataCrawler
         static void Main(string[] args)
         {
             TableLogin();
-            List<string> baseCats = new List<string> {
-                //"https://www.e-piotripawel.pl/kategoria/artykuly-spozywcze/1106 ",
-                //"https://www.e-piotripawel.pl/kategoria/garmazerka-i-gastronomia/955/sort/relevancy.desc",
-                //"https://www.e-piotripawel.pl/kategoria/kuchnie-swiata/776/sort/relevancy.desc",
-                //"https://www.e-piotripawel.pl/kategoria/mrozonki/20/sort/relevancy.desc",
-                //"https://www.e-piotripawel.pl/kategoria/pieczywo-i-wyroby-cukiernicze/26/sort/relevancy.desc",
-                "https://www.e-piotripawel.pl/kategoria/ryby-i-przetwory-rybne/32/sort/relevancy.desc",
-                //"https://www.e-piotripawel.pl/kategoria/silownia-i-fitness/1108/sort/relevancy.desc",
-                //"https://www.e-piotripawel.pl/kategoria/warzywa-i-owoce/41/sort/relevancy.desc",
-                //"https://www.e-piotripawel.pl/kategoria/woda-i-napoje/22/sort/relevancy.desc",
-                //"https://www.e-piotripawel.pl/kategoria/wedliny-i-mieso/951/sort/relevancy.desc",
-                //"https://www.e-piotripawel.pl/kategoria/swieze/1105/sort/relevancy.desc",
+            List<ProductModel> totalData = new List<ProductModel>();
+            Dictionary<string, string> baseCats = new Dictionary<string, string>() {
+                {"artykuly-spozywcze", "https://www.e-piotripawel.pl/kategoria/artykuly-spozywcze/1106"},
+                {"garmazerka", "https://www.e-piotripawel.pl/kategoria/garmazerka-i-gastronomia/955/sort/relevancy.desc"},
+                {"kuchnie-swiata", "https://www.e-piotripawel.pl/kategoria/kuchnie-swiata/776/sort/relevancy.desc"},
+                {"mrozonki", "https://www.e-piotripawel.pl/kategoria/mrozonki/20/sort/relevancy.desc"},
+                {"pieczywo", "https://www.e-piotripawel.pl/kategoria/pieczywo-i-wyroby-cukiernicze/26/sort/relevancy.desc"},
+                {"ryby", "https://www.e-piotripawel.pl/kategoria/ryby-i-przetwory-rybne/32/sort/relevancy.desc"},
+                {"silownia", "https://www.e-piotripawel.pl/kategoria/silownia-i-fitness/1108/sort/relevancy.desc"},
+                {"warzywa", "https://www.e-piotripawel.pl/kategoria/warzywa-i-owoce/41/sort/relevancy.desc"},
+                {"napoje", "https://www.e-piotripawel.pl/kategoria/woda-i-napoje/22/sort/relevancy.desc"},
+                {"mieso", "https://www.e-piotripawel.pl/kategoria/wedliny-i-mieso/951/sort/relevancy.desc"},
+                {"swieze", "https://www.e-piotripawel.pl/kategoria/swieze/1105/sort/relevancy.desc"},
             };
-            int num = 1;
-            foreach(var cat in baseCats)
+            foreach(var kv in baseCats)
             {
-                var data = ProcessCategory(cat);
-                SaveData(data, num++);
+                var data = ProcessCategory(kv.Value);
+                totalData.AddRange(data);
+                SaveData(data, kv.Key);
             }
+            SaveData(totalData, "All items");
+            SaveData(totalData, "With values");
+            SaveData(totalData, "Without values");
+
 
             Console.ReadLine();
         }
@@ -50,7 +55,7 @@ namespace DataCrawler
             tableDriver.Navigate().GoToUrl("https://www.tabele-kalorii.pl/logowanie.php");
             tableDriver.FindElementById("nazwa_uzytkownika").SendKeys("ftkvyn");
             tableDriver.FindElementById("haslo_uzytkownika").SendKeys("qazxsw");
-            tableDriver.FindElement(By.CssSelector("[type=submit]")).Click();
+            tableDriver.FindElementById("haslo_uzytkownika").SendKeys(Keys.Enter);
         }
 
         static List<ProductModel> ProcessCategory(string baseUrl)
@@ -64,10 +69,10 @@ namespace DataCrawler
                 foreach (var link in links)
                 {
                     var model = GetPipProduct(link);
-                    if (!model.InfoFound)
-                    {
-                        model = FillData(model);
-                    }
+                    //if (!model.InfoFound)
+                    //{
+                    //    model = FillData(model);
+                    //}
                     data.Add(model);
                 }
                 Console.WriteLine($"Page processed, {DateTime.Now}");
@@ -303,13 +308,13 @@ namespace DataCrawler
             return model;
         }
 
-        static void SaveData(List<ProductModel> data, int num)
+        static void SaveData(List<ProductModel> data, string name)
         {
             if (!Directory.Exists(resultFolder))
             {
                 Directory.CreateDirectory(resultFolder);
             }
-            string resultFileName = $"result_{num}_{DateTime.Now.ToString()}.csv";
+            string resultFileName = $"{name}.csv";
             string path = Path.Combine(resultFolder, resultFileName);
             if (File.Exists(path))
             {
