@@ -43,8 +43,8 @@ namespace DataCrawler
                 SaveData(data, kv.Key);
             }
             SaveData(totalData, "All items");
-            SaveData(totalData, "With values");
-            SaveData(totalData, "Without values");
+            SaveData(totalData.Where(i => i.InfoFound).ToList(), "With values");
+            SaveData(totalData.Where(i => !i.InfoFound).ToList(), "Without values");
 
 
             Console.ReadLine();
