@@ -21,6 +21,7 @@ namespace DataCrawler
 
         static void Main(string[] args)
         {
+            TableLogin();
             List<string> baseCats = new List<string> {
                 //"https://www.e-piotripawel.pl/kategoria/artykuly-spozywcze/1106 ",
                 //"https://www.e-piotripawel.pl/kategoria/garmazerka-i-gastronomia/955/sort/relevancy.desc",
@@ -44,16 +45,22 @@ namespace DataCrawler
             Console.ReadLine();
         }
 
+        static void TableLogin()
+        {
+            tableDriver.Navigate().GoToUrl("https://www.tabele-kalorii.pl/logowanie.php");
+            tableDriver.FindElementById("nazwa_uzytkownika").SendKeys("ftkvyn");
+            tableDriver.FindElementById("haslo_uzytkownika").SendKeys("qazxsw");
+            tableDriver.FindElement(By.CssSelector("[type=submit]")).Click();
+        }
+
         static List<ProductModel> ProcessCategory(string baseUrl)
         {
             List<ProductModel> data = new List<ProductModel>();
-            //List<string> totalLinks = new List<string>();
             pipListDriver.Navigate().GoToUrl(baseUrl);
             pipListDriver.ExecuteScript(removeModalScript);
             do
             {
                 var links = GetPageLinks();
-                //  totalLinks.AddRange(links);
                 foreach (var link in links)
                 {
                     var model = GetPipProduct(link);
@@ -125,12 +132,12 @@ namespace DataCrawler
                                 for(neededIndex = 0; neededIndex < headers.Count; neededIndex++)
                                 {
                                     var headerText = headers[neededIndex]?.Text?.ToLower() ?? "";
-                                    if (headerText.Contains("w 100 g"))
+                                    if (headerText.Contains("100 g"))
                                     {
                                         indexFound = true;
                                         result.BaseQuantity = "100 g";
                                         break;
-                                    }else if(headerText.Contains("w 100 ml") && !headerText.Contains("%rws"))
+                                    }else if(headerText.Contains("100 ml") && !headerText.Contains("%rws"))
                                     {
                                         indexFound = true;
                                         result.BaseQuantity = "100 ml";
@@ -212,15 +219,16 @@ namespace DataCrawler
             {
                 Console.WriteLine($"Looking for values for {model.Title}");
                 tableDriver.Navigate().GoToUrl("https://www.tabele-kalorii.pl/");
-                tableDriver.FindElementById("wyszukiwarka_produktow").Clear();
-                tableDriver.FindElementById("wyszukiwarka_produktow").SendKeys(model.PureProductName);
-                tableDriver.FindElement(By.CssSelector("[name=wyszukiwarka_submit]")).Click();
+                var searchInput = tableDriver.FindElementById("wyszukiwarka_produktow");
+                searchInput.Clear();
+                searchInput.SendKeys(model.PureProductName);
+                searchInput.SendKeys(Keys.Enter);
 
                 if (tableDriver.FindElements(By.CssSelector("#komunikat-nie-znaleziono")).Any())
                 {
-                    tableDriver.FindElementById("wyszukiwarka_produktow").Clear();
-                    tableDriver.FindElementById("wyszukiwarka_produktow").SendKeys(model.Title);
-                    tableDriver.FindElement(By.CssSelector("[name=wyszukiwarka_submit]")).Click();
+                    searchInput.Clear();
+                    searchInput.SendKeys(model.Title);
+                    searchInput.SendKeys(Keys.Enter);
                 }
 
                 var title = tableDriver.FindElements(By.CssSelector(".tk-nazwa a"))?.FirstOrDefault()?.Text?.ToLower();
