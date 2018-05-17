@@ -21,7 +21,7 @@ namespace DataCrawler
 
         static void Main(string[] args)
         {
-            TableLogin();
+            //TableLogin();
             List<ProductModel> totalData = new List<ProductModel>();
             Dictionary<string, string> baseCats = new Dictionary<string, string>() {
                 {"artykuly-spozywcze", "https://www.e-piotripawel.pl/kategoria/artykuly-spozywcze/1106"},
