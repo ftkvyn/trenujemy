@@ -5,12 +5,12 @@ const md5 = require('md5');
 const uuidv4 = require('uuid/v4');
 const queryString = require('query-string');
 
-const pos_id = +process.env.TRENUJEMY_POS_ID;
-const merchant_id = +process.env.TRENUJEMY_MERCHANT_ID;
-const crc = process.env.TRENUJEMY_CRC;
-const payment_url = process.env.TRENUJEMY_ENV === 'DEV' ?
- process.env.TRENUJEMY_SANDBOX_PAYMENT_URL :
- process.env.TRENUJEMY_PAYMENT_URL;
+const pos_id = +process.env.FITELIO_POS_ID;
+const merchant_id = +process.env.FITELIO_MERCHANT_ID;
+const crc = process.env.FITELIO_CRC;
+const payment_url = process.env.FITELIO_ENV === 'DEV' ?
+ process.env.FITELIO_SANDBOX_PAYMENT_URL :
+ process.env.FITELIO_PAYMENT_URL;
 
 function calculateTotalItems(cart){
 	cart.totalItems = 0;
@@ -147,8 +147,8 @@ module.exports = {
 				    	p24_client: user.name,
 				    	p24_country: 'PL',
 				    	p24_language: 'pl',
-				    	p24_url_return: process.env.TRENUJEMY_ROOT_HOST + 'paymentEnd',
-				    	p24_url_status: process.env.TRENUJEMY_ROOT_HOST + 'verify',
+				    	p24_url_return: process.env.FITELIO_ROOT_HOST + 'paymentEnd',
+				    	p24_url_status: process.env.FITELIO_ROOT_HOST + 'verify',
 				    	p24_api_version: '3.2'				    	
 				    	//p24_sign: md5Hash
 					};

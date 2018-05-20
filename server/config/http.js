@@ -52,7 +52,7 @@ module.exports.http = {
     ],
 
     globalLocals: function (req, res, next) {
-        res.locals.googleAnalyticsId  = process.env.TRENUJEMY_GOOGLE_ANALYTICS_ID;
+        res.locals.googleAnalyticsId  = process.env.FITELIO_GOOGLE_ANALYTICS_ID;
         return next();
     },
 

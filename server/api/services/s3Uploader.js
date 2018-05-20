@@ -5,10 +5,10 @@ const uuidv4 = require('uuid/v4');
 const path = require('path');
 const bucketName = 'trenu-jemy';
 
-AWS.config.update({accessKeyId: process.env.TRENUJEMY_AWS_ID, 
-	secretAccessKey: process.env.TRENUJEMY_AWS_KEY});
+AWS.config.update({accessKeyId: process.env.FITELIO_AWS_ID, 
+	secretAccessKey: process.env.FITELIO_AWS_KEY});
 AWS.config.region = 'eu-central-1';
-const envPath = process.env.TRENUJEMY_ENV;
+const envPath = process.env.FITELIO_ENV;
 const imgRoot = '/img/';
 const filesRoot = '/files/';
 const s3 = new AWS.S3();

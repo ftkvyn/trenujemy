@@ -408,7 +408,7 @@ module.exports = {
 	},
 
 	dashboard: function(req,res){
-		return res.view('dashboard', {layout: null, locals: {user: req.session.user, rootHost: process.env.TRENUJEMY_ROOT_HOST}});	
+		return res.view('dashboard', {layout: null, locals: {user: req.session.user, rootHost: process.env.FITELIO_ROOT_HOST}});	
 	},
 
 	contact:function(req,res){

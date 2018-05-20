@@ -1,10 +1,10 @@
-const sg = require('sendgrid')(process.env.TRENUJEMY_SENDGRID_API);
+const sg = require('sendgrid')(process.env.FITELIO_SENDGRID_API);
 const helper = require('sendgrid').mail;
 
-const from_email = new helper.Email(process.env.TRENUJEMY_FROM_EMAIL);
-const rootHost = process.env.TRENUJEMY_ROOT_HOST;
-const contactEmail = process.env.TRENUJEMY_CONTACT_EMAIL;
-const bccEmail = process.env.TRENUJEMY_ALL_MAILS_COPY_EMAIL || '';
+const from_email = new helper.Email(process.env.FITELIO_FROM_EMAIL);
+const rootHost = process.env.FITELIO_ROOT_HOST;
+const contactEmail = process.env.FITELIO_CONTACT_EMAIL;
+const bccEmail = process.env.FITELIO_ALL_MAILS_COPY_EMAIL || '';
 const fs = require('fs');
 
 

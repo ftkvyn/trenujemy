@@ -11,7 +11,7 @@
  * For more information on configuring the session, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.session.html
  */
- var mongoUri = process.env.TRENUJEMY_MONGODB_URI 
+ var mongoUri = process.env.FITELIO_MONGODB_URI 
 + '/_sessions';
 
 
