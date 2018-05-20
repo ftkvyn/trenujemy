@@ -42,12 +42,12 @@ class Header extends React.Component {
                     <div className="navbar-header">
                         <a href="/" className="navbar-brand">
                             <div className="brand-logo">
-                                { /*<img src="img/logo.png" alt="App Logo" className="img-responsive" />*/ }
-                                <p className='logo-txt'>Znany Trener 24</p>
+                                { /* <img src="/images/favicon_w.png" alt="App Logo" className="img-responsive" /> */}
+                                <p className='logo-txt'>Fitelio</p>
                             </div>
                             <div className="brand-logo-collapsed">
-                                { /*<img src="img/logo-single.png" alt="App Logo" className="img-responsive" />*/ }
-                                <p className='logo-txt'>ZT</p>
+                                { <img src="/images/favicon_w.png" alt="App Logo" className="img-responsive" /> }
+                                { /*<p className='logo-txt'>FT</p>*/ }
                             </div>
                         </a>
                     </div>

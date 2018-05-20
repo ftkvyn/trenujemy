@@ -7,6 +7,7 @@ const contactEmail = process.env.FITELIO_CONTACT_EMAIL;
 const bccEmail = process.env.FITELIO_ALL_MAILS_COPY_EMAIL || '';
 const fs = require('fs');
 
+const _emailLayout = fs.readFileSync('./emails/__layout.html', 'utf8');
 
 const activationEmailTemplate = fs.readFileSync('./emails/activate.html', 'utf8');
 const passwordRecoveryEmailTemplate = fs.readFileSync('./emails/passwordRecovery.html', 'utf8');
@@ -25,9 +26,10 @@ const termsFileContent = fs.readFileSync('./assets/Regulamin znanytrener24.pdf')
 const termsFileContentBase64 = new Buffer(termsFileContent).toString('base64');
 
 
-function sendMail(toMail, subject, body, options){
+function sendMail(toMail, subject, bodyContent, options){
 	try{
 		options = options || {};
+		const body = _emailLayout.replace("%%CONTENT%%", bodyContent);
 		const to_email = new helper.Email(toMail);
 		const content = new helper.Content('text/html', body);
 		const mail = new helper.Mail(from_email, subject, to_email, content);
