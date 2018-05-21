@@ -14,6 +14,16 @@ const GoodsInfo = (props) => {
     }else {
         if(props.goods.feedPlan){
             if(props.goods.feedPlan.plan.isWithConsulting){
+                let consultantName = '';
+                if(!props.trainerMode){
+                    consultantName = <Row>
+                        <label className="col-lg-2 col-md-4 control-label text-right">Konsultant:</label>
+                        <Col lg={ 10 } md={8}>
+                            {props.goods.feedPlan.trainer.name}
+                        </Col>
+                    </Row>
+                }
+
                 purchasedFeedPlanItem = <div className='list-group-item'>
                 <Row>
                     <label className="col-lg-2 col-md-4 control-label text-right">Wykupiona usługa:</label>
@@ -21,12 +31,7 @@ const GoodsInfo = (props) => {
                         Plan dietetyczny + codzienna konsultacja
                     </Col>
                 </Row>
-                <Row>
-                    <label className="col-lg-2 col-md-4 control-label text-right">Konsultant:</label>
-                    <Col lg={ 10 } md={8}>
-                        {props.goods.feedPlan.trainer.name}
-                    </Col>
-                </Row>
+                {consultantName}
                 <Row>
                     <label className="col-lg-2 col-md-4 control-label text-right">Termin ważności:</label>
                     <Col lg={ 10 } md={8}>
@@ -65,40 +70,48 @@ const GoodsInfo = (props) => {
                 }
             }
         }
-    }
+    }    
+    
     if(props.onlyTrainings){
     	purchasedFeedPlanItem = '';
     }
     let purchaseButton = '';
-    if(!props.noPurchaseButton){
+    if(!props.noPurchaseButton && !props.trainerMode){
     	purchaseButton = <a type="button" href='/#trainings' className="btn btn-xs btn-primary">Wykup dodatkowe treningi</a>
     }
 
   	return <div className='list-group mb0'>
         {purchasedFeedPlanItem}
-        {trains.map( (item, num) => <div key={num} className='list-group-item'>
+        {trains.map( (item, num) => {
+            let trainerName = '';
+            let trainerPhone = '';
+            if(!props.trainerMode){
+                trainerName = <Row>
+                    <label className="col-lg-2 col-md-4 control-label text-right">Trener:</label>
+                    <Col lg={ 10 } md={8}>
+                        {item.trainer.name}
+                    </Col>
+                </Row>
+                trainerPhone = <Row>
+                    <label className="col-lg-2 col-md-4 control-label text-right">Telefon trenera:</label>
+                    <Col lg={ 10 } md={8}>                
+                        <a href={"tel:" + item.trainer.phone }>
+                            <i className="fa fa-phone" aria-hidden="true"></i>
+                            <span> {item.trainer.phone} </span>
+                            <i className="fa fa-phone" aria-hidden="true"></i>
+                        </a>
+                    </Col>
+                </Row>
+            }
+            return <div key={num} className='list-group-item'>
         <Row>
             <label className="col-lg-2 col-md-4 control-label text-right">Wykupiona usługa:</label>
             <Col lg={ 10 } md={8}>
                 {item.plan.name}
             </Col>
         </Row>
-        <Row>
-            <label className="col-lg-2 col-md-4 control-label text-right">Trener:</label>
-            <Col lg={ 10 } md={8}>
-                {item.trainer.name}
-            </Col>
-        </Row>
-        <Row>
-            <label className="col-lg-2 col-md-4 control-label text-right">Telefon trenera:</label>
-            <Col lg={ 10 } md={8}>                
-                <a href={"tel:" + item.trainer.phone }>
-                    <i className="fa fa-phone" aria-hidden="true"></i>
-                    <span> {item.trainer.phone} </span>
-                    <i className="fa fa-phone" aria-hidden="true"></i>
-                </a>
-            </Col>
-        </Row>
+        {trainerName}
+        {trainerPhone}
         <Row>
             <label className="col-lg-2 col-md-4 control-label text-right">Termin ważności:</label>
             <Col lg={ 10 } md={8}>
@@ -108,9 +121,9 @@ const GoodsInfo = (props) => {
         <Row>
             <label className="col-lg-2 col-md-4 control-label text-right">Do wykorzystania</label>
             <Col lg={ 10 } md={8}>
-                Treinigów: <b>{item.trainsLeft}</b>&nbsp;&nbsp;{purchaseButton}
+                Treningów: <b>{item.trainsLeft}</b>&nbsp;&nbsp;{purchaseButton}
             </Col>
-        </Row></div>)}        
+        </Row></div>})}        
     </div>
 }
 

@@ -213,8 +213,8 @@ class Advice extends React.Component {
                 sameInTrainingStyle = {display:'none'};
             }   
             planControl = <fieldset>
+                <legend>Szczegółowy plan dietetyczny</legend>
                 <div className="form-group">
-                    <label className="col-lg-3 col-md-4 control-label">Plan dietetyczny i treningowy</label>
                     <Col lg={ 9 } md={ 8 }>
                       <div dangerouslySetInnerHTML={{ __html: this.state.data.plan }} />
                     </Col>
@@ -224,7 +224,8 @@ class Advice extends React.Component {
         return (
               <Panel>
                     <form className="form-horizontal">     
-                       <FormGroup className='form-inline'>
+                        <legend>Zalecane dzienne spożycie wg wartości odżywczych</legend>
+                        <FormGroup className='form-inline'>                            
                             <label className="col-lg-3 col-md-4 control-label">Białko:</label>
                             <Col lg={ 9 } md={ 8 }>
                                  <FormControl type="number" placeholder="0" 

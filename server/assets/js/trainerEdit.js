@@ -162,7 +162,7 @@ $(function() {
 	let mainText = $('[data-main-text]');
 	mainText.css('cursor','pointer');	
 	mainText.on('click', function(){		
-		let editor = $('<textarea></textarea>');
+		let editor = $('<textarea maxLength="600"></textarea>');
 		editor.val(mainText.text());
 		editor.css('width','100%');
 		editor.addClass(mainText.attr('class'));

@@ -81,8 +81,8 @@ class TransactionsPage extends React.Component {
                 <Row>
                    <Col lg={12} md={12} sm={12}>
                         <Well bsSize="large" style={{'textAlign':'center'}}>
-                            <h1><em className="fa fa-chart-line"></em></h1>
-                            <p>Lista transakcyj</p>
+                            <h1><em className="fa fa-credit-card"></em></h1>
+                            <p>Lista Twoich transakcji</p>
                         </Well>
                         <Panel>
                             <p>Pokaż transakcję</p>

@@ -7,6 +7,7 @@ import { loadClients } from '../Common/clientsService';
 import WelcomeScreen from '../Components/WelcomeScreen';
 import { loadNotifications } from '../Common/notificationsService';
 import { saveTrainerInfo, loadTrainerInfo, saveTrainerRoute } from '../Common/trainerInfoService';
+import GoodsInfo from '../Components/GoodsInfo'
 
 
 
@@ -77,6 +78,9 @@ function loadClientData(id){
     .then((data) => {
         this.setState({userData: data});
     });
+
+    loadPurchases(id)
+        .then((data) => this.setState({userGoods: data}));
 }
 
 function destroyDp(){
@@ -135,6 +139,7 @@ class Profile extends React.Component {
         let initialState = {
             user:{},
             userData:{},
+            userGoods:{},
             feedPlans:[],
             trainPlans:[],
             notifications:{},
@@ -371,6 +376,7 @@ class Profile extends React.Component {
             </div>
         }
         let readonlyProps = {};
+        let goodsInfo = '';
         if(this.state.userId){
             readonlyProps = {readOnly: true};
             if(this.state.userData.id){
@@ -391,6 +397,7 @@ class Profile extends React.Component {
                     </div>  
                 }
             }
+            goodsInfo = <GoodsInfo goods={this.state.userGoods} trainerMode={true}></GoodsInfo>
         }
         let profilePic = this.state.user.profilePic || '/images/no_image_user.png';
         let picForm = "";
@@ -449,7 +456,7 @@ class Profile extends React.Component {
                         </FormGroup>    
                         {specializationForm}   
                         {invoiceForm} 
-                        {downloadContainer}
+                        {downloadContainer}                        
                         <div role="alert" className="alert alert-success saveSuccess" style={{display:'none'}}>
                             Dane zapisane poprawnie.
                         </div>  
@@ -457,6 +464,7 @@ class Profile extends React.Component {
                             Nie udało się zapisać dane.
                         </div>
                     </form>
+                    {goodsInfo}
                     {picForm}
                     {helloPopup}
                 </Panel>
