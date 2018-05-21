@@ -53,8 +53,13 @@ class AddComponentFirstStep extends React.Component {
       const newSearchText = event.target.value;
       const filterText = newSearchText.toLowerCase();
       let filteredComponents = this.state.allComponents
-        .filter((item) => item.name.toLowerCase().indexOf(filterText) > -1)
+        .filter((item) => item.nameLower.indexOf(filterText) > -1)
         .sort( (valA, valB) => (valB.usedTimes || 0) - (valA.usedTimes || 0) );
+      let exactMatchIndex = filteredComponents.findIndex(val => val.nameLower == filterText);
+      if(exactMatchIndex > -1){
+        let matchElement = filteredComponents.splice(exactMatchIndex,1)[0];
+        filteredComponents.unshift(matchElement);
+      }
       this.setState({filteredComponents: filteredComponents, filterText: newSearchText});
     }
 
