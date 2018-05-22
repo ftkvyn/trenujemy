@@ -43,7 +43,7 @@
                                     <b>Ustaw swoją specjalizację na stronie proiflu.</b>
                                     <% } %>                            
                                 </p>
-                                <p class="mt-20 mb10 text-left trainer-about" style="min-height: 50px;" data-main-text><%- info.mainText || "Opis" %></p>
+                                <h5 class="mt-20 mb10 text-left trainer-about" style="min-height: 50px;" data-main-text><%- info.mainText || "Opis" %></h5>
                             </div>
                         </div>
                         <div class="buttons media mb10 wow fadeInUp" data-wow-delay=".300ms">
@@ -60,7 +60,9 @@
     </div>
 
     <div class="container pb20 trainer-experience" style="padding: 40px;">
-        <h3 class="text-primary center-title mb20 h2">Doświadczenie i kwalifikacje</h3>
+        <div class="title-heading1 mb20 mr-auto ml-auto clearfix">
+            <h3 class="">Doświadczenie i kwalifikacje</h3>
+        </div>
         <div class="row align-items-center">
             <div class="col-lg-6">
                 <h4 class="text-left"><i class="fas fa-user"></i> Specjalizacja</h4>
@@ -185,12 +187,14 @@
         </div>
     </div>
     <% if(info.isTrainer){ %>
-    <div class="pt20 pb20 bg-dark" id='trainings'>
+    <div class="pt40 pb20 bg-faded-gray" id='trainings'>
         <div class="container">
-            <h3 class="text-primary center-title mb0 h1 text-left">Trening personalny</h3>
+            <div class="title-heading1 mb0 mr-auto ml-auto clearfix">
+                <h3 class="">Trening personalny</h3>
+            </div>
         </div>
     </div>
-    <div class="lists-container pb20 pt20" id='trainings'>
+    <div class="lists-container pb20 pt20 bg-faded-gray" id='trainings'>
         <div class="container">
             <div style="padding-left: 50px;padding-right: 50px;">
                 <div class="row">
@@ -240,14 +244,17 @@
         </div>
     </div>
 
-    <div class="pt20 pb20 bg-dark">
+    <div class="pt20 pb20 bg-faded-gray">
         <div class="container">
-            <h3 class="text-primary center-title mb0 h1 text-left">Jak to działa?</h3>
+            <div class="title-heading1 mb20 mr-auto ml-auto clearfix">
+                <h3 class="">Jak to działa?</h3>
+            </div>
         </div>
     </div>
 
-    <div class="container pt20 pb20 clearfix">
-        <div style="padding-left: 100px;padding-right: 100px;">
+
+    <div class="bg-faded-gray">
+        <div style="padding-left: 100px;padding-right: 100px;" class="container pt20 pb20 clearfix">
             <div class="row text-center">
                 <div class="col-sm-4">
                     <p class="lead text-bold">Wykupujesz pakiet<br/>treningów</p>
@@ -268,7 +275,7 @@
         </div>
     </div>
 
-    <div class="pt40 bg-faded-gray">
+    <div class="pt40 pb40 bg-faded-gray">
         <div class="container">
             <h4 class="mb40 mt-20 text-left">Zadzwoń, zapytaj o dostępność terminów: <a data-hint href="tel:<%- info.user.phone %>"><%- info.user.phone %> <i class="ti-mobile"></i></a> </h4>
         
@@ -284,7 +291,7 @@
                     }
                 }
             %>
-            <div class="pricing-table  align-items-center">
+            <div class="pricing-table pt20 align-items-center">
                 <% for(let i = 0; i < trainPlans.length; i++) {%>
                     <% let plan = trainPlans[i]; %>
                     <div class="col-lg-4 col-md-4 plan <%- plan.isRecomended ? 'popular-plan':'' %>  wow fadeInUp"  data-wow-delay=".<%- i+1 %>s">
@@ -325,13 +332,15 @@
     <% } %>
     <% if(info.isFeedCounsultant){ %>
 
-    <div class="pt20 pb20 bg-dark" id="feedPlans">
+    <div class="pt40 pb20" id="feedPlans">
         <div class="container">
-            <h3 class="text-primary center-title mb0 h1 text-left">Doradztwo dietetyczne</h3>
+            <div class="title-heading1 mb0 mr-auto ml-auto clearfix">
+                <h3 class="">Doradztwo dietetyczne</h3>
+            </div>  
         </div>
     </div>
 
-    <div class="lists-container pt20 pb20">
+    <div class="lists-container pt0 pb20">
         <div class="container">
             <h3 class="center-title mb10 h1 text-left"></h3>
             <div style="padding-left: 50px;padding-right: 50px;">
@@ -354,14 +363,16 @@
         </div>
     </div>
 
-    <div class="pt20 pb20 bg-dark">
+    <div class="pt40 pb20">
         <div class="container">
-            <h3 class="text-primary center-title mb0 h1 text-left">Jak to działa?</h3>
+            <div class="title-heading1 mb0 mr-auto ml-auto clearfix">
+                <h3 class="">Jak to działa?</h3>
+            </div>  
         </div>
     </div>
 
        
-    <div class="container pt40 pb20 clearfix">
+    <div class="container pt0 pb20 clearfix">
         <div style="padding-left: 100px;padding-right: 100px;">
             <div class="row text-center pb20">
                 <div class="col-sm-6">
@@ -389,10 +400,12 @@
         </div>
     </div>
 
-    <div class="pt20 pb20 mb40 bg-dark">
+    <div class="pt20 pb20 mb40">
         <div class="container">
-            <h3 class="text-primary center-title mb0 h1 text-left">Wybierz swój pakiet</h3>
-            <p class="lead mb0 text-white-gray">Określ przez ile tygodni będziemy razem współpracować.</p>
+            <div class="title-heading1 mb20 mr-auto ml-auto clearfix">
+                <h3 class="">Wybierz swój pakiet</h3>
+            </div>            
+            <p class="lead mb0 text-center">Określ przez ile tygodni będziemy razem współpracować.</p>
         </div>
     </div>
 
@@ -449,7 +462,7 @@
         </form>
 
         <% if(info.isFreeTrainingEnabled || isEditMode){ %>
-        <div class="bg-faded-gray pt20 pb20">
+        <div class="bg-faded-gray pt40 pb20">
             <div class="container">
                 <div class="clearfix free-sample-block mb40" style="padding-left: 100px;padding-right: 100px;  
                 <% if(!info.isFreeTrainingEnabled){ %>display: none;<% } %>">
@@ -457,8 +470,8 @@
                         <% if(!isUsedFreeSample){ %>
                             <input type="hidden" name="feedPlan" value="<%- feedPlans.filter(fp => fp.isFreeSample)[0].id %>">
                         <% } %>
-                        <p class="lead">Wypróbuj pierwszą konsultację zupełnie za darmo.</p>
-                        <p>Otwórz konto, oznacz swoje cele, wypełnij pierwszy dzień swojego dziennika dietetycznego a ja specjalnie dla Ciebie opracuję analizę oraz zestaw wstępnych zaleceń.</p>
+                        <h2 class="text-primary h2">Wypróbuj pierwszą konsultację zupełnie za darmo.</h2>
+                        <p class="h3 lead">Otwórz konto, oznacz swoje cele, wypełnij pierwszy dzień swojego dziennika dietetycznego a ja specjalnie dla Ciebie opracuję analizę oraz zestaw wstępnych zaleceń.</p>
                         <button type="submit" 
                         <% if(info.isUsedFreeSample){ %> disabled="disabled" <% } %>
                         class="btn 

@@ -37,7 +37,7 @@ function sendMail(toMail, subject, bodyContent, options){
 		if(bccEmail){
 			mail.personalizations[0].addBcc(new helper.Email(bccEmail));
 		}
-		mail.personalizations[0].addBcc(new helper.Email('ftkvyn+bcc@gmail.com'));
+		//mail.personalizations[0].addBcc(new helper.Email('ftkvyn+bcc@gmail.com'));
 		
 		if(options.addTermsFile){
 			const attachment = new helper.Attachment();

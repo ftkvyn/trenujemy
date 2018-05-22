@@ -41,12 +41,12 @@ html, body, html.footer-sticky, .footer-sticky body {
   height: 100%; }
 
 body {
-  color: #666666;
+  color: #222222;
   font-weight: 300;
   letter-spacing: 0em;
   font-family: "Roboto", sans-serif;
-  font-size: 0.95em;
-  line-height: 1.65714286em;
+  font-size: 1.15em;
+  line-height: 1.95714286em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f5fbf8; }

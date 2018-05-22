@@ -414,7 +414,7 @@ class Survey extends React.Component {
                                 value={this.state.data.allergy === null ? 'no' : 'yes'}
                                 onChange={this.handleChange.bind(this)}
                                 {...readonlyProps}
-                                style={{'width':'80px'}}
+                                style={{'width':'100px'}}
                                 className="form-control">
                                     <option value='yes'>Tak</option>
                                     <option value='no'>Nie</option>
@@ -435,7 +435,7 @@ class Survey extends React.Component {
                                 value={this.state.data.notEating === null ? 'no' : 'yes'}
                                 onChange={this.handleChange.bind(this)}
                                 {...readonlyProps}
-                                style={{'width':'80px'}}
+                                style={{'width':'100px'}}
                                 className="form-control">
                                     <option value='yes'>Tak</option>
                                     <option value='no'>Nie</option>
@@ -456,7 +456,7 @@ class Survey extends React.Component {
                                 value={this.state.data.preserveWeightProblems}
                                 onChange={this.handleChange.bind(this)}
                                 {...readonlyProps}
-                                style={{'width':'80px'}}
+                                style={{'width':'100px'}}
                                 className="form-control">
                                     <option value='true'>Tak</option>
                                     <option value='false'>Nie</option>
@@ -470,7 +470,7 @@ class Survey extends React.Component {
                                 value={this.state.data.usedEatingPlans === null ? 'no' : 'yes'}
                                 onChange={this.handleChange.bind(this)}
                                 {...readonlyProps}
-                                style={{'width':'80px'}}
+                                style={{'width':'100px'}}
                                 className="form-control">
                                     <option value='yes'>Tak</option>
                                     <option value='no'>Nie</option>
@@ -491,7 +491,7 @@ class Survey extends React.Component {
                                 value={this.state.data.dailyCalories === null ? 'no' : 'yes'}
                                 onChange={this.handleChange.bind(this)}
                                 {...readonlyProps}
-                                style={{'width':'80px'}}
+                                style={{'width':'100px'}}
                                 className="form-control">
                                     <option value='yes'>Tak</option>
                                     <option value='no'>Nie</option>
@@ -881,7 +881,7 @@ class Survey extends React.Component {
                                 value={this.state.data.supplementsCost === null ? 'no' : 'yes'}
                                 onChange={this.handleChange.bind(this)}
                                 {...readonlyProps}
-                                style={{'width':'80px'}}
+                                style={{'width':'100px'}}
                                 className="form-control">
                                     <option value='yes'>Tak</option>
                                     <option value='no'>Nie</option>
