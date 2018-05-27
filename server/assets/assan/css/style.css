@@ -4557,13 +4557,12 @@ Image boxes styled hover styles
 
 .feed-plans .feed-item .feed-price{
     color: black;
-    font-weight: bold;
-    font-size: 200%;
-    line-height: 1.3;
+    font-size: 1.5em;
+    line-height: 1.75;
 }
 .feed-checkbox{
   text-align: center;
-  padding-left: 40px;
+  padding-left: 20px;
 }
 .feed-prices{
 
