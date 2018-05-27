@@ -31,8 +31,11 @@
                             <button type="submit" class="btn btn-rounded btn-primary btn-block">Stwórz konto</button>
                         </div>
                     </form>
+                    <div class="alert alert-danger terms-error text-center" role="alert" style="display: none;">
+                        Akceptacja regulaminu jest niezbędna do utworzenia konta.
+                    </div>
                     <p class="text-white">
-                        Przeczytałem i akceptuję <a href="/Regulamin znanytrener24.pdf" download>regulamin</a> serwisu Znanytrener24.pl. Ponadto wyrażam zgodę na przetwarzanie i przechowywanie moich danych osobowych zgodnie z ustawą o ochronie danych osobowych z dnia 29.08.1997 r. (Dz. U. Nr 133, poz. 833). 
+                       <label for="terms"> <input type="checkbox" name="terms" id="terms" /> Przeczytałem i akceptuję <a href="/Regulamin Fitelio.pdf" download>regulamin</a> serwisu Fitelio.pl. Ponadto wyrażam zgodę na przetwarzanie i przechowywanie moich danych osobowych zgodnie z ustawą o ochronie danych osobowych z dnia 29.08.1997 r. (Dz. U. Nr 133, poz. 833). </label>
                     </p>
                 </div>
             </div>
@@ -50,6 +53,12 @@
 
         $('body').on('submit', '.register-form',function(event){
             event.preventDefault();
+            if(!$('#terms').prop('checked')){
+                $('.terms-error').show();
+                return;
+            }else{
+                $('.terms-error').hide();
+            }
             var model = {};
             model.login = $('.register-form .email').val();
             model.password = $('.register-form .password').val();

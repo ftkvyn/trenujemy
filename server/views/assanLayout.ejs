@@ -3,6 +3,7 @@
     <head>
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=<%=typeof googleAnalyticsId == 'undefined' ? '' : googleAnalyticsId %>"></script>
+        <script src="/js/lib/js.cookie.min.js"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
@@ -125,10 +126,24 @@
                   $('.contact-info').show();
                   return false;
               });
+
+              var isAgreed = Cookies.get('agreed');
+              if(!isAgreed){
+                $('.cookie-info').show();
+              }
+
+              $('.cookie-info-close').click(function(){
+                $('.cookie-info').hide();
+                Cookies.set('agreed', true);
+              })
           });
       </script> 
 
-      
+      <div class="cookie-info" style="display: none;">
+        <p>Nasza strona używa cookies. Więcej informacji znajdziesz w naszej</p>
+        <p><a  href="/Polityka pywatności.pdf" download>polityce dotyczącej cookies</a>.</p>
+        <div class="cookie-info-close">x</div>
+      </div>
       <footer class="footer pt0 bg-faded pb90">
             <div class="container text-center">
                 <!-- <div class="list-inline mb30 clearfix">
@@ -155,7 +170,8 @@
                 </div> -->
                 <div class="">
                     &copy; Copyright <%- (new Date()).getFullYear() %>. All Right Reserved. Fitelio.pl <br/>
-                    <a href="/Regulamin znanytrener24.pdf" download>Regulamin</a>
+                    <a href="/Regulamin Fitelio.pdf" download>Regulamin</a> <br/>
+                    <a href="/Polityka pywatności.pdf" download>Polityka pywatności</a>
                 </div>
             </div>
         </footer><!--/footer bottom-->

@@ -22,7 +22,7 @@ const editedAdviceTemplate = fs.readFileSync('./emails/editedAdvice.html', 'utf8
 const editedTrainingTemplate = fs.readFileSync('./emails/editedTraining.html', 'utf8');
 const editedDailyReportTemplate = fs.readFileSync('./emails/editedDailyReport.html', 'utf8');
 
-const termsFileContent = fs.readFileSync('./assets/Regulamin znanytrener24.pdf');
+const termsFileContent = fs.readFileSync('./assets/Regulamin Fitelio.pdf');
 const termsFileContentBase64 = new Buffer(termsFileContent).toString('base64');
 
 
@@ -43,7 +43,7 @@ function sendMail(toMail, subject, bodyContent, options){
 			const attachment = new helper.Attachment();
 		    attachment.setContent(termsFileContentBase64);
 		    attachment.setType('application/pdf');
-		    attachment.setFilename('Regulamin znanytrener24.pdf');
+		    attachment.setFilename('Regulamin Fitelio.pdf');
 		    attachment.setDisposition("attachment");
 		    mail.addAttachment(attachment);
 		}

@@ -4788,3 +4788,42 @@ section.site-wrapper{
 .example-section img{
   box-shadow: 4px 4px 23px 2px rgba(153,153,153,1);
 }
+
+.cookie-info{
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+  max-width: 620px;
+  text-align: center;
+  padding: 20px;
+  background: gray;
+  opacity: 0.9;
+  border-radius: 20px;
+}
+
+.cookie-info p{
+  color: white;
+  font-size: 16px;
+}
+.cookie-info a,
+.cookie-info a:hover{
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.cookie-info .cookie-info-close{
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  border: 2px solid white;
+  color: white;
+  font-weight: bold;
+  width: 30px;height: 30px;
+  border-radius: 30px;
+  font-size: 20px;
+  line-height: 24px;
+}
