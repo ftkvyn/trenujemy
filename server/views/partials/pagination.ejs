@@ -1,6 +1,6 @@
 <% if (totalPages > 1) { %>
 
-<nav aria-label="Page navigation example" class="pt30 mb0">
+<nav aria-label="Page navigation example" class="pt30 mb0 trainers-pagination">
     <ul class="pagination pagination justify-content-center">
 		<% 
 		function getPageLink(page, isActive, linkClass, text){
@@ -59,27 +59,42 @@
 <% } %>
 
 <script type="text/javascript">
-	const search = window.location.search.toString();
-	let searchTemplate = search;
-	if(searchTemplate.indexOf('page=') > -1){
-		let pageStart = searchTemplate.indexOf('page=');
-		if(searchTemplate[pageStart - 1] == '&'){
-			pageStart --;
+	(function() {
+		const search = window.location.search.toString();
+		let searchTemplate = search;
+		console.log(search);
+		if(searchTemplate.indexOf('page=') > -1){
+			let pageStart = searchTemplate.indexOf('page=');
+			if(searchTemplate[pageStart - 1] == '&'){
+				pageStart --;
+			}
+			let pageEnd = searchTemplate.indexOf('&', pageStart + 1);
+			if(pageEnd == -1){
+				pageEnd = searchTemplate.length;
+			}
+			const pagePart = searchTemplate.slice(pageStart, pageEnd);
+			searchTemplate = searchTemplate.replace(pagePart, '');
+			if(searchTemplate[1] == '&'){
+				searchTemplate = '?' + searchTemplate.substr(2);
+			}
 		}
-		let pageEnd = searchTemplate.indexOf('&', pageStart + 1);
-		if(pageEnd == -1){
-			pageEnd = searchTemplate.length;
-		}
-		const pagePart = searchTemplate.slice(pageStart, pageEnd);
-		searchTemplate = searchTemplate.replace(pagePart, '');
-		if(searchTemplate[1] == '&'){
-			searchTemplate = '?' + searchTemplate.substr(2);
-		}
-	}
-	const linkTemplate = window.location.pathname + searchTemplate;
-	$('.page-link').each(function() {
-		const linkEl = $(this);
-		const pageNum = linkEl.attr('data-page-num');
-		linkEl.attr('href', linkTemplate + '&page=' + pageNum);
-	})
+		const linkTemplate = window.location.pathname + searchTemplate;
+		$('.page-link').each(function() {
+			const linkEl = $(this);
+			const pageNum = linkEl.attr('data-page-num');
+			linkEl.attr('href', linkTemplate + '&page=' + pageNum);
+		});
+
+
+		$('.trainers-pagination a')
+		.click(function(event) {
+			event.preventDefault();
+			let linkEl = $(event.target);
+			let linkHref = linkEl.attr('href');
+			const resultQuery = linkHref.replace('/trainers?', '');
+
+			//funciton is defined in script section on listing.ejs
+			reloadData(resultQuery);
+		})
+	})();
 </script>

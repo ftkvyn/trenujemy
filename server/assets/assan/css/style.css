@@ -4827,3 +4827,7 @@ section.site-wrapper{
   font-size: 20px;
   line-height: 24px;
 }
+
+.trainers-list{
+  transition: opacity 1s;
+}

@@ -38,6 +38,8 @@ module.exports.routes = {
 
   '/trainers': 'ViewsController.listing',
 
+  'get /listingPartial' : 'ViewsController.listingPartial',
+
   '/cartApprove': 'ViewsController.cartApprove',
 
   '/paymentEnd': 'ViewsController.paymentEnd',  

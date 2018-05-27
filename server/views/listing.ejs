@@ -31,7 +31,6 @@
     <div class="row">            
             <div class="col-md-3 col-sm-3 col-xs-3 mb40">
                 <form role="form" id="search-form" action="/trainers">
-                    <input type="hidden" name="page" value="" />
                     <div class="pb30">
                         <h4 class="sidebar-title">Szukam:</h4>
                         <select class="form-control" id="type" name="type">
@@ -84,49 +83,33 @@
                 </form>
             </div>
             <div class="col-md-9 col-sm-9 col-xs-9 mb40">
-                <% if(!trainers.length) { %>
-                    <p class="not-found text-center">Brak wyników</p>
-                <% } %>
-
-                <% for(var i = 0; i < trainers.length; i++){
-                    const trainer = trainers[i]; %>
-
-                <div class="property-listing-row">
-                    <div class="row align-items-center">
-                        <div class="col-sm-5">
-                            <a class="listing-thumb" href="/<%- trainer.friendlyId %>">
-                                <img src="<%- trainer.user.profilePic || '/images/no_image_user.png' %>" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                        <div class="col-sm-7">
-                            <div class="listing-content-alt">
-                                <h3><a href="/<%- trainer.friendlyId %>"><%- trainer.user.name %></a></h3>
-                                <span class="listing-location trainer-about"><%- trainer.mainText %></span>
-                                <hr />
-                                <div class="property-listing-footer clearfix">
-                                    <% if(trainer.isTrainer) { %>
-                                        <h4>Trener personalny</h4>
-                                    <% } %>
-                                    <% if(trainer.isFeedCounsultant) { %>
-                                        <h4>Dietetyk</h4>
-                                    <% } %>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <%}%>
-
-                <%- include ./partials/pagination %>            
+                <%- include ./partials/trainersList %>                  
             </div>
     </div>
 </div>
 
 <script type="text/javascript">
+    $('.trainers-list').css('opacity','1');
+    function reloadData(query) {
+        $.get('/listingPartial?' + query,function(data){
+            try{
+                var stateObj = { query: query };
+                history.pushState(stateObj, document.title, "/trainers?"+query);
+            }
+            catch(ex){
+                console.error(ex);
+            }
+            $('.trainers-list').replaceWith(data);
+            setTimeout(function() {
+                $('.trainers-list').css('opacity','1');
+            }, 100);                        
+        });        
+    }
+
     let sendForm = function() {
-        $('#search-form').hide();
-        $('#search-form').submit();
+        $('.trainers-list').css('opacity','0.2');
+        var query = $('#search-form').serialize();
+        reloadData(query);
     }
 
     let sendTimer = null;

@@ -67,6 +67,64 @@ const searchFields = [
 'isFreeTrainingEnabled',
 ];
 
+function getListingInfo(req, next){
+	const page = +req.query.page || 1;
+	const city = +req.query.city || 0;
+	const type = req.query.type || ''; // 'trainer' or 'consultant'
+	// console.log(req.query);
+
+	let where = {};
+
+	let prefix = '';
+	if(type == 'trainer'){
+		prefix = 'isTrainHelp';
+	}else if(type == 'consultant'){
+		prefix = 'isFeedHelp';
+	}
+
+	for(let key in req.query){
+		if(key.indexOf('isHelp') === 0){
+			let newKey = key.replace('isHelp', prefix);
+			req.query[newKey] = req.query[key];
+		}
+	}
+
+	for (var i = searchFields.length - 1; i >= 0; i--) {
+		let key = searchFields[i];
+		if(req.query[key]){
+			where[key] = true;
+		}
+	}
+
+	if(type == 'trainer'){
+		where.isTrainer = true;
+		if(city){
+			where.city = city;
+		}
+	}else if(type == 'consultant'){
+		where.isFeedCounsultant = true;
+	}
+
+	where.isActivatedByTrainer = true;
+	where.isApprovedByAdmin = true;
+
+	// console.log(where);
+	trainersLoader.loadTrainersPage(where, {pageSize: PAGE_SIZE, page: page})
+	.then(function(data){
+		//console.log(data);
+		return next(null, {
+			trainers: data.trainers,
+			page,
+			totalPages: data.totalPages
+		});		
+	})
+	.catch(function (err) {
+      	console.error(err);
+        return next(err);
+    })
+    .done();
+}
+
 module.exports = {
 	home: function(req,res){
 		TrainerInfo.find({
@@ -90,68 +148,35 @@ module.exports = {
 		
 	},
 
+	listingPartial: function(req, res){
+		getListingInfo(req, function(err, data){
+			if(err){
+				return res.serverError();
+			}
+			return res.view('partials/trainersList', {
+				layout: null,
+				trainers: data.trainers,
+				page: data.page,
+				totalPages: data.totalPages
+			});
+		});
+	},
+
 	listing: function(req,res){
-		const page = +req.query.page || 1;
-		const city = +req.query.city || 0;
-		const type = req.query.type || ''; // 'trainer' or 'consultant'
-		// console.log(req.query);
-
-		let where = {};
-
-		let prefix = '';
-		if(type == 'trainer'){
-			prefix = 'isTrainHelp';
-		}else if(type == 'consultant'){
-			prefix = 'isFeedHelp';
-		}
-
-		for(let key in req.query){
-			if(key.indexOf('isHelp') === 0){
-				let newKey = key.replace('isHelp', prefix);
-				req.query[newKey] = req.query[key];
+		getListingInfo(req, function(err, data){
+			if(err){
+				return res.serverError();
 			}
-		}
-
-		for (var i = searchFields.length - 1; i >= 0; i--) {
-			let key = searchFields[i];
-			if(req.query[key]){
-				where[key] = true;
-			}
-		}
-
-		if(type == 'trainer'){
-			where.isTrainer = true;
-			if(city){
-				where.city = city;
-			}
-		}else if(type == 'consultant'){
-			where.isFeedCounsultant = true;
-		}
-
-		where.isActivatedByTrainer = true;
-		where.isApprovedByAdmin = true;
-
-		// console.log(where);
-		trainersLoader.loadTrainersPage(where, {pageSize: PAGE_SIZE, page: page})
-		.then(function(data){
-			//console.log(data);
-
 			return res.view('listing', {
 				locals: {
 					user: req.session.user, 
 					cart: req.session.cart,
 				},
 				trainers: data.trainers,
-				page: page,
+				page: data.page,
 				totalPages: data.totalPages
 			});
-		})
-		.catch(function (err) {
-	        console.error(err);
-	        return res.serverError();
-	    })
-	    .done();
-			
+		});
 	},
 
 	trainer: function(req, res){

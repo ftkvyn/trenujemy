@@ -1,0 +1,51 @@
+<div class="trainers-list" style="opacity: 0.2">
+    <% if(!trainers.length) { %>
+        <p class="not-found text-center">Brak wyników</p>
+    <% } %>
+
+    <% for(var i = 0; i < trainers.length; i++){
+        const trainer = trainers[i]; %>
+
+    <div class="property-listing-row">
+        <div class="row align-items-center">
+            <div class="col-sm-5">
+                <a class="listing-thumb" href="/<%- trainer.friendlyId %>">
+                    <img src="<%- trainer.user.profilePic || '/images/no_image_user.png' %>" alt="" class="img-fluid">
+                </a>
+            </div>
+            <div class="col-sm-7">
+                <div class="listing-content-alt">
+                    <%
+                    const cityName = 
+                    [
+                        '',
+                        'Warszawa',
+                        'Kraków',
+                        'Łódź',
+                        'Wrocław',
+                        'Poznań',
+                        'Gdańsk',
+                        'Szczecin',
+                    ][trainer.city];
+                    %>
+                    <h3><a href="/<%- trainer.friendlyId %>"><%- trainer.user.name %></a></h3>
+                    <p class="trainer-city"><%- cityName %></p>
+                    <span class="listing-location trainer-about"><%- trainer.mainText %></span>
+                    <hr />
+                    <div class="property-listing-footer clearfix">
+                        <% if(trainer.isTrainer) { %>
+                            <h4>Trener personalny</h4>
+                        <% } %>
+                        <% if(trainer.isFeedCounsultant) { %>
+                            <h4>Dietetyk</h4>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%}%>
+
+    <%- include ./pagination %>            
+</div>
