@@ -14,7 +14,7 @@
 
         <!-- Required meta tags -->
         <meta charset="utf-8">
-        <link rel="icon" type="image/png" href="/images/favicon.png" />
+        <link rel="icon" type="image/png" href="/favicon.ico?v=2" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Fitelio <%=typeof title == 'undefined' ? '' : ' - ' + title%></title>
         <!-- Plugins CSS -->
@@ -37,6 +37,14 @@
     </head>
 
     <body>
+      <script type="text/javascript">
+        if(location.protocol == 'http:'){
+          if(location.host.indexOf('localhost') != 0){
+            location = 'https://' + location.host + location.pathname + location.hash;
+          } 
+        }
+      </script>
+
       <script type="text/javascript">
         function ScrollTo(name, event) {
           if($('#' + name).length){
@@ -137,7 +145,7 @@
 
               $('.cookie-info-close').click(function(){
                 $('.cookie-info').hide();
-                Cookies.set('agreed', true);
+                Cookies.set('agreed', true, { expires: 99999, path: '' });
               })
           });
       </script> 

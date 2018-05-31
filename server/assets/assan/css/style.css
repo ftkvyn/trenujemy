@@ -4893,3 +4893,7 @@ section.site-wrapper{
 .trainers-list{
   transition: opacity 1s;
 }
+
+.about-us-pic{
+  max-height: 150px;
+}

@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
     <base href="/dashboard" />
-    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    <link rel="icon" type="image/png" href="/favicon.ico?v=2" />
     <link href="/react/vendor.css" rel="stylesheet"/>
     <link href="/styles/custom.css" rel="stylesheet"/>
     <% if( locals.user.role == 'user'){%>
@@ -15,7 +15,14 @@
         <title>Fitelio - Panel trenera</title>
     <% }%>
 </head>
-<body>    
+<body> 
+    <script type="text/javascript">
+        if(location.protocol == 'http:'){
+          if(location.host.indexOf('localhost') != 0){
+            location = 'https://' + location.host + location.pathname + location.hash;
+          } 
+        }
+    </script>  
     <div id="app"></div>
 
     <input type="hidden" id='userData' value="<%- JSON.stringify(locals.user) %>">
