@@ -1,4 +1,29 @@
-<!-- ToDo:clean up -->
+<% if(locals.reportData && locals.reportData.items && locals.reportData.items.length){%>
+    <script type="text/javascript">
+        ga('require', 'ecommerce');
+
+        <% for(let i = 0; i < locals.reportData.items.length; i++) {%>
+            <% let item = locals.reportData.items[i]; %>
+            ga('ecommerce:addTransaction', {
+              'id': '<%- item.id %>',                     // Transaction ID. Required.
+              'affiliation': '<%- item.trainerName %> (id:<%- item.trainerId %>)',   // Affiliation or store name.
+              'revenue': '<%- item.price %>',               // Grand Total.              
+              'currency': 'PLN'
+            });
+
+            ga('ecommerce:addItem', {
+              'id': '<%- item.id %>',                     // Transaction ID. Required.
+              'name': '<%- item.name %>',    // Product name. Required.
+              'category': '<%- item.category %>',         // Category or variation.
+              'price': '<%- item.price %>',                 // Unit price.
+              'quantity': '1' ,                  // Quantity.
+              'currency': 'PLN'
+            });
+        <%}%>
+
+        ga('ecommerce:send');
+    </script>
+<%}%>
 
 <div id="rev_slider_1078_1_wrapper" class="rev_slider_wrapper fullwidthbanner-container" data-alias="classic4export" data-source="gallery" style="margin:0px auto;background-color:transparent;padding:0px;margin-top:0px;margin-bottom:0px;">
     <!-- START REVOLUTION SLIDER 5.4.1 auto mode -->

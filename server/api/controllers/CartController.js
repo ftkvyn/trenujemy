@@ -237,7 +237,8 @@ module.exports = {
 			}			
 			transactionsService.finalizeTransaction(paymentId)
 			.then(function(data){
-				return res.redirect('/paymentEnd')
+				req.session.paymentId = paymentId;
+				return res.redirect('/paymentEnd');
 			})
 			.catch(function(err){
 				console.error(err);

@@ -398,11 +398,58 @@ module.exports = {
 	},
 
 	paymentEnd: function(req,res){
-		return res.view('cart', {locals: {
+		function endRequest(reportData) {
+			return res.view('cart', {locals: {
 				user: req.session.user, 
 				cartSuccessMessage: "Dziękujemy za dokonanie zakupu. Zaraz po zaksięgowaniu wpłaty otrzymasz dostęp do wykupionych usług w panelu klienta",
 				cartItems: [],
-				cart: req.session.cart}});
+				cart: req.session.cart,
+				reportData: reportData
+			}});
+		}
+
+		const paymentId = req.session.paymentId;
+		console.log(paymentId);
+		req.session.paymentId = null;
+		if(paymentId){
+			Transaction.find({externalId: paymentId})
+			.exec(function(err, data){
+				if(err){
+					console.error(err);
+					return endRequest(null);
+				}
+				try{
+					let reportData = {
+						items: []
+					};
+					for(let i = 0; i < data.length; i++){
+						let transaction = data[i];
+						let item = transaction.item;
+						let reportItem = {
+							id: transaction.externalId,
+							name: item.name || transaction.title,
+							category: item.isTraining 
+								? 'training' : item.isFreeSample ? 'free_consultation' : 'consultation',
+							price: item.price,
+							quantity: 1,
+
+							trainerId: item.trainer.id,
+							trainerName: item.trainer.name,
+						};
+						reportData.items.push(reportItem);
+					}
+					console.log(reportData);
+					endRequest(reportData);
+				}
+				catch(err){
+					console.error(err);
+					return endRequest(null);
+				}
+			});
+		}else{
+			endRequest(null);
+		}
+		
 	},
 
 	login: function(req,res){
