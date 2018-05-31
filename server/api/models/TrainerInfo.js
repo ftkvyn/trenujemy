@@ -38,6 +38,13 @@ module.exports = {
 		//0-Not set, 1-Warszawa, 2-Kraków, 3-Łódź, 4-Wrocław, 5-Poznań, 6-Gdańsk, 7-Szczecin
 		//int for faster search
 	},
+    
+    hasVideo:{
+        type:'boolean'
+    },
+    videoUrl:{
+        type:'string'
+    },
 
     isTrainer:{
         type:'boolean'

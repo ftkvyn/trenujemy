@@ -452,4 +452,59 @@ $(function() {
 			});
 		});
 	});
+
+	function youtube_parser(url){
+        if(!url){
+            return null;
+        }
+        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+        var match = url.match(regExp);
+        return (match&&match[7].length==11)? match[7] : false;
+    }
+
+    function  checkVideoUrlFormat(url) {
+    	let videoId = youtube_parser(url);
+		if(!videoId){
+			alert('Niepoprawny format adresu video na youtube. Dane nie zostały zapisane, prosimy skontaktować się z obsługą fitelio.pl');
+			return false;
+		}
+		return true;
+    }
+
+	function saveVideo() {
+		let data = {id: $('#info-id').val()};
+		data.hasVideo = $('#hasVideo')[0].checked;
+		data.videoUrl = $('#videoUrl').val();
+		console.log(data);
+		if(data.hasVideo){
+			if(!checkVideoUrlFormat(data.videoUrl)){
+				return false;
+			}
+			saveTrainerInfo(data)
+			.then(function(data) {
+				alert('Video zostało zapisane, możesz sprawdzić na swojej stronie.');
+			})
+			.catch(function() {
+				alert('Występił błąd zapisywania danych.');
+			});
+		}
+	}
+
+	$('#saveVideo').click(saveVideo);
+	$('#videoUrl').keyup(function(event) {
+		if ( event.which == 13) {
+			saveVideo();
+		}
+	});
+	$('#hasVideo').change(function(event) {
+		let data = {id: $('#info-id').val()};
+		data.hasVideo = this.checked;
+		data.videoUrl = $('#videoUrl').val();
+		if(!data.hasVideo || !data.videoUrl){
+			return saveTrainerInfo(data);
+		}
+		if(!saveVideo()){
+			event.preventDefault();
+		};
+	})
 })
