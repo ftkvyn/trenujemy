@@ -10,6 +10,7 @@ routeReplacements['ę'] = 'e';
 routeReplacements['ć'] = 'c';
 routeReplacements['ń'] = 'n';
 routeReplacements['ó'] = 'o';
+routeReplacements['ł'] = 'l';
 
 exports.findFriendlyId = function(Entity, idSource, excludeId, cb){
 	try{
@@ -21,8 +22,6 @@ exports.findFriendlyId = function(Entity, idSource, excludeId, cb){
 			}else{
 				if(routeSymbols.indexOf(friendlyIdSrc[i]) > -1){
 					resultRoute += friendlyIdSrc[i];
-				}else{
-					resultRoute += '_';
 				}
 			}
 		}

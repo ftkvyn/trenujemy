@@ -4897,3 +4897,19 @@ section.site-wrapper{
 .about-us-pic{
   max-height: 150px;
 }
+
+.hit-enter{
+  position: relative;
+}
+
+.hit-enter:focus-within::after{
+    position: absolute;
+    background: yellow;
+    padding: 5px 10px;
+    border-radius: 10px;
+    border: 3px solid orange;
+    top: -50px;
+    right: 40px;
+    box-shadow: 4px 3px 18px 2px #888888;
+    content:'Press enter';
+}

@@ -12,8 +12,8 @@ namespace DataCrawler
 {
     class Program
     {
-        static ChromeDriver pipListDriver = new ChromeDriver();
-        static ChromeDriver pipDriver = new ChromeDriver();
+        static ChromeDriver pipListDriver;// = new ChromeDriver();
+        static ChromeDriver pipDriver;// = new ChromeDriver();
         static ChromeDriver tableDriver;// = new ChromeDriver();
 
         const string resultFolder = @"C:\Temp\Data\";
@@ -21,6 +21,11 @@ namespace DataCrawler
 
         static void Main(string[] args)
         {
+            tableDriver = new ChromeDriver();
+            var tableData = ProcessTable("https://kalkulatorkalorii.net/tabela-kalorii");
+            SaveData(tableData, "tabela-kalorii");
+            return;
+
             //TableLogin();
             List<ProductModel> totalData = new List<ProductModel>();
             Dictionary<string, string> baseCats = new Dictionary<string, string>() {
@@ -56,6 +61,55 @@ namespace DataCrawler
             tableDriver.FindElementById("nazwa_uzytkownika").SendKeys("ftkvyn");
             tableDriver.FindElementById("haslo_uzytkownika").SendKeys("qazxsw");
             tableDriver.FindElementById("haslo_uzytkownika").SendKeys(Keys.Enter);
+        }
+
+        static List<ProductModel> ProcessTable(string baseUrl)
+        {
+            List<ProductModel> data = new List<ProductModel>();
+            tableDriver.Navigate().GoToUrl(baseUrl);
+            int n = 0;
+            do
+            {
+                var trs = tableDriver.FindElements(By.CssSelector("table tbody tr"));
+                foreach(var tr in trs)
+                {
+                    try
+                    {
+                        var model = new ProductModel();
+                        var tds = tr.FindElements(By.TagName("td"));
+                        model.PureProductName = tds[0].Text;
+                        model.Title = model.PureProductName;
+                        model.Calories = ExtractNumber(tds[1].Text);
+                        model.Protein = ExtractNumber(tds[2].Text);
+                        model.Carbo = ExtractNumber(tds[3].Text);
+                        model.Fat = ExtractNumber(tds[4].Text);
+                        model.InfoFound = true;
+                        data.Add(model);
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                }
+                Console.WriteLine($"Page {++n} processed, {DateTime.Now}");
+            } while (TableListNextPage());
+            Console.WriteLine($"Table processed, {DateTime.Now}");
+            return data;
+        }
+
+        static bool TableListNextPage()
+        {
+            try
+            {
+                var link = tableDriver.FindElements(By.CssSelector("a.last-page")).First().GetAttribute("href");
+                tableDriver.Navigate().GoToUrl(link);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+                return false;
+            }
         }
 
         static List<ProductModel> ProcessCategory(string baseUrl)

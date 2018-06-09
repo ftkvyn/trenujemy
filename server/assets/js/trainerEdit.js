@@ -153,6 +153,21 @@ $(function() {
         e.preventDefault();
     });
 
+//    ToDo: try use ::after , :focus-within
+    // <div class='enter-hint'>Press enter</div>
+// li:focus-within::after{
+//   position: absolute;
+//     background: yellow;
+//     padding: 5px 10px;
+//     border-radius: 10px;
+//     border: 3px solid orange;
+//     top: -50px;
+//     right: 40px;
+//     box-shadow: 4px 3px 18px 2px #888888;
+//     content:'Press enter';
+// }
+//parent - relative
+
 	const hintText = 'Możesz zmienić tą wartość w ustawieniach konta.';
 	$('[data-hint]').attr('title', hintText);
 	$('[data-hint]').click(function(){
@@ -162,7 +177,7 @@ $(function() {
 	let mainText = $('[data-main-text]');
 	mainText.css('cursor','pointer');	
 	mainText.on('click', function(){		
-		let editor = $('<textarea maxLength="600"></textarea>');
+		let editor = $('<textarea class="hit-enter" maxLength="600"></textarea>');
 		editor.val(mainText.text());
 		editor.css('width','100%');
 		editor.addClass(mainText.attr('class'));
@@ -233,7 +248,7 @@ $(function() {
 			if(typeof omitAttr !== typeof undefined && omitAttr !== false){
 				return;
 			}
-			let editor = $('<li><input class="form-control" type="text"/></li>');
+			let editor = $('<li class="hit-enter"><input class="form-control" type="text"/></li>');
 			let editorInput = editor.find('input');
 			editorInput.val(liItem.text());
 			editorInput.css('display','inline');
@@ -257,7 +272,7 @@ $(function() {
 			});
 		});
 
-		let newItem = $('<li><input class="form-control" type="text"/></li>');
+		let newItem = $('<li class="hit-enter"><input class="form-control" type="text"/></li>');
 		let newItemEditor = newItem.find('input');
 		newItemEditor.css('display','inline');
 		newItemEditor.on('keyup', function(event){
@@ -329,6 +344,7 @@ $(function() {
 
 	$('[data-price-title]').each(function(num){
 		let titleItem = $(this);
+		titleItem.addClass('hit-enter');
 		titleItem.click(function(){
 			
 			if(titleItem.find('input').length){
@@ -364,6 +380,7 @@ $(function() {
 	$('[data-train-price-edit]').each(function(num){
 		let priceEl = $(this);
 		let priceAttr = priceEl.attr('data-train-price-edit');
+		priceEl.addClass('hit-enter');
 		priceEl.css('cursor','pointer');
 		priceEl.click(function(){
 			priceEl.closest('.old-price').css('opacity','1');
@@ -397,6 +414,7 @@ $(function() {
 
 	$('[data-train-count-edit]').each(function(num){
 		let countEl = $(this);
+		countEl.addClass('hit-enter');
 		countEl.css('cursor','pointer');
 		countEl.click(function(){
 			let editorInput = $('<input class="" type="number"/>');
@@ -428,6 +446,7 @@ $(function() {
 
 	$('[data-feed-price-edit]').each(function(num){
 		let priceEl = $(this);
+		priceEl.addClass('hit-enter');
 		priceEl.css('cursor','pointer');
 		priceEl.click(function(){
 			let editorInput = $('<input class="form-control" type="number"/>');
@@ -491,6 +510,7 @@ $(function() {
 	}
 
 	$('#saveVideo').click(saveVideo);
+	$('#videoUrl').addClass('hit-enter');
 	$('#videoUrl').keyup(function(event) {
 		if ( event.which == 13) {
 			saveVideo();
