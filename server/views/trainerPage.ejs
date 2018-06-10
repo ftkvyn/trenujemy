@@ -65,13 +65,13 @@
         </div>
         <div class="row align-items-center">
             <div class="col-lg-6">
-                <h4 class="text-left"><i class="fas fa-user"></i> Specjalizacja</h4>
+                <h4 class="text-left"><img src="/images/icons/profile.png" style="width: 40px; height: 40px;" /> Specjalizacja</h4>
                 <ul data-hint>
                     <li>Trener personalny</li>
                     <li>Dietetyk</li>
                 </ul>
 
-                <h4 class="text-left"><i class="fas fa-graduation-cap"></i> Wyszktałcenie, kursy, certyfikaty</h4>
+                <h4 class="text-left"><img src="/images/icons/diplom.png" style="width: 40px; height: 40px;" /> Wyszktałcenie, kursy, certyfikaty</h4>
                 <ul data-edit-list="certificates">
                     <% if(info.certificates && (typeof info.certificates == 'object') ) for(let i = 0; i < info.certificates.length; i++) {%>
                         <li><%- info.certificates[i] %></li>
@@ -80,7 +80,7 @@
             </div>  
             <div class="col-lg-6">
                 <div class="clearfix">
-                    <h4 class="text-left"><i class="fas fa-trophy"></i> Osiągnięcia</h4>
+                    <h4 class="text-left"><img src="/images/icons/lib.png" style="width: 40px; height: 40px;" /> Osiągnięcia</h4>
                     <ul data-edit-list="achivements">
                         <% if(info.achivements && (typeof info.achivements == 'object') ) for(let i = 0; i < info.achivements.length; i++) {%>
                             <li><%- info.achivements[i] %></li>
@@ -89,7 +89,7 @@
                 </div>
 
                 <div class="clearfix">
-                    <h4 class="text-left"><i class="fas fa-certificate"></i> Certyfikaty <% if(isEditMode){ %><button class="btn btn-primary btn-sm add-image">Dodaj</button> <% } %> </h4>
+                    <h4 class="text-left"><img src="/images/icons/prize.png" style="width: 40px; height: 40px;" /> Certyfikaty <% if(isEditMode){ %><button class="btn btn-primary btn-sm add-image">Dodaj</button> <% } %> </h4>
                     <% if(isEditMode){ %>                        
                         <form id='cert-image-form' style='display:none;'>
                             <input type='file' name='file' id='newCertificate' 
@@ -135,7 +135,7 @@
                 </div>
 
                 <div class="clearfix">
-                    <h4 class="text-left"><i class="fas fa-camera-retro"></i> Zdjęcia <% if(isEditMode){ %><button class="btn btn-primary btn-sm add-image">Dodaj</button> <% } %></h4>                  
+                    <h4 class="text-left"><img src="/images/icons/foto.png" style="width: 40px; height: 40px;" /> Zdjęcia <% if(isEditMode){ %><button class="btn btn-primary btn-sm add-image">Dodaj</button> <% } %></h4>                  
                     
                     <% if(isEditMode){ %>
                         
