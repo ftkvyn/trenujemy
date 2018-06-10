@@ -4904,12 +4904,17 @@ section.site-wrapper{
 
 .hit-enter:focus-within::after{
     position: absolute;
-    background: yellow;
-    padding: 5px 10px;
+    background: #fffeda;
+    color: black;
+    padding: 7px 7px;
     border-radius: 10px;
-    border: 3px solid orange;
-    top: -50px;
-    right: 40px;
+    font-size: 14px;
+    line-height: 20px;
+    border: 2px solid #444;
+    bottom: -45px;
+    right: 0px;
+    z-index: 1000;
     box-shadow: 4px 3px 18px 2px #888888;
-    content:'Press enter';
+    content: 'Aby zatwierdzić wciśnij enter';
+    font-weight: bold;
 }

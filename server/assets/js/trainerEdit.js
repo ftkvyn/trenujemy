@@ -153,21 +153,6 @@ $(function() {
         e.preventDefault();
     });
 
-//    ToDo: try use ::after , :focus-within
-    // <div class='enter-hint'>Press enter</div>
-// li:focus-within::after{
-//   position: absolute;
-//     background: yellow;
-//     padding: 5px 10px;
-//     border-radius: 10px;
-//     border: 3px solid orange;
-//     top: -50px;
-//     right: 40px;
-//     box-shadow: 4px 3px 18px 2px #888888;
-//     content:'Press enter';
-// }
-//parent - relative
-
 	const hintText = 'Możesz zmienić tą wartość w ustawieniach konta.';
 	$('[data-hint]').attr('title', hintText);
 	$('[data-hint]').click(function(){
@@ -176,8 +161,9 @@ $(function() {
 
 	let mainText = $('[data-main-text]');
 	mainText.css('cursor','pointer');	
+	mainText.parent().addClass('hit-enter');
 	mainText.on('click', function(){		
-		let editor = $('<textarea class="hit-enter" maxLength="600"></textarea>');
+		let editor = $('<textarea maxLength="600"></textarea>');
 		editor.val(mainText.text());
 		editor.css('width','100%');
 		editor.addClass(mainText.attr('class'));
@@ -380,7 +366,7 @@ $(function() {
 	$('[data-train-price-edit]').each(function(num){
 		let priceEl = $(this);
 		let priceAttr = priceEl.attr('data-train-price-edit');
-		priceEl.addClass('hit-enter');
+		priceEl.parent().addClass('hit-enter');
 		priceEl.css('cursor','pointer');
 		priceEl.click(function(){
 			priceEl.closest('.old-price').css('opacity','1');
@@ -414,7 +400,7 @@ $(function() {
 
 	$('[data-train-count-edit]').each(function(num){
 		let countEl = $(this);
-		countEl.addClass('hit-enter');
+		countEl.parent().addClass('hit-enter');
 		countEl.css('cursor','pointer');
 		countEl.click(function(){
 			let editorInput = $('<input class="" type="number"/>');
@@ -446,7 +432,7 @@ $(function() {
 
 	$('[data-feed-price-edit]').each(function(num){
 		let priceEl = $(this);
-		priceEl.addClass('hit-enter');
+		priceEl.parent().addClass('hit-enter');
 		priceEl.css('cursor','pointer');
 		priceEl.click(function(){
 			let editorInput = $('<input class="form-control" type="number"/>');
@@ -510,7 +496,7 @@ $(function() {
 	}
 
 	$('#saveVideo').click(saveVideo);
-	$('#videoUrl').addClass('hit-enter');
+	$('#videoUrl').parent().addClass('hit-enter');
 	$('#videoUrl').keyup(function(event) {
 		if ( event.which == 13) {
 			saveVideo();
