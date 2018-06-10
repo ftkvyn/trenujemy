@@ -4839,7 +4839,7 @@ section.site-wrapper{
 }
 
 .bg-faded-gray{
-  background: #f1f1f1;
+  background: #f9fbfe;
 }
 
 .bg-faded-gray .title-heading1 h3:after {
@@ -4849,6 +4849,12 @@ section.site-wrapper{
 
 .example-section img{
   box-shadow: 4px 4px 23px 2px rgba(153,153,153,1);
+}
+
+.how-it-works .media .media-body h4 {
+    font-size: 19px;
+    font-weight: bold;
+    font-family: "Open Sans", sans-serif;
 }
 
 .cookie-info{

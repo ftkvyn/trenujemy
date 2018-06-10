@@ -1085,3 +1085,9 @@ Responsive style
     font-size: 2rem; }
   .social-buttons {
     display: inline-block; } }
+
+
+
+body .icon-border.btn-outline-primary:hover {
+    background-color: #21bfc1;
+}

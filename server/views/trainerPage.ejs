@@ -358,22 +358,43 @@
     </div>
 
 
-    <div class="bg-faded-gray pb40">
+    <div class="bg-faded-gray pb40 how-it-works">
         <div style="padding-left: 100px;padding-right: 100px;" class="container pt20 pb20 clearfix">
-            <div class="row text-center">
+            <div class="row">
                 <div class="col-sm-4">
-                    <p class="lead text-bold">Wykupujesz pakiet<br/>treningów</p>
-                    <p>Zadzwoń, porozmawiajmy. Powiesz mi czego szukasz, wspólnie zastanowimy się czy potrafię Ci pomóc.</p>
+                    <div class="media">
+                        <div class="d-flex mr-3">
+                           <i class="btn-outline-primary icon-border icon-border-sm text-bold">1</i>  
+                        </div>
+                        <div class="media-body">
+                            <h4 class="mt-0 mb10 lead">Wykupujesz pakiet<br/>treningów</h4>
+                            Zadzwoń, porozmawiajmy. Powiesz mi czego szukasz, wspólnie zastanowimy się czy potrafię Ci pomóc.
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-sm-4">
-                    <p class="lead text-bold">Otrzymujesz dostęp<br/>do panelu klienta</p>
-                    <p>W panelu wypełniasz szczegółową ankietę, zarządzasz kalendarzem treningów a także komunikujesz się ze mną.</p>
+                    <div class="media">
+                        <div class="d-flex mr-3">
+                           <i class="btn-outline-primary icon-border icon-border-sm text-bold">2</i>  
+                        </div>
+                        <div class="media-body">
+                            <h4 class="mt-0 mb10 lead">Otrzymujesz dostęp<br/>do panelu klienta</h4>
+                            W panelu wypełniasz szczegółową ankietę, zarządzasz kalendarzem treningów a także komunikujesz się ze mną.
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-sm-4">
-                    <p class="lead text-bold">Wspólnie ćwiczymy<br/>w wybranym miejscu</p>
-                    <p>Umawiamy się na konkretną godzinę i dajemy z siebie wszystko!</p>
+                    <div class="media">
+                        <div class="d-flex mr-3">
+                           <i class="btn-outline-primary icon-border icon-border-sm text-bold">3</i>  
+                        </div>
+                        <div class="media-body">
+                            <h4 class="mt-0 mb10 lead">Wspólnie ćwiczymy<br/>w wybranym miejscu</h4>
+                            Umawiamy się na konkretną godzinę i dajemy z siebie wszystko!
+                        </div>
+                    </div>
                 </div>
             </div>
             <a href="/#trainings-info" class="btn btn-primary pull-right">Dowiedz się więcej</a>
@@ -478,20 +499,26 @@
         <% if(info.isFreeTrainingEnabled || isEditMode){ %>
         <div class="bg-faded-gray pt20 pb20">
             <div class="container">
-                <div class="clearfix free-sample-block mb10" style="<% if(!info.isFreeTrainingEnabled){ %>display: none;<% } %>">
+                <div class="clearfix text-center free-sample-block mb10" style="<% if(!info.isFreeTrainingEnabled){ %>display: none;<% } %>">
                     <form action="/addItemToCart" method="POST">
-                        <div style="padding-left: 100px;padding-right: 100px; ">
-                            <% if(!isUsedFreeSample){ %>
-                                <input type="hidden" name="feedPlan" value="<%- feedPlans.filter(fp => fp.isFreeSample)[0].id %>">
-                            <% } %>
-                            <p class="text-primary lead">Wypróbuj pierwszą konsultację zupełnie za darmo.</p>
-                            <p class="">Otwórz konto, oznacz swoje cele, wypełnij pierwszy dzień swojego dziennika dietetycznego a ja specjalnie dla Ciebie opracuję analizę oraz zestaw wstępnych zaleceń.</p>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div>
+                                    <% if(!isUsedFreeSample){ %>
+                                        <input type="hidden" name="feedPlan" value="<%- feedPlans.filter(fp => fp.isFreeSample)[0].id %>">
+                                    <% } %>
+                                    <p class="lead text-bold">Wypróbuj pierwszą konsultację <span class="text-primary">zupełnie za darmo</span>.</p>
+                                    <p class="">Otwórz konto, oznacz swoje cele, wypełnij pierwszy dzień swojego dziennika dietetycznego a ja specjalnie dla Ciebie opracuję analizę oraz zestaw wstępnych zaleceń.</p>
+                                </div>        
+                            </div>
+                            <div class="col-sm-4 pt40">
+                                <button type="submit" 
+                                <% if(info.isUsedFreeSample){ %> disabled="disabled" <% } %>
+                                class="btn btn-lg
+                                <% if(info.isUsedFreeSample){ %> btn-disabled <% } else { %> btn-primary <% } %>
+                                ">Chcę wypróbować</button>  
+                            </div>
                         </div>
-                        <button type="submit" 
-                        <% if(info.isUsedFreeSample){ %> disabled="disabled" <% } %>
-                        class="btn btn-lg pull-right
-                        <% if(info.isUsedFreeSample){ %> btn-disabled <% } else { %> btn-outline-info <% } %>
-                        pull-right">Chcę wypróbować</button>
                     </form>
                 </div>
             </div>
@@ -508,28 +535,56 @@
     </div>
 
        
-    <div class="container pt0 pb40 clearfix">
+    <div class="container pt0 pb40 clearfix how-it-works">
         <div style="padding-left: 100px;padding-right: 100px;">
-            <div class="row text-center pb20">
+            <div class="row pb40">
                 <div class="col-sm-6">
-                    <p class="lead text-bold">Wybierasz odpowiedni<br/>pakiet konsultacji</p>
-                    <p>Wybierasz okres jaki Ciebie najbardziej interesuje. Zauważ, że im dłuższy okres tym większa szansa na zrealizowanie wyznaczonych celów. </p>
+                    <div class="media">
+                        <div class="d-flex mr-3">
+                           <i class="btn-outline-primary icon-border icon-border-sm text-bold">1</i>  
+                        </div>
+                        <div class="media-body">
+                            <h4 class="mt-0 mb10 lead">Wybierasz odpowiedni<br/>pakiet konsultacji</h4>
+                            Wybierasz okres jaki Ciebie najbardziej interesuje. Zauważ, że im dłuższy okres tym większa szansa na zrealizowanie wyznaczonych celów.      
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-sm-6">
-                    <p class="lead text-bold">Otrzymujesz dostęp<br/>do panelu klienta</p>
-                    <p>W panelu wypełniasz szczegółową ankietę, gdzie określasz swój aktualny stan a także definiujesz cele jakie masz zamiar ze mną osiągnąć.</p>
+                    <div class="media">
+                        <div class="d-flex mr-3">
+                           <i class="btn-outline-primary icon-border icon-border-sm text-bold">2</i>  
+                        </div>
+                        <div class="media-body">
+                            <h4 class="mt-0 mb10 lead">Otrzymujesz dostęp<br/>do panelu klienta</h4>
+                            W panelu wypełniasz szczegółową ankietę, gdzie określasz swój aktualny stan a także definiujesz cele jakie masz zamiar ze mną osiągnąć.     
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row text-center pb20">
+            <div class="row pb20">
                 <div class="col-sm-6">
-                    <p class="lead text-bold">Codziennie dostarczasz<br/>mi informacji</p>
-                    <p>W panelu uzupełniasz dane na temat Twojej aktywności oraz szczegółowo przekazujesz informacje na temat każdego posiłku tego dnia.</p>
+                    <div class="media">
+                        <div class="d-flex mr-3">
+                           <i class="btn-outline-primary icon-border icon-border-sm text-bold">3</i>  
+                        </div>
+                        <div class="media-body">
+                            <h4 class="mt-0 mb10 lead">Codziennie dostarczasz<br/>mi informacji</h4>
+                            W panelu uzupełniasz dane na temat Twojej aktywności oraz szczegółowo przekazujesz informacje na temat każdego posiłku tego dnia.     
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-sm-6">
-                    <p class="lead text-bold">Wspólnie prowadzimy Cię<br/>do wytyczonego celu</p>
-                    <p>Codziennie otrzymujesz ode mnie informację zwrotną na temat Twojej aktywności oraz odżywiania.Dzięki dogłębnej analizie Twoich danych będę w stanie pomóc Ci osiągnąć Twój cel.</p>
+                    <div class="media">
+                        <div class="d-flex mr-3">
+                           <i class="btn-outline-primary icon-border icon-border-sm text-bold">4</i>  
+                        </div>
+                        <div class="media-body">
+                            <h4 class="mt-0 mb10 lead">Wspólnie prowadzimy Cię<br/>do wytyczonego celu</h4>
+                            Codziennie otrzymujesz ode mnie informację zwrotną na temat Twojej aktywności oraz odżywiania.Dzięki dogłębnej analizie Twoich danych będę w stanie pomóc Ci osiągnąć Twój cel.
+                        </div>
+                    </div>
                 </div>
             </div>
             <a href="/#howItWorks" class="btn btn-primary pull-right">Dowiedz się więcej</a>
