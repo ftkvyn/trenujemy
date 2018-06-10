@@ -28,17 +28,6 @@ module.exports.bootstrap = function(cb) {
   // 	}
   // }
 
-  //ToDo: run once
-  // TrainerInfo.find()
-  // .exec(function(err, data) {
-  //   for (var i = data.length - 1; i >= 0; i--) {
-  //     data[i].friendlyId = data[i].friendlyId.replace('_','');
-  //     TrainerInfo.update({id: data[i].id},{friendlyId: data[i].friendlyId}).exec(function(argument) {
-  //       // body...
-  //     });
-  //   }
-  // })
-
   //running once a day at 0:10
   scheduler.scheduleJob('10 0 * * *', function(){
     expiringService.expirePlans();
