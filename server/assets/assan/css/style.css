@@ -622,7 +622,8 @@ Buttons
   border: 2px solid #4782d3;
   background-color: transparent;
   color: #4782d3; }
-  .btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:active {
+  .media.isHover .icon-border.btn-outline-primary,
+  .media:hover .icon-border.btn-outline-primary, .btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:active {
     color: #fff;
     border-color: #4782d3;
     background-color: transparent; }
@@ -1993,12 +1994,15 @@ Icon boxes
   border-radius: 50%;
   -webkit-border-radius: 50%;
   display: inline-block;
+  transition: all 0.5s;
   border: 1px solid;
   text-align: center; }
   .icon-border.btn-outline-warning:hover {
     background-color: #f0ad4e; }
   .icon-border.btn-outline-danger:hover {
     background-color: #c9302c; }
+  .media:hover .icon-border.btn-outline-primary,
+  .media.isHover .icon-border.btn-outline-primary,
   .icon-border.btn-outline-primary:hover {
     background-color: #4782d3; }
   .icon-border.btn-outline-success:hover {
@@ -4923,4 +4927,25 @@ section.site-wrapper{
     box-shadow: 4px 3px 18px 2px #888888;
     content: 'Aby zatwierdzić wciśnij enter';
     font-weight: bold;
+}
+
+
+.how-it-works .cbp-item{
+  padding: 10px;
+}
+
+.how-it-works .cbp-wrapper-outer,
+.how-it-works .cbp-item{
+  overflow: visible;
+}
+
+.how-it-works .cbp-item .cbp-item-wrapper{
+  transition: all 0.5s;
+  box-shadow: 0px 0px 0px 0px #888888;
+}
+
+.how-it-works .cbp-item .cbp-item-wrapper.highlight{
+  z-index: 1000;
+  transform: scale(1.2);
+  box-shadow: 4px 3px 18px 2px #888888;
 }
