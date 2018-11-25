@@ -67,7 +67,7 @@ class WelcomeScreen extends React.Component {
               <p>Aby w pełni wykorzystać możliwości serwisu, wybierz trenera i wykup usługę.<br/>Możesz skorzystać z treningu personalnego lub wykupić pakiet bieżącej konsultacji dietetycznej.</p>,
               <p>Po wykupieniu usługi panel będzie miejscem Twojej bieżącej komunikacji z trenerem. <br/>W zależności od wykupionej usługi, umówisz tutaj trening lub wykorzystasz pakiet konsultacji dietetycznej.</p>];
           }else{
-              if(this.props.notify.trainingInfo){
+              if(this.props.notify.trainingInfo && this.props.goods.trainPlans && this.props.goods.trainPlans.length){
                   let lastTraining = this.props.goods.trainPlans.sort( (a, b) => new Date(b.createdAt) - new Date(a.createdAt) )[0] || {};
                   headerText = <p>Witaj, wykupiłeś pakiet treningów:<br/><b>{lastTraining.plan.name}</b><br/>u trenera:<br/><b>{lastTraining.trainer.name}</b></p>;
                   headers = [<p><b>1</b><br/>Kontakt z trenerem</p>, 
