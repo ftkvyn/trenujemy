@@ -58,7 +58,7 @@ module.exports.routes = {
 
   '/adminLogin': 'ViewsController.adminLogin',
 
-  '/registerTrainer': 'ViewsController.registerTrainer',  
+  '/dlaTrenera': 'ViewsController.registerTrainer',  
 
   '/recoverPassword': 'ViewsController.recoverPassword',
 
