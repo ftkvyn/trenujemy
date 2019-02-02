@@ -35,7 +35,7 @@ module.exports = {
 
   		price:{
   			type:'number',columnType:'integer',
-  		},
+  		}
   },
 
   beforeValidate: function (values, cb) {

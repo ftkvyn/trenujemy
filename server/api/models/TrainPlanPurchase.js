@@ -35,6 +35,9 @@ module.exports = {
   		model:'Transaction',
   		required:true
   	},
+    promoCode:{
+      model:'PromoCode'
+    },
   },
 
   beforeUpdate: function (values, cb) {

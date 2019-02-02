@@ -31,7 +31,10 @@ module.exports = {
 	transaction:{
 		model:'Transaction',
 		required:true
-	}
+	},
+	promoCode:{
+        model:'PromoCode'
+    },
   },
 
   customToJSON: function() {

@@ -251,6 +251,12 @@ module.exports = {
     isFreeTrainingEnabled:{
 		type:'boolean'
 	},
+    isFeedPlansPromoCodesEnabled:{
+        type:'boolean'
+    },
+    isTrainingsPromoCodesEnabled:{
+        type:'boolean'
+    },
   }
 };
 
