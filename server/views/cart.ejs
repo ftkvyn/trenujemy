@@ -100,7 +100,12 @@
             <tbody>        
                 <% let sum = 0; %>                   
                 <% for(let i = 0; i < locals.cartItems.length; i++) {%>
-                    <% let item = locals.cartItems[i]; sum += item.price;%>            
+                    <% 
+                    let item = locals.cartItems[i]; 
+                    if(!item.promoCode) {
+                        sum += item.price;
+                    }
+                    %>            
                     <tr>
                         <% if(item.isFeedPlan){%>
                             <% let word = 'tygodni'; %>
@@ -115,20 +120,34 @@
                                        <br/> <b>z codzienną konsultacją</b>
                                     <%}%>
                                 <%}%>
-                                <br/>Konsultant: <b> <%= item.trainer.name %> </b>                            
+                                <br/>Konsultant: <b> <%= item.trainer.name %> </b> 
+                                <% if(item.promoCode) { %> 
+                                <br/>Kod rabatowy: <b> <%= item.promoCode.value %> </b>    
+                                <% } %>                     
                             </td>
                         <% }else{%>
                             <td class="product-name">
                                 <%= item.name %>
                                 <br/>Trener: <b> <%= item.trainer.name %> </b>  
+                                <% if(item.promoCode) { %> 
+                                <br/>Kod rabatowy: <b> <%= item.promoCode.value %> </b>    
+                                <% } %>  
                             </td>
                         <% } %>
+                        <% if(item.promoCode) { %> 
+                        <td class="product-price"><s><%= item.price %> zł</s><br/><b>0 zł</b> </td>
+                        <% }else{%>
                         <td class="product-price"><%= item.price %> zł</td>
+                        <% } %>
                         <td class="product-quantity">
                             1
                         </td>
                         <td class="product-total">
+                        <% if(item.promoCode) { %>
+                            0 zł 
+                        <% } else { %> 
                             <%= item.price %> zł
+                        <% } %> 
                         </td>
                         <td class="product-delete">
                              <% if(!locals.isApprove){%>                 
@@ -158,9 +177,15 @@
                  <div class="pb20">
                      <h3><small>Razem w koszyku - </small> <%= sum %> zł</h3>
                  </div>
-                <% if(locals.isApprove){%>                 
+                <% if(locals.isApprove){%>     
+                    <% 
+                    let payText = 'Płacę'; 
+                    if(sum == 0) {
+                        payText = 'Otrzymuję';
+                    }
+                    %>              
                     <% if(locals.cartItems && locals.cartItems.length) {%>
-                        <a href="/payment" class="btn btn-primary">Płacę</a>
+                        <a href="/payment" class="btn btn-primary"><%= payText %></a>
                     <% }else{%>
                         <a class="btn btn-seconary disabled">Płacę</a>
                     <% }%>

@@ -22,6 +22,9 @@ exports.loadCartItems = function(cart){
 	if(cart.feedPlan){
 		qs.push(FeedPlan.findOne({isVisible: true, id: cart.feedPlan}).populate('trainer'));
 	}
+	if(cart.promoCode && cart.promoCode.id){
+		qs.push(PromoCode.findOne(cart.promoCode.id));
+	}
 	Q.all(qs)
 	.catch(function(err){
 		console.log('error');
@@ -32,10 +35,23 @@ exports.loadCartItems = function(cart){
 		try{
 			let cartItems = [];
 			const feedPlan = data[1];
+			let promoCode = null;
+			if(!feedPlan){
+				promoCode = data[1];
+			}else{
+				promoCode = data[2]; 
+			}
+			if(promoCode.transaction || promoCode.user){
+				//Allready used
+				promoCode = null;
+			}
 			if(feedPlan){
 				//feedPlan.target = data[2];
 				feedPlan.isFeedPlan = true;
 				feedPlan.trainerId = feedPlan.trainer.id;
+				if(promoCode && promoCode.feedPlan && promoCode.feedPlan === feedPlan.id){
+					feedPlan.promoCode = promoCode;
+				}
 				cartItems.push(feedPlan);
 			}
 			const trainings = [];
@@ -43,6 +59,9 @@ exports.loadCartItems = function(cart){
 				const training = data[0].find((item) => item.id == cart.trainings[i]);
 				training.isTraining = true;
 				training.trainerId = training.trainer.id;
+				if(promoCode && promoCode.trainPlan && promoCode.trainPlan === training.id){
+					training.promoCode = promoCode;
+				}
 				cartItems.push(training);
 			}
 			cartItems.push(...trainings);

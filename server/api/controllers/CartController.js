@@ -58,6 +58,43 @@ module.exports = {
 	    res.redirect('/cart');
 	},
 
+	usePromoCode: function(req, res) {
+		if(!req.body.promoCode) {
+			return res.badRequest('No promo code provided');
+		}
+		if(!req.body.isFeedPlan && !req.body.isTraining) {
+			return res.badRequest('Bad request');
+		}
+		if(!req.body.trainer) {
+			return res.badRequest('Bad request');
+		}
+		PromoCode.findOne({value : req.body.promoCode, trainer: req.body.trainer})
+		.exec(function(err, promoCode){
+			if(err || !promoCode){
+				return res.badRequest(err);
+			}
+			if(promoCode.transaction || promoCode.user) {
+				return res.badRequest({isUsed: true});
+			}
+			if(req.body.isFeedPlan && !promoCode.feedPlan) {
+				return res.badRequest({wrongType: true});
+			}
+			if(req.body.isTraining && !promoCode.trainPlan) {
+				return res.badRequest({wrongType: true});
+			}
+			cartService.initCart(req, true);
+			req.promoCode = promoCode;
+			if(req.body.isFeedPlan) {
+				req.session.cart.feedPlan = promoCode.feedPlan;
+			} else if(req.body.isTraining) {
+				req.session.cart.trainings.push(promoCode.trainPlan);
+			}
+			calculateTotalItems(req.session.cart);
+	    	res.redirect('/cartApprove');
+		});
+	},
+
+	//ToDo: handle promo codes
 	payment: function(req, res){
 		let qs = [];
 		qs.push(User.findOne(req.session.user.id));

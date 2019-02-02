@@ -33,7 +33,10 @@ module.exports = {
 	feedPlan:{
 		model:'FeedPlan'
 	}
-
+  },
+  beforeUpdate: function (values, cb) {
+  	//ToDo: check that this trainer don't have code with the same value and of the same type.
+  	cb();
   }
 };
 
