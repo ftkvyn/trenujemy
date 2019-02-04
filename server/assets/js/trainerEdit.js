@@ -319,6 +319,42 @@ $(function() {
 	});
 	freeSampleBlock.before(freeSapleCheck);
 
+	let feedPromoBlock = $('.feed-plan-promo-codes-block');
+	let feedPromoCheck = $('<div class="feed-plan-promo-codes-edit clearfix"><input type="checkbox" id="feed-plan-promo-codes-on" /><label for="feed-plan-promo-codes-on">Chcę udostępnić możliwość wpisania kodu na darmową konsultację</label></div>');
+	if(feedPromoBlock.is(':visible')){
+		feedPromoCheck.find('input').attr('checked', 'checked');
+	}
+	feedPromoCheck.find('input').on('change', function(event){
+		console.log('save(isFeedPlansPromoCodesEnabled): ' + this.checked);				
+		if(!this.checked){
+			feedPromoBlock.hide();
+		}else{
+			feedPromoBlock.show();
+		}
+		let model = {id: infoId};
+		model.isFeedPlansPromoCodesEnabled = this.checked;
+	    saveTrainerInfo(model);		
+	});
+	feedPromoBlock.before(feedPromoCheck);
+
+	let trainPromoBlock = $('.train-plan-promo-codes-block');
+	let trainPromoCheck = $('<div class="train-plan-promo-codes-edit clearfix"><input type="checkbox" id="train-plan-promo-codes-on" /><label for="train-plan-promo-codes-on">Chcę udostępnić możliwość wpisania kodu na darmowe treningi</label></div>');
+	if(trainPromoBlock.is(':visible')){
+		trainPromoCheck.find('input').attr('checked', 'checked');
+	}
+	trainPromoCheck.find('input').on('change', function(event){
+		console.log('save(isTrainPlansPromoCodesEnabled): ' + this.checked);				
+		if(!this.checked){
+			trainPromoBlock.hide();
+		}else{
+			trainPromoBlock.show();
+		}
+		let model = {id: infoId};
+		model.isTrainingsPromoCodesEnabled = this.checked;
+	    saveTrainerInfo(model);		
+	});
+	trainPromoBlock.before(trainPromoCheck);
+
 	let cityNum = $('#city-num').val();
 	$('[data-city-edit]').val(cityNum);
 

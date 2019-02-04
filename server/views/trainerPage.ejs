@@ -345,7 +345,32 @@
                 <% } %>
             </div> 
             <h4 class="mb40 mt-20 text-left">Zadzwoń, zapytaj o dostępność terminów: <a data-hint href="tel:<%- info.user.phone %>"><%- info.user.phone %> <i class="ti-mobile"></i></a> </h4>
-        </div>     
+        </div>  
+
+        <% if(info.isTrainingsPromoCodesEnabled || isEditMode){ %>
+        <div class="bg-faded-gray pt20 pb20">
+            <div class="container">
+                <div class="clearfix text-center train-plan-promo-codes-block mb10" style="<% if(!info.isTrainingsPromoCodesEnabled){ %>display: none;<% } %>">
+                    <form action="/usePromoCode" method="POST">
+                        <input type="hidden" name="isTraining" value="true">
+                        <div class="row">
+                            <div class="col-lg-5 min-height">
+                                
+                            </div>
+                            <div class="col-lg-4 pt10 mb20">
+                                <input type="text" class='form-control' placeholder="Wpisz kod rabatowy" name="promoCode" />
+                            </div>
+                            <div class="col-lg-3">
+                                <button type="submit" 
+                                class="btn btn-lg btn-primary pull-right">Zrealizuj kod rabatowy</button>  
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
         <% } %>       
     </div> 
 
@@ -361,7 +386,7 @@
     <div class="bg-faded-gray pb40 how-it-works">
         <div style="padding-left: 100px;padding-right: 100px;" class="container pt20 pb20 clearfix">
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-md-4">
                     <div class="media">
                         <div class="d-flex mr-3">
                            <i class="btn-outline-primary icon-border icon-border-sm text-bold">1</i>  
@@ -373,7 +398,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-4">
+                <div class="col-md-4">
                     <div class="media">
                         <div class="d-flex mr-3">
                            <i class="btn-outline-primary icon-border icon-border-sm text-bold">2</i>  
@@ -385,7 +410,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-4">
+                <div class="col-md-4">
                     <div class="media">
                         <div class="d-flex mr-3">
                            <i class="btn-outline-primary icon-border icon-border-sm text-bold">3</i>  
@@ -495,6 +520,29 @@
                 </div>
             </div> 
         </form>
+        <% if(info.isFeedPlansPromoCodesEnabled || isEditMode){ %>
+        <div class="pb40">
+            <div class="container">
+                <div class="clearfix text-center feed-plan-promo-codes-block mb10" style="<% if(!info.isFeedPlansPromoCodesEnabled){ %>display: none;<% } %>">
+                    <form action="/usePromoCode" method="POST">
+                        <input type="hidden" name="isFeedPlan" value="true">
+                        <div class="row">
+                            <div class="col-lg-5 min-height">
+                                
+                            </div>
+                            <div class="col-lg-4 pt10 mb20">
+                                <input type="text" class='form-control' placeholder="Wpisz kod rabatowy" name="promoCode" />
+                            </div>
+                            <div class="col-lg-3">
+                                <button type="submit" 
+                                class="btn btn-lg btn-primary pull-right">Zrealizuj kod rabatowy</button>  
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <% } %>
 
         <% if(info.isFreeTrainingEnabled || isEditMode){ %>
         <div class="bg-faded-gray pt20 pb20">
@@ -524,6 +572,7 @@
             </div>
         </div>
         <% } %>
+        
     </div>
 
     <div class="pt40 pb20">

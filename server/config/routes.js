@@ -50,6 +50,8 @@ module.exports.routes = {
 
   'post /removeItemFromCart': 'CartController.removeItem',
 
+  'post /usePromoCode' : 'CartController.usePromoCode',
+
   '/payment': 'CartController.payment',
 
   '/verify': 'CartController.verify',
