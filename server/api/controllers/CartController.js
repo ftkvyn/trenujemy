@@ -145,14 +145,16 @@ module.exports = {
 			    		}
 			    	}
 			    }
-				const totalPrice = cartItems.reduce( (accumulator, currentItem) => accumulator + currentItem.price, 0);
+				const totalPrice = cartItems.reduce( 
+					(accumulator, currentItem) => accumulator + !currentItem.promoCode ? currentItem.price : 0, 0);
 				let transactionModels = [];
 				let paymentId = uuidv4();
 				for(let i = 0; i < cartItems.length; i++){
+					const itemPrice = !cartItems[i].promoCode ? cartItems[i].price * 100 : 0;
 					const newTransactionModel = {
 						user: req.session.user.id,
 						item: cartItems[i],
-						amount: cartItems[i].price * 100,
+						amount: itemPrice,
 						externalId: paymentId,
 						status: 'created',
 						trainer: cartItems[i].trainer.id			

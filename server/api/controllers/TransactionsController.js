@@ -25,6 +25,7 @@ module.exports = {
 		condition.trainer = req.session.user.id;
 		Transaction.find(condition)
 		.populate('user')
+		.populate('promoCode')
 		.sort('createdAt DESC')
 		.exec(function(err, data) {
 			if(err){
