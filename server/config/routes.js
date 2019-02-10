@@ -156,6 +156,8 @@ module.exports.routes = {
 
   'post /api/trainerInfo/route/:id' : 'TrainerInfoController.updateRoute',
 
+  'post /api/promoCode': 'PromoCodeController.generate',
+
   'post /api/trainerInfo/adminApprovement/:id' : 'TrainerInfoController.approveByAdmin',
 
   'get /editTrainerPage/:friendlyId' : 'ViewsController.trainerEdit',

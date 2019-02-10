@@ -194,5 +194,12 @@ module.exports.policies = {
     '*':'isTrainer',
     'find':'isTrainerForOtherUser',
     'update':'sessionAuth'
-  }
+  },
+
+  PromoCodeController:{
+    '*':'isTrainer',
+    'create':false,
+    'destroy':false,
+    'update':false
+  },
 };
