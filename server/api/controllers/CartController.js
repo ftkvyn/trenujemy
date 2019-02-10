@@ -68,22 +68,30 @@ module.exports = {
 		if(!req.body.trainer) {
 			return res.badRequest('Bad request');
 		}
-		PromoCode.findOne({value : req.body.promoCode, trainer: req.body.trainer})
+		PromoCode.findOne({value : req.body.promoCode})
 		.exec(function(err, promoCode){
 			if(err || !promoCode){
-				return res.badRequest(err);
+				req.session.cartMessage = 'Wpisany kod jest niepoprawny';
+				return res.redirect('/cart');
+			}
+			if(req.body.trainer != promoCode.trainer){
+				req.session.cartMessage = 'Wpisany kod należy do innego trenera lub konsultanta';
+				return res.redirect('/cart');
 			}
 			if(promoCode.transaction || promoCode.user) {
-				return res.badRequest({isUsed: true});
+				req.session.cartMessage = 'Ten kod już jest użyty.';
+				return res.redirect('/cart');
 			}
 			if(req.body.isFeedPlan && !promoCode.feedPlan) {
-				return res.badRequest({wrongType: true});
+				req.session.cartMessage = 'Wpisany kod nie jest kodem konsultacji dyjetytycznej';
+				return res.redirect('/cart');
 			}
 			if(req.body.isTraining && !promoCode.trainPlan) {
-				return res.badRequest({wrongType: true});
+				req.session.cartMessage = 'Wpisany kod nie jest kodem na otrzymanie treningów';
+				return res.redirect('/cart');
 			}
 			cartService.initCart(req, true);
-			req.promoCode = promoCode;
+			req.session.cart.promoCode = promoCode;
 			if(req.body.isFeedPlan) {
 				req.session.cart.feedPlan = promoCode.feedPlan;
 			} else if(req.body.isTraining) {

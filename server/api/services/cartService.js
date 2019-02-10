@@ -34,19 +34,19 @@ exports.loadCartItems = function(cart){
 		// console.log(data);
 		try{
 			let cartItems = [];
-			const feedPlan = data[1];
+			let feedPlan = data[1];
 			let promoCode = null;
-			if(!feedPlan){
+			if(!cart.feedPlan){
 				promoCode = data[1];
+				feedPlan = null;
 			}else{
 				promoCode = data[2]; 
 			}
-			if(promoCode.transaction || promoCode.user){
+			if(promoCode && (promoCode.transaction || promoCode.user)){
 				//Allready used
 				promoCode = null;
 			}
 			if(feedPlan){
-				//feedPlan.target = data[2];
 				feedPlan.isFeedPlan = true;
 				feedPlan.trainerId = feedPlan.trainer.id;
 				if(promoCode && promoCode.feedPlan && promoCode.feedPlan === feedPlan.id){

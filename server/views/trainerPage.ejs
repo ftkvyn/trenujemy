@@ -353,12 +353,13 @@
                 <div class="clearfix text-center train-plan-promo-codes-block mb10" style="<% if(!info.isTrainingsPromoCodesEnabled){ %>display: none;<% } %>">
                     <form action="/usePromoCode" method="POST">
                         <input type="hidden" name="isTraining" value="true">
+                        <input type="hidden" name="trainer" value="<%= info.user.id %>">
                         <div class="row">
                             <div class="col-lg-5 min-height">
                                 
                             </div>
                             <div class="col-lg-4 pt10 mb20">
-                                <input type="text" class='form-control' placeholder="Wpisz kod rabatowy" name="promoCode" />
+                                <input type="text" class='form-control' required placeholder="Wpisz kod rabatowy" name="promoCode" />
                             </div>
                             <div class="col-lg-3">
                                 <button type="submit" 
@@ -524,6 +525,7 @@
                 <div class="clearfix text-center feed-plan-promo-codes-block mb10" style="<% if(!info.isFeedPlansPromoCodesEnabled){ %>display: none;<% } %>">
                     <form action="/usePromoCode" method="POST">
                         <input type="hidden" name="isFeedPlan" value="true">
+                        <input type="hidden" name="trainer" value="<%= info.user.id %>">
                         <div class="row">
                             <div class="col-lg-5 min-height">
                                 
