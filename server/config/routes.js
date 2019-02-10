@@ -160,7 +160,7 @@ module.exports.routes = {
 
   'post /api/promoCode': 'PromoCodeController.generate',
 
-  'post /api/codesToPrint': 'PromoCodeController.rememberCodes',
+  'post /api/rememberCodes': 'PromoCodeController.rememberCodes',
 
   'post /api/trainerInfo/adminApprovement/:id' : 'TrainerInfoController.approveByAdmin',
 

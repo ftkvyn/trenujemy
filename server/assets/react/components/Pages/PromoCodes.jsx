@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import { Grid, Row, Col, Panel, Button, FormControl, FormGroup, InputGroup, DropdownButton, MenuItem, Well } from 'react-bootstrap';
-import { loadCodes, generateCode } from '../Common/promoCodesService';
+import { loadCodes, generateCode, rememberCodes } from '../Common/promoCodesService';
 import { loadTrainerInfo, loadTrainPlans, loadFeedPlans } from '../Common/trainerInfoService';
 
 
@@ -101,16 +101,24 @@ class PromoCodes extends React.Component {
     	if(this.state.generatingCodes){
     		return;
     	}
-    	const win = window.open('/printCodes', '_blank');
-  		win.focus();
+    	const codeIds = this.state.newFeedCodes.map(code => code.id);
+    	rememberCodes(codeIds)
+    	.then(() => {
+	    	const win = window.open('/printCodes', '_blank');
+	  		win.focus();
+  		});
     }
 
     printTrainCodes(){
     	if(this.state.generatingCodes){
     		return;
     	}
-    	const win = window.open('/printCodes', '_blank');
-  		win.focus();
+    	const codeIds = this.state.newTrainCodes.map(code => code.id);
+    	rememberCodes(codeIds)
+    	.then(() => {
+	    	const win = window.open('/printCodes', '_blank');
+	  		win.focus();
+  		});
     }
 
     render() {  
@@ -153,7 +161,7 @@ class PromoCodes extends React.Component {
                             value={this.state.selectedTrainPlan}
                             onChange={this.handleChange.bind(this)}
                             className="form-control">
-                            	{this.state.trainPlans.map(plan => <option key={plan.id} value={plan.id}>{plan.trainsCount} treningów</option>)}
+                            	{this.state.trainPlans.map(plan => <option key={plan.id} value={plan.id}>{plan.trainsCount}</option>)}
                             </FormControl>
                         </Col>
                     </Row>
@@ -185,7 +193,7 @@ class PromoCodes extends React.Component {
                             value={this.state.selectedFeedPlan}
                             onChange={this.handleChange.bind(this)}
                             className="form-control">
-                            	{this.state.feedPlans.map(plan => <option key={plan.id} value={plan.id}>{plan.weeks} tygodnie</option>)}
+                            	{this.state.feedPlans.map(plan => <option key={plan.id} value={plan.id}>{plan.weeks} {plan.word}</option>)}
                             </FormControl>
                         </Col>
                     </Row>

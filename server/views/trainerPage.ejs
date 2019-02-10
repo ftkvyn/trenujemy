@@ -486,9 +486,7 @@
                         </div>
                     </div>
                     <% for(let i = 0; i < feedPlans.filter(fp => !fp.isFreeSample).length; i++) {%>
-                        <% let plan = feedPlans[i]; let word = 'tygodni'; %>
-                        <% if(plan.weeks < 6){word = 'tygodnie';} %>
-                        <% if(plan.weeks == 1){word = 'tydzień';} %> 
+                        <% let plan = feedPlans[i].toJSON(); %>
                         <div class="row feed-item">
                             <div class="col-xs-4  col-sm-4 feed-cell">
                                 <div class="feed-checkbox">
@@ -503,7 +501,7 @@
                                 </div>                            
                             </div>
                             <div class="col-xs-4  col-sm-4 feed-cell">
-                                <h3 class='feed-title'><%- plan.weeks %> <%- word %></h3>
+                                <h3 class='feed-title'><%- plan.weeks %> <%- plan.word %></h3>
                             </div>
                             <div class="col-xs-4  col-sm-4 feed-cell">
                                 <div class="col-md-12 feed-price"><span data-feed-price-edit><%- plan.price %></span> zł</div>

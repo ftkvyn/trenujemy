@@ -29,4 +29,21 @@ function generateCode(model){
 	  });
 }
 
-export{ loadCodes, generateCode }
+function rememberCodes(codeIds) {
+	return new Promise((resolve, reject) => {
+		$.ajax({
+            url: `/api/rememberCodes/`,
+            type: 'POST',
+            data: {codes: codeIds},
+            success: function (data) {
+            	resolve(data);                
+            },
+            error: function(err){
+                console.error(err);
+                reject(err);                
+            }
+        });
+	  });
+}
+
+export{ loadCodes, generateCode, rememberCodes }

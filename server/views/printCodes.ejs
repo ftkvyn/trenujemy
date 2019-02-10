@@ -20,14 +20,11 @@
             text-align: center;
         }
         h2{
-            /*font-size: 2em;*/
             font-weight: normal;
         }
         p{
-            /*font-size: 1.5em;*/
         }
         h1{
-            /*font-size: 2.2em;*/
         }
         @media print{@page {size: landscape}}
     </style>
@@ -36,69 +33,30 @@
     <table>
         <tbody>
             <tr>
+                <% for(let i = 0; i < locals.codes.length; i++) {
+                    let code = locals.codes[i];
+                %>
                 <td>
                     <div>
                         <img src="/images/logo.png"/>
                     </div>
-                    <h2>Przemysław Bulski</h2>
-                    <p>www.fitelio.pl/przemyslawbulski</p>
+                    <h2><%= locals.trainerInfo.user.name %></h2>
+                    <p>www.fitelio.pl/<%= locals.trainerInfo.friendlyId %></p>
                     <p>Kupon na:</p>
-                    <h1><b>1 trening</b></h1>
-                    <h2><p>Kod: Q7A98LMq</p></h2>
+                    <% if(code.feedPlan) {%>
+                        <h1><b><%= code.feedPlan.weeks %> <%= code.feedPlan.toJSON().word %></b></h1>
+                    <% } %>
+                    <% if(code.trainPlan) {%>
+                        <h1><b>Treningów: <%= code.trainPlan.trainsCount %></b></h1>
+                    <% } %>
+                    <h2><p>Kod: <%= code.value%></p></h2>
                 </td>
-                <td>
-                    <div>
-                        <img src="/images/logo.png"/>
-                    </div>
-                    <h2>Przemysław Bulski</h2>
-                    <p>www.fitelio.pl/przemyslawbulski</p>
-                    <p>Kupon na:</p>
-                    <h1><b>1 trening</b><h1>
-                    <h2><p>Kod: Q7A98LMq</p></h2>
-                </td>
-                <td>
-                    <div>
-                        <img src="/images/logo.png"/>
-                    </div>
-                    <h2>Przemysław Bulski</h2>
-                    <p>www.fitelio.pl/przemyslawbulski</p>
-                    <p>Kupon na:</p>
-                    <h1><b>1 trening</b><h1>
-                    <h2><p>Kod: Q7A98LMq</p></h2>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div>
-                        <img src="/images/logo.png"/>
-                    </div>
-                    <h2>Przemysław Bulski</h2>
-                    <p>www.fitelio.pl/przemyslawbulski</p>
-                    <p>Kupon na:</p>
-                    <h1><b>1 trening</b><h1>
-                    <h2><p>Kod: Q7A98LMq</p></h2>
-                </td>
-                <td>
-                    <div>
-                        <img src="/images/logo.png"/>
-                    </div>
-                    <h2>Przemysław Bulski</h2>
-                    <p>www.fitelio.pl/przemyslawbulski</p>
-                    <p>Kupon na:</p>
-                    <h1><b>1 trening</b><h1>
-                    <h2><p>Kod: Q7A98LMq</p></h2>
-                </td>
-                <td>
-                    <div>
-                        <img src="/images/logo.png"/>
-                    </div>
-                    <h2>Przemysław Bulski</h2>
-                    <p>www.fitelio.pl/przemyslawbulski</p>
-                    <p>Kupon na:</p>
-                    <h1><b>1 trening</b><h1>
-                    <h2><p>Kod: Q7A98LMq</p></h2>
-                </td>
-            </tr>
+                    <% if(i % 3 === 2) {%>
+                    </tr>
+                    <tr>
+                    <% } %>
+                <% } %>
+            </tr>            
         </tbody>
     </table>
     <script type="text/javascript">

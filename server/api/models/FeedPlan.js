@@ -46,6 +46,14 @@ module.exports = {
       values.price = null;
     }
     cb();
+  },
+
+  customToJSON: function() {
+      const obj = {...this};
+      obj.word = 'tygodni';
+      if(obj.weeks < 6){obj.word = 'tygodnie';}
+      if(obj.weeks == 1){obj.word = 'tydzień';}
+      return obj;
   }
 };
 

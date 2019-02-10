@@ -56,6 +56,7 @@ module.exports = {
 
 	rememberCodes: function(req, res) {
 		req.session.codesToPrint = req.body.codes;
+		console.log(req.body.codes);
 		return res.json({success: true});
 	}
 };

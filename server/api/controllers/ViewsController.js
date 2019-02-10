@@ -300,8 +300,6 @@ module.exports = {
 			}});
 		})
 		.then(function(cartItems){
-			// console.log('controller - items');
-			// console.log(cartItems);
 			const cartMessage = req.session.cartMessage;
 			req.session.cartMessage = undefined;
 			return res.view('cart', {locals: {
@@ -489,7 +487,24 @@ module.exports = {
 	},
 
 	printCodes: function(req, res) {
-		return res.view('printCodes', {layout: null, locals: {user: req.session.user}});
+		if(!req.session.codesToPrint || !req.session.user){
+			return res.redirect('/dashboard');
+		}
+		const codeIds = req.session.codesToPrint;
+		qs = [];
+		qs.push(TrainerInfo.findOne({user: req.session.user.id}).populate('user'));
+		qs.push(PromoCode.find({id: codeIds}).populate('feedPlan').populate('trainPlan'));
+		Q.all(qs)
+		.then(function(data) {
+			const trainerInfo = data[0];
+			const codes = data[1];
+			return res.view('printCodes', {layout: null, locals: {trainerInfo: trainerInfo, codes: codes}});	
+		})
+		.catch(function(err) {
+			console.error(err);
+			return res.redirect('/dashboard');
+		})
+		
 	}
 };
 
