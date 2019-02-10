@@ -7,7 +7,7 @@
 
 module.exports = {
 	find:  function(req, res){
-		TrainPlan.find({isActive: true, trainer:req.session.user})
+		TrainPlan.find({isActive: true, trainer:req.session.user.id})
 		.exec(function(err, data) {
 			if(err){
 				console.error(err);

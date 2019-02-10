@@ -89,7 +89,7 @@ class TrainerMenu extends React.Component {
 
                 <li className={ this.routeActive('promoCodes') ? 'active' : '' }>
                     <Link to="/promoCodes" title="Kody rabatowe">
-                    <em className="fa fa-list-alt"></em>
+                    <em className="fa fa-gift"></em>
                     <span>Kody rabatowe</span>
                     </Link>
                 </li>

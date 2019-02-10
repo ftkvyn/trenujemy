@@ -370,7 +370,7 @@ class Profile extends React.Component {
                 <FormGroup>
                     <label className="col-lg-2 control-label">Pełny adres strony:</label>
                     <Col lg={ 10 }>
-                        <a target='blank' style={{'line-height':'36px'}} href={this.state.rootHost + this.state.trainerInfo.friendlyId}>{this.state.rootHost + this.state.trainerInfo.friendlyId}</a>
+                        <a target='blank' style={{'lineHeight':'36px'}} href={this.state.rootHost + this.state.trainerInfo.friendlyId}>{this.state.rootHost + this.state.trainerInfo.friendlyId}</a>
                     </Col>
                 </FormGroup> 
             </div>

@@ -16,8 +16,8 @@ class PromoCodes extends React.Component {
             trainPlans:[],
             trainerInfo:{},
             trainerInfoLoaded: false,
-            selectedTrainPlan:null,
-            selectedFeedPlan:null,
+            selectedTrainPlan:'',
+            selectedFeedPlan:'',
         };
         this.state = initialState;        
     };
@@ -33,7 +33,7 @@ class PromoCodes extends React.Component {
         			.then(plans => this.setState({trainPlans: plans}));
         		}
         		if(info.isFeedCounsultant && info.isFeedPlansPromoCodesEnabled) {
-        			loadTrainPlans()
+        			loadFeedPlans()
         			.then(plans => this.setState({feedPlans: plans}));
         		}
         	});
@@ -54,35 +54,35 @@ class PromoCodes extends React.Component {
         if(!this.state.trainerInfoLoaded){
             content = <div></div>
         } else {
-        	if(this.state.trainerInfo.isFeedPlansPromoCodesEnabled){
+        	if(this.state.trainerInfo.isFeedPlansPromoCodesEnabled && this.state.trainerInfo.isFeedCounsultant){
         		trainCodesContent = <Panel>
         			<p>Kod na darmowy trening</p>
         			<p>Po wpisaniu prawidłowego kodu klient otrzyma gratis usługę, którą tutaj zdefiniujesz</p>
                     <Row>
-                        <label className="col-lg-2 col-md-4 control-label text-right">Liczba treningów:</label>
-                        <Col lg={ 10 } md={8}>
+                        <label className="col-lg-4 col-md-6 control-label text-right">Liczba treningów:</label>
+                        <Col lg={ 4 } md={ 6 }>
                          <FormControl componentClass="select" name="selectedTrainPlan" 
                             value={this.state.selectedTrainPlan}
                             onChange={this.handleChange.bind(this)}
                             className="form-control">
-                            	{this.trainPlans.map(plan => <option value={plan}>{plan.trainsCount} treningów</option>)}
+                            	{this.state.trainPlans.map(plan => <option key={plan.id} value={plan}>{plan.trainsCount} treningów</option>)}
                             </FormControl>
                         </Col>
                     </Row>
                 </Panel>;
         	}
-        	if(this.state.trainerInfo.isTrainingsPromoCodesEnabled){
+        	if(this.state.trainerInfo.isTrainingsPromoCodesEnabled && this.state.trainerInfo.isTrainer){
         		feedCodesContent = <Panel>
         			<p>Kod na darmową konsultację dietetyczną</p>
         			<p>Po wpisaniu prawidłowego kodu klient otrzyma gratis usługę, którą tutaj zdefiniujesz</p>
                     <Row>
-                        <label className="col-lg-2 col-md-4 control-label text-right">Czas trwania usługi:</label>
-                        <Col lg={ 10 } md={8}>
+                        <label className="col-lg-4 col-md-6 control-label text-right">Czas trwania usługi:</label>
+                        <Col lg={ 4 } md={ 6 }>
                          <FormControl componentClass="select" name="selectedFeedPlan" 
                             value={this.state.selectedFeedPlan}
                             onChange={this.handleChange.bind(this)}
                             className="form-control">
-                            	{this.feedPlans.map(plan => <option value={plan}>{plan.weeks} tygodni</option>)}
+                            	{this.state.feedPlans.map(plan => <option key={plan.id} value={plan}>{plan.weeks} tygodnie</option>)}
                             </FormControl>
                         </Col>
                     </Row>
@@ -114,3 +114,5 @@ class PromoCodes extends React.Component {
         );
     }
 }
+
+export default PromoCodes;
