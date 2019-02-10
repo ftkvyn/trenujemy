@@ -53,5 +53,10 @@ module.exports = {
 			return res.badRequest(err);
 		})
 	},
+
+	rememberCodes: function(req, res) {
+		req.session.codesToPrint = req.body.codes;
+		return res.json({success: true});
+	}
 };
 

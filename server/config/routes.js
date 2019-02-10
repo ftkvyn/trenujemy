@@ -66,7 +66,9 @@ module.exports.routes = {
 
   '/changePassword': 'ViewsController.changePassword',
 
-  '/activate': 'ViewsController.activate',  
+  '/activate': 'ViewsController.activate',
+
+  '/printCodes': 'ViewsController.printCodes',  
 
   '/dashboard/:path?/:path2?/:path3?/:path4?/:path5?/:path6?/:path7?/:path8?': 'ViewsController.dashboard',
 
@@ -157,6 +159,8 @@ module.exports.routes = {
   'post /api/trainerInfo/route/:id' : 'TrainerInfoController.updateRoute',
 
   'post /api/promoCode': 'PromoCodeController.generate',
+
+  'post /api/codesToPrint': 'PromoCodeController.rememberCodes',
 
   'post /api/trainerInfo/adminApprovement/:id' : 'TrainerInfoController.approveByAdmin',
 

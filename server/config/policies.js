@@ -63,6 +63,7 @@ module.exports.policies = {
 
   ViewsController:{
     '*' : true,
+    'printCodes': 'isTrainer',
     'dashboard' : 'sessionAuthRedirectToLogin',
     'cartApprove' : 'sessionAuthRedirectToLogin'
   },

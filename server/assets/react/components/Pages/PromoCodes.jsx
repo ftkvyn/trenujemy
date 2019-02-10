@@ -47,25 +47,19 @@ class PromoCodes extends React.Component {
         let newData = {};
         newData[fieldName] = fieldVal
         this.setState(newData);
-        console.log(newData);
     }
 
     generateCode(model, initial){
-    	console.log('5');
     	if(!initial && model.trainPlan && this.state.newTrainCodes.length > 5) {
-    		console.log('6');
     		this.setState({generatingCodes: false});
     		return;
     	}
     	if(!initial && model.feedPlan && this.state.newFeedCodes.length > 5) {
-    		console.log('7');
     		this.setState({generatingCodes: false});
     		return;
     	}
-    	console.log('8');
     	generateCode(model)
     	.then((newCode) => {
-    		console.log('9');
     		if(newCode.trainPlan){
     			const newCodes = [...this.state.newTrainCodes, newCode];
     			this.setState({newTrainCodes: newCodes});
@@ -82,42 +76,62 @@ class PromoCodes extends React.Component {
     }
 
     addTrainingCodes(){
-    	console.log('1');
     	if(this.state.generatingCodes){
-    		console.log('2');
     		return;
     	}
     	if(!this.state.selectedTrainPlan){
-    		console.log('3');
     		return;
     	}
-    	console.log('4');
     	this.setState({generatingCodes: true, newTrainCodes: []});
     	this.generateCode({trainPlan: this.state.selectedTrainPlan}, true);
     }
 
     addFeedCodes(){
-    	console.log('1');
     	if(this.state.generatingCodes){
-    		console.log('2');
     		return;
     	}
     	if(!this.state.selectedFeedPlan){
-    		console.log('3');
     		return;
     	}
-    	console.log('4');
     	this.setState({generatingCodes: true, newFeedCodes: []});
     	this.generateCode({feedPlan: this.state.selectedFeedPlan}, true);
+    }
+
+    printFeedCodes(){
+    	if(this.state.generatingCodes){
+    		return;
+    	}
+    }
+
+    printTrainCodes(){
+    	if(this.state.generatingCodes){
+    		return;
+    	}
     }
 
     render() {  
     	let content = '';
     	let feedCodesContent = '';
     	let trainCodesContent = '';
+    	let printTrainCodes = '';
+    	let printFeedCodes = '';
     	let disabledAttrs = {};
     	if(this.state.generatingCodes){
     		disabledAttrs = {disabled: "disabled"};
+    	}
+    	if(this.state.newTrainCodes.length > 5){
+    		printTrainCodes = <Row>
+            	<Col lg={12}>
+            		<div  {...disabledAttrs} onClick={this.printTrainCodes.bind(this)} className='btn btn-outline btn-primary'>Wydrukuj kody</div>
+            	</Col>
+            </Row>
+    	}
+    	if(this.state.newFeedCodes.length > 5){
+    		printFeedCodes = <Row>
+            	<Col lg={12}>
+            		<div  {...disabledAttrs} onClick={this.printFeedCodes.bind(this)} className='btn btn-outline btn-primary'>Wydrukuj kody</div>
+            	</Col>
+            </Row>
     	}
         if(!this.state.trainerInfoLoaded){
             content = <div></div>
@@ -151,6 +165,7 @@ class PromoCodes extends React.Component {
                         </div>
                         )}
                     </Row>
+                    {printTrainCodes}
                 </Panel>;
         	}
         	if(this.state.trainerInfo.isFeedPlansPromoCodesEnabled && this.state.trainerInfo.isFeedCounsultant){
@@ -182,6 +197,7 @@ class PromoCodes extends React.Component {
                         </div>
                         )}
                     </Row>
+                    {printFeedCodes}
                 </Panel>;
         	}
         }

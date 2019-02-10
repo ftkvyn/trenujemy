@@ -486,6 +486,10 @@ module.exports = {
 	contact:function(req,res){
 		emailService.sendContactMail(req.body);
 		return res.send('Ok');
+	},
+
+	printCodes: function(req, res) {
+		return res.view('printCodes', {layout: null, locals: {user: req.session.user}});
 	}
 };
 
