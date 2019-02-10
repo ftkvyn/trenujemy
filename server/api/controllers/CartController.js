@@ -161,12 +161,15 @@ module.exports = {
 					const itemPrice = !cartItems[i].promoCode ? cartItems[i].price * 100 : 0;
 					const newTransactionModel = {
 						user: req.session.user.id,
-						item: cartItems[i],
+						item: cartItems[i],						
 						amount: itemPrice,
 						externalId: paymentId,
 						status: 'created',
 						trainer: cartItems[i].trainer.id			
 					};
+					if(cartItems[i].promoCode) {
+						newTransactionModel.title = 'Kod rabatowy: ' + cartItems[i].promoCode.value;
+					}
 					transactionModels.push(newTransactionModel);
 				}
 				
