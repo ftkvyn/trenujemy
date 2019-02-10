@@ -14,6 +14,39 @@ function loadTrainerInfo(){
 	  });
 }
 
+function loadTrainPlans() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: '/api/trainPlan/',
+            type: 'GET',
+            success: function (data) {
+                resolve(data);                
+            },
+            error: function(err){
+                console.error(err);
+                reject(err);                
+            }
+        });
+      });   
+}
+
+function loadFeedPlans() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: '/api/feedPlan/',
+            type: 'GET',
+            success: function (data) {
+                resolve(data);                
+            },
+            error: function(err){
+                console.error(err);
+                reject(err);                
+            }
+        });
+      });   
+}
+
+
 function adminActivate(model){
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -65,4 +98,4 @@ function saveTrainerRoute(model){
 	  });
 }
 
-export{saveTrainerInfo, saveTrainerRoute, loadTrainerInfo, adminActivate}
+export{ saveTrainerInfo, saveTrainerRoute, loadTrainerInfo, adminActivate, loadTrainPlans, loadFeedPlans }

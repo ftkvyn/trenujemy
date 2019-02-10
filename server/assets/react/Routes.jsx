@@ -14,6 +14,7 @@ import ClientPage from './components/Pages/ClientPage'
 import DiaryPage from './components/Pages/DiaryPage'
 
 import TransactionsPage from './components/Pages/TransactionsPage'
+import PromoCodes from './components/Pages/PromoCodes'
 
 import AnswerTemplatesPage from './components/Pages/AnswerTemplatesPage'
 import AdviceTemplatesPage from './components/Pages/AdviceTemplatesPage'
@@ -73,7 +74,8 @@ const Routes = ({ location }) => {
                             <Route path="/adviceTemplates" component={AdviceTemplatesPage}/>
                             <Route path="/transactions" component={TransactionsPage}/>                            
                             <Route path="/trainings" component={TrainingsPage}/>   
-                            <Route path="/trainerPageEdit" component={TrainerPageEdit}/>                                                                                 
+                            <Route path="/trainerPageEdit" component={TrainerPageEdit}/>   
+                            <Route path="/promoCodes" component={PromoCodes}/>   
                             <Redirect to="/goods"/>
                         </Switch>
                     </div>

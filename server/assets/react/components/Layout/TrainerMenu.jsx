@@ -86,6 +86,13 @@ class TrainerMenu extends React.Component {
                     <span>Szablony zaleceń</span>
                     </Link>
                 </li>
+
+                <li className={ this.routeActive('promoCodes') ? 'active' : '' }>
+                    <Link to="/promoCodes" title="Kody rabatowe">
+                    <em className="fa fa-list-alt"></em>
+                    <span>Kody rabatowe</span>
+                    </Link>
+                </li>
             </ul>);
     }
 
