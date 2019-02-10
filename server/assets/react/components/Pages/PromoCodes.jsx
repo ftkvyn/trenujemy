@@ -101,12 +101,16 @@ class PromoCodes extends React.Component {
     	if(this.state.generatingCodes){
     		return;
     	}
+    	const win = window.open('/printCodes', '_blank');
+  		win.focus();
     }
 
     printTrainCodes(){
     	if(this.state.generatingCodes){
     		return;
     	}
+    	const win = window.open('/printCodes', '_blank');
+  		win.focus();
     }
 
     render() {  
