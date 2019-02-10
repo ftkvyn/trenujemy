@@ -293,3 +293,14 @@ body.with-popup .wrapper > .aside
 .topnavbar-wrapper .navbar.topnavbar{
 	background: #34495E;
 }
+
+.promo-code-box{
+	text-align: center;
+    padding-top: 10px;
+}
+
+.promo-code-box label{
+	border: 1px solid #cfdbe2;
+    border-radius: 4px;
+    padding: 10px;
+}

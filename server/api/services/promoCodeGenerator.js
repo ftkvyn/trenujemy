@@ -25,6 +25,7 @@ function checkIfUnique(code){
 		}
 		return deferred.resolve(code);
 	});
+	return deferred.promise;
 }
 
 function tryGenerateCode(cb){
@@ -55,6 +56,7 @@ exports.generateCode = function(argument) {
 		});
 	}
 	catch(ex){
-		return deferred.reject(ex);
+		deferred.reject(ex);
 	}
+	return deferred.promise;
 }

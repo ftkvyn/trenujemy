@@ -28,13 +28,13 @@ module.exports = {
 			return res.badRequest('Both train plan and feed plan selected');
 		}
 		const model = {
-			trainer: req.session.user
+			trainer: req.session.user.id
 		};
 		if(req.body.feedPlan){
-			model.feedPlan = feedPlan;
+			model.feedPlan = req.body.feedPlan;
 		}
 		if(req.body.trainPlan){
-			model.trainPlan = trainPlan;
+			model.trainPlan = req.body.trainPlan;
 		}
 		promoCodeGenerator.generateCode()
 		.then(function(code) {
