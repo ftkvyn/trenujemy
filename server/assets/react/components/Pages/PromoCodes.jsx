@@ -106,7 +106,8 @@ class PromoCodes extends React.Component {
     	.then(() => {
 	    	const win = window.open('/printCodes', '_blank');
 	  		win.focus();
-  		});
+  		})
+        .catch((err) => console.error(err));
     }
 
     printTrainCodes(){
@@ -118,7 +119,8 @@ class PromoCodes extends React.Component {
     	.then(() => {
 	    	const win = window.open('/printCodes', '_blank');
 	  		win.focus();
-  		});
+  		})
+        .catch((err) => console.error(err));;
     }
 
     render() {  
