@@ -55,6 +55,7 @@ module.exports.policies = {
 
   CartController:{
     'addItem': 'notTrainer',
+    'usePromoCode': 'notTrainer',
     'removeItem':true,
     'payment': ['sessionAuthRedirectToLogin', 'notTrainer'],
     '*':'sessionAuthRedirectToLogin',
