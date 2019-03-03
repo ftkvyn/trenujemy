@@ -63,22 +63,24 @@
         <div class="title-heading1 mb20 mr-auto ml-auto clearfix">
             <h3 class="">Doświadczenie i kwalifikacje</h3>
         </div>
-        <div class="row align-items-center">
+        <div class="row">
             <div class="col-lg-6">
                 <h4 class="text-left"><img src="/images/icons/profile.png" style="width: 40px; height: 40px;" /> Specjalizacja</h4>
                 <ul data-hint>
                     <li>Trener personalny</li>
                     <li>Dietetyk</li>
                 </ul>
-
+                <% if(isEditMode || (info.certificates && info.certificates.length)) {%>
                 <h4 class="text-left"><img src="/images/icons/diplom.png" style="width: 40px; height: 40px;" /> Wyszktałcenie, kursy, certyfikaty</h4>
                 <ul data-edit-list="certificates">
                     <% if(info.certificates && (typeof info.certificates == 'object') ) for(let i = 0; i < info.certificates.length; i++) {%>
                         <li><%- info.certificates[i] %></li>
                     <% } %>
                 </ul>
+                 <% } %>
             </div>  
             <div class="col-lg-6">
+                <% if(isEditMode || (info.achivements && info.achivements.length)) {%>
                 <div class="clearfix">
                     <h4 class="text-left"><img src="/images/icons/lib.png" style="width: 40px; height: 40px;" /> Osiągnięcia</h4>
                     <ul data-edit-list="achivements">
@@ -87,7 +89,8 @@
                         <% } %>
                     </ul>
                 </div>
-
+                <% } %>
+                <% if(isEditMode || (info.certificateImages && info.certificateImages.length)) {%>
                 <div class="clearfix">
                     <h4 class="text-left"><img src="/images/icons/prize.png" style="width: 40px; height: 40px;" /> Certyfikaty <% if(isEditMode){ %><button class="btn btn-primary btn-sm add-image">Dodaj</button> <% } %> </h4>
                     <% if(isEditMode){ %>                        
@@ -105,35 +108,36 @@
                             let certLeft = info.certificateImages.length - limitCert;
                             for(let i = 0; i < limitCert; i++){
                          %>
-                        <div class="cbp-item cbp-item-small">
-                            <a href="<%- info.certificateImages[i] %>" class="cbp-caption cbp-lightbox" rel="nofollow">
-                                <div class="">
-                                    <img src="<%- info.certificateImages[i] %>" alt="">
-                                </div>
-                            </a>
-                        </div>
+                            <div class="cbp-item cbp-item-small">
+                                <a href="<%- info.certificateImages[i] %>" class="cbp-caption cbp-lightbox" rel="nofollow">
+                                    <div class="">
+                                        <img src="<%- info.certificateImages[i] %>" alt="">
+                                    </div>
+                                </a>
+                            </div>
                          <% } %>
 
                         <% if(certLeft > 0){ %>                     
-                        <div class="more-items cbp-item cbp-item-small">
-                            +<%- certLeft %>      
-                        </div>
+                            <div class="more-items cbp-item cbp-item-small">
+                                +<%- certLeft %>      
+                            </div>
                         <% } %>
 
                         <%  
                             for(let i = limitCert; i < info.certificateImages.length; i++){
                          %>
-                        <div class="cbp-item cbp-item-small" style="display: none;">
-                            <a href="<%- info.certificateImages[i] %>" class="cbp-caption cbp-lightbox" rel="nofollow">
-                                <div class="">
-                                    <img src="<%- info.certificateImages[i] %>" alt="">
-                                </div>
-                            </a>
-                        </div>
+                            <div class="cbp-item cbp-item-small" style="display: none;">
+                                <a href="<%- info.certificateImages[i] %>" class="cbp-caption cbp-lightbox" rel="nofollow">
+                                    <div class="">
+                                        <img src="<%- info.certificateImages[i] %>" alt="">
+                                    </div>
+                                </a>
+                            </div>
                          <% } %>
                     </div>
                 </div>
-
+                <% } %>
+                <% if(isEditMode || (info.photos && info.photos.length)) {%>
                 <div class="clearfix">
                     <h4 class="text-left"><img src="/images/icons/foto.png" style="width: 40px; height: 40px;" /> Zdjęcia <% if(isEditMode){ %><button class="btn btn-primary btn-sm add-image">Dodaj</button> <% } %></h4>                  
                     
@@ -183,6 +187,7 @@
                          <% } %>
                     </div>
                 </div>
+                <% } %>
             </div>              
         </div>
     </div>
