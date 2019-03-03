@@ -104,8 +104,8 @@ class PromoCodes extends React.Component {
     	const codeIds = this.state.newFeedCodes.map(code => code.id);
     	rememberCodes(codeIds)
     	.then(() => {
-	    	const win = window.open('/printCodes', '_blank');
-	  		win.focus();
+            const iframe = document.getElementById('printFrame');
+            iframe.src = '/printCodes';
   		})
         .catch((err) => console.error(err));
     }
@@ -117,8 +117,8 @@ class PromoCodes extends React.Component {
     	const codeIds = this.state.newTrainCodes.map(code => code.id);
     	rememberCodes(codeIds)
     	.then(() => {
-	    	const win = window.open('/printCodes', '_blank');
-	  		win.focus();
+	    	const iframe = document.getElementById('printFrame');
+            iframe.src = '/printCodes';
   		})
         .catch((err) => console.error(err));;
     }
@@ -234,6 +234,7 @@ class PromoCodes extends React.Component {
 		              	{content}
 		              	{feedCodesContent}
 		              	{trainCodesContent}
+                        <iframe id='printFrame' style={{width: "0", height: "0", border:"none", display: "hidden"}}></iframe>
 	            	</Col>
                 </Row>
             </ContentWrapper>
